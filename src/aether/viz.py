@@ -242,18 +242,23 @@ def plot_joint_figures(sweep, comparison, out_dir: Path) -> list[Path]:
     G, D = np.meshgrid(sweep.gamma_deg, sweep.diameter_m, indexing="ij")
 
     # -- F6: where a design is allowed to exist --------------------------------------
-    fig, ax = plt.subplots(figsize=(6.0, 4.0))
+    fig, ax = plt.subplots(figsize=(6.2, 4.1))
     cs = ax.contourf(G, D, t_bond, levels=14, cmap="magma_r")
     cb = fig.colorbar(cs, ax=ax)
     cb.set_label("peak bondline temperature  [K]")
     cb.outline.set_edgecolor(MUTED)
-    ax.contourf(G, D, feas.astype(float), levels=[0.5, 1.5], colors="none",
-                hatches=["////"], alpha=0.0)
-    ax.contour(G, D, feas.astype(float), levels=[0.5], colors="white", linewidths=1.8)
+
+    # Wash OUT the infeasible area rather than hatching it, so the eye reads the
+    # remaining clear region as "designs that are allowed to exist".
+    ax.contourf(G, D, feas.astype(float), levels=[-0.5, 0.5], colors=["white"], alpha=0.68)
+    ax.contour(G, D, feas.astype(float), levels=[0.5], colors="white", linewidths=2.0)
+
     ax.set_xlabel("entry flight-path angle  $\\gamma_0$  [deg]")
     ax.set_ylabel("capsule diameter  $D$  [m]")
-    ax.set_title("Feasible region (inside white contour) opens only in two dimensions")
+    ax.set_title("Only two dimensions open a feasible region at all")
     ax.grid(False)
+    # Breathing room so optimum markers on the domain edge are never clipped.
+    ax.margins(x=0.04, y=0.05)
 
     if comparison.peak_only is not None:
         for e, colour, mark, lbl in (
@@ -261,12 +266,16 @@ def plot_joint_figures(sweep, comparison, out_dir: Path) -> list[Path]:
             (comparison.joint, HOT, "D", "joint O1 optimum"),
         ):
             ax.plot(e.design_vector["entry_flight_path_angle_deg"],
-                    e.design_vector["diameter_m"], mark, color=colour, ms=8,
-                    markeredgecolor="white", markeredgewidth=1.2, label=lbl)
-        ax.legend(fontsize=8, loc="lower left")
+                    e.design_vector["diameter_m"], mark, color=colour, ms=9,
+                    markeredgecolor="white", markeredgewidth=1.4, label=lbl,
+                    clip_on=False, zorder=6)
+        ax.legend(fontsize=8, loc="lower left", facecolor="white", framealpha=0.85,
+                  frameon=True, edgecolor="none")
     written.append(_save(fig, out_dir, "M1b_feasible_region",
-                         f"{tag}. Hatch-free area inside the white contour satisfies both the "
-                         f"deceleration and bondline constraints."))
+                         f"{tag}. The washed-out area fails the deceleration or bondline "
+                         f"constraint; only the clear region inside the white boundary "
+                         f"satisfies both. Both optima sit on the diameter bound - an open "
+                         f"item, see PROJECT_STATUS.md."))
 
     # -- F7: the two optimisers disagree ---------------------------------------------
     if comparison.peak_only is not None:
