@@ -99,6 +99,17 @@ def main() -> int:
     return 0
 
 
+def _margin_ratio(joint, peak_only, allowable_k: float) -> float:
+    """Bondline margin of the joint design relative to the peak-flux-only design.
+
+    Deliberately parameterised by the allowable so the report can show how violently
+    this ratio moves with a number that is not yet sourced.
+    """
+    numerator = allowable_k - joint.performance.peak_bondline_temperature_k
+    denominator = allowable_k - peak_only.performance.peak_bondline_temperature_k
+    return numerator / max(denominator, 1e-9)
+
+
 def _margin(ev) -> float:
     """Bondline constraint margin as a percentage. NaN if the limit is unsourced."""
     return ev.performance.constraint_margins.get(
@@ -196,14 +207,23 @@ def write_reports(study, run_id, meta, out_dir, figures, sweep=None, comparison=
     n_feasible_1d = int(np.sum(study.feasible))
 
     lines += [
-        "\n## The anti-correlation is global, not a corner case\n",
+        "\n## How much this rank correlation is actually worth\n",
         f"Rank correlation between peak heat flux and peak bondline temperature across the "
-        f"sweep is **Spearman rho = {rho:+.3f}**. ",
-        ("A value of exactly -1 means the ordering is perfectly reversed: *every* candidate "
-         "with a lower peak heat flux than another has a higher bondline temperature than it. "
-         "The counterexample is not a pathological pair hiding in the domain - the entire "
-         "domain is a counterexample.\n" if rho <= -0.999 else
-         "The two metrics are strongly but not perfectly anti-ordered over this domain.\n"),
+        f"sweep is **Spearman rho = {rho:+.3f}**.\n",
+        ("\n**This number is close to tautological and must not be quoted as if it were "
+         "independent evidence.** Only one parameter was varied. Both metrics turn out to be "
+         "*strictly monotone* in that parameter, and two strictly monotone functions of a "
+         "single variable can only ever produce rho = +1 or -1. The correlation therefore "
+         "restates 'both are monotone in gamma, with opposite signs' - it does not measure "
+         "the strength of a relationship across a design space, because this domain is a "
+         "line segment, not a space.\n"
+         "\nWhat the sweep does establish, and it is enough for H0, is the monotonicity "
+         "itself: over the full range of entry angle tested, every step that lowers peak heat "
+         "flux raises bondline temperature. There is no interior entry angle at which both "
+         "improve. The honest claim is a statement about this one-parameter family; a claim "
+         "about the design space needs the multi-dimensional sweep in M1b and, properly, the "
+         "DOE in M4.\n" if abs(rho) >= 0.999 else
+         "\nThe two metrics are strongly but not perfectly anti-ordered over this domain.\n"),
         "\n## The feasibility squeeze\n",
         f"Of {len(study.gamma_deg)} candidates, **{n_feasible_1d} satisfy every hard "
         f"constraint**. ",
@@ -262,10 +282,21 @@ def write_reports(study, run_id, meta, out_dir, figures, sweep=None, comparison=
             f"{jo.performance.feasible} |\n",
             f"\nThe joint optimum runs its bondline **{comparison.bondline_saving_k:.1f} K "
             f"cooler** than the design a peak-flux-only search selects, at a cost of "
-            f"{comparison.peak_flux_cost_pct:+.1f}% on peak heat flux. In margin terms the "
-            f"peak-flux-only design sits close enough to the bondline allowable that ordinary "
-            f"uncertainty in material conductivity or atmospheric density could push it over; "
-            f"the joint design does not. **H1 is supported.**\n",
+            f"{comparison.peak_flux_cost_pct:+.1f}% on peak heat flux. **H1 is supported.**\n",
+            "\n### Do not quote the margin as a ratio\n",
+            "It is tempting to say the joint design has *N times the thermal margin*. That "
+            "ratio is measured against the bondline allowable, and `ASSUMPTIONS.md` A-LIM-1 "
+            "states plainly that the allowable is an unsourced engineering placeholder. The "
+            "ratio is therefore extremely sensitive to a number nobody has justified:\n",
+            "\n| Assumed bondline allowable | Margin ratio, joint vs peak-only |\n|---|---|\n",
+            *[
+                f"| {lim:.0f} K | {_margin_ratio(jo, po, lim):.1f}x |\n"
+                for lim in (445.0, 450.0, 460.0, 500.0)
+            ],
+            f"\nThe robust quantity is the **absolute** difference, "
+            f"{comparison.bondline_saving_k:.1f} K, which does not depend on the allowable at "
+            "all. Report that. Once a sourced allowable exists the ratio becomes meaningful; "
+            "until then it is an artifact of a placeholder.\n",
             "\nNote that both optima choose the largest available diameter, i.e. the lowest "
             "ballistic coefficient. That is the expected physics — a lower β decelerates "
             "higher in thinner air — and it means the diameter bound, not the physics, is "

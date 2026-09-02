@@ -24,6 +24,13 @@ time to diffuse inward.
 This repository tries to falsify that, quantitatively, with a verified reduced-order
 model first and CFD afterwards.
 
+So far it survives: over a 41-point sweep of entry angle, the two metrics are strictly
+monotone in opposite directions — the shallowest entry cuts peak heat flux 38% while
+running the bondline 114 K hotter, and no interior angle improves both. That is a result
+about a one-parameter family, not yet about a design space; see
+[`PROJECT_STATUS.md`](PROJECT_STATUS.md) for exactly how far the claim extends and where
+it stops.
+
 ## Status
 
 **Milestone M1 complete** (reduced-order burn-vs-bake demonstration). See

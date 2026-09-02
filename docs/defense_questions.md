@@ -39,8 +39,8 @@ the questions to be able to answer cold. Answering "the model said so" is a fail
 15. Why is `evaluate_design` the only permitted evaluation path?
 16. What is a Pareto front? Why must a two-objective front be monotone, and how did that
     fact catch a bug?
-17. What is Spearman rank correlation and why was it the right statistic to report for
-    M1 instead of the single strongest counterexample pair?
+17. The M1 sweep reports Spearman ρ = −1.000. Why is that number close to worthless as
+    independent evidence, and what *is* the defensible claim from that sweep?
 18. Why does an unsourced constraint limit get stored as `null` rather than a large
     number?
 19. Which validation rows are `LIMITED` rather than `PASS`, and what specifically is
@@ -54,5 +54,7 @@ the questions to be able to answer cold. Answering "the model said so" is a fail
     strengthen it?
 23. Both M1b optima sit on the diameter bound. Why is that a problem, and what would you
     do about it?
+23b. Why is "six times the thermal margin" a bad way to report the M1b comparison, and
+    what should be reported instead?
 24. What did AI contribute to this project, and what did it not?
 25. What would falsify H0? What experiment or simulation would you run to try?

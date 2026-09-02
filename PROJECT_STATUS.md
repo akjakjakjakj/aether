@@ -20,21 +20,31 @@ Updated 2026-09-02.
 
 ## Headline results so far
 
-**H0 — supported.** Across a 27-point sweep of entry flight-path angle from −8.0° to
-−1.5°, the rank correlation between peak heat flux and peak bondline temperature is
-Spearman ρ = **−1.000**. Every candidate with a lower peak flux than another has a
-higher bondline temperature than it. The strongest pair differs by **38.3% lower peak
-flux and a 114 K hotter bondline**.
+**H0 — supported.** Across a 41-point sweep of entry flight-path angle from −8.0° to
+−1.5°, peak heat flux and peak bondline temperature are both **strictly monotone in
+entry angle, with opposite signs**: there is no interior angle at which both improve.
+The endpoints differ by **38.3% lower peak flux and a 114 K hotter bondline**.
 
-**The feasibility squeeze.** With geometry frozen, **zero of 27** candidates satisfy
+The rank correlation over this sweep is Spearman ρ = −1.000, but that number is close to
+tautological — two strictly monotone functions of one swept variable can only give ±1 —
+and must not be quoted as independent evidence. The monotonicity is the finding; the
+correlation coefficient adds nothing to it. A claim about the *design space* rather than
+this one-parameter family requires M1b and, properly, the DOE at M4.
+
+**The feasibility squeeze.** With geometry frozen, **zero of 41** candidates satisfy
 both the 12 g deceleration limit and the 450 K bondline limit. Steep entries fail on
 deceleration; shallow entries fail on bondline. Trajectory shaping alone cannot produce
 a valid design — which is the reason O1 optimises geometry and trajectory jointly.
 
 **H1 — supported.** Opening the diameter axis (140-point grid) recovers 21 feasible
-designs. A peak-flux-only optimiser selects a design with a bondline at 444.1 K — 5.9 K
-below the allowable. A joint optimiser selects one at 411.6 K — 38.4 K below. The joint
-design has roughly **six times the thermal margin** for 19.6% higher peak heat flux.
+designs. A peak-flux-only optimiser selects a design with a bondline at 444.1 K; a joint
+optimiser selects one at 411.6 K. The joint design therefore runs **32.5 K cooler at the
+bondline** for 19.6% higher peak heat flux.
+
+Quote that absolute figure, not a margin *ratio*. The ratio is measured against the
+bondline allowable, which A-LIM-1 declares an unsourced placeholder, and it swings from
+37× to 1.6× as the allowable moves from 445 K to 500 K. The 32.5 K does not depend on
+the allowable at all.
 
 ## Verification state
 
@@ -56,7 +66,9 @@ Three validation rows are `LIMITED`, not `PASS`. See `VALIDATION_MATRIX.md`.
    validated.
 5. **Constraint limits are unsourced** engineering placeholders (`A-LIM-1`). They set
    where the feasible region falls, though not whether the anti-correlation exists.
-6. **Backward Euler is first-order in time.** Adequate and convergent, but Crank–Nicolson
+6. **Only one parameter was swept in M1.** The monotonicity result is a statement about a
+   one-parameter family, not a design space. M4's DOE is what upgrades it.
+7. **Backward Euler is first-order in time.** Adequate and convergent, but Crank–Nicolson
    would cut timestep cost for the same accuracy — worth doing before the optimisation
    loop makes evaluation count matter.
 
