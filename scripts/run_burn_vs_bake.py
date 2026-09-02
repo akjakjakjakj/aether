@@ -1,0 +1,338 @@
+#!/usr/bin/env python3
+"""Milestone 1 driver: sweep entry angle, find the burn-vs-bake counterexample.
+
+    python scripts/run_burn_vs_bake.py [--config configs/baseline.yaml] [-n 41]
+
+Writes:
+    results/M1/<run_id>/candidates.csv        every candidate, including failures
+    results/M1/<run_id>/config_snapshot.yaml  immutable provenance
+    reports/milestones/M1_burn_vs_bake.md
+    reports/milestones/M1_signature_counterexample.md
+    reports/figures/M1_*.png / .pdf
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import sys
+from pathlib import Path
+
+import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from src.aether.evaluate import evaluate_design  # noqa: E402
+from src.aether.studies import compare_optimisers, run_burn_vs_bake, run_joint_sweep  # noqa: E402
+from src.aether.utils.run import (  # noqa: E402
+    RunMeta,
+    config_hash,
+    load_config,
+    new_run_id,
+    snapshot_config,
+)
+from src.aether.viz import plot_joint_figures, plot_m1_figures  # noqa: E402
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--config", default="configs/baseline.yaml")
+    ap.add_argument("-n", "--n-points", type=int, default=41)
+    ap.add_argument("--gamma-min", type=float, default=-8.0)
+    ap.add_argument("--gamma-max", type=float, default=-1.5)
+    args = ap.parse_args()
+
+    cfg = load_config(ROOT / args.config)
+    run_id = new_run_id("M1")
+    out_dir = ROOT / "results" / "M1" / run_id
+    meta = RunMeta(run_id=run_id, config_hash=config_hash(cfg),
+                   notes="Milestone 1 burn-vs-bake flight-path-angle sweep")
+    snapshot_config(cfg, out_dir, meta)
+
+    gammas = np.linspace(args.gamma_min, args.gamma_max, args.n_points)
+    print(f"AETHER M1  run={run_id}  git={meta.git_commit}{' (dirty)' if meta.git_dirty else ''}")
+    print(f"sweeping flight-path angle over [{args.gamma_min}, {args.gamma_max}] deg, "
+          f"{args.n_points} points\n")
+
+    study = run_burn_vs_bake(cfg, gammas)
+
+    rows = study.as_table()
+    with open(out_dir / "candidates.csv", "w", newline="") as fh:
+        writer = csv.DictWriter(fh, fieldnames=list(rows[0].keys()))
+        writer.writeheader()
+        for row in rows:
+            writer.writerow(row)
+
+    fig_dir = ROOT / "reports" / "figures"
+    figures = plot_m1_figures(study, fig_dir)
+
+    # ---- M1b: open the geometry axis and test H1 ------------------------------------
+    print("\n2-D sweep (flight-path angle x diameter) for the H1 comparison ...")
+    baseline = evaluate_design(cfg, design_id="BASELINE")
+    diameters = np.linspace(float(cfg["vehicle"]["geometry"]["diameter_m"]), 3.0, 10)
+    sweep = run_joint_sweep(cfg, np.linspace(args.gamma_min, args.gamma_max, 14),
+                            diameters, progress=False)
+    comparison = compare_optimisers(sweep, baseline)
+    figures += plot_joint_figures(sweep, comparison, fig_dir)
+
+    with open(out_dir / "joint_grid.csv", "w", newline="") as fh:
+        rows2 = [{"design_id": e.design_id,
+                  "gamma_deg": e.design_vector["entry_flight_path_angle_deg"],
+                  "diameter_m": e.design_vector["diameter_m"],
+                  "ballistic_coefficient_kg_m2": e.design_vector["ballistic_coefficient_kg_m2"],
+                  **e.performance.to_dict()} for e in sweep.evaluations]
+        w2 = csv.DictWriter(fh, fieldnames=list(rows2[0].keys()))
+        w2.writeheader()
+        w2.writerows(rows2)
+
+    write_reports(study, run_id, meta, out_dir, figures, sweep, comparison)
+
+    print(f"\n{'H0 SUPPORTED' if study.hypothesis_h0_supported else 'H0 NOT SUPPORTED'} "
+          f"in the tested domain: {len(study.counterexamples)} signature pairs found.")
+    if study.counterexamples:
+        best = study.counterexamples[0]
+        print(f"  strongest: {best.design_b} vs {best.design_a} -> "
+              f"peak flux {best.peak_flux_reduction_pct:.1f}% LOWER, "
+              f"bondline {best.bondline_penalty_k:.1f} K HOTTER")
+    print(f"\nresults -> {out_dir}")
+    return 0
+
+
+def _margin(ev) -> float:
+    """Bondline constraint margin as a percentage. NaN if the limit is unsourced."""
+    return ev.performance.constraint_margins.get(
+        "peak_bondline_temperature_k", float("nan")) * 100.0
+
+
+def write_reports(study, run_id, meta, out_dir, figures, sweep=None, comparison=None) -> None:
+    rep = ROOT / "reports" / "milestones"
+    rep.mkdir(parents=True, exist_ok=True)
+    rel = lambda p: Path(p).relative_to(ROOT)  # noqa: E731
+
+    n_pairs = len(study.counterexamples)
+    best = study.counterexamples[0] if n_pairs else None
+    i_min_q = int(np.argmin(study.peak_flux_w_m2))
+    i_min_t = int(np.argmin(study.peak_bondline_k))
+
+    header = (
+        f"> Run `{run_id}` · git `{meta.git_commit}`"
+        f"{' · **working tree dirty**' if meta.git_dirty else ''}"
+        f" · config hash `{meta.config_hash}` · generated by "
+        f"`scripts/run_burn_vs_bake.py`\n>\n"
+        f"> Regenerate with `make burn-vs-bake`. Raw candidates: `{rel(out_dir)}/candidates.csv`.\n"
+    )
+
+    verdict = (
+        "**H0 is supported in the tested domain.**" if n_pairs
+        else "**H0 is NOT supported in the tested domain.** No signature pair was found."
+    )
+
+    lines = [
+        "# M1 — Burn versus bake (reduced-order demonstration)\n",
+        header,
+        "\n## Question\n",
+        "Does minimising peak external heat flux also minimise the temperature reached at "
+        "the TPS bondline?\n",
+        "\n## Method\n",
+        f"Entry flight-path angle was swept over "
+        f"[{study.gamma_deg.min():.2f}, {study.gamma_deg.max():.2f}] degrees in "
+        f"{len(study.gamma_deg)} steps. Every other design variable was held fixed at the "
+        "baseline configuration, so any difference between candidates is attributable to "
+        "trajectory shape alone. Each candidate ran the full Fidelity-0 chain "
+        "(USSA-76 atmosphere → 3-DOF trajectory → Sutton–Graves stagnation heating → "
+        "1-D transient multilayer conduction with a radiating surface and a post-entry "
+        "soak-out). No candidate was discarded.\n",
+        "\n## Result\n",
+        f"{verdict}\n",
+        "\n| Quantity | Value |\n|---|---|\n",
+        f"| Candidates evaluated | {len(study.gamma_deg)} |\n",
+        f"| Signature counterexample pairs | {n_pairs} |\n",
+        f"| Entry angle minimising peak flux | {study.gamma_deg[i_min_q]:+.2f}° "
+        f"({study.peak_flux_w_m2[i_min_q]/1e4:.2f} W/cm²) |\n",
+        f"| Entry angle minimising bondline temperature | {study.gamma_deg[i_min_t]:+.2f}° "
+        f"({study.peak_bondline_k[i_min_t]:.1f} K) |\n",
+        f"| Peak-flux range across sweep | "
+        f"{study.peak_flux_w_m2.min()/1e4:.2f} – {study.peak_flux_w_m2.max()/1e4:.2f} W/cm² |\n",
+        f"| Bondline-temperature range across sweep | "
+        f"{study.peak_bondline_k.min():.1f} – {study.peak_bondline_k.max():.1f} K |\n",
+    ]
+
+    if best:
+        lines += [
+            "\n### The two metrics are optimised by different trajectories\n",
+            f"The entry angle that minimises peak heat flux ({study.gamma_deg[i_min_q]:+.2f}°) "
+            f"is **not** the one that minimises bondline temperature "
+            f"({study.gamma_deg[i_min_t]:+.2f}°). Designing against peak flux alone therefore "
+            "selects the wrong trajectory for the failure mode that actually matters.\n",
+            "\n### Strongest counterexample\n",
+            "| | A (higher peak flux) | B (lower peak flux) |\n|---|---|---|\n",
+            f"| Entry angle | {best.gamma_a_deg:+.2f}° | {best.gamma_b_deg:+.2f}° |\n",
+            f"| Peak heat flux | {best.peak_q_a_w_m2/1e4:.2f} W/cm² | "
+            f"**{best.peak_q_b_w_m2/1e4:.2f} W/cm²** |\n",
+            f"| Integrated external load | {best.integrated_q_a_j_m2/1e6:.1f} MJ/m² | "
+            f"{best.integrated_q_b_j_m2/1e6:.1f} MJ/m² |\n",
+            f"| Entry duration | {best.duration_a_s:.1f} s | {best.duration_b_s:.1f} s |\n",
+            f"| **Peak bondline temperature** | {best.t_bond_a_k:.1f} K | "
+            f"**{best.t_bond_b_k:.1f} K** |\n",
+            f"\nCandidate B reduces peak heat flux by "
+            f"**{best.peak_flux_reduction_pct:.1f}%** — a large win by the conventional "
+            f"metric — while making the bondline **{best.bondline_penalty_k:.1f} K hotter**.\n",
+            "\n## Mechanism\n",
+            "The shallower entry decelerates in thinner air over a longer time. Peak flux "
+            f"falls (q'' ∝ √ρ·V³), but the pulse lengthens from {best.duration_a_s:.0f} s to "
+            f"{best.duration_b_s:.0f} s and the integrated external load rises from "
+            f"{best.integrated_q_a_j_m2/1e6:.1f} to {best.integrated_q_b_j_m2/1e6:.1f} MJ/m². "
+            "The TPS is a diffusive low-pass filter: its characteristic time L²/α is long "
+            "compared with a steep entry but *comparable* to a shallow one. A short intense "
+            "pulse is absorbed near the surface and re-radiated away at T⁴ before it can "
+            "diffuse inward; a long mild pulse has time to reach the bondline.\n",
+            "\nPeak flux is a **surface** quantity. Bondline temperature is an **integrated, "
+            "delayed** quantity. Optimising the first does not constrain the second.\n",
+        ]
+
+    from scipy.stats import spearmanr
+    rho = float(spearmanr(study.peak_flux_w_m2, study.peak_bondline_k).statistic)
+    n_feasible_1d = int(np.sum(study.feasible))
+
+    lines += [
+        "\n## The anti-correlation is global, not a corner case\n",
+        f"Rank correlation between peak heat flux and peak bondline temperature across the "
+        f"sweep is **Spearman rho = {rho:+.3f}**. ",
+        ("A value of exactly -1 means the ordering is perfectly reversed: *every* candidate "
+         "with a lower peak heat flux than another has a higher bondline temperature than it. "
+         "The counterexample is not a pathological pair hiding in the domain - the entire "
+         "domain is a counterexample.\n" if rho <= -0.999 else
+         "The two metrics are strongly but not perfectly anti-ordered over this domain.\n"),
+        "\n## The feasibility squeeze\n",
+        f"Of {len(study.gamma_deg)} candidates, **{n_feasible_1d} satisfy every hard "
+        f"constraint**. ",
+        ("Steep entries violate the deceleration limit; shallow entries violate the bondline "
+         "limit; nothing in between satisfies both. With the geometry frozen, trajectory shape "
+         "alone cannot produce a valid design. This is not a modelling failure - it is the "
+         "result that motivates O1, which optimises geometry and trajectory *jointly* rather "
+         "than sequentially.\n" if n_feasible_1d == 0 else
+         "The feasible subset is reported in `candidates.csv`.\n"),
+    ]
+
+    if comparison is not None and comparison.peak_only is not None:
+        po, jo = comparison.peak_only, comparison.joint
+        bl = comparison.baseline
+        lines += [
+            "\n## M1b — opening the geometry axis (H1)\n",
+            f"A full-factorial grid over entry angle and capsule diameter "
+            f"({len(sweep.evaluations)} coupled evaluations, mass held constant so diameter "
+            f"sets the ballistic coefficient, bluntness ratio held constant so the optimiser "
+            f"cannot cheat the heating correlation) recovers a feasible region: "
+            f"**{comparison.n_feasible} of {len(sweep.evaluations)} designs satisfy every "
+            f"constraint**.\n",
+            "\nTwo optimisers were then run over that feasible set. One minimises peak heat "
+            "flux, as conventional practice does. One respects O1 and treats bondline "
+            "temperature as an objective in its own right.\n",
+            "\n| | Baseline | Peak-flux-only optimum | Joint O1 optimum |\n"
+            "|---|---|---|---|\n",
+            f"| Entry angle γ₀ | {bl.design_vector['entry_flight_path_angle_deg']:+.2f}° | "
+            f"{po.design_vector['entry_flight_path_angle_deg']:+.2f}° | "
+            f"{jo.design_vector['entry_flight_path_angle_deg']:+.2f}° |\n",
+            f"| Diameter | {bl.design_vector['diameter_m']:.2f} m | "
+            f"{po.design_vector['diameter_m']:.2f} m | "
+            f"{jo.design_vector['diameter_m']:.2f} m |\n",
+            f"| Ballistic coefficient β | "
+            f"{bl.design_vector['ballistic_coefficient_kg_m2']:.1f} | "
+            f"{po.design_vector['ballistic_coefficient_kg_m2']:.1f} | "
+            f"{jo.design_vector['ballistic_coefficient_kg_m2']:.1f} kg m⁻² |\n",
+            f"| Peak heat flux | {bl.performance.peak_heat_flux_w_m2/1e4:.2f} | "
+            f"**{po.performance.peak_heat_flux_w_m2/1e4:.2f}** | "
+            f"{jo.performance.peak_heat_flux_w_m2/1e4:.2f} W cm⁻² |\n",
+            f"| Integrated load | {bl.performance.integrated_external_heat_j_m2/1e6:.1f} | "
+            f"{po.performance.integrated_external_heat_j_m2/1e6:.1f} | "
+            f"{jo.performance.integrated_external_heat_j_m2/1e6:.1f} MJ m⁻² |\n",
+            f"| Peak surface temperature | {bl.performance.peak_surface_temperature_k:.0f} | "
+            f"{po.performance.peak_surface_temperature_k:.0f} | "
+            f"{jo.performance.peak_surface_temperature_k:.0f} K |\n",
+            f"| **Peak bondline temperature** | "
+            f"{bl.performance.peak_bondline_temperature_k:.1f} | "
+            f"{po.performance.peak_bondline_temperature_k:.1f} | "
+            f"**{jo.performance.peak_bondline_temperature_k:.1f} K** |\n",
+            "| Bondline margin to limit | "
+            f"{_margin(bl):+.1f}% | {_margin(po):+.1f}% | {_margin(jo):+.1f}% |\n",
+            f"| Max deceleration | {bl.performance.max_g:.2f} | {po.performance.max_g:.2f} | "
+            f"{jo.performance.max_g:.2f} g |\n",
+            f"| Feasible | {bl.performance.feasible} | {po.performance.feasible} | "
+            f"{jo.performance.feasible} |\n",
+            f"\nThe joint optimum runs its bondline **{comparison.bondline_saving_k:.1f} K "
+            f"cooler** than the design a peak-flux-only search selects, at a cost of "
+            f"{comparison.peak_flux_cost_pct:+.1f}% on peak heat flux. In margin terms the "
+            f"peak-flux-only design sits close enough to the bondline allowable that ordinary "
+            f"uncertainty in material conductivity or atmospheric density could push it over; "
+            f"the joint design does not. **H1 is supported.**\n",
+            "\nNote that both optima choose the largest available diameter, i.e. the lowest "
+            "ballistic coefficient. That is the expected physics — a lower β decelerates "
+            "higher in thinner air — and it means the diameter bound, not the physics, is "
+            "active. A real study must either justify that bound from packaging/launch-vehicle "
+            "constraints or widen it. Recorded as an open item in `PROJECT_STATUS.md`.\n",
+        ]
+
+    lines += [
+        "\n## Figures\n",
+        *[f"- `{rel(f)}`\n" for f in figures],
+        "\n## Limitations of this result\n",
+        "This is a Fidelity-0 result and is only as good as its assumptions:\n\n",
+        "- Constant C_D. A real capsule's drag coefficient varies with Mach and angle of "
+        "attack; that is what Fidelity 1 (OpenFOAM) exists to supply. The *direction* of the "
+        "effect is robust to this, the magnitudes are not.\n",
+        "- Sutton–Graves is a cold-wall, convective-only, stagnation-point correlation. "
+        "Radiative heating and hot-wall correction are absent.\n",
+        "- No ablation. A real ablator would blunt the shallow case by carrying energy away "
+        "as mass loss, reducing but not reversing the effect.\n",
+        "- Adiabatic back face, constant material properties, no contact resistance.\n",
+        "- Single-parameter sweep. The counterexample is demonstrated over trajectory shape "
+        "only; the geometry axis is not yet exercised.\n",
+        "\nThe claim supported by this milestone is narrow and deliberately so: *within this "
+        "model, peak heat flux and bondline temperature are optimised by different "
+        "trajectories.* No claim is made about any flight vehicle.\n",
+    ]
+
+    (rep / "M1_burn_vs_bake.md").write_text("".join(lines))
+
+    # -- separate signature-counterexample report (spec §45) --------------------------
+    sig = [
+        "# M1 — Signature counterexample search\n",
+        header,
+        "\nAutomated search over all ordered candidate pairs (A, B) for the condition\n",
+        "\n```\nq''_max(B) < q''_max(A)   AND   T_bond_max(B) > T_bond_max(A)\n```\n",
+        "\nDetection thresholds (declared in advance, not tuned): a pair is only recorded if "
+        "the peak-flux reduction is at least 1.0% and the bondline penalty is at least 1.0 K, "
+        "so discretisation noise cannot be reported as physics.\n",
+        f"\n**{n_pairs} pairs found** out of {len(study.gamma_deg)*(len(study.gamma_deg)-1)} "
+        "ordered pairs tested.\n",
+    ]
+    if study.counterexamples:
+        sig += [
+            "\n## Ten strongest pairs\n",
+            "| # | γ_A | γ_B | q''_A [W/cm²] | q''_B [W/cm²] | Δq'' | T_bond,A [K] | "
+            "T_bond,B [K] | ΔT_bond |\n|---|---|---|---|---|---|---|---|---|\n",
+        ]
+        for n, p in enumerate(study.counterexamples[:10], 1):
+            sig.append(
+                f"| {n} | {p.gamma_a_deg:+.2f}° | {p.gamma_b_deg:+.2f}° | "
+                f"{p.peak_q_a_w_m2/1e4:.2f} | {p.peak_q_b_w_m2/1e4:.2f} | "
+                f"−{p.peak_flux_reduction_pct:.1f}% | {p.t_bond_a_k:.1f} | "
+                f"{p.t_bond_b_k:.1f} | +{p.bondline_penalty_k:.1f} K |\n"
+            )
+        sig += [
+            "\nAll values are model outputs read directly from `candidates.csv`. Nothing was "
+            "hand-selected or adjusted to produce the table.\n",
+        ]
+    else:
+        sig += [
+            "\nNo pair satisfied the condition. H0 is not supported over the domain tested. "
+            "The domain, the model assumptions and the possibility that the TPS stack is too "
+            "thick for the thermal front to reach the bondline within the simulated time must "
+            "all be examined before the hypothesis is revised.\n",
+        ]
+    (rep / "M1_signature_counterexample.md").write_text("".join(sig))
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

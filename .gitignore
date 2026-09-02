@@ -1,0 +1,16 @@
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+
+# Generated artefacts (regenerate with `make`)
+results/**/*.parquet
+results/**/*.csv
+results/**/*.png
+results/**/*.pdf
+cfd/generated/
+data/raw/
+data/processed/
+.DS_Store

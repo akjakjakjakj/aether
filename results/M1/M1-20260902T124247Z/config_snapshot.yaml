@@ -1,0 +1,57 @@
+_meta:
+  run_id: M1-20260902T124247Z
+  config_hash: 056afae32fd1
+  git_commit: UNTRACKED
+  git_dirty: false
+  created_utc: '2026-09-02T12:42:47+00:00'
+  aether_version: 0.1.0
+  notes: Milestone 1 burn-vs-bake flight-path-angle sweep
+config:
+  meta:
+    name: baseline
+    description: Nominal ballistic entry of a spherically-blunted capsule.
+  vehicle:
+    mass_kg: 350.0
+    cd: 1.2
+    cl: 0.0
+    bank_angle_deg: 0.0
+    geometry:
+      nose_radius_m: 0.6
+      diameter_m: 1.2
+  entry:
+    altitude_m: 120000.0
+    velocity_m_s: 7400.0
+    flight_path_angle_deg: -3.0
+  tps:
+    emissivity: 0.85
+    t_initial_k: 300.0
+    t_radiation_sink_k: 4.0
+    bondline_after_layer: 0
+    t_bondline_reference_k: 400.0
+    t_penetration_threshold_k: 500.0
+    layers:
+    - name: insulator
+      thickness_m: 0.015
+      conductivity_w_mk: 0.3
+      density_kg_m3: 280.0
+      specific_heat_j_kgk: 1200.0
+      n_cells: 120
+    - name: structure
+      thickness_m: 0.01
+      conductivity_w_mk: 150.0
+      density_kg_m3: 2700.0
+      specific_heat_j_kgk: 900.0
+      n_cells: 20
+  limits:
+    max_g: 12.0
+    max_dynamic_pressure_pa: null
+    t_bondline_allowable_k: 450.0
+    t_surface_allowable_k: null
+  numerics:
+    terminal_altitude_m: 20000.0
+    max_time_s: 3000.0
+    rtol: 1.0e-09
+    atol: 1.0e-09
+    max_step_s: 0.5
+    soak_time_s: 1200.0
+    soak_samples: 400

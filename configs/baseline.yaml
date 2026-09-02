@@ -1,0 +1,62 @@
+# AETHER baseline configuration - Fidelity 0
+#
+# Representative small blunt-body entry capsule. These are ENGINEERING PLACEHOLDER
+# values chosen to be physically consistent and of the right order for a sub-scale
+# Earth-entry capsule. They are NOT taken from any flown vehicle, and no claim is made
+# that they match one. Anything genuinely unknown is left null - see ASSUMPTIONS.md.
+
+meta:
+  name: baseline
+  description: Nominal ballistic entry of a spherically-blunted capsule.
+
+vehicle:
+  mass_kg: 350.0
+  cd: 1.20            # blunt capsule, hypersonic continuum, order-of-magnitude correct
+  cl: 0.0             # ballistic baseline; no lift, no bank
+  bank_angle_deg: 0.0
+  geometry:
+    nose_radius_m: 0.60   # effective stagnation-point radius (NOT the diameter)
+    diameter_m: 1.20
+
+entry:
+  altitude_m: 120000.0        # entry interface
+  velocity_m_s: 7400.0        # ~LEO de-orbit speed
+  flight_path_angle_deg: -3.0 # negative == descending
+
+tps:
+  emissivity: 0.85
+  t_initial_k: 300.0
+  t_radiation_sink_k: 4.0
+  bondline_after_layer: 0     # bondline sits behind layer 0 (the ablator/insulator)
+  t_bondline_reference_k: 400.0     # M4 dose reference
+  t_penetration_threshold_k: 500.0  # M5 penetration threshold
+  layers:
+    - name: insulator
+      thickness_m: 0.015   # sized so the bondline is actually a live constraint
+      conductivity_w_mk: 0.30
+      density_kg_m3: 280.0
+      specific_heat_j_kgk: 1200.0
+      n_cells: 120
+    - name: structure
+      thickness_m: 0.010
+      conductivity_w_mk: 150.0        # aluminium-like
+      density_kg_m3: 2700.0
+      specific_heat_j_kgk: 900.0
+      n_cells: 20
+
+limits:
+  # A null limit is an OPEN QUESTION, not a satisfied constraint. The metrics code
+  # skips nulls rather than assuming a pass.
+  max_g: 12.0
+  max_dynamic_pressure_pa: null
+  t_bondline_allowable_k: 450.0
+  t_surface_allowable_k: null
+
+numerics:
+  terminal_altitude_m: 20000.0
+  max_time_s: 3000.0
+  rtol: 1.0e-9
+  atol: 1.0e-9
+  max_step_s: 0.5
+  soak_time_s: 1200.0   # post-entry conduction soak; the bondline peak lags the pulse
+  soak_samples: 400
