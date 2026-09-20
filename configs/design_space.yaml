@@ -20,12 +20,35 @@ base_overrides:
   vehicle:
     aero:
       model: constant
+    geometry:
+      # Stagnation heating takes the EFFECTIVE nose radius, not the cap radius
+      # (ASSUMPTIONS A-GEO-3, docs/theory/effective_nose_radius.md). Changed from
+      # `cap_radius` on 2026-09-20 to close the model-validity failure in NR-15: with
+      # R_eff = R_n the 1/sqrt(R_n) lever had no ceiling, and flattening the nose to
+      # infinity removed 98.9% of the peak flux, which is not physics. The corrected
+      # model saturates - the same change now removes 21.3% - and is anchored in two
+      # primaries (NASA TN D-5121 table I; NASA TM X-1067). Every one of the 64 M4
+      # front designs lands at R_b/R_n = 0.417-0.425 and R_c/R_b = 0.200, i.e. ON
+      # Ellison's tabulated (0.417, 0.2) point, so none of them is extrapolated.
+      # Carries a +-20% uncertainty at that K, which is the two primaries' own
+      # documented disagreement - propagate it in M7, do not assume it away.
+      effective_nose_radius_model: velocity_gradient
   limits:
-    # Both added at M4, anticipating metric-gaming (confirmed by the audit's counterfactual); see docs/negative_results.md NR-15
-    # and NR-13 and ASSUMPTIONS A-OPT-5 / A-OPT-6. null would skip them (A-LIM-2).
-    max_bluntness_ratio: 1.2          # R_n / D. Upper edge of the range in which
-                                      # effective_nose_radius_m == nose_radius_m is
-                                      # defensible; PLACEHOLDER, see A-OPT-5.
+    # Added at M4, anticipating metric-gaming (confirmed by the audit's counterfactual);
+    # see docs/negative_results.md NR-15 and NR-13, ASSUMPTIONS A-OPT-5 / A-OPT-6.
+    # null SKIPS a limit (A-LIM-2).
+    #
+    # RELAXED to null on 2026-09-20, together with the model change above. 1.2 was never
+    # a design limit: it was the edge of the range in which `R_eff = R_n` was defensible
+    # - a fence around a model, which NR-15 says plainly is not a model. The corrected
+    # model is valid over R_b/R_n in [0, 1], i.e. every bluntness ratio >= 0.5, which
+    # covers the whole box above the reference design. What stops the nose flattening
+    # now is GEOMETRY: `CapsuleGeometry.validate()` refuses the shape once the nose cap
+    # no longer fits inside the body (about 1.26 at a 70 deg cone), and it refuses it as
+    # an infeasible candidate that stays in the log. The incentive to go there is also
+    # largely gone - 1.2 -> 1.26 is worth 0.92% of peak flux under the corrected model
+    # against 2.41% under the legacy one.
+    max_bluntness_ratio: null
     max_heatshield_mass_fraction: 1.0 # logical necessity, not a design judgment: the
                                       # forebody TPS stack cannot outweigh the vehicle.
 
@@ -73,6 +96,14 @@ variables:
     min: 0.02
     max: 0.10
     reference: 0.10
+    # NOT INERT ANY MORE. M4 froze this variable because at Fidelity 0 it moved no
+    # objective at all (Sobol S_T = 0.0000 on both). The corner radius enters the
+    # corrected effective-nose-radius model directly, so it now moves peak flux by
+    # 1.45% across this box - more than bluntness still has left above 1.2. The M4
+    # screening decision must be RE-DERIVED on the next `make doe`, not reused.
+    # It also opens a metric-gaming surface: a sharper shoulder lowers stagnation
+    # heating in this model, while being exactly where real vehicles are damaged and
+    # where the model says nothing at all (A-HEAT-4). Watch the lower bound.
   cone_half_angle_deg:
     kind: direct
     path: vehicle.geometry.cone_half_angle_deg

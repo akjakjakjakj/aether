@@ -289,6 +289,61 @@ Honest accounting of every gap surfaced across all seven items — these should 
 
 ---
 
+## 8. Effective nose radius for a shallow spherical segment (A-GEO-3, A-OPT-5, NR-15)
+
+*Added 2026-09-20, a second research pass. This item does not close a placeholder VALUE; it
+closes a model-FORM failure — the one condition under which spec §42 permits new physics.*
+
+**Project placeholder:** `effective_nose_radius_m = nose_radius_m`, protected by a
+`max_bluntness_ratio = 1.2` fence.
+
+**Finding: a quantitative relation is citable from two primary documents, both opened and
+read, and they disagree with each other by more than this project's other heating
+uncertainties.**
+
+| Value | Form | Source | Tier |
+|---|---|---|---|
+| `R_b/R_eff = (dU/dS)_s,BB / (dU/dS)_s,hemi` | the DEFINITION of an effective radius | NASA TM X-1067 (Zoby &amp; Sullivan, 1965), eqs. (3)–(5), report p. 4, NTRS 19660017753 | ✅ T1 |
+| Nine measured values of `R_b/R_eff` over `K = R_b/R_n` ∈ {0, 0.417, 0.707} and `R_c/R_b` ∈ {0, 0.2, 0.4} | table | NASA TN D-5121 (Ellison, 1969), **Table I**, α = 0 rows, report p. 11, NTRS 19690013192 | ✅ T1 |
+| Flat face, sharp corner: `R_eff = 3.155 R_b` | from that table | as above | ✅ T1 |
+| Flat face, sharp corner: `R_eff ≈ 3.40–3.50 R_b` | figure read | TM X-1067 figures 3 and 4, digitised at 600 dpi, ±0.010 | 🟡 T2 |
+| "Corner radius raises the heating ratio ~11% (fig. 3) / ~22% (fig. 4) at `r_B/r_N = 0` as `r_C/r_B` goes 0 → 0.3" | verbatim statement | TM X-1067, pp. 6–7 | ✅ T1 |
+| "Agreement with Zoby &amp; Sullivan within 10 percent for K = 0 and K = 0.707; for K = 0.417 and R = 0, the disagreement is about 20 percent" | verbatim statement | TN D-5121, p. 5 | ✅ T1 |
+| Precedent for substituting `R_eff` into a Sutton–Graves-FORM correlation | `q̇_s √(R_eff/p_s) = K_i (H_s − H_w)`, its eq. (1), citing TM X-1067 as its ref. 19 | NASA TN D-4799 (Zoby, 1968), NTRS 19680025996 | ✅ T1 |
+| "R_eff ≈ 3.3–3.4 × body radius" attributed to a hypersonics textbook | — | **No textbook was opened.** Anderson, Bertin, Hirschel were all attempted and none was obtainable. The number is *supported* by the primaries above and should be cited to them | ❌ T3 as a textbook claim |
+
+**Validity conditions (from the primaries):** angle of attack 0° in both. Ellison: M = 8.0,
+Re_D = 1.37×10⁶, perfect-gas cold-wall tunnel, `K ≤ 0.707` (the hemisphere end is *not*
+covered by his experiment). Zoby &amp; Sullivan: `r_B/r_N` 0→1.0, `r_C/r_B` 0→0.30, source
+pressure data reduced for equilibrium air at 23 800 ft/s and 138 000 ft, and the whole
+method rests on the stagnation-region pressure distribution being invariant for M ≳ 3.5 —
+which is what licenses using M = 8 tunnel data at AETHER's 7.4 km/s. ✅ T1 throughout.
+
+**Neither source publishes a formula** — faired curves in one, a 3×3 table and two
+interpolation charts in the other, and a third report of the era (Stallings, 1967)
+explicitly instructing the reader to interpolate from charts. The interpolation in
+`src/aether/geometry/stagnation_gradient.py` is therefore **this project's construction
+over the primaries' data points** and is labelled as such everywhere it appears.
+
+**Which was adopted, and why.** Ellison. It is tabulated rather than read off a graph, it
+is an experiment rather than a computation from other people's pressure data, and it is
+the **conservative** of the two (smaller `R_eff`, hence more heating). The disagreement
+between the two is carried as the stated uncertainty rather than resolved by preferring
+one — and at `K ≈ 0.42`, which is exactly where the M4 front sits, it is about ±20% on
+`R_eff`, i.e. ±10% on heat flux.
+
+**Could not be sourced:** Boison &amp; Curtiss (ARS J. 29(2), 1959, DOI 10.2514/8.4699) —
+citation confirmed real, publisher blocks access, ❌ T3. Trimmer (AEDC, DTIC AD0669378) —
+exists, DTIC returned 403 to every path, ❌ T3. **Rodrigues, "Closed-Form Reconstruction of
+Zoby–Sullivan Stagnation-Point Heat-Flux Scaling", JTHT, 7 July 2026, DOI 10.2514/1.T7458**
+— paywalled, ❌ T3; its title describes exactly the published fit that would replace this
+project's own interpolation, and it is the single highest-value follow-up on this topic.
+
+Full provenance and verbatim quotations: `data/reference/stagnation_velocity_gradient.yaml`.
+Derivation: `docs/theory/effective_nose_radius.md`.
+
+---
+
 ## Sources — full list, graded
 
 **✅ T1 (primary, opened and read directly)**

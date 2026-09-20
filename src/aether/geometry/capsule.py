@@ -55,8 +55,17 @@ import yaml
 from scipy import integrate
 
 from ..utils.run import REPO_ROOT
+from .stagnation_gradient import (
+    CAP_RADIUS,
+    MODELS,
+    VELOCITY_GRADIENT,
+    EffectiveNoseRadiusReport,
+    effective_nose_radius_report,
+)
 
 DEFAULT_BOUNDS_PATH = REPO_ROOT / "configs" / "geometry_bounds.yaml"
+
+__all__ = ["CapsuleGeometry", "read_stl_triangles", "CAP_RADIUS", "VELOCITY_GRADIENT"]
 
 
 @lru_cache(maxsize=1)
@@ -156,6 +165,13 @@ class CapsuleGeometry:
         Aft-body cone half-angle [deg]. Zero is a valid, cylindrical afterbody.
     length_m:
         Total capsule length, nose tip to the base plane [m].
+    effective_nose_radius_model:
+        Which rule `effective_nose_radius_m` follows (A-GEO-3). `'cap_radius'` is the
+        legacy identity R_eff = R_n and is the DEFAULT, so every pre-existing config,
+        result and test is untouched. `'velocity_gradient'` applies the measured
+        stagnation-velocity-gradient correction of `.stagnation_gradient` - see
+        `docs/theory/effective_nose_radius.md` and `docs/negative_results.md` NR-15.
+        Not a shape parameter: it changes no geometry, no area, no volume and no STL.
     """
 
     nose_radius_m: float
@@ -164,6 +180,7 @@ class CapsuleGeometry:
     cone_half_angle_deg: float
     aft_cone_angle_deg: float
     length_m: float
+    effective_nose_radius_model: str = CAP_RADIUS
 
     # -- internal geometry ---------------------------------------------------------
 
@@ -237,6 +254,12 @@ class CapsuleGeometry:
            Pass `bounds={}` to check pure geometric feasibility only.
         """
         name = type(self).__name__
+
+        if self.effective_nose_radius_model not in MODELS:
+            raise ValueError(
+                f"{name}.effective_nose_radius_model must be one of {MODELS}, got "
+                f"{self.effective_nose_radius_model!r}"
+            )
 
         # Primitive scalars first, before anything trig-based (self._joins) is
         # touched - cone_half_angle_deg == 0 divides by zero in _joins.
@@ -342,16 +365,57 @@ class CapsuleGeometry:
     # -- derived quantities -------------------------------------------------------
 
     @property
+    def _fore_cone_span_fraction(self) -> float:
+        """Radial span of the straight fore cone, as a fraction of the body radius.
+
+        Zero when the spherical cap runs straight into the shoulder torus, which is the
+        shape Zoby & Sullivan and Ellison actually measured. Large when a long conical
+        flank separates the two, which they did not. Only ever raises a flag.
+        """
+        j = self._joins
+        return float((j.r2 - j.r1) / (self.diameter_m / 2.0))
+
+    def effective_nose_radius_report(self) -> EffectiveNoseRadiusReport:
+        """`effective_nose_radius_m` plus every reason to distrust it (A-GEO-3).
+
+        Same number as the property, with the dimensionless groups, the validity flags
+        and any extrapolation note attached. `evaluate_design` puts these on every
+        candidate as diagnostics, so "the correction was extrapolated here" shows up in
+        the candidate log instead of being invisible.
+        """
+        self.validate(bounds={})
+        return effective_nose_radius_report(
+            nose_radius_m=self.nose_radius_m,
+            body_radius_m=self.diameter_m / 2.0,
+            corner_radius_m=self.shoulder_radius_m,
+            model=self.effective_nose_radius_model,
+            cone_span_fraction=self._fore_cone_span_fraction,
+        )
+
+    @property
     def effective_nose_radius_m(self) -> float:
         """Stagnation-point radius for Sutton-Graves heating [m] (A-GEO-3).
 
-        The stagnation point sits at the pole of the nose sphere, so for this
-        sphere-cone-torus forebody it is simply nose_radius_m - exposed as its own
-        property so callers never have to know that internal detail, and so a
-        future forebody shape that is NOT a simple sphere still has somewhere to
-        report a different answer.
+        NOT necessarily the nose radius. Sutton-Graves' 1/sqrt(R_n) is really a
+        statement about the stagnation-point VELOCITY GRADIENT, and for a shallow
+        spherical segment that gradient is governed by the body radius and the corner
+        rather than by the cap's own curvature - so flattening the nose buys less and
+        less, and in the flat-faced limit buys nothing at all. Which rule applies here is
+        set by `effective_nose_radius_model`:
+
+        `'cap_radius'` (default)
+            R_eff = R_n. Exact only at the hemisphere. This is what every M1/M1b result
+            was computed with and it is kept as the default so those reproduce
+            bit-for-bit.
+        `'velocity_gradient'`
+            R_eff from NASA TN D-5121 table I via `.stagnation_gradient`, continuous with
+            the hemisphere limit and saturating at the flat face.
+
+        Derivation and worked numbers: `docs/theory/effective_nose_radius.md`.
         """
-        return self.nose_radius_m
+        if self.effective_nose_radius_model == CAP_RADIUS:
+            return self.nose_radius_m
+        return self.effective_nose_radius_report().effective_nose_radius_m
 
     @property
     def reference_area_m2(self) -> float:

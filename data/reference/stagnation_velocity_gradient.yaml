@@ -1,0 +1,210 @@
+# Published reference data for the stagnation-point velocity gradient / effective nose
+# radius of blunt axisymmetric bodies (spherical segment + corner radius on a cylinder).
+#
+# PROVENANCE RULE (same as sphere_supersonic.yaml): every number below was read from the
+# cited document itself, on 2026-09-20, from 400-600 dpi page renders - NOT from the PDFs'
+# OCR text layer, which is unusable on both of these 1960s scans. `how_read` records
+# whether a value is tabulated or read off a graph. Anything that could not be seen in a
+# fetched document is in `not_verified` rather than quoted from memory.
+#
+# WHY THIS FILE EXISTS. Sutton-Graves needs an "effective nose radius". For a hemisphere
+# that is the nose radius. For a shallow spherical segment it is not: the stagnation
+# velocity gradient stops following the cap's radius of curvature and becomes governed by
+# the body radius and the corner. See docs/theory/effective_nose_radius.md.
+#
+# The numbers in `ellison_1969.table_i_alpha0` are MIRRORED as a module constant in
+# src/aether/geometry/stagnation_gradient.py (the model must not depend on a file being
+# present at run time). tests/test_stagnation_gradient.py asserts the two agree, so this
+# file cannot silently drift away from the physics.
+
+sources:
+  zoby_sullivan_1965:
+    citation: >
+      E. V. Zoby and E. M. Sullivan, "Effects of Corner Radius on Stagnation-Point
+      Velocity Gradients on Blunt Axisymmetric Bodies", NASA TM X-1067, Langley Research
+      Center, dated 16 November 1964, issued 1965. Originally CONFIDENTIAL, declassified.
+      Also published as J. Spacecraft and Rockets 3(10), 1966.
+    url: https://ntrs.nasa.gov/api/citations/19660017753/downloads/19660017753.pdf
+    ntrs_id: "19660017753"
+    nature: >
+      ANALYTICAL. Velocity gradients were computed from OTHER authors' published
+      experimental pressure distributions, using equilibrium-air thermodynamics and
+      isentropic flow relations. Not itself an experiment.
+    defining_relations: >
+      Report p. 4, eqs. (3), (4), (5), transcribed from the page image:
+        (dU/dS)_s,Hemi = (1/r_B) sqrt(2 p_s / rho_s)    (Newtonian flow)   (3)
+        (dU/dS)_s,BB   = (1/r_eff) sqrt(2 p_s / rho_s)                     (4)
+        r_B / r_eff    = (dU/dS)_s,BB / (dU/dS)_s,Hemi                     (5)
+      NOTE the hemisphere reference has radius r_B, the BODY radius - not the nose
+      radius. The effective radius is therefore defined by the source itself; converting
+      a velocity-gradient ratio into an effective radius is NOT this project's inference.
+    validity: >
+      Angle of attack 0 deg only. r_B/r_N from 0 (flat-faced cylinder) to 1.0
+      (hemisphere); r_C/r_B from 0 (sharp corner) to 0.30. The whole method rests on the
+      pressure distribution being invariant with Mach number for M_inf >~ 3.5 (p. 2,
+      citing Langley Unitary Plan wind-tunnel data); supporting evidence cited to
+      M = 3.0-24.4. Source pressure data reduced at U_inf = 23 800 ft/s and 138 000 ft
+      altitude with equilibrium-air normal-shock properties. Not covered: angle of
+      attack, nonequilibrium chemistry, M < 3.5, r_C/r_B > 0.30, and any body that is
+      not a spherical segment on a cylinder.
+    stated_accuracy: >
+      p. 6, verbatim: "The results shown in figure 3 have been compared with experimental
+      results from references 16 and 17 for flat-faced bodies with varying corner-radius
+      ratios. The experimental heating rates are approximately 2 percent greater than
+      those in figure 3."
+
+  ellison_1969:
+    citation: >
+      J. C. Ellison, "Experimental Stagnation-Point Velocity Gradients and Heat-Transfer
+      Coefficients for a Family of Blunt Bodies at Mach 8 and Angles of Attack",
+      NASA TN D-5121, Langley Research Center, April 1969.
+    url: https://ntrs.nasa.gov/api/citations/19690013192/downloads/19690013192.pdf
+    ntrs_id: "19690013192"
+    nature: >
+      EXPERIMENT. Local pressure and heat-transfer measurements on nine blunt
+      axisymmetric models. Velocity distributions obtained from the measured pressures by
+      assuming isentropic expansion from the stagnation point; the gradient is the slope
+      of the straight line through the data either side of the stagnation point (p. 5).
+    defining_relation: >
+      p. 5, verbatim: "In figures 4(a) and 4(b), RB/Reff is shown as a function of the
+      parameters K and R. These results were obtained from the relation RB/Reff = U/Usp,
+      presented by Zoby and Sullivan in reference 6. The stagnation-point velocity
+      gradient Usp was calculated from Newtonian theory for a sphere having a radius equal
+      to the radius RB of the bodies investigated."
+      Symbols: K = R_B/R_N (body radius / nose radius; K = 0 is a flat face),
+      R = R_c/R_B (corner radius / body radius).
+    validity: >
+      Summary p. 1, verbatim: "a family of blunt, axisymmetric bodies having a range of
+      ratios of body radius to nose radius from 0 (flat face) to 0.707, and ratios of
+      corner radius to body radius of 0 (sharp corner) to 0.40. The experimental data were
+      obtained at a Mach number of 8.0 and a Reynolds number (based on model diameter) of
+      1.37 x 10^6, over a range of angles of attack from 0 to 20 deg."
+      Perfect-gas, cold-wall wind tunnel. K never exceeds 0.707: the hemisphere end of the
+      range is NOT covered by this experiment.
+    agreement_with_zoby_sullivan: >
+      p. 5, verbatim: "The data of the present investigation agree with the results of Zoby
+      and Sullivan (ref. 6) within 10 percent for K = 0 and K = 0.707; however, for
+      K = 0.417 and R = 0, the disagreement is about 20 percent."
+      This sentence is the source of the uncertainty band this project carries on the
+      correction. It is the primary's own statement, not an estimate made here.
+
+  zoby_1968:
+    citation: >
+      E. V. Zoby, "Empirical Stagnation-Point Heat-Transfer Relation in Several Gas
+      Mixtures at High Enthalpy Levels", NASA TN D-4799, October 1968.
+    url: https://ntrs.nasa.gov/api/citations/19680025996/downloads/19680025996.pdf
+    ntrs_id: "19680025996"
+    why_it_matters: >
+      Its eq. (1), q_s sqrt(R_eff/p_s) = K_i (H_s - H_w), is a Sutton-Graves-FORM
+      correlation written with the effective nose radius substituted for the nose radius,
+      and its reference 19 for R_eff is Zoby & Sullivan TM X-1067 itself. The substitution
+      this project is making - feed R_eff, not R_n, to a stagnation-heating correlation -
+      is therefore the one the same author published. Opened and read; the K_i values were
+      not transcribed because this project keeps its own Sutton-Graves constant (A-HEAT-1).
+
+# ---------------------------------------------------------------------------------------
+# THE DATA THE MODEL IS BUILT ON.
+#
+# Ordinate is R_B/R_eff, i.e. the stagnation velocity gradient of the blunt body divided
+# by that of a hemisphere OF THE BODY RADIUS. R_eff/R_B is its reciprocal and is listed
+# only for readability - it is derived arithmetic, not a printed column.
+# ---------------------------------------------------------------------------------------
+ellison_1969_table_i_alpha0:
+  source: ellison_1969
+  how_read: tabulated (TABLE I, report p. 11; alpha = 0 deg rows only)
+  columns: [k_body_over_nose, r_corner_over_body, rb_over_reff]
+  rows:
+    - {k_body_over_nose: 0.0,   r_corner_over_body: 0.0, rb_over_reff: 0.317}
+    - {k_body_over_nose: 0.0,   r_corner_over_body: 0.2, rb_over_reff: 0.377}
+    - {k_body_over_nose: 0.0,   r_corner_over_body: 0.4, rb_over_reff: 0.455}
+    - {k_body_over_nose: 0.417, r_corner_over_body: 0.0, rb_over_reff: 0.587}
+    - {k_body_over_nose: 0.417, r_corner_over_body: 0.2, rb_over_reff: 0.609}
+    - {k_body_over_nose: 0.417, r_corner_over_body: 0.4, rb_over_reff: 0.640}
+    - {k_body_over_nose: 0.707, r_corner_over_body: 0.0, rb_over_reff: 0.738}
+    - {k_body_over_nose: 0.707, r_corner_over_body: 0.2, rb_over_reff: 0.772}
+    - {k_body_over_nose: 0.707, r_corner_over_body: 0.4, rb_over_reff: 0.817}
+
+# The hemisphere end of the K range is not in Ellison's experiment (it stops at 0.707).
+# It is not read off anything either: when R_N = R_B the spherical segment IS a hemisphere,
+# eq. (5) gives R_eff = R_B = R_N identically, and a corner radius has nothing left to
+# blend, so the corner-ratio dependence must vanish there. Zoby & Sullivan's figure 4
+# shows all five corner-ratio curves meeting at exactly 1.0 at r_B/r_N = 1.0.
+hemisphere_anchor:
+  source: definitional (eq. 5 of zoby_sullivan_1965), corroborated by its figure 4
+  how_read: exact
+  k_body_over_nose: 1.0
+  rb_over_reff: 1.0
+  applies_to_all_corner_ratios: true
+
+# ---------------------------------------------------------------------------------------
+# CROSS-CHECK ONLY - NOT used to build the model.
+#
+# Read off Zoby & Sullivan figure 4 (report p. 14) at 600 dpi. Two curves only: the
+# sharp-corner curve and the r_C/r_B = 0.30 curve. The 0.10 / 0.20 / 0.25 curves are
+# dashed and scan-degraded and could not be separated beyond r_B/r_N ~ 0.20, so they are
+# omitted rather than guessed. Above r_B/r_N ~ 0.45 all five curves merge into one bundle
+# and only the bundle is quoted.
+#
+# READ-OFF UNCERTAINTY: +/- 0.010 in the ordinate for r_B/r_N <= 0.25, +/- 0.008 above.
+# An independent pixel trace made while checking this could not cleanly separate the
+# individual curves from the underlying graph paper, so these values are carried at
+# T2 confidence (figure read, one reader) and are used ONLY in a loose-tolerance
+# consistency test, never as model coefficients.
+#
+# CHECKSUMS that do validate the read, both verbatim from the report and both reproduced:
+#   p. 6: at r_B/r_N = 0 the FIG-3 ordinate (the square root of this one) "increases by
+#         approximately 11 percent" as r_C/r_B goes 0 -> 0.3.  sqrt(0.365/0.286) = 1.130,
+#         and the direct fig-3 reads 0.605/0.542 = 1.116.  Matches "approximately 11%".
+#   p. 7: the FIG-4 ordinate increases "approximately 22 percent" over the same change.
+#         0.365/0.286 = 1.276. This is high against the stated 22%, because both curves
+#         are steepest exactly at the axis where the read is worst. The report's own
+#         number, 1.22, is the one to trust.
+zoby_sullivan_1965_figure_4:
+  source: zoby_sullivan_1965
+  how_read: read off a graph (figure 4, report p. 14), 600 dpi render
+  confidence: T2 - figure read, single reader, +/- 0.010
+  sharp_corner:          # r_C/r_B = 0.00
+    r_corner_over_body: 0.0
+    columns: [k_body_over_nose, rb_over_reff]
+    rows: [[0.00, 0.286], [0.05, 0.295], [0.10, 0.312], [0.15, 0.333],
+           [0.20, 0.359], [0.25, 0.385], [1.00, 1.000]]
+  rounded_corner:        # r_C/r_B = 0.30, the largest corner ratio plotted
+    r_corner_over_body: 0.30
+    columns: [k_body_over_nose, rb_over_reff]
+    rows: [[0.00, 0.365], [0.05, 0.370], [0.10, 0.381], [0.15, 0.392],
+           [0.20, 0.410], [0.25, 0.425], [0.30, 0.449], [0.40, 0.502], [1.00, 1.000]]
+  merged_bundle:         # above ~0.45 the five corner-ratio curves are indistinguishable
+    note: all plotted corner ratios collapse onto one curve here
+    columns: [k_body_over_nose, rb_over_reff]
+    rows: [[0.45, 0.530], [0.50, 0.561], [0.55, 0.604], [0.65, 0.688], [0.70, 0.732],
+           [0.75, 0.776], [0.80, 0.820], [0.85, 0.868], [0.90, 0.916], [1.00, 1.000]]
+
+not_verified:
+  - >
+    Boison, J. C. and Curtiss, H. A., "An Experimental Investigation of Blunt Body
+    Stagnation Point Velocity Gradient", ARS Journal 29(2), 130-135, Feb 1959
+    (DOI 10.2514/8.4699). Citation confirmed real; the paper itself was NOT opened
+    (publisher blocks automated access). Its data appear as the circle symbols in Zoby &
+    Sullivan figure 3, which WAS read.
+  - >
+    Trimmer, L. L., "Study of the Blunt-Body Stagnation Point Velocity Gradient in
+    Hypersonic Flow", AEDC, May 1968, DTIC AD0669378. Exists; DTIC returned 403 to every
+    access path tried. NOT opened.
+  - >
+    Any hypersonics TEXTBOOK stating the widely-repeated "R_eff ~ 3.3-3.4 x body radius"
+    rule for a flat face. No textbook was opened. The rule is SUPPORTED by the primaries -
+    Zoby & Sullivan figure 3 gives 1/0.542^2 = 3.40 and Ellison's table gives 3.155 at
+    M = 8 - but it should be cited to those, not to a textbook, and it is not a
+    Mach-independent constant.
+  - >
+    Rodrigues, J., "Closed-Form Reconstruction of Zoby-Sullivan Stagnation-Point Heat-Flux
+    Scaling", J. Thermophysics and Heat Transfer, 7 July 2026, DOI 10.2514/1.T7458.
+    Title suggests exactly the closed-form fit this project had to build for itself.
+    Paywalled, NOT opened. The highest-value single follow-up on this topic.
+  - >
+    Any source giving these data as a CLOSED-FORM correlation. Zoby & Sullivan publish
+    faired curves with no equation and no table; Ellison publishes a 3x3 table and two
+    interpolation charts; Stallings (NASA TN, 1967) explicitly tells the reader to
+    interpolate from charts. The interpolation in
+    src/aether/geometry/stagnation_gradient.py is therefore THIS PROJECT'S construction
+    over the primaries' data points, and is documented as such.

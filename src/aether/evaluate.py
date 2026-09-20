@@ -17,7 +17,7 @@ import numpy as np
 
 from .aerodynamics import build_cd_model
 from .atmosphere import USStandardAtmosphere1976
-from .geometry import CapsuleGeometry
+from .geometry import CAP_RADIUS, CapsuleGeometry
 from .heating import heat_flux_history
 from .scoring import PerformanceVector, compute_metrics
 from .tps import Layer, TPSStack, solve_tps
@@ -44,6 +44,7 @@ class DesignEvaluation:
 
 
 _SHAPE_FIELDS = ("shoulder_radius_m", "cone_half_angle_deg", "aft_cone_angle_deg", "length_m")
+_NOSE_MODEL_KEY = "effective_nose_radius_model"
 _USSA76_EXACT_CEILING_M = 86_000.0
 
 
@@ -56,6 +57,18 @@ def _capsule_from_config(geom: dict[str, Any]) -> CapsuleGeometry | None:
     """
     present = [name for name in _SHAPE_FIELDS if name in geom]
     if not present:
+        # Legacy two-parameter geometry. It has no body radius and no corner radius, so
+        # the velocity-gradient correction is not even computable here; a config asking
+        # for it on this path would otherwise be silently ignored, which is worse than
+        # failing.
+        model = geom.get(_NOSE_MODEL_KEY)
+        if model is not None and model != CAP_RADIUS:
+            raise ValueError(
+                f"vehicle.geometry.{_NOSE_MODEL_KEY} = {model!r} needs a full capsule "
+                f"({', '.join(_SHAPE_FIELDS)}); the legacy nose-radius/diameter geometry "
+                f"has no body or corner radius to apply it to. Use {CAP_RADIUS!r} or "
+                "give the full shape."
+            )
         return None
     missing = [name for name in _SHAPE_FIELDS if name not in geom]
     if missing:
@@ -67,6 +80,7 @@ def _capsule_from_config(geom: dict[str, Any]) -> CapsuleGeometry | None:
         cone_half_angle_deg=float(geom["cone_half_angle_deg"]),
         aft_cone_angle_deg=float(geom["aft_cone_angle_deg"]),
         length_m=float(geom["length_m"]),
+        effective_nose_radius_model=str(geom.get(_NOSE_MODEL_KEY, CAP_RADIUS)),
     )
 
 
@@ -159,9 +173,11 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
     geom = veh["geometry"]
     capsule = _capsule_from_config(geom)
     diameter = float(geom["diameter_m"])
+    nose_report = None
     if capsule is None:
         # Legacy two-parameter path (pre-Phase-F configs): unchanged behaviour.
         nose_radius = float(geom["nose_radius_m"])
+        effective_nose_radius = nose_radius
         area = np.pi * (diameter / 2.0) ** 2
     else:
         try:
@@ -176,7 +192,14 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
                 "entry_flight_path_angle_deg": float(ent["flight_path_angle_deg"]),
             }
             return _rejected(design_id, rejected_vector, f"invalid geometry: {exc}")
-        nose_radius = capsule.effective_nose_radius_m
+        # GEOMETRIC nose radius (the design variable) and the EFFECTIVE one that
+        # Sutton-Graves consumes are the same number only under the legacy
+        # `cap_radius` model. Keeping them apart is what stops the bluntness-ratio
+        # constraint - a statement about geometry - from quietly turning into a
+        # statement about the heating model. See NR-15's dated follow-up.
+        nose_radius = capsule.nose_radius_m
+        nose_report = capsule.effective_nose_radius_report()
+        effective_nose_radius = nose_report.effective_nose_radius_m
         area = capsule.reference_area_m2
 
     cd_model, fidelity = build_cd_model(veh.get("aero"), capsule)
@@ -206,7 +229,7 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
         cd_model=cd_model,
     )
 
-    q = heat_flux_history(traj, nose_radius)
+    q = heat_flux_history(traj, effective_nose_radius)
 
     # ---- post-entry soak-out --------------------------------------------------------
     # The bondline peak LAGS the heat pulse. Heat already inside the TPS keeps diffusing
@@ -233,6 +256,13 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
         "bluntness_ratio": (bluntness_ratio, lim.get("max_bluntness_ratio")),
     }
     diagnostics: dict[str, float] = {"bluntness_ratio": float(bluntness_ratio)}
+    if nose_report is not None:
+        # Carried on every candidate so a reader can see WHICH heating model produced a
+        # result, by how much it moved the radius, and whether it was extrapolated -
+        # without re-deriving it from the design vector.
+        diagnostics["effective_nose_radius_m"] = float(effective_nose_radius)
+        diagnostics["effective_nose_radius_ratio"] = float(nose_report.ratio_to_cap_radius)
+        diagnostics["nose_model_extrapolated"] = float(nose_report.extrapolated)
     if capsule is not None:
         areal_mass = sum(layer.thickness_m * layer.density_kg_m3 for layer in stack.layers)
         shield_fraction = (areal_mass * capsule.wetted_forebody_area_m2
