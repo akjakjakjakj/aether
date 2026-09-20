@@ -1,53 +1,30 @@
-# AI usage disclosure
+# Proposed update to AI_USAGE.md
 
-This project was built with AI assistance (Claude, via Claude Code). Hiding that would
-be dishonest and would also make the work impossible to defend. This file records what
-was AI-generated, what was reviewed, and what the student must be able to explain
-unaided.
+**This is a proposal, not an edit.** `AI_USAGE.md` has not been touched. The coordinator
+merges what is below, or some of it, after checking it.
 
-## Categories
+Scope: everything added on 2026-09-20, from the ten commits of that day and the seven
+engineering-notebook entries beside them. The existing file's table stops at "Current state
+(2026-09-02, after M1)", so none of this is in it.
 
-- **AI-generated, student-reviewed** — written by the model, read line by line and
-  understood by the student.
-- **AI-proposed, student-approved** — an engineering or modelling decision suggested by
-  the model and accepted by the student after considering it.
-- **Student-authored** — the student's own decision or writing.
-- **External** — from a cited published source.
+**Every new row is marked `review pending`.** That is not a formality and it is not
+pessimism: the student has not read any of this code line by line. Marking rows reviewed
+before that has happened would break the one rule in `AI_USAGE.md` that makes the rest of it
+worth anything.
 
-## Current state (2026-09-02, after M1)
+Size of what is proposed: the package went from roughly 1500 lines of Python at M1 to
+**21 150 lines across 13 sub-packages**, plus **5908 lines of tests** and **2564 lines** of
+experiment analysis code. Almost all of the difference was added in one day, and almost none
+of it has been read.
 
-| Item | Category | Note |
-|---|---|---|
-| Research question and hypotheses H0/H1/H2 | External / student-approved | Framed in the capstone specification (`CLAUDE.md`, `docs/AETHER_Capstone_Specification.md`), which the student received and accepted as the frozen scope. |
-| USSA-76 implementation | AI-generated, **review pending** | Layer constants are from the published standard. The >86 km table is transcribed and unverified — see VALIDATION_MATRIX G1A′. |
-| 3-DOF equations of motion | External | Standard planar entry equations. The student must be able to derive dγ/dt, including the V²cos γ / r centrifugal term. |
-| Sutton–Graves implementation | AI-generated, **review pending** | Constant re-derived from NASA TR R-376 on 2026-09-20 and deliberately **not changed** (+0.39%, against the primary's own 3.3% stated error). The report contains neither the equation form nor the constant; see `docs/theory/sutton_graves_constant.md` and NR-12. Gate G2 is `PASS`; gate G2′ (model form: catalycity, hot wall, radiation) is untouched. |
-| 1-D conduction solver (FV, backward Euler, harmonic interfaces) | AI-generated, **review pending** | The student must be able to explain why the scheme is conservative and why backward Euler was chosen. |
-| Newton linearisation of the radiating boundary | AI-proposed, student-approved | Proposed in response to an actual divergence: a fixed-point sweep on T⁴ blew up on the first run. Recorded in `docs/negative_results.md` NR-01. |
-| Post-entry soak-out phase | AI-proposed, student-approved | Proposed after observing that truncating the thermal solve at the trajectory's end understated the bondline peak by ~50 K. NR-02. |
-| Sizing the TPS to 15 mm | AI-proposed, student-approved | At the original 40 mm the bondline never responded within the entry, which would have hidden the effect under a design margin nobody would actually fly. NR-03. |
-| Verification tests | AI-generated, student-reviewed | The analytical benchmark (Carslaw & Jaeger §2.9) is external. |
-| `pareto_front` dominance test | AI-generated, **defect found and fixed** | The first implementation was wrong and produced a non-monotone "front". Caught by looking at the figure. NR-04. |
-| Figures and reports | AI-generated from data | No number in any report is typed by hand; all are read from the result files. |
+---
 
-## Standing rules for this project
+## Proposed new table section
 
-1. **No result is reported that the student cannot explain.** `docs/defense_questions.md`
-   is the checklist.
-2. **Review status is tracked honestly.** Rows above marked *review pending* are exactly
-   that. They will be changed only when the student has actually read and understood
-   the code, not when the milestone is declared done.
-3. **The AI does not decide physics.** Every modelling choice that changes a result is
-   recorded here with the reason it was accepted.
-4. **Negative results stay.** Four AI-introduced problems are recorded in
-   `docs/negative_results.md` rather than quietly fixed, because the debugging is part
-   of the research record.
-5. **The size of the unreviewed surface is itself reported.** As of 2026-09-21 the package
-   is 21150 lines of Python with 5908 lines of tests, nearly all added in one day, and the
-   student has read almost none of it line by line. A reading order (~16 hours) is in
-   `docs/ai_usage_proposed_update.md`.
+Append to `AI_USAGE.md` after the existing "Current state (2026-09-02, after M1)" table,
+under a new heading. The format matches the existing three-column table.
 
-## Current state (2026-09-20, after M2–M7 harnesses)
+### Current state (2026-09-20, after M2–M7 harnesses)
 
 | Item | Category | Note |
 |---|---|---|
@@ -86,8 +63,93 @@ unaided.
 | **Figures and generated reports** (`viz.py`, `optimization/report.py`, `cfd/report.py`, `uncertainty/report.py`, `studies/*`) | AI-generated from data | No number in any report is typed by hand. After NR-18, generated reports no longer contain pre-written interpretive prose; interpretation is emitted by code from audit tables or not at all. |
 | **Test suite** (5908 lines, 24 files) | AI-generated, **review pending** | Includes several tests that assert a *finding* rather than a fix, so the finding cannot be silently forgotten (weak identifiability of contact resistance; hull-membership independence; the unchecked atmosphere rows). |
 
-## What the AI did *not* contribute
+### Proposed addition to "Standing rules for this project"
 
-The research question, the choice of hypotheses, the frozen scope, and the decision that
-the bondline rather than the surface is the interesting failure mode. Those came from
-the project specification.
+> 5. **The size of the unreviewed surface is itself reported.** As of 2026-09-20 the package
+>    is 21 150 lines of Python with 5908 lines of tests, nearly all added in one day, and the
+>    author has read almost none of it line by line. That number belongs in the disclosure,
+>    because "AI-assisted" without it is uninformative.
+
+### Proposed correction to an existing row
+
+The existing table's Sutton–Graves row reads "Constant not yet re-derived from NASA TR
+R-376." **That is now out of date.** Proposed replacement:
+
+> | Sutton–Graves implementation | AI-generated, **review pending** | Constant re-derived from NASA TR R-376 on 2026-09-20 and deliberately **not changed** (+0.39%, against the primary's own 3.3% stated error). The report contains neither the equation form nor the constant; see `docs/theory/sutton_graves_constant.md` and NR-12. Gate G2 is `PASS`; gate G2′ (model form: catalycity, hot wall, radiation) is untouched. |
+
+---
+
+## Reading order, to be able to defend this
+
+Honest framing first. **Reading 21 000 lines is not the task and will not happen.** The task
+is to be able to explain every result and every physical decision, which is a much smaller
+set of files. Most of the 21 000 lines are harness: study runners, report generators, plotting,
+persistence, CLI plumbing. Those matter for reproducibility and almost never for a defence.
+
+The order below is by *defensibility per hour*, not by dependency. Time estimates assume
+reading at roughly 100 lines per hour with the theory document open alongside, which is slow
+and is the realistic rate for code that implements physics you have not derived yourself.
+
+### Tier 1 — cannot defend the project without these (about 6 hours)
+
+| Order | File | Lines | Hours | Why first |
+|---|---|---|---|---|
+| 1 | `src/aether/evaluate.py` | 370 | 1.5 | The canonical evaluator. Every result in the project comes out of this one function. Read it with `ASSUMPTIONS.md` open. If you read one file, read this one. |
+| 2 | `src/aether/tps/conduction1d.py` | ~470 | 2.0 | The headline claim is about what happens inside the stack, and this is the only `PASS` that claim rests on. Be able to explain the harmonic interface, why backward Euler, the Newton-linearised radiating surface, and what the energy residual measures. |
+| 3 | `src/aether/geometry/stagnation_gradient.py` + `docs/theory/effective_nose_radius.md` | 282 + doc | 1.5 | The physics change of the day, worth 20% on peak heat flux. The theory document is the better entry point; read it first, then the code, and check that the code does what the document says. |
+| 4 | `src/aether/heating/sutton_graves.py` + `docs/theory/sutton_graves_constant.md` | 129 + doc | 1.0 | Short file, long argument. The constant, its units, and why it was not changed. |
+
+### Tier 2 — needed for the results sections (about 5 hours)
+
+| Order | File | Lines | Hours | Why |
+|---|---|---|---|---|
+| 5 | `src/aether/trajectory/entry3dof.py` | ~300 | 1.0 | Derive dγ/dt yourself on paper first, then read. The V²cos γ / r term is a standard defence question. |
+| 6 | `src/aether/optimization/pareto.py` | ~250 | 1.0 | Dominance, hypervolume, spacing, knee. Small, self-contained, and the site of NR-04. |
+| 7 | `src/aether/atmosphere/us76.py` | ~300 | 1.0 | Where the exact region ends and the transcribed table begins, and why that boundary matters for the bondline (NR-14). |
+| 8 | `src/aether/optimization/budget.py` + `design_space.py` | ~500 | 1.0 | What an "evaluation" costs and what a design vector is. Every study's accounting rests on these two. |
+| 9 | `src/aether/geometry/capsule.py` (`validate()` and `effective_nose_radius_m` only) | ~150 of 619 | 1.0 | Read the validator and the effective-radius property. Skip the STL writer unless asked about it. |
+
+### Tier 3 — read before the studies are run, not after (about 5 hours)
+
+| Order | File | Hours | Why |
+|---|---|---|---|
+| 10 | `src/aether/surrogate/gp.py` | 1.5 | GP prediction, the hull guard, `HULL_TOLERANCE`. Needed for every §11–13 question. |
+| 11 | `src/aether/uncertainty/statistics.py` + `sampling.py` | 1.5 | Wilson, Clopper–Pearson at k = 0, percentiles, nested draws and common random numbers. Small files carrying the answers to several defence questions. |
+| 12 | `src/aether/optimization/ai_agent.py` (the prompt builder and the schema validator) | 1.0 | What the agent sees and what is rejected. Needed to answer "what did AI contribute" precisely. |
+| 13 | `src/aether/optimization/guards.py` | 1.0 | Short. The response to NR-18, and the best single illustration of what went wrong organisationally. |
+
+### Tier 4 — skim only, unless a question lands on it
+
+`cfd/` (3084 lines), `optimization/adaptive*.py`, `uncertainty/robust.py`, every `report.py`
+and `plots.py`, `studies/*`, `experiments/thermal_coupon/analysis/`. Read the **docstrings**
+and the configuration files that drive them. For CFD specifically,
+`docs/validation/M2_model_form_limits.md` and the generated M2 and M3 reports carry everything
+a defence needs; the pipeline code is reproducibility infrastructure.
+
+### Total
+
+**About 16 hours of real reading** to get from "an AI wrote it" to "I can explain every result
+and every physical decision". Realistically that is four to six sittings. It is not
+negotiable down by reading faster; it is negotiable down only by deciding that some results
+will not be defended, which is a worse trade.
+
+### Two things to do while reading, not afterwards
+
+1. **Update `AI_USAGE.md` as you go.** Move a row from *review pending* to *student-reviewed*
+   the day you finish the file. A batch update at the end is a guess.
+2. **Write your own answer to the matching defence question before reading the code**, then
+   check it. `docs/defense_questions.md` is indexed to roughly the same order. Reading code
+   to confirm an answer you have already attempted sticks; reading it to absorb an answer
+   does not.
+
+---
+
+## What the coordinator should check before merging
+
+- That no row here is marked reviewed. None is.
+- That the "AI-proposed, student-approved pending" rows really are decisions rather than
+  implementation details. Fourteen are listed; each changes a result, a physical model, a
+  declared criterion, or what the student will do in a laboratory.
+- That the correction to the existing Sutton–Graves row is applied, since the current text is
+  now false.
+- That the line counts are current at merge time. They were measured on 2026-09-20.

@@ -44,7 +44,7 @@ Measured on an Apple M4, single-threaded. Nothing here is parallelised yet.
 |---|---|
 | `make test` | ~25 s |
 | `make baseline` | ~3 s |
-| `make burn-vs-bake` | ~4 min (27 one-dimensional + 140 grid evaluations) |
+| `make burn-vs-bake` | ~4 min (41 one-dimensional + 140 grid evaluations) |
 | `make doe` | ~6 min on 6 worker processes (~9300 coupled evaluations; M4, added 2026-09-20) |
 | `make optimize` | ~13 min on 6 worker processes (3 methods × 7 seeds × 1000 evaluations) |
 | `make ablation` | M5, added 2026-09-20. **Not yet run to completion**; estimated ~2–3 h, almost all LLM latency (≈ 5 min per call, ≤ 80 calls). Needs the Claude Code CLI installed and signed in; reads no API key. |
@@ -108,8 +108,8 @@ make burn-vs-bake
 
 should reproduce, on the committed baseline configuration:
 
-- Spearman ρ(q''_max, T_bond,max) = **−1.000** over the 27-point sweep
-- **0 of 27** candidates feasible with geometry frozen
+- Spearman ρ(q''_max, T_bond,max) = **−1.000** over the 41-point sweep
+- **0 of 41** candidates feasible with geometry frozen
 - **21 of 140** feasible on the 2-D grid
 - peak-flux-only optimum: q'' = 37.0 W/cm², T_bond = 444.1 K
 - joint O1 optimum: q'' = 44.3 W/cm², T_bond = 411.6 K
