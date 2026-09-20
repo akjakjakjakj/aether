@@ -1,0 +1,137 @@
+{
+ "ai_adaptive": {
+  "rounds_parsed": 20,
+  "rounds_mentioning": {
+   "admits_prior_knowledge": 13,
+   "names_allen_eggers": 1,
+   "names_sutton_graves": 0,
+   "front_is_1d_in_gamma": 15,
+   "mass_fraction_caps_D": 20,
+   "hull_or_extrapolation_fence": 15,
+   "cone_is_validity_lever": 19,
+   "mentions_Cd_or_drag_coefficient": 4,
+   "says_shape_raises_drag": 1,
+   "questions_realism_of_a_limit": 0,
+   "mentions_shoulder": 2,
+   "hv_dominated_by_bondline_axis": 4
+  },
+  "first_call_by_seed": {
+   "mass_fraction_caps_D": {
+    "seed_37": 1,
+    "seed_41": 1
+   },
+   "cone_is_validity_lever": {
+    "seed_37": 1,
+    "seed_41": 1
+   },
+   "says_shape_raises_drag": {
+    "seed_37": 1
+   },
+   "mentions_shoulder": {
+    "seed_37": 1,
+    "seed_41": 1
+   },
+   "admits_prior_knowledge": {
+    "seed_37": 2,
+    "seed_41": 1
+   },
+   "hv_dominated_by_bondline_axis": {
+    "seed_37": 2
+   },
+   "hull_or_extrapolation_fence": {
+    "seed_37": 3,
+    "seed_41": 3
+   },
+   "front_is_1d_in_gamma": {
+    "seed_37": 4,
+    "seed_41": 3
+   },
+   "names_allen_eggers": {
+    "seed_41": 1
+   },
+   "mentions_Cd_or_drag_coefficient": {
+    "seed_41": 4
+   }
+  }
+ },
+ "ai_agent": {
+  "rounds_parsed": 47,
+  "rounds_mentioning": {
+   "admits_prior_knowledge": 35,
+   "names_allen_eggers": 12,
+   "names_sutton_graves": 9,
+   "front_is_1d_in_gamma": 27,
+   "mass_fraction_caps_D": 45,
+   "hull_or_extrapolation_fence": 39,
+   "cone_is_validity_lever": 39,
+   "mentions_Cd_or_drag_coefficient": 4,
+   "says_shape_raises_drag": 4,
+   "questions_realism_of_a_limit": 0,
+   "mentions_shoulder": 2,
+   "hv_dominated_by_bondline_axis": 10
+  },
+  "first_call_by_seed": {
+   "admits_prior_knowledge": {
+    "seed_37": 1,
+    "seed_41": 1,
+    "seed_59": 1,
+    "seed_67": 1,
+    "seed_73": 4
+   },
+   "mass_fraction_caps_D": {
+    "seed_37": 1,
+    "seed_41": 1,
+    "seed_59": 1,
+    "seed_67": 1,
+    "seed_73": 1
+   },
+   "cone_is_validity_lever": {
+    "seed_37": 1,
+    "seed_41": 1,
+    "seed_59": 1,
+    "seed_67": 1,
+    "seed_73": 1
+   },
+   "hv_dominated_by_bondline_axis": {
+    "seed_37": 1,
+    "seed_41": 2,
+    "seed_59": 1,
+    "seed_67": 2
+   },
+   "hull_or_extrapolation_fence": {
+    "seed_37": 3,
+    "seed_41": 3,
+    "seed_59": 2,
+    "seed_67": 3,
+    "seed_73": 2
+   },
+   "front_is_1d_in_gamma": {
+    "seed_37": 5,
+    "seed_41": 3,
+    "seed_59": 4,
+    "seed_67": 5,
+    "seed_73": 4
+   },
+   "says_shape_raises_drag": {
+    "seed_41": 1,
+    "seed_67": 1
+   },
+   "names_allen_eggers": {
+    "seed_41": 6,
+    "seed_59": 1,
+    "seed_73": 8
+   },
+   "mentions_Cd_or_drag_coefficient": {
+    "seed_59": 1,
+    "seed_73": 2
+   },
+   "mentions_shoulder": {
+    "seed_59": 10,
+    "seed_67": 2
+   },
+   "names_sutton_graves": {
+    "seed_67": 1
+   }
+  }
+ }
+}

@@ -1,0 +1,64 @@
+.venv/bin/python scripts/run_ai_ablation.py --replay M5-ABL-20260920T211134Z --strict-replay
+AETHER M5 ablation  run=M5-REPLAY-20260920T224633Z  mode=REPLAY of M5-ABL-20260920T211134Z  git=bf4f9a3 (dirty)  workers=6
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg']
+evaluator source hash at launch: c0a44bb0c14acd88
+  lhs_search   seed  37: spent 200 of 200, 0 cache hits, 0 LLM calls, 18 s
+  lhs_search   seed  41: spent 200 of 200, 0 cache hits, 0 LLM calls, 11 s
+  lhs_search   seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 10 s
+  lhs_search   seed  67: spent 200 of 200, 0 cache hits, 0 LLM calls, 10 s
+  lhs_search   seed  73: spent 200 of 200, 0 cache hits, 0 LLM calls, 10 s
+  nsga2        seed  37: spent 200 of 200, 0 cache hits, 0 LLM calls, 22 s
+  nsga2        seed  41: spent 200 of 200, 0 cache hits, 0 LLM calls, 18 s
+  nsga2        seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 20 s
+  nsga2        seed  67: spent 200 of 200, 0 cache hits, 0 LLM calls, 20 s
+  nsga2        seed  73: spent 200 of 200, 0 cache hits, 0 LLM calls, 20 s
+  nsga2_pop20  seed  37: spent 200 of 200, 0 cache hits, 0 LLM calls, 23 s
+  nsga2_pop20  seed  41: spent 200 of 200, 0 cache hits, 0 LLM calls, 30 s
+  nsga2_pop20  seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 34 s
+  nsga2_pop20  seed  67: spent 200 of 200, 0 cache hits, 0 LLM calls, 26 s
+  nsga2_pop20  seed  73: spent 200 of 200, 0 cache hits, 0 LLM calls, 20 s
+  bo_parego    seed  37: spent 200 of 200, 0 cache hits, 0 LLM calls, 84 s
+  bo_parego    seed  41: spent 200 of 200, 0 cache hits, 0 LLM calls, 96 s
+  bo_parego    seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 95 s
+  bo_parego    seed  67: spent 200 of 200, 0 cache hits, 0 LLM calls, 88 s
+  bo_parego    seed  73: spent 200 of 200, 0 cache hits, 0 LLM calls, 89 s
+  ai_agent     seed  37: spent 200 of 200, 0 cache hits, 9 LLM calls, 71 s
+  ai_agent     seed  67: spent 200 of 200, 0 cache hits, 9 LLM calls, 81 s
+  ai_agent     seed  59: spent 200 of 200, 0 cache hits, 10 LLM calls, 83 s
+  ai_agent     seed  41: spent 200 of 200, 0 cache hits, 10 LLM calls, 83 s
+  ai_agent     seed  73: spent 200 of 200, 0 cache hits, 9 LLM calls, 32 s
+/Users/akj/Projects/aether/.venv/lib/python3.12/site-packages/sklearn/gaussian_process/_gpr.py:667: ConvergenceWarning: lbfgs failed to converge after 24 iteration(s) (status=2):
+ABNORMAL: 
+
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+  _check_optimize_result("lbfgs", opt_res)
+/Users/akj/Projects/aether/.venv/lib/python3.12/site-packages/sklearn/gaussian_process/_gpr.py:667: ConvergenceWarning: lbfgs failed to converge after 21 iteration(s) (status=2):
+ABNORMAL: 
+
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+  _check_optimize_result("lbfgs", opt_res)
+/Users/akj/Projects/aether/.venv/lib/python3.12/site-packages/sklearn/gaussian_process/_gpr.py:667: ConvergenceWarning: lbfgs failed to converge after 29 iteration(s) (status=2):
+ABNORMAL: 
+
+You might also want to scale the data as shown in:
+    https://scikit-learn.org/stable/modules/preprocessing.html
+  _check_optimize_result("lbfgs", opt_res)
+  ai_adaptive  seed  37: spent 200 of 200, 0 cache hits, 10 LLM calls, 171 s
+  ai_adaptive  seed  41: spent 200 of 200, 0 cache hits, 10 LLM calls, 181 s
+
+  lhs_search   HV = 0.2524 +/- 0.0171 [0.2332, 0.2757]  (n = 5)
+  nsga2        HV = 0.2803 +/- 0.0253 [0.2569, 0.3186]  (n = 5)
+  nsga2_pop20  HV = 0.2753 +/- 0.0381 [0.2156, 0.3082]  (n = 5)
+  bo_parego    HV = 0.3520 +/- 0.0011 [0.3506, 0.3530]  (n = 5)
+  ai_agent     HV = 0.3556 +/- 0.0000 [0.3555, 0.3556]  (n = 5)
+  ai_adaptive  HV = 0.3556 +/- 0.0000 [0.3556, 0.3556]  (n = 2)
+  @50: ai_agent vs bo_parego: diff +0.0283, A12 0.88 -> AI helped
+  @100: ai_agent vs bo_parego: diff +0.0085, A12 1.00 -> AI helped
+  @200: ai_agent vs bo_parego: diff +0.0036, A12 1.00 -> no measured difference
+LLM calls: 67
+replay check: {'prompt_mismatches': 0, 'source_hash_original': 'c0a44bb0c14acd88', 'source_hash_matches_original': True, 'hv_per_seed_identical': {'lhs_search': True, 'nsga2': True, 'nsga2_pop20': True, 'bo_parego': True, 'ai_agent': True, 'ai_adaptive': True}, 'all_identical': True}
+figures: ['M5_hypervolume.png', 'M5_hypervolume_per_seed.png', 'M5_fronts.png', 'M5_budget_use.png', 'M5_surrogate_calibration.png']
+report -> /Users/akj/Projects/aether/results/M5/M5-REPLAY-20260920T224633Z/M5_ai_ablation.md
+results -> /Users/akj/Projects/aether/results/M5/M5-REPLAY-20260920T224633Z

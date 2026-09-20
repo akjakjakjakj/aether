@@ -1154,3 +1154,82 @@ optimiser ran (`M4-DOE-20260920T204844Z/hv_reference_check.json`).
 **Evidence.** `results/M4/M4-OPT-20260920T205252Z/summary.json`, `candidates.csv|.parquet`,
 `audit_probes.csv`; `reports/milestones/M4_pareto_optimisation.md` §10–§11a; Fidelity-0
 counterpart archived as `reports/milestones/M4_pareto_optimisation_fidelity0.md`.
+
+### NR-31 — The M5 report generator carried three pre-written sentences into a Fidelity-1 run where they are wrong or misleading
+
+**What happened.** The M5 study (`M5-ABL-20260920T211134Z`) ran on the final physics
+(`cfd_surface_v2`, evaluator fidelity label 1). The report generator
+(`src/aether/optimization/ablation_report.py`) was written when only Fidelity 0 existed and,
+despite the NR-18 rule that findings must be generated from `summary.json`, three fixed
+phrases survived. (1) The §46 table column **"CFD calls"** is computed as "paid rows with
+fidelity > 0", which at Fidelity 1 counts every evaluation that went through the CFD-derived
+drag *surface*: it prints 90–188 per seed and a header total of 4038 for a study that ran
+the CFD solver **zero** times. (2) The `ai_adaptive` row and section say **"F0 only"** and
+"every candidate was evaluated at Fidelity 0"; every candidate was in fact evaluated by the
+same Fidelity-1 surface as the other methods. What is true is that no promotion to a new CFD
+case was available or granted (0 of 360 decisions). (3) The power paragraph says a "no
+measured difference" means *the study could not tell them apart*; at the 200-evaluation
+checkpoint the exact test rejected at its floor (p = 1/252, Holm 0.0119, A12 = 1.00) and the
+verdict is "no measured difference" because the mean gain (+0.0036) is under the
+pre-declared 0.005 threshold.
+
+**Why it matters.** (1) and (2) are the NR-18 failure again in a smaller form: a label that
+was true of the model the generator was written for. A reader of the §46 table would
+conclude M5 spent four thousand CFD runs. (3) would let a reader think the agent and the
+Bayesian optimiser were statistically indistinguishable at 200 evaluations, which is not
+what was measured.
+
+**What was done.** Nothing under `src/aether` was touched: three studies were running and
+every runner aborts on a source change (NR-18, NR-24). The three corrections are written
+into the hand-written audit that the report embeds (`M5_qualitative_audit.md` §6), so the
+published report carries them. **Open:** once no study is running, the generator should
+count CFD *solver* calls (0 for M5), reword the `ai_adaptive` label in terms of promotion
+rather than fidelity number, and make the power sentence conditional on which leg of the
+rule failed. Also cosmetic: the prospective surrogate table does not mark heat flux as
+log₁₀ although its numbers are; and a comment in `configs/ai_ablation.yaml` still quotes the
+Fidelity-0 M4 reference (0.3773 ± 0.0070; the final-physics value, which the report reads
+from M4's summary and prints correctly, is 0.3467 ± 0.0055).
+
+**Evidence.** `reports/milestones/M5_ai_ablation.md` §3, §4, §6, §7.6;
+`results/M5/M5-ABL-20260920T211134Z/summary.json` (`methods.*.cfd_calls_mean`,
+`criteria.checkpoints.200`).
+
+### NR-32 — The LLM agent threw away a correct rule it had derived, because the harness only lets it remember 400 characters; and a fifth of its budget went on polishing two placeholder limits
+
+**What happened.** Two things in the M5 agent's behaviour that the hypervolume does not show.
+
+*A forgotten rule.* In round 1 of seed 37 the agent derived, from the geometry validator's
+failure messages, the closed-form validity rule (bluntness − 0.1)·cos(cone half-angle) ≤ 0.4
+— which agrees with the evaluator on all 5400 paid designs of the run
+(`audit/geometry_rule_check.py`). The prompt's digest of earlier rounds carries the first 400
+characters of the previous `mechanism` only; the rule lived in the `observation`. In round 2
+the agent refitted a looser rule from the rows it could see, sent **all 20** proposals to
+bluntness 1.25–1.35 marked "feasible", and got 20 refusals and no hypervolume gain.
+`ai_adaptive` on the same seed (same initial design, fresh LLM samples) lost 18 of 20 in the
+same round. 65 of the agent's 900 accepted proposals returned no physics; 20 of them are
+this one round. It recovered in the next round and the seed finished level with the others
+(0.35559), so the cost is invisible at 200 evaluations and would not be at 60.
+
+*Fence polishing.* From round 4 on the agent walked the diameter 3.384 → 3.385 → 3.3852 →
+3.38523 m toward a mass-fraction margin of 9 × 10⁻⁶ and the entry angle in steps of 10⁻⁴°
+toward the g-limit. 195 of its 1000 paid designs are within 10⁻³ (unit cube) of an earlier
+one; removing them lowers its mean hypervolume from 0.35557 to 0.35517. Dropping every design
+within 0.1 % of any constraint cuts its final lead over `bo_parego` from 0.0036 to 0.0020
+(`audit/fence_counterfactual.py`). It never asked, in 67 rounds, whether a heat-shield mass
+fraction of 0.99999 was a meaningful place to be.
+
+**Why it matters.** The first is a harness property, not a model property: the agent's
+memory between rounds was chosen (to keep prompts deterministic and short) without testing
+what it loses, and the loss fell on exactly the kind of knowledge (a boundary rule) that the
+failure-message asymmetry gives the agent in the first place. The second is reward hacking
+in its mildest form: the agent was told the score and optimised the score. Both the
+mass-fraction limit and the flat 12 g are labelled placeholders in M4; an optimiser that
+parks on them to five decimal places is measuring the placeholder.
+
+**What changed.** Nothing in the harness (frozen during the studies). Recorded in the audit
+(§3, §4). If M5 is ever re-run: carry the agent's own `observation` forward (or let it keep
+a short notes field), and report hypervolume with a constraint stand-off beside the raw one.
+
+**Evidence.** `results/M5/M5-ABL-20260920T211134Z/llm/ai_agent/seed_37/call_01..03`;
+`audit/extras.json` (`no_physics_by_seed_call`), `audit/hull_and_near_repeats.json`,
+`audit/fence_counterfactual.json`.

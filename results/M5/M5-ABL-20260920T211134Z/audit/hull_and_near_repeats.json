@@ -1,0 +1,72 @@
+{
+ "largest_bluntness_evaluated_at_cone>=69.9": 1.2,
+ "smallest_bluntness_refused_by_surface_at_cone>=69.9": 1.201,
+ "methods": {
+  "ai_adaptive": {
+   "paid": 400,
+   "refused_outside_cfd_hull": 26,
+   "invalid_geometry": 23,
+   "front_designs": 151,
+   "front_share_within_0.01_bluntness_of_edge": 1.0,
+   "front_bluntness_max": 1.2,
+   "near_repeats": 78,
+   "hv_mean": 0.35558143063102177,
+   "hv_mean_without_near_repeats": 0.3550428970720689
+  },
+  "ai_agent": {
+   "paid": 1000,
+   "refused_outside_cfd_hull": 40,
+   "invalid_geometry": 81,
+   "front_designs": 362,
+   "front_share_within_0.01_bluntness_of_edge": 1.0,
+   "front_bluntness_max": 1.2,
+   "near_repeats": 195,
+   "hv_mean": 0.35557497057001736,
+   "hv_mean_without_near_repeats": 0.35516620233516827
+  },
+  "bo_parego": {
+   "paid": 1000,
+   "refused_outside_cfd_hull": 23,
+   "invalid_geometry": 396,
+   "front_designs": 39,
+   "front_share_within_0.01_bluntness_of_edge": 0.1794871794871795,
+   "front_bluntness_max": 1.1989180741644931,
+   "near_repeats": 0,
+   "hv_mean": 0.3519568397754032,
+   "hv_mean_without_near_repeats": 0.3519568397754032
+  },
+  "lhs_search": {
+   "paid": 1000,
+   "refused_outside_cfd_hull": 1,
+   "invalid_geometry": 551,
+   "front_designs": 11,
+   "front_share_within_0.01_bluntness_of_edge": 0.0,
+   "front_bluntness_max": 1.0997924744344036,
+   "near_repeats": 0,
+   "hv_mean": 0.25243733832613324,
+   "hv_mean_without_near_repeats": 0.25243733832613324
+  },
+  "nsga2": {
+   "paid": 1000,
+   "refused_outside_cfd_hull": 1,
+   "invalid_geometry": 195,
+   "front_designs": 17,
+   "front_share_within_0.01_bluntness_of_edge": 0.0,
+   "front_bluntness_max": 0.9607216294577018,
+   "near_repeats": 21,
+   "hv_mean": 0.2803267530276308,
+   "hv_mean_without_near_repeats": 0.2803267230063779
+  },
+  "nsga2_pop20": {
+   "paid": 1000,
+   "refused_outside_cfd_hull": 0,
+   "invalid_geometry": 116,
+   "front_designs": 19,
+   "front_share_within_0.01_bluntness_of_edge": 0.0,
+   "front_bluntness_max": 0.8955138221915007,
+   "near_repeats": 55,
+   "hv_mean": 0.27532522188046266,
+   "hv_mean_without_near_repeats": 0.27532522188046266
+  }
+ }
+}

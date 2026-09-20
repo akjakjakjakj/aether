@@ -1,0 +1,465 @@
+{
+ "ai_agent": {
+  "by_call": {
+   "1": {
+    "n": 100,
+    "no_physics": 5,
+    "infeasible_physics": 9,
+    "feasible": 86,
+    "median_abs_rel_err_flux": 0.0685579447162792,
+    "median_abs_err_bondline_k": 3.331038194288567
+   },
+   "2": {
+    "n": 99,
+    "no_physics": 31,
+    "infeasible_physics": 3,
+    "feasible": 65,
+    "median_abs_rel_err_flux": 0.016789375102635826,
+    "median_abs_err_bondline_k": 0.5583972617860979
+   },
+   "3": {
+    "n": 99,
+    "no_physics": 12,
+    "infeasible_physics": 0,
+    "feasible": 87,
+    "median_abs_rel_err_flux": 0.0013502520974246063,
+    "median_abs_err_bondline_k": 0.1333974636808648
+   },
+   "4": {
+    "n": 100,
+    "no_physics": 7,
+    "infeasible_physics": 0,
+    "feasible": 93,
+    "median_abs_rel_err_flux": 0.00019957961966285878,
+    "median_abs_err_bondline_k": 0.04079431463219407
+   },
+   "5": {
+    "n": 100,
+    "no_physics": 1,
+    "infeasible_physics": 8,
+    "feasible": 91,
+    "median_abs_rel_err_flux": 9.523284818336554e-05,
+    "median_abs_err_bondline_k": 0.022565350404420315
+   },
+   "6": {
+    "n": 98,
+    "no_physics": 4,
+    "infeasible_physics": 0,
+    "feasible": 94,
+    "median_abs_rel_err_flux": 7.089497020546411e-05,
+    "median_abs_err_bondline_k": 0.012766648330398311
+   },
+   "7": {
+    "n": 84,
+    "no_physics": 3,
+    "infeasible_physics": 1,
+    "feasible": 80,
+    "median_abs_rel_err_flux": 7.798072939756739e-05,
+    "median_abs_err_bondline_k": 0.021016986513814118
+   },
+   "8": {
+    "n": 104,
+    "no_physics": 2,
+    "infeasible_physics": 0,
+    "feasible": 102,
+    "median_abs_rel_err_flux": 6.726847510514034e-05,
+    "median_abs_err_bondline_k": 0.014036774026862986
+   },
+   "9": {
+    "n": 104,
+    "no_physics": 1,
+    "infeasible_physics": 0,
+    "feasible": 103,
+    "median_abs_rel_err_flux": 4.110805698769404e-05,
+    "median_abs_err_bondline_k": 0.009426807856414143
+   },
+   "10": {
+    "n": 12,
+    "no_physics": 0,
+    "infeasible_physics": 0,
+    "feasible": 12,
+    "median_abs_rel_err_flux": 0.0001187420080674372,
+    "median_abs_err_bondline_k": 0.01820512295574872
+   }
+  },
+  "no_physics_by_seed_call": {
+   "seed 59 call 1": 2,
+   "seed 59 call 2": 1,
+   "seed 67 call 2": 3,
+   "seed 41 call 2": 4,
+   "seed 37 call 2": 20,
+   "seed 67 call 3": 4,
+   "seed 59 call 3": 1,
+   "seed 37 call 3": 4,
+   "seed 41 call 3": 2,
+   "seed 59 call 4": 2,
+   "seed 41 call 4": 1,
+   "seed 37 call 4": 2,
+   "seed 59 call 5": 1,
+   "seed 67 call 6": 4,
+   "seed 67 call 7": 2,
+   "seed 59 call 9": 1,
+   "seed 73 call 1": 3,
+   "seed 73 call 2": 3,
+   "seed 73 call 3": 1,
+   "seed 73 call 4": 2,
+   "seed 73 call 7": 1,
+   "seed 73 call 8": 2
+  },
+  "hv_by_round": {
+   "seed 59": [
+    0.31457,
+    0.34812,
+    0.35368,
+    0.35519,
+    0.35545,
+    0.35549,
+    0.35551,
+    0.35552,
+    0.35553,
+    0.35554
+   ],
+   "seed 41": [
+    0.33203,
+    0.34992,
+    0.35454,
+    0.35537,
+    0.35549,
+    0.35555,
+    0.35556,
+    0.35558,
+    0.35559,
+    0.35559
+   ],
+   "seed 67": [
+    0.28443,
+    0.34456,
+    0.35365,
+    0.35505,
+    0.35531,
+    0.35549,
+    0.35552,
+    0.35556,
+    0.35558
+   ],
+   "seed 37": [
+    0.33115,
+    0.33115,
+    0.3429,
+    0.35413,
+    0.35528,
+    0.35536,
+    0.35554,
+    0.35557,
+    0.35559
+   ],
+   "seed 73": [
+    0.31615,
+    0.34686,
+    0.35401,
+    0.35502,
+    0.3553,
+    0.35547,
+    0.35551,
+    0.35556,
+    0.35558
+   ]
+  }
+ },
+ "ai_adaptive": {
+  "by_call": {
+   "1": {
+    "n": 40,
+    "no_physics": 0,
+    "infeasible_physics": 1,
+    "feasible": 39,
+    "median_abs_rel_err_flux": 0.030617527877746444,
+    "median_abs_err_bondline_k": 2.783432782206404
+   },
+   "2": {
+    "n": 40,
+    "no_physics": 19,
+    "infeasible_physics": 0,
+    "feasible": 21,
+    "median_abs_rel_err_flux": 0.007081075122905473,
+    "median_abs_err_bondline_k": 0.18255501474777702
+   },
+   "3": {
+    "n": 40,
+    "no_physics": 5,
+    "infeasible_physics": 4,
+    "feasible": 31,
+    "median_abs_rel_err_flux": 0.0017479933667576498,
+    "median_abs_err_bondline_k": 0.26103206854838845
+   },
+   "4": {
+    "n": 40,
+    "no_physics": 0,
+    "infeasible_physics": 0,
+    "feasible": 40,
+    "median_abs_rel_err_flux": 0.00027848836420269244,
+    "median_abs_err_bondline_k": 0.03835859613764114
+   },
+   "5": {
+    "n": 40,
+    "no_physics": 1,
+    "infeasible_physics": 2,
+    "feasible": 37,
+    "median_abs_rel_err_flux": 0.00053928504532219,
+    "median_abs_err_bondline_k": 0.07207546202437243
+   },
+   "6": {
+    "n": 34,
+    "no_physics": 3,
+    "infeasible_physics": 3,
+    "feasible": 28,
+    "median_abs_rel_err_flux": 9.306849662053071e-05,
+    "median_abs_err_bondline_k": 0.027741037896475973
+   },
+   "7": {
+    "n": 29,
+    "no_physics": 0,
+    "infeasible_physics": 0,
+    "feasible": 29,
+    "median_abs_rel_err_flux": 6.420428947839745e-05,
+    "median_abs_err_bondline_k": 0.02268868615038855
+   },
+   "8": {
+    "n": 49,
+    "no_physics": 0,
+    "infeasible_physics": 1,
+    "feasible": 48,
+    "median_abs_rel_err_flux": 6.059815647089284e-05,
+    "median_abs_err_bondline_k": 0.012602901118611953
+   },
+   "9": {
+    "n": 40,
+    "no_physics": 0,
+    "infeasible_physics": 0,
+    "feasible": 40,
+    "median_abs_rel_err_flux": 3.6616635027724696e-05,
+    "median_abs_err_bondline_k": 0.00682407432321952
+   },
+   "10": {
+    "n": 8,
+    "no_physics": 0,
+    "infeasible_physics": 0,
+    "feasible": 8,
+    "median_abs_rel_err_flux": 0.0001531099403422034,
+    "median_abs_err_bondline_k": 0.021244275407724444
+   }
+  },
+  "no_physics_by_seed_call": {
+   "seed 41 call 2": 1,
+   "seed 37 call 2": 18,
+   "seed 37 call 3": 1,
+   "seed 41 call 3": 4,
+   "seed 41 call 5": 1,
+   "seed 37 call 6": 3
+  },
+  "hv_by_round": {
+   "seed 41": [
+    0.32129,
+    0.34987,
+    0.35418,
+    0.35518,
+    0.35548,
+    0.35552,
+    0.35556,
+    0.35558,
+    0.35558,
+    0.35558
+   ],
+   "seed 37": [
+    0.33139,
+    0.33617,
+    0.35212,
+    0.35496,
+    0.35506,
+    0.35547,
+    0.35553,
+    0.35557,
+    0.35557,
+    0.35558
+   ]
+  }
+ },
+ "per_seed_fronts_pooled": {
+  "ai_adaptive": {
+   "n": 151,
+   "cd_at_peak_heating": [
+    1.3643942131629725,
+    1.364453386739443
+   ],
+   "diameter_m": [
+    3.383,
+    3.38524
+   ],
+   "bluntness_ratio": [
+    1.2,
+    1.2
+   ],
+   "cone_half_angle_deg": [
+    70.0,
+    70.0
+   ],
+   "flight_path_angle_deg": [
+    -3.5703,
+    -1.5
+   ],
+   "min_margin_mass_fraction": 3.141612911927716e-06,
+   "min_margin_max_g": 1.4324310284585806e-05,
+   "share_margin_mass_below_1e-3": 0.9933774834437086,
+   "share_margin_mass_below_1e-4": 0.7483443708609272
+  },
+  "ai_agent": {
+   "n": 362,
+   "cd_at_peak_heating": [
+    1.36439316803284,
+    1.3644563989106926
+   ],
+   "diameter_m": [
+    3.38,
+    3.38523
+   ],
+   "bluntness_ratio": [
+    1.2,
+    1.2
+   ],
+   "cone_half_angle_deg": [
+    70.0,
+    70.0
+   ],
+   "flight_path_angle_deg": [
+    -3.57035,
+    -1.5
+   ],
+   "min_margin_mass_fraction": 9.04958623959562e-06,
+   "min_margin_max_g": 1.1411427340846105e-05,
+   "share_margin_mass_below_1e-3": 0.9972375690607734,
+   "share_margin_mass_below_1e-4": 0.643646408839779
+  },
+  "bo_parego": {
+   "n": 39,
+   "cd_at_peak_heating": [
+    1.3625787939563083,
+    1.3744337047448447
+   ],
+   "diameter_m": [
+    3.339124770238888,
+    3.3842963693377177
+   ],
+   "bluntness_ratio": [
+    0.7910580946620103,
+    1.1989180741644931
+   ],
+   "cone_half_angle_deg": [
+    68.4066506514337,
+    70.0
+   ],
+   "flight_path_angle_deg": [
+    -3.567435099804369,
+    -1.5
+   ],
+   "min_margin_mass_fraction": 0.0003015427560311,
+   "min_margin_max_g": 0.0013253034178937,
+   "share_margin_mass_below_1e-3": 0.10256410256410256,
+   "share_margin_mass_below_1e-4": 0.0
+  },
+  "lhs_search": {
+   "n": 11,
+   "cd_at_peak_heating": [
+    1.2052132920504213,
+    1.3796682975152312
+   ],
+   "diameter_m": [
+    2.6963993286940173,
+    3.3231278293356006
+   ],
+   "bluntness_ratio": [
+    0.4158291181140616,
+    1.0997924744344036
+   ],
+   "cone_half_angle_deg": [
+    46.03746158333029,
+    69.34325272776377
+   ],
+   "flight_path_angle_deg": [
+    -3.6491584682668865,
+    -1.6111841285134698
+   ],
+   "min_margin_mass_fraction": 0.0066394581886121,
+   "min_margin_max_g": 0.0132179069620298,
+   "share_margin_mass_below_1e-3": 0.0,
+   "share_margin_mass_below_1e-4": 0.0
+  },
+  "nsga2": {
+   "n": 17,
+   "cd_at_peak_heating": [
+    1.3024061091453691,
+    1.3715781704709646
+   ],
+   "diameter_m": [
+    3.1746476778885846,
+    3.363618292563685
+   ],
+   "bluntness_ratio": [
+    0.5047756737137026,
+    0.9607216294577018
+   ],
+   "cone_half_angle_deg": [
+    57.011281765239154,
+    69.78906061636727
+   ],
+   "flight_path_angle_deg": [
+    -3.3979428668467566,
+    -1.510614516363093
+   ],
+   "min_margin_mass_fraction": 0.0004743471617396,
+   "min_margin_max_g": 0.0225456080581188,
+   "share_margin_mass_below_1e-3": 0.058823529411764705,
+   "share_margin_mass_below_1e-4": 0.0
+  },
+  "nsga2_pop20": {
+   "n": 19,
+   "cd_at_peak_heating": [
+    1.30969949429537,
+    1.3811498193876703
+   ],
+   "diameter_m": [
+    2.6434992147389496,
+    3.3171662065008567
+   ],
+   "bluntness_ratio": [
+    0.5389916319278937,
+    0.8955138221915007
+   ],
+   "cone_half_angle_deg": [
+    55.948262044871946,
+    69.96068542120679
+   ],
+   "flight_path_angle_deg": [
+    -3.5366858231742127,
+    -1.6067970233892606
+   ],
+   "min_margin_mass_fraction": 0.0127942890044752,
+   "min_margin_max_g": 0.0054427772228219,
+   "share_margin_mass_below_1e-3": 0.0,
+   "share_margin_mass_below_1e-4": 0.0
+  }
+ },
+ "lhs_cd_spearman": {
+  "diameter_m": 0.020026793321475014,
+  "bluntness_ratio": 0.5078619634128894,
+  "cone_half_angle_deg": 0.9748320813056393,
+  "flight_path_angle_deg": -0.04185181942614567
+ },
+ "lhs_cd_range": [
+  0.3893861271412374,
+  1.3810120055232795
+ ],
+ "failure_reasons_agent": {
+  "invalid geometry: cone_half_angle_deg (# deg) is too sm": 81,
+  "aero surface extrapolation: surrogate 'cd_fore': # of # qu": 40
+ }
+}

@@ -100,3 +100,81 @@ The coordinator runs `make ablation` once, after M3's drag surface lands and `ma
 `make optimize` have been re-run. Study seeds are now 37, 41, 59, 67, 73 (11 and 23 were
 seen in development). Then: write `reports/milestones/M5_qualitative_audit.md` against that
 run ID, run `make ablation-replay`, and fill in the Observed section above.
+
+---
+
+# 2026-09-21 addendum — the study, run once on the final physics (Fidelity 1)
+
+The title of this entry says Fidelity 0 because that is what existed when the harness was
+built. The study itself ran after gate G4 passed and DOE/M4 were re-run on `cfd_surface_v2`.
+The hypotheses above were written before it and are scored below as written.
+
+## Action
+
+`make ablation` once, detached: run `M5-ABL-20260920T211134Z` (git `bf4f9a3`, dirty tree,
+source hash `c0a44bb0c14acd88`, DOE `M4-DOE-20260920T204844Z`), concurrently with the M6 and
+M7 studies on a shared machine, 6 workers. 1 h 35 min wall. Then
+`make ablation-replay RUN_ID=… STRICT=1` (run `M5-REPLAY-20260920T224633Z`), the qualitative
+audit, and `make ablation-report`. Nothing under `src/aether` or `configs/` was edited.
+
+## Observed
+
+All numbers from `results/M5/M5-ABL-20260920T211134Z/summary.json`.
+
+| method | HV @ 200, mean ± s.d. (n = 5) | HV @ 50 | HV @ 100 | feasible / 200 | front size |
+|---|---|---|---|---|---|
+| `lhs_search` | 0.2524 ± 0.0171 | 0.1342 | 0.2131 | 8.2 | 2.2 |
+| `nsga2` (pop 40) | 0.2803 ± 0.0253 | 0.2272 | 0.2417 | 60.4 | 3.4 |
+| `nsga2_pop20` | 0.2753 ± 0.0381 | 0.1248 | 0.2256 | 106.6 | 3.8 |
+| `bo_parego` | 0.3520 ± 0.0011 | 0.3145 | 0.3465 | 103.0 | 7.8 |
+| `ai_agent` | 0.3556 ± 0.0000 | 0.3428 | 0.3550 | 163.8 | 72.4 |
+
+- Pre-declared rule, best conventional = `bo_parego` at every checkpoint: **AI helped at 50**
+  (+0.0283, A12 0.88, Holm p 0.0278) **and at 100** (+0.0085, A12 1.00, Holm p 0.0119);
+  **no measured difference at 200** (+0.0036, A12 1.00, Holm p 0.0119: the test rejects, the
+  gain is under the declared 0.005).
+- M4's NSGA-II needed 1000 evaluations for 0.3467 ± 0.0055; M5's `nsga2` reproduces M4's
+  first 200 evaluations on the shared seeds exactly.
+- LLM calls: **67** (47 `ai_agent`, 20 `ai_adaptive`; planned 63, cap 80); 0 failed, 0
+  malformed; mean 177 s a round; 1.0 M tokens in, 1.1 M out. Rejections: 37 of 937
+  (`ai_agent`), all duplicates or no-change; **none out of bounds**; no LHS fallback.
+- Strict replay with no LLM access: 0 prompt mismatches, same source hash, every method's
+  per-seed hypervolume identical.
+- The agent stated M4's structural finding (a one-parameter front in entry angle at a corner
+  fenced by the mass fraction, the CFD hull and the 70° bound) by its third to fifth round in
+  every seed, recovered the analytic geometry-validity rule exactly from failure messages in
+  three of five seeds in round 1, and had the direction of change right on 93 % of its
+  round-1 predictions, which it attributed to Allen–Eggers / Sutton–Graves priors.
+- 65 of 900 accepted proposals returned no physics; 20 of them are one round (seed 37, call 2;
+  NR-32). 195 of its 1000 paid designs are near-repeats of earlier ones.
+
+## Interpretation
+
+Hypothesis 1 (NSGA-II trails at 50 and 100): held. Hypothesis 2 (agent leads early, on
+priors): held, and the audit says so in the agent's own words. Hypothesis 3 (agent and
+`bo_parego` within seed noise at 200, test cannot separate them): **wrong as written.** The
+gap at 200 is small (0.0036) but it is three times `bo_parego`'s seed s.d. and the exact test
+separates the samples completely; what the rule says is that the gap is below the size
+declared worth calling a gain. Hypothesis 4 (boundary overshoot, low diversity): half right.
+Diversity is the lowest of any method (0.31 against 0.60); the overshoot was never of the
+*box* (no out-of-bounds proposal) but of the validity and hull boundaries.
+
+What the result is: on an easy landscape (one real trade-off, monotone free improvements)
+an LLM with aerospace priors reaches a mean hypervolume of 0.345 at 60 evaluations and
+0.350 at 80, where the GP optimiser (same initial design, 0.1002 for both at 20) needs 100
+and 150 and NSGA-II reaches neither in 200. What it is not: evidence that
+the agent reasons from data better than a surrogate does (priors and the failure-message
+asymmetry are not separable here), evidence about a harder landscape, or a located optimum.
+About half of the final lead is precision on two limits M4 calls placeholders. n = 5, one
+model, one run of a sampled method.
+
+## Next
+
+1. When no study is running: fix the three generator sentences of NR-31 (CFD-call count,
+   `ai_adaptive` wording, conditional power sentence) and re-run `make ablation-report`; the
+   numbers will not change.
+2. If M5 is ever re-run (it should not be re-run to get a different verdict): carry the
+   agent's `observation` forward between rounds, and report a stand-off hypervolume beside
+   the raw one (NR-32).
+3. M6 fills in the `ai_adaptive` row; its two seeds here are plumbing (0 of 360 promotions
+   granted) and are in no comparison.
