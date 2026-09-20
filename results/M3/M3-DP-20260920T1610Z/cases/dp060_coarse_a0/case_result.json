@@ -1,0 +1,141 @@
+{
+  "case_name": "dp060_coarse_a0",
+  "case_dir": "/Users/akj/Projects/aether/cfd/generated/M3-DP-20260920T1610Z/dp060_coarse_a0",
+  "status": "OK",
+  "failure_reason": "",
+  "steps": [
+    {
+      "name": "blockMesh",
+      "command": "blockMesh",
+      "returncode": 0,
+      "wall_time_s": 5.973048166008084,
+      "timed_out": false
+    },
+    {
+      "name": "extrudeMesh",
+      "command": "extrudeMesh",
+      "returncode": 0,
+      "wall_time_s": 6.553879125000094,
+      "timed_out": false
+    },
+    {
+      "name": "checkMesh",
+      "command": "checkMesh",
+      "returncode": 0,
+      "wall_time_s": 5.17004054201243,
+      "timed_out": false
+    },
+    {
+      "name": "setFields",
+      "command": "setFields",
+      "returncode": 0,
+      "wall_time_s": 5.291771709002205,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_startup",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 22.27649737500178,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 135.36633854199317,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_ext1",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 82.03488208301133,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_ext2",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 63.903979249997064,
+      "timed_out": false
+    },
+    {
+      "name": "sampleLine",
+      "command": "postProcess -func sampleLine -latestTime",
+      "returncode": 0,
+      "wall_time_s": 3.1396748749975814,
+      "timed_out": false
+    },
+    {
+      "name": "sampleBody",
+      "command": "postProcess -func sampleBody -latestTime",
+      "returncode": 0,
+      "wall_time_s": 3.0882019169948762,
+      "timed_out": false
+    },
+    {
+      "name": "sampleOutlet",
+      "command": "postProcess -func sampleOutlet -latestTime",
+      "returncode": 0,
+      "wall_time_s": 3.125618291000137,
+      "timed_out": false
+    }
+  ],
+  "mesh_quality": {
+    "mesh_ok": true,
+    "n_failed_checks": 0,
+    "n_cells": 3072.0,
+    "max_non_orthogonality_deg": 55.4587455,
+    "avg_non_orthogonality_deg": 36.93206288,
+    "n_severely_non_orthogonal_faces": null,
+    "max_skewness": 1.05116412,
+    "max_aspect_ratio": 3.092327133
+  },
+  "n_cells": 3072,
+  "representative_cell_size_m": 0.01643440185706715,
+  "solver_wall_time_s": 303.58169725000334,
+  "total_wall_time_s": 335.92393187501875,
+  "metrics": {
+    "cd_total": 1.270055278124219,
+    "cd_fore": 1.270055278124219,
+    "cd_aft": NaN,
+    "mesh_extent": "forebody",
+    "outlet_min_mach": 1.4604058901903259,
+    "cd_total_last_iteration": 1.2699266889197627,
+    "standoff_m": 0.2479722164535208,
+    "standoff_over_max_radius": 0.4132870274225347,
+    "upstream_clearance_fraction": 0.5616592050699735,
+    "shock_thickness_m": 0.02028377879495885,
+    "shock_thickness_cells": 1.6120255232548797,
+    "stagnation_line_cell_size_at_shock_m": 0.012582790100000019,
+    "p_stag_wall_face_pa": 12010.2598,
+    "p_stag_line_extrapolated_pa": 12012.13725627461,
+    "p_max_on_body_pa": 12024.56122,
+    "p_stag_over_p_inf": 12.01213725627461,
+    "final_mean_abs_drho_dtau": 0.13326800546,
+    "initial_mean_abs_drho_dtau": 4.2353717409,
+    "n_iterations": 20000,
+    "n_iterations_planned": 10000,
+    "n_extensions": 2,
+    "startup_first_order_iterations": 1500
+  },
+  "convergence": {
+    "cd_total": {
+      "quantity": "cd_total",
+      "mean": 1.270055278124219,
+      "peak_to_peak_rel": 0.0005499261928616876,
+      "drift_rel": 0.0001543392957257097,
+      "window_iterations": 2000,
+      "converged": true
+    },
+    "cd_fore": {
+      "quantity": "cd_fore",
+      "mean": 1.270055278124219,
+      "peak_to_peak_rel": 0.0005499261928616876,
+      "drift_rel": 0.0001543392957257097,
+      "window_iterations": 2000,
+      "converged": true
+    }
+  }
+}

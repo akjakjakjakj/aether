@@ -1,0 +1,21 @@
+{
+  "run_id": "M3-DP-20260920T1610Z",
+  "mesh_level": "medium",
+  "subset": "mesh-check",
+  "gate_G4_status_at_build": "IN_PROGRESS",
+  "openfoam_version": "v2512",
+  "n_planned": 58,
+  "n_skipped_invalid_geometry": 40,
+  "n_run": 8,
+  "verdicts": {
+    "USABLE": 6,
+    "REJECTED": 2
+  },
+  "driver_wall_time_s_this_invocation": 3757.229466334,
+  "sum_case_wall_time_s": 13586.637690426927,
+  "max_concurrent_cases": 4,
+  "scale_check": {
+    "performed": false,
+    "tolerance": 0.002
+  }
+}

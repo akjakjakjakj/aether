@@ -1,0 +1,30 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      setFieldsDict;
+}
+// AETHER template - upper-case placeholders between at-signs are filled by aether.cfd.case.
+//
+// Stagnant gas at freestream p and T in the shadow of the body. An impulsive start with
+// freestream velocity everywhere pulls a near-vacuum behind a slip-wall body within a few
+// iterations and the solver dies on a negative temperature (docs/negative_results.md NR-05).
+// This only changes the INITIAL transient; the converged steady state does not depend on it.
+
+defaultFieldValues
+(
+    volVectorFieldValue U (3822.06673969 0 0)
+);
+
+regions
+(
+    boxToCell
+    {
+        box (0.253906561823 -1e6 -1e6) (1e6 0.72 1e6);
+        fieldValues
+        (
+            volVectorFieldValue U (0 0 0)
+        );
+    }
+);

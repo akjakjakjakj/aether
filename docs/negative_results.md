@@ -641,3 +641,143 @@ methods were evaluated by different physics is not a comparison.
 
 **Kept because** the failure was organisational, not numerical, and would have produced a
 complete, plausible, well-formatted report.
+
+---
+
+### NR-19 — An impulsive start at Mach 20 kills the second-order scheme; a first-order start does not
+
+**What happened.** M3 coarse smoke test, before any design point was run. The flattest
+capsule in the design (R_n/D = 1.35, 70° cone, R_c/D = 0.02) at Mach 20 died after 22
+iterations with a floating-point exception inside `sqrt` — a negative temperature, the same
+symptom as NR-05 but with no wake in the domain to blame.
+
+**Isolation (spec §36 order).** Geometry valid; `checkMesh` "Mesh OK" but with 67° maximum
+non-orthogonality (a near-flat face seen from a block centre lying almost in its plane —
+recorded, not fixed). Boundary and initial conditions as M2. Then three variants of the
+identical case, side by side: max Courant 0.05 died at iteration 566; the Minmod limiter died
+at 150; **first-order (upwind) reconstruction ran 1500 iterations without trouble**, and
+switching it back to van Leer afterwards ran on to 5000.
+
+**Why (probable).** At Mach 20 the kinetic energy is over 99% of the total energy, so the
+internal energy is a small difference of large numbers; while the bow shock is still forming
+from a uniform Mach-20 field against a wall, a second-order reconstruction of ρ, U and T
+across it undershoots into negative temperature. A lower Courant number does not help because
+the transient is the same in pseudo-time — exactly as in NR-05.
+
+**Fix.** `run_case(..., startup_first_order_iterations=N)`: N upwind iterations, then the
+declared limiter. Default 0, so every M2 case is untouched. M3 applies it to every design
+point (A-CFD-13). The converged solution is obtained and judged with the M2 scheme; only the
+path to it changed.
+
+**Evidence.** `cfd/generated/M3-startup-exp/` (heavy fields, gitignored) and
+`results/M3/smoke-coarse/attempts.csv`.
+
+---
+
+### NR-20 — A sphere's domain does not fit a cone: two ways the M2 inflow boundary was wrong for capsules
+
+**What happened.** Same smoke test. M2's agent had flagged that a wide cone might push its
+shock onto the inflow boundary; it happened, and a second case nobody had flagged happened too.
+
+1. *Wide-angle cone, small nose* (R_n/D = 0.25, 70°, Mach 20). The boundary was sized from
+   max(R_n, R_b) with Billig's **sphere** stand-off. A 70° cone's shock is detached and stands
+   off like a disk's, not like its small nose sphere's. The drag kept falling for 5600
+   iterations as the shock walked upstream, then the solver crashed.
+2. *Slender cone* (R_n/D = 0.25, 20°, Mach 20). M2 opens the boundary at the Mach angle plus
+   6°: 8.9° at Mach 20. A 20° cone's shock lies at about 22°. The boundary cut through the
+   shock along most of the body.
+
+**Fix.** Boundary placement only (A-CFD-14): the sizing radius grows to 2 R_b between cone
+angles 40° and 70°, and attached-shock cones open the boundary at Rasmussen's cone-shock
+angle + 5°. Placement is never trusted: every case is checked automatically — stand-off
+against the distance to the boundary on the axis, and the outermost outflow faces must still
+be at freestream Mach number — and a failed check **or a solver crash** triggers a re-run in a
+larger domain, with every attempt kept as a row of `attempts_<level>.csv`.
+
+**Cost, stated.** A larger domain with the same cell count is a coarser mesh near the body, so
+a re-run case is not quite the same discretisation as its neighbours.
+
+**Evidence.** `results/M3/smoke-coarse/`, `results/M3/smoke-coarse-2/` (smoke runs, killed
+once they had shown what they had to show; partial tables kept).
+
+---
+
+### NR-21 — Five design points never met the force criterion, and waiting longer did not help
+
+**What happened.** First pass of the M3 coarse design (run `M3-DP-20260920T1610Z`): 7 of 56
+cases missed the declared force-convergence criterion after M2's three extensions. A
+"patience pass" then gave each of them one more attempt with up to nine extensions — the
+criterion itself untouched, which is NR-09's rule. Two converged (`dp015`, the M4-front shape
+at Mach 20, and `dp051`). **Five did not, at up to 55 000 iterations:**
+
+| point | Mach | shape (R_n/D, cone, R_c/D) | final peak-to-peak (limit 0.1%) | final drift (limit 0.02%) |
+|---|---|---|---|---|
+| dp001 | 20 | 0.25, 20°, 0.02 | 0.60% | 0.025% |
+| dp011 | 20 | 0.80, 52.5°, 0.02 | 0.23% | 0.14% |
+| dp032 | 18.4 | 0.47, 35.3°, 0.096 | 0.109% | 0.002% |
+| dp043 | 14.5 | 0.40, 29.2°, 0.021 | 0.109% | 0.006% |
+| dp053 | 9.9 | 1.14, 69.1°, 0.036 | 0.34% | 0.22% |
+
+(Values from `attempts_coarse.csv`, patience-pass rows.)
+
+**What it looks like.** Not slow convergence: `dp032` and `dp043` sit at 0.109% with
+essentially zero drift — a steady limit cycle a hair outside a 0.1% band, the same signature
+as NR-07 (captured shock flickering between neighbouring cells under a TVD limiter), here at
+high Mach on a coarse mesh. `dp011` and `dp053` both have a small shoulder radius with the
+sonic line sitting on it, and drift as well as oscillate. The mean C_D of every one of them
+moved by less than 0.05% between the first pass and the patience pass.
+
+**What was NOT done.** The criterion was not widened to 0.12% to let two of them in, and the
+cases were not dropped from the record. They are REJECTED, they are listed in the milestone
+report, and `cfd_surface_v1` does not contain them. A separate, labelled INCLUSIVE surface
+that does contain them exists only to measure what the strict rule costs (report §10): on the
+designs compared, very little.
+
+**Consequence.** Each rejected hull anchor removes its corner from the usable design space
+under Fidelity 1 (A-AERO-1): here the slender, small-shoulder corner at Mach 20 (`dp001`) and
+the validity-boundary point at R_n/D = 0.8, R_c/D = 0.02 (`dp011`).
+
+**Later the same day.** The six late anchors of NR-22 added a sixth: `dp061` (R_n/D 1.15, 68.1°,
+R_c/D 0.10, Mach 20) ended at 0.49% peak-to-peak and 0.21% drift after nine extensions, while
+its neighbour `dp059` met the criterion on the patience pass. And on the **medium** mesh two of
+the eight mesh-check cases (`dp003`, `dp019`, both Mach 20) sat at 0.12% peak-to-peak with
+near-zero drift — the same limit cycle, so refinement from coarse to medium does not remove it.
+Final count: 56 usable, 6 rejected of 62.
+
+**Disclosure.** The patience rule was added after the first pass had been seen. It is written
+into `configs/cfd_design_points.yaml` with that statement.
+
+**Evidence.** `results/M3/M3-DP-20260920T1610Z/attempts_coarse.csv`, `cases/<point>_coarse_a*`
+and `cases/<point>_coarse_c0` (force histories, log tails).
+
+---
+
+### NR-22 — The hull anchor meant for the M4 front missed it
+
+**What happened.** A GP may not extrapolate, the guard is the convex hull of the CFD points,
+and the M4 front lives in a corner of the shape box squeezed against the geometric-validity
+boundary. One anchor was placed for it, at "validity boundary + 0.5°" for R_n/D = 1.2,
+R_c/D = 0.10 — a cone angle of 69.18°. The front actually spans 68.75–70.0° at R_n/D
+1.177–1.198. After the first pass, four of the five M4-front designs used in the G5 comparison
+came back flagged **outside the hull**: the surface built specifically to re-evaluate the
+front could not, by its own rule, evaluate most of it.
+
+**Why.** The anchor was placed from a reading of `configs/design_space.yaml`'s comment, not
+from the front's actual shape range, which was on disk
+(`results/M4/nose-model-recheck/front_under_both_models.csv`) and was not opened until the
+flags appeared.
+
+**Fix.** Three "late anchors" enclosing the front's shape range, at both ends of the Mach
+range, appended after the fill so no existing point is renumbered. Chosen from the front's
+shape range, not from any CFD value; added after the first pass, and the config says so.
+
+**Outcome.** With the late anchors in, all five M4-front designs of the G5 comparison fall
+inside the hull. A side effect, also recorded: six near-duplicate points in one corner made the
+GP more overconfident (k-fold z-score spread rose from about 1.1 to about 1.65); the measured
+spread is now stored with the surface and applied as a sigma inflation factor.
+
+**Kept because** the extrapolation guard did its job — it turned a design-of-experiments
+mistake into a visible flag instead of a quietly extrapolated number.
+
+**Evidence.** `results/M3/M3-DP-20260920T1610Z/coupled/constant_vs_surface.csv`
+(`aero_shape_extrapolated`), `configs/cfd_design_points.yaml` → `design.late_anchors`.

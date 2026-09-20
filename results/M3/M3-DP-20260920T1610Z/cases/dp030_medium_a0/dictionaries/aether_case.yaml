@@ -1,0 +1,64 @@
+solver: rhoCentralFoam
+equations: axisymmetric compressible Euler
+time_integration: localEuler pseudo-time marching to steady state
+flux_scheme: Kurganov central-upwind, vanLeer reconstruction
+gas_model: calorically perfect gas, single species, no chemistry
+flow:
+  mach: 7.956512824923746
+  pressure_pa: 1000.0
+  temperature_k: 220.0
+  gamma: 1.4
+  gas_constant_j_kgk: 287.0530720470647
+  velocity_m_s: 2365.8065231496944
+  density_kg_m3: 0.015834892527153588
+  dynamic_pressure_pa: 44314.267433223235
+boundary_conditions:
+  freestream: fixedValue p, T, U (supersonic inflow; bow shock stays inside)
+  outlet: zeroGradient p, T, U
+  body_fore/body_aft: slip U, zeroGradient p and T
+  front/back: wedge
+  axis: empty (collapsed by extrudeMesh)
+mesh:
+  generator: blockMesh (planar strip) + extrudeMesh wedge
+  n_body_cells: 128
+  n_radial_cells: 96
+  n_cells: 12288
+  n_blocks: 16
+  extent: forebody
+  body_patches:
+  - body_fore
+  refinement_factor: 2
+  representative_cell_size_m: 0.0053960179118152434
+  domain_area_m2: 0.357789810335305
+  outflow_x_m: 0.583183539914617
+  upstream_axis_x_m: -0.18061109841511003
+  sizing_radius_m: 0.6
+  settings:
+    n_body_cells_base: 64
+    n_radial_cells_base: 48
+    cells_per_block_base: 4
+    refinement_factor: 2
+    radial_expansion_ratio: 4.0
+    standoff_margin: 2.0
+    asymptote_margin_deg: 34.37720579536831
+    wake_length_diameters: 3.0
+    wedge_angle_deg: 5.0
+    outer_samples_per_block: 24
+    extent: forebody
+solver_settings:
+  n_iterations: 20000
+  max_co: 0.2
+  rdeltat_smoothing: 0.02
+  flux_scheme: Kurganov
+  limiter: vanLeer
+  force_interval: 5
+  n_ranks: 1
+  dynamic_viscosity_pa_s: 0.0
+  prandtl: 1.0
+  max_extensions: 3
+  extension_fraction: 0.5
+body:
+  name: dp030
+  length_m: 0.6431835399146171
+  max_radius_m: 0.6
+  frontal_area_m2: 1.1309733552923256

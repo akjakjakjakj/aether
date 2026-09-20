@@ -41,6 +41,9 @@ class DesignEvaluation:
     a result is not an artefact: bluntness ratio, heat-shield mass fraction, share of the
     heat load accumulated in the flagged >86 km atmosphere, and whether the bondline was
     still warming when the soak-out window closed. See `_diagnostics`."""
+    aero_provenance: dict[str, Any] = field(default_factory=dict)
+    """Empty at Fidelity 0. For a CFD-derived drag model: surface version and training hash,
+    gate G4 status at build and at evaluation, shape-extrapolation flag, uncertainty draw."""
 
 
 _SHAPE_FIELDS = ("shoulder_radius_m", "cone_half_angle_deg", "aft_cone_angle_deg", "length_m")
@@ -202,7 +205,23 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
         effective_nose_radius = nose_report.effective_nose_radius_m
         area = capsule.reference_area_m2
 
-    cd_model, fidelity = build_cd_model(veh.get("aero"), capsule)
+    try:
+        cd_model, fidelity = build_cd_model(veh.get("aero"), capsule)
+    except ValueError as exc:
+        # ONLY the surrogate's extrapolation guard is a property of the DESIGN (spec
+        # section 25: never extrapolate silently). It comes back as a rejected candidate
+        # that stays in the log. Any other ValueError is a malformed config and still raises.
+        if type(exc).__name__ != "ExtrapolationError":
+            raise
+        rejected_vector = {
+            "nose_radius_m": nose_radius, "diameter_m": diameter,
+            **{name: float(geom[name]) for name in _SHAPE_FIELDS},
+            "mass_kg": float(veh["mass_kg"]),
+            "entry_velocity_m_s": float(ent["velocity_m_s"]),
+            "entry_flight_path_angle_deg": float(ent["flight_path_angle_deg"]),
+        }
+        return _rejected(design_id, rejected_vector,
+                         f"aero surface extrapolation: {exc}", fidelity=1)
 
     vehicle = VehicleAero(
         mass_kg=float(veh["mass_kg"]),
@@ -272,6 +291,10 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
         diagnostics["heatshield_mass_fraction"] = float(shield_fraction)
         diagnostics["wetted_forebody_area_m2"] = capsule.wetted_forebody_area_m2
     diagnostics.update(_diagnostics(traj, q, tps_res))
+    aero_provenance: dict[str, Any] = {}
+    if hasattr(cd_model, "report"):
+        diagnostics.update(cd_model.report(traj.mach, traj.time_s, q))
+        aero_provenance = dict(cd_model.provenance)
 
     perf = compute_metrics(
         traj, q, tps_res,
@@ -308,4 +331,5 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
         tps=tps_res,
         fidelity=fidelity,
         diagnostics=diagnostics,
+        aero_provenance=aero_provenance,
     )

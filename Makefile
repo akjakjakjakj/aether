@@ -40,6 +40,28 @@ cfd-validate:
 cfd-report:
 	$(PY) scripts/run_cfd_validation.py --stage report --run-id $(RUN_ID)
 
+# Milestone M3: CFD design points -> drag response surface -> coupled gate G5 + report.
+# Needs OpenFOAM for the first target only. `cfd-design-points` takes HOURS (coarse ~1.5 h,
+# medium ~8 h on a 4-performance-core laptop): run it in the background; it is resumable.
+#   make cfd-design-points                                  production level, new run ID
+#   make cfd-design-points RUN_ID=M3-DP-...                 resume
+#   make cfd-design-points RUN_ID=M3-DP-... LEVEL=medium SUBSET=mesh-check
+#   make aero-surface RUN_ID=M3-DP-... [LEVEL=medium]       fit + cross-validate + persist
+#   make m3-coupled   RUN_ID=M3-DP-...                      G5, comparison, report
+# The surface is registered as vehicle.aero.model `cfd_surface_v1` and is OFF: nothing
+# selects it, and it refuses to load while gate G4 is not PASS.
+.PHONY: cfd-design-points aero-surface m3-coupled
+cfd-design-points:
+	$(PY) scripts/run_cfd_design_points.py $(if $(RUN_ID),--run-id $(RUN_ID),) \
+		$(if $(LEVEL),--level $(LEVEL),) $(if $(SUBSET),--subset $(SUBSET),)
+
+aero-surface:
+	$(PY) scripts/build_aero_surface.py $(if $(RUN_ID),--run-id $(RUN_ID),) \
+		$(if $(LEVEL),--level $(LEVEL),)
+
+m3-coupled:
+	$(PY) scripts/run_m3_coupled.py --dp-run $(RUN_ID) $(if $(LEVEL),--level $(LEVEL),)
+
 # Milestone M4. Both take minutes on 6 cores - run them in the background. `optimize`
 # frees exactly the variables the latest `doe` run's screening.json left active. The
 # fidelity is whatever configs/design_space.yaml's vehicle.aero.model selects (0 today).

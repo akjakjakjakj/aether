@@ -110,7 +110,12 @@ class GPSurrogate:
         return np.power(10.0, z) if self.transform == "log10" else z
 
     # -- fit / predict -----------------------------------------------------------------
-    def fit(self, x_unit: np.ndarray, y: np.ndarray) -> GPSurrogate:
+    def fit(self, x_unit: np.ndarray, y: np.ndarray, *,
+            theta: np.ndarray | None = None) -> GPSurrogate:
+        """Fit the GP. `theta` (log kernel hyperparameters, as `kernel_theta` returns them)
+        pins the kernel and skips the optimiser: that is how a PERSISTED surrogate is
+        rebuilt bit-for-bit from its training table (M3 aero surface). Default None ==
+        optimise, the behaviour every earlier caller gets."""
         x_unit = np.atleast_2d(np.asarray(x_unit, dtype=float))
         z = self.forward(y)
         if x_unit.shape[0] != z.shape[0] or x_unit.shape[0] < 2:
@@ -123,8 +128,13 @@ class GPSurrogate:
                   * Matern(length_scale=np.full(k, 0.5), length_scale_bounds=(1e-2, 1e2),
                            nu=2.5)
                   + WhiteKernel(1e-6, (1e-10, 1e-1)))
+        if theta is not None:
+            kernel = kernel.clone_with_theta(np.asarray(theta, dtype=float))
         self._gp = GaussianProcessRegressor(kernel=kernel, normalize_y=True,
-                                            n_restarts_optimizer=self.n_restarts,
+                                            optimizer=None if theta is not None
+                                            else "fmin_l_bfgs_b",
+                                            n_restarts_optimizer=0 if theta is not None
+                                            else self.n_restarts,
                                             random_state=self.seed)
         with warnings.catch_warnings():
             # A length scale running into its bound is expected for an inert input.
@@ -133,6 +143,13 @@ class GPSurrogate:
         self.hull = TrainingHull(x_unit)
         self.n_train = int(x_unit.shape[0])
         return self
+
+    @property
+    def kernel_theta(self) -> np.ndarray:
+        """Fitted log-hyperparameters; feed back into `fit(..., theta=...)` to rebuild."""
+        if self._gp is None:
+            raise RuntimeError(f"surrogate '{self.name}' has not been fitted")
+        return np.array(self._gp.kernel_.theta, dtype=float)
 
     def predict(self, x_unit: np.ndarray, *, on_extrapolation: str = "raise") -> Prediction:
         """Predict at `x_unit`. `on_extrapolation`: "raise" (default) or "flag"."""

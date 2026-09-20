@@ -42,6 +42,9 @@ Measured on an Apple M4, single-threaded. Nothing here is parallelised yet.
 | `make optimize` | ~13 min on 6 worker processes (3 methods × 7 seeds × 1000 evaluations) |
 | `make ablation` | M5, added 2026-09-20. **Not yet run to completion**; estimated ~2–3 h, almost all LLM latency (≈ 5 min per call, ≤ 80 calls). Needs the Claude Code CLI installed and signed in; reads no API key. |
 | `make ablation-replay RUN_ID=…` | re-runs a recorded M5 study with **no LLM access**; a few minutes (evaluations and GP fits only) |
+| `make cfd-design-points` | M3, added 2026-09-20. **Needs OpenFOAM.** Coarse mesh, 56 design points + 2 scale-check cases, 4 serial solvers side by side: **~55 min** measured on a fanless Apple M4 (4 performance + 6 efficiency cores) while the M2 benchmark and an interactive session were also running; roughly 2–5 min per case. A later patience pass for force-unconverged cases and the 8-point medium-mesh subset (`LEVEL=medium SUBSET=mesh-check`) add about an hour. `LEVEL=medium` for the whole design is estimated at ~8 h (not run). Resumable: finished cases are loaded, never re-run. |
+| `make aero-surface RUN_ID=…` | ~20 s (GP fit, 5-fold CV, four figures); no OpenFOAM |
+| `make m3-coupled RUN_ID=…` | ~1 min (about 60 coupled evaluations + report); no OpenFOAM. Needs `results/M4/M4-OPT-…/candidates.parquet` for the M4-front designs |
 
 A single `evaluate_design` call takes roughly 1.5 s, dominated by the TPS solve
 (~2800 implicit timesteps over 140 cells).

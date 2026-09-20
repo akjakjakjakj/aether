@@ -78,6 +78,11 @@ src/aether/
   tps/          1-D multilayer FV conduction + analytical benchmark
   scoring/      canonical PerformanceVector; tpi.py (spec 44, DISCARDED - see the study)
   cfd/          Fidelity 1: outline -> mesh -> rhoCentralFoam -> metrics -> GCI -> gate G4
+                design_points.py (M3): seeded (Mach, forebody shape) design, acceptance rules,
+                shock-clearance check + domain re-run, 4 serial cases side by side
+  aerodynamics/ drag-model registry; base_drag.py (assumed band), cfd_surface.py
+                (`cfd_surface_v1`: GP of C_D,fore + base band, hull guard, G4 guard, GCI hook),
+                surface_build.py (held-out + k-fold validation, persistence), plots.py
   studies/      burn_vs_bake, joint_sweep, Pareto extraction, tpi_study
   utils/        constants (each with a source), run IDs, config snapshots
   evaluate.py   THE canonical evaluator
@@ -122,6 +127,23 @@ candidate (invalid geometry included, with the reason) to `results/M4/<run>/cand
 every candidate row. `make doe` writes `screening.json`; `make optimize` frees exactly the
 variables it left active. Moving M4 to Fidelity 1 is: register the response-surface model,
 change `vehicle.aero.model`, re-run both targets.
+
+## M3 in one paragraph
+
+`scripts/run_cfd_design_points.py` runs the planned CFD cases through the unchanged M2
+`run_case` and writes `results/M3/<run>/design_points_<level>.csv`; `scripts/build_aero_surface.py`
+fits and cross-validates the GP and persists it as a training table plus pinned kernel
+hyper-parameters in `data/aero/cfd_surface_v1/`; `scripts/run_m3_coupled.py` runs gate G5 and
+the constant-C_D vs surface comparison and generates the report. The trajectory never calls
+CFD or the GP inside a time step: for one capsule the builder tabulates the surface on a Mach
+grid once and hands the integrator a smooth 1-D interpolant, so a Fidelity-1 evaluation costs
+the same as a Fidelity-0 one. **`cfd_surface_v1` is registered but off**: no config selects
+it, and while gate G4 is not PASS the builder raises `GateNotPassedError` unless the config
+says `allow_provisional: true` (used only by the G5 study and tests). A shape outside the CFD
+hull comes back from `evaluate_design` as a rejected candidate, never an extrapolated number.
+Every Fidelity-1 result carries `aero_provenance` (surface hash, source run, mesh level, G4
+status at build and at evaluation, uncertainty draw) and `aero_*` diagnostics (share of heat
+load and flight time outside the CFD Mach range).
 
 ## M5 in one paragraph
 

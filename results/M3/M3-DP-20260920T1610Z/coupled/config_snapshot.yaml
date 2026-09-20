@@ -1,0 +1,68 @@
+_meta:
+  run_id: M3-DP-20260920T1610Z/coupled
+  config_hash: 3b9b3d511061
+  git_commit: 8802cb7
+  git_dirty: true
+  created_utc: '2026-09-20T17:15:26+00:00'
+  aether_version: 0.1.0
+  notes: M3 coupled gate G5; gate_G4_status_at_build=IN_PROGRESS
+config:
+  meta:
+    name: aero_surface
+    milestone: M3
+  design_points_config: configs/cfd_design_points.yaml
+  surface:
+    min_usable_points: 25
+    k_folds: 5
+    mesh_check_level: medium
+    model_form_rel_halfband: 0.05
+    inclusive_sensitivity:
+      enabled: true
+      max_peak_to_peak_rel: 0.01
+    report_shapes:
+    - name: baseline
+      bluntness_ratio: 0.5
+      cone_half_angle_deg: 25.0
+      shoulder_ratio: 0.1
+    - name: m4_front
+      bluntness_ratio: 1.19
+      cone_half_angle_deg: 69.2
+      shoulder_ratio: 0.1
+    - name: cone_60
+      bluntness_ratio: 0.3
+      cone_half_angle_deg: 60.0
+      shoulder_ratio: 0.05
+    - name: cone_40
+      bluntness_ratio: 0.3
+      cone_half_angle_deg: 40.0
+      shoulder_ratio: 0.05
+  coupled:
+    base_config: configs/baseline.yaml
+    effective_nose_radius_model: velocity_gradient
+    reference_capsule:
+      diameter_m: 1.2
+      bluntness_ratio: 0.5
+      shoulder_ratio: 0.1
+      cone_half_angle_deg: 25.0
+      aft_cone_angle_deg: 20.0
+      fineness_ratio: 0.875
+    m4_run: results/M4/M4-OPT-20260920T132037Z
+    m4_front_n: 5
+    determinism_repeats: 3
+    shape_sweep:
+      bluntness_ratio:
+      - 0.3
+      - 0.5
+      - 0.7
+      - 0.9
+      - 1.1
+      cone_half_angle_deg:
+      - 25.0
+      - 40.0
+      - 55.0
+      - 69.0
+      fineness_ratio: 1.2
+    low_mach_hold_test:
+      scale_factors:
+      - 0.7
+      - 1.3

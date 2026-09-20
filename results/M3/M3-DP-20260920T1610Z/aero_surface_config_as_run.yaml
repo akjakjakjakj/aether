@@ -1,0 +1,56 @@
+# AETHER Milestone M3 - the CFD-derived drag response surface `cfd_surface_v1` and the
+# coupled-model gate G5. Declared before the surface was fitted.
+#
+# GATE STATUS AT BUILD: G4 IN_PROGRESS. The surface is PROVISIONAL; no optimisation config
+# selects it (configs/design_space.yaml stays on `aero.model: constant`).
+
+meta:
+  name: aero_surface
+  milestone: M3
+
+design_points_config: configs/cfd_design_points.yaml
+
+surface:
+  min_usable_points: 25
+  k_folds: 5
+  mesh_check_level: medium
+  # Perfect-gas model-form half-band on C_D,fore (A-CFD-1). DECLARED, not derived and not
+  # validated: stagnation Cp is ~1.84 at gamma = 1.4 against the Newtonian limit 2.0, i.e.
+  # the gas model can move blunt-body pressure by up to ~8% at the stagnation point and by
+  # less in the drag integral. 0.05 is the project's "several percent" made explicit so M7
+  # can sample it; the NOMINAL surface does not use it.
+  model_form_rel_halfband: 0.05
+  # SENSITIVITY ONLY, never the production surface: a second surface that also takes cases
+  # which passed every acceptance rule except force convergence and stayed inside this band.
+  # Declared after the smoke test showed near-flat-faced shapes at Mach 20 hover just outside
+  # the 0.1% criterion, and before the design results were analysed.
+  inclusive_sensitivity:
+    enabled: true
+    max_peak_to_peak_rel: 0.01
+  report_shapes:
+    - {name: baseline, bluntness_ratio: 0.5, cone_half_angle_deg: 25.0, shoulder_ratio: 0.10}
+    - {name: m4_front, bluntness_ratio: 1.19, cone_half_angle_deg: 69.2, shoulder_ratio: 0.10}
+    - {name: cone_60, bluntness_ratio: 0.30, cone_half_angle_deg: 60.0, shoulder_ratio: 0.05}
+    - {name: cone_40, bluntness_ratio: 0.30, cone_half_angle_deg: 40.0, shoulder_ratio: 0.05}
+
+coupled:
+  base_config: configs/baseline.yaml
+  # The constant-C_D arm uses vehicle.cd from the base config. Both arms use the corrected
+  # effective-nose-radius model, as the M4 design space does.
+  effective_nose_radius_model: velocity_gradient
+  reference_capsule:        # Phase-F baseline capsule (geometry/parametric/baseline.yaml)
+    diameter_m: 1.2
+    bluntness_ratio: 0.5
+    shoulder_ratio: 0.10
+    cone_half_angle_deg: 25.0
+    aft_cone_angle_deg: 20.0
+    fineness_ratio: 0.875
+  m4_run: results/M4/M4-OPT-20260920T132037Z
+  m4_front_n: 5                 # evenly spaced along the front, by peak heat flux
+  determinism_repeats: 3
+  shape_sweep:                  # everything except the forebody shape held at reference
+    bluntness_ratio: [0.3, 0.5, 0.7, 0.9, 1.1]
+    cone_half_angle_deg: [25.0, 40.0, 55.0, 69.0]
+    fineness_ratio: 1.2         # long enough for every swept forebody to be valid
+  low_mach_hold_test:           # how much do the objectives care about the held value?
+    scale_factors: [0.7, 1.3]   # C_D below the lowest CFD Mach multiplied by these

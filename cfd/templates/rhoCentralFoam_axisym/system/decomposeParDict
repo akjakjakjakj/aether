@@ -1,0 +1,11 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      decomposeParDict;
+}
+// AETHER template - upper-case placeholders between at-signs are filled by aether.cfd.case.
+
+numberOfSubdomains @N_RANKS@;
+method          scotch;

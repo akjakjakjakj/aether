@@ -14,8 +14,12 @@ aerodynamics that produced it.
 
 Swapping in the M3 CFD response surface is meant to be a config change plus a re-run:
 register a builder under a new model name here, point `vehicle.aero.model` at it, and no
-study, DOE or optimiser changes. Until validation gate G4 is PASS no such builder exists,
-and asking for one is an error rather than a silent fallback (spec section 17).
+study, DOE or optimiser changes.
+
+M3 registered `cfd_surface_v1` (see `cfd_surface.py`). It is registered but OFF: no config
+selects it, and while validation gate G4 is not PASS the builder REFUSES to serve it
+(`GateNotPassedError`) unless the config carries `allow_provisional: true`, which exists for
+the coupled-model gate G5 tests and labels every result it produces (spec section 17).
 """
 
 from __future__ import annotations
@@ -48,6 +52,17 @@ def _build_constant(aero_cfg: dict[str, Any], geometry: Any) -> tuple[CdModel | 
 register_aero_model("constant", _build_constant)
 
 
+def _build_cfd_surface_v1(aero_cfg: dict[str, Any], geometry: Any) -> tuple[CdModel | None, int]:
+    """Fidelity 1: CFD-derived C_D(Mach, forebody shape). Imported lazily - the surrogate
+    package imports the evaluator, which imports this module."""
+    from .cfd_surface import build_cfd_surface_model
+
+    return build_cfd_surface_model(aero_cfg, geometry)
+
+
+register_aero_model("cfd_surface_v1", _build_cfd_surface_v1)
+
+
 def build_cd_model(aero_cfg: dict[str, Any] | None, geometry: Any) -> tuple[CdModel | None, int]:
     """Build the drag model named by a `vehicle.aero` config block.
 
@@ -69,7 +84,7 @@ def build_cd_model(aero_cfg: dict[str, Any] | None, geometry: Any) -> tuple[CdMo
     if name not in _REGISTRY:
         raise KeyError(
             f"unknown vehicle.aero.model '{name}'. Registered: {sorted(_REGISTRY)}. A "
-            "CFD-derived model may only be registered once validation gate G4 is PASS "
+            "CFD-derived model may only be USED once validation gate G4 is PASS "
             "(spec section 17)."
         )
     return _REGISTRY[name](aero_cfg or {}, geometry)

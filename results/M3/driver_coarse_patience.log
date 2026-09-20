@@ -1,0 +1,90 @@
+AETHER M3 design points  run=M3-DP-20260920T1610Z  level=coarse  OpenFOAM=v2512  planned=58  skipped_invalid=40
+[  1/58] sc3 M=6.00 USABLE     cd_fore=0.88690 wall=102s attempts=1 
+[  2/58] dp000 M=3.00 USABLE     cd_fore=0.38943 wall=275s attempts=1 
+[  3/58] sc1p2 M=6.00 USABLE     cd_fore=0.88690 wall=362s attempts=1 
+[  4/58] dp002 M=3.00 USABLE     cd_fore=0.38839 wall=277s attempts=1 
+[  5/58] dp004 M=3.00 USABLE     cd_fore=1.44734 wall=307s attempts=1 
+[  6/58] dp003 M=20.00 USABLE     cd_fore=0.35180 wall=142s attempts=3 
+[  7/58] dp005 M=20.00 USABLE     cd_fore=1.55148 wall=205s attempts=1 
+[  8/58] dp007 M=20.00 USABLE     cd_fore=1.37493 wall=125s attempts=1 
+[  9/58] dp006 M=3.00 USABLE     cd_fore=1.27494 wall=118s attempts=1 
+[ 10/58] dp008 M=3.00 USABLE     cd_fore=1.44992 wall=256s attempts=1 
+[ 11/58] dp010 M=3.00 USABLE     cd_fore=1.32688 wall=216s attempts=1 
+[ 12/58] dp009 M=20.00 USABLE     cd_fore=1.54672 wall=307s attempts=1 
+[ 13/58] dp012 M=3.00 USABLE     cd_fore=1.23544 wall=218s attempts=1 
+[ 14/58] dp013 M=20.00 USABLE     cd_fore=1.31749 wall=159s attempts=1 
+[ 15/58] dp014 M=3.00 USABLE     cd_fore=1.27532 wall=255s attempts=1 
+[ 16/58] dp016 M=3.00 USABLE     cd_fore=0.86797 wall=119s attempts=1 
+[ 17/58] dp017 M=20.00 USABLE     cd_fore=0.88993 wall=119s attempts=1 
+[ 18/58] dp018 M=3.00 USABLE     cd_fore=0.85630 wall=151s attempts=1 
+[ 19/58] dp019 M=20.00 USABLE     cd_fore=0.88165 wall=101s attempts=1 
+[ 20/58] dp020 M=3.00 USABLE     cd_fore=0.85501 wall=152s attempts=1 
+[ 21/58] dp021 M=20.00 USABLE     cd_fore=0.88080 wall=99s attempts=1 
+[ 22/58] dp022 M=12.85 USABLE     cd_fore=1.50539 wall=214s attempts=1 
+[ 23/58] dp023 M=9.46 USABLE     cd_fore=1.14294 wall=210s attempts=1 
+[ 24/58] dp024 M=5.14 USABLE     cd_fore=0.86805 wall=159s attempts=1 
+[ 25/58] dp025 M=4.81 USABLE     cd_fore=0.93014 wall=106s attempts=1 
+[ 26/58] dp026 M=11.33 USABLE     cd_fore=1.19924 wall=146s attempts=1 
+[ 27/58] dp027 M=6.14 USABLE     cd_fore=1.34686 wall=152s attempts=1 
+[ 28/58] dp028 M=15.40 USABLE     cd_fore=1.25902 wall=148s attempts=1 
+[ 29/58] dp029 M=3.35 USABLE     cd_fore=1.29662 wall=151s attempts=1 
+[ 30/58] dp030 M=7.96 USABLE     cd_fore=0.71281 wall=120s attempts=1 
+[ 31/58] dp031 M=15.85 USABLE     cd_fore=1.42603 wall=278s attempts=1 
+[ 32/58] dp015 M=20.00 USABLE     cd_fore=1.36333 wall=663s attempts=2 
+[ 33/58] dp033 M=10.71 USABLE     cd_fore=1.47148 wall=172s attempts=1 
+[ 34/58] dp034 M=7.30 USABLE     cd_fore=1.38685 wall=152s attempts=1 
+[ 35/58] dp035 M=7.57 USABLE     cd_fore=1.42225 wall=201s attempts=1 
+[ 36/58] dp036 M=3.80 USABLE     cd_fore=0.41946 wall=113s attempts=1 
+[ 37/58] dp037 M=8.94 USABLE     cd_fore=1.44523 wall=208s attempts=1 
+[ 38/58] dp038 M=4.84 USABLE     cd_fore=1.26316 wall=256s attempts=1 
+[ 39/58] dp039 M=16.30 USABLE     cd_fore=1.08737 wall=100s attempts=1 
+[ 40/58] dp040 M=4.53 USABLE     cd_fore=1.36968 wall=163s attempts=1 
+[ 41/58] dp041 M=12.00 USABLE     cd_fore=0.97509 wall=165s attempts=1 
+[ 42/58] dp042 M=6.52 USABLE     cd_fore=1.03438 wall=166s attempts=1 
+[ 43/58] dp011 M=20.00 REJECTED   cd_fore=1.39153 wall=1026s attempts=2 force criterion not met (p2p 0.0023192691001481802, drift 0.0014373256961713488) after 9 extensions
+[ 44/58] dp044 M=3.17 USABLE     cd_fore=1.02389 wall=181s attempts=1 
+[ 45/58] dp045 M=11.70 USABLE     cd_fore=1.37547 wall=276s attempts=1 
+[ 46/58] dp046 M=8.45 USABLE     cd_fore=1.30454 wall=263s attempts=1 
+[ 47/58] dp047 M=5.76 USABLE     cd_fore=1.38483 wall=151s attempts=1 
+[ 48/58] dp048 M=19.53 USABLE     cd_fore=1.41802 wall=256s attempts=1 
+[ 49/58] dp049 M=4.25 USABLE     cd_fore=1.31251 wall=153s attempts=1 
+[ 50/58] dp050 M=10.08 USABLE     cd_fore=0.80675 wall=98s attempts=1 
+[ 51/58] dp032 M=18.38 REJECTED   cd_fore=0.88895 wall=1026s attempts=2 force criterion not met (p2p 0.0010889984337587612, drift 2.0747973120111367e-05) after 9 extensions
+[ 52/58] dp052 M=3.38 USABLE     cd_fore=0.98019 wall=208s attempts=1 
+[ 53/58] dp001 M=20.00 REJECTED   cd_fore=0.35253 wall=1137s attempts=3 force criterion not met (p2p 0.005972207935364963, drift 0.0002536901359560754) after 9 extensions
+[ 54/58] dp054 M=9.58 USABLE     cd_fore=1.29701 wall=153s attempts=1 
+[ 55/58] dp055 M=5.41 USABLE     cd_fore=1.36433 wall=140s attempts=1 
+[ 56/58] dp051 M=3.46 USABLE     cd_fore=1.44452 wall=627s attempts=2 
+[ 57/58] dp043 M=14.50 REJECTED   cd_fore=0.72327 wall=990s attempts=2 force criterion not met (p2p 0.0010894242192187563, drift 5.577101307034609e-05) after 9 extensions
+[ 58/58] dp053 M=9.88 REJECTED   cd_fore=1.49372 wall=850s attempts=2 force criterion not met (p2p 0.003435132642780547, drift 0.002171413587313178) after 9 extensions
+{
+  "run_id": "M3-DP-20260920T1610Z",
+  "mesh_level": "coarse",
+  "subset": "all",
+  "gate_G4_status_at_build": "IN_PROGRESS",
+  "openfoam_version": "v2512",
+  "n_planned": 58,
+  "n_skipped_invalid_geometry": 40,
+  "n_run": 58,
+  "verdicts": {
+    "USABLE": 53,
+    "REJECTED": 5
+  },
+  "driver_wall_time_s_this_invocation": 1966.3624498330028,
+  "sum_case_wall_time_s": 16925.31274496297,
+  "max_concurrent_cases": 4,
+  "scale_check": {
+    "performed": true,
+    "tolerance": 0.002,
+    "diameters_m": [
+      1.2,
+      3.0
+    ],
+    "cd_fore": [
+      0.8869041670533978,
+      0.8869041471454786
+    ],
+    "rel_difference": 2.24465279807789e-08,
+    "scale_invariant": true
+  }
+}

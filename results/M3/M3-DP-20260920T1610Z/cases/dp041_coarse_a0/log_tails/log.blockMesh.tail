@@ -1,0 +1,60 @@
+    Block 9 cell size :
+        i : 0.01220028329 .. 0.01220028316
+        j : 0.002058494817 .. 0.008233979269
+        k : 0.03 .. 0.03
+
+    Block 10 cell size :
+        i : 0.01220028297 .. 0.01220028293
+        j : 0.00219465088 .. 0.00877860352
+        k : 0.03 .. 0.03
+
+    Block 11 cell size :
+        i : 0.01220028273 .. 0.01220028277
+        j : 0.002371748744 .. 0.009486994976
+        k : 0.03 .. 0.03
+
+    Block 12 cell size :
+        i : 0.01220028257 .. 0.01220028268
+        j : 0.002596909737 .. 0.01038763895
+        k : 0.03 .. 0.03
+
+    Block 13 cell size :
+        i : 0.01220028248 .. 0.01220028266
+        j : 0.002878671656 .. 0.01151468662
+        k : 0.03 .. 0.03
+
+    Block 14 cell size :
+        i : 0.01220028247 .. 0.01220041069
+        j : 0.003227466836 .. 0.01290986734
+        k : 0.03 .. 0.03
+
+    Block 15 cell size :
+        i : 0.01220046718 .. 0.0121675378
+        j : 0.003655841526 .. 0.0146233661
+        k : 0.03 .. 0.03
+
+Creating cells
+Creating patches
+No patch pairs to merge
+
+Writing polyMesh with 0 cellZones
+----------------
+Mesh Information
+----------------
+  boundingBox: (-0.1879101473 0 -0.03) (0.4193222573 1.038722131 0)
+  nPoints: 6370
+  nCells: 3072
+  nFaces: 12400
+  nInternalFaces: 6032
+----------------
+Patches
+----------------
+  patch 0 (start: 6032 size: 64) name: body_fore
+  patch 1 (start: 6096 size: 64) name: freestream
+  patch 2 (start: 6160 size: 48) name: outlet
+  patch 3 (start: 6208 size: 48) name: axis
+  patch 4 (start: 6256 size: 3072) name: front
+  patch 5 (start: 9328 size: 3072) name: back
+
+End
+

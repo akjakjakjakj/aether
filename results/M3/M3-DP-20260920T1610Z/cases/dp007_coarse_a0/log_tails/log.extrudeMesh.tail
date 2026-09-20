@@ -1,0 +1,60 @@
+Merging edge (0 3185) since length 0 << 1.158318715e-05
+Merging edge (3 3188) since length 6.449573232e-20 << 1.158318715e-05
+Merging edge (5 3190) since length 1.309221398e-19 << 1.158318715e-05
+Merging edge (7 3192) since length 1.993370171e-19 << 1.158318715e-05
+Merging edge (9 3194) since length 2.697998889e-19 << 1.158318715e-05
+Merging edge (11 3196) since length 3.423720619e-19 << 1.158318715e-05
+Merging edge (13 3198) since length 4.171166776e-19 << 1.158318715e-05
+Merging edge (15 3200) since length 4.940987681e-19 << 1.158318715e-05
+Merging edge (17 3202) since length 5.73385312e-19 << 1.158318715e-05
+Merging edge (19 3204) since length 6.550452931e-19 << 1.158318715e-05
+Merging edge (21 3206) since length 7.391497599e-19 << 1.158318715e-05
+Merging edge (23 3208) since length 8.25771888e-19 << 1.158318715e-05
+Merging edge (25 3210) since length 9.14987043e-19 << 1.158318715e-05
+Merging edge (27 3212) since length 1.006872848e-18 << 1.158318715e-05
+Merging edge (29 3214) since length 1.101509248e-18 << 1.158318715e-05
+Merging edge (31 3216) since length 1.198978582e-18 << 1.158318715e-05
+Merging edge (33 3218) since length 1.299365652e-18 << 1.158318715e-05
+Merging edge (35 3220) since length 1.402757804e-18 << 1.158318715e-05
+Merging edge (37 3222) since length 1.509244991e-18 << 1.158318715e-05
+Merging edge (39 3224) since length 1.618919866e-18 << 1.158318715e-05
+Merging edge (41 3226) since length 1.73187785e-18 << 1.158318715e-05
+Merging edge (43 3228) since length 1.848217223e-18 << 1.158318715e-05
+Merging edge (45 3230) since length 1.968039207e-18 << 1.158318715e-05
+Merging edge (47 3232) since length 2.091448054e-18 << 1.158318715e-05
+Merging edge (49 3234) since length 2.218551135e-18 << 1.158318715e-05
+Merging edge (51 3236) since length 2.349459038e-18 << 1.158318715e-05
+Merging edge (53 3238) since length 2.484285661e-18 << 1.158318715e-05
+Merging edge (55 3240) since length 2.623148309e-18 << 1.158318715e-05
+Merging edge (57 3242) since length 2.7661678e-18 << 1.158318715e-05
+Merging edge (59 3244) since length 2.91346857e-18 << 1.158318715e-05
+Merging edge (61 3246) since length 3.065178777e-18 << 1.158318715e-05
+Merging edge (63 3248) since length 3.221430419e-18 << 1.158318715e-05
+Merging edge (65 3250) since length 3.382359443e-18 << 1.158318715e-05
+Merging edge (67 3252) since length 3.548105866e-18 << 1.158318715e-05
+Merging edge (69 3254) since length 3.718813896e-18 << 1.158318715e-05
+Merging edge (71 3256) since length 3.894632059e-18 << 1.158318715e-05
+Merging edge (73 3258) since length 4.075713326e-18 << 1.158318715e-05
+Merging edge (75 3260) since length 4.262215248e-18 << 1.158318715e-05
+Merging edge (77 3262) since length 4.454300092e-18 << 1.158318715e-05
+Merging edge (79 3264) since length 4.652134982e-18 << 1.158318715e-05
+Merging edge (81 3266) since length 4.855892046e-18 << 1.158318715e-05
+Merging edge (83 3268) since length 5.065748563e-18 << 1.158318715e-05
+Merging edge (85 3270) since length 5.281887119e-18 << 1.158318715e-05
+Merging edge (87 3272) since length 5.504495769e-18 << 1.158318715e-05
+Merging edge (89 3274) since length 5.733768193e-18 << 1.158318715e-05
+Merging edge (91 3276) since length 5.96990387e-18 << 1.158318715e-05
+Merging edge (93 3278) since length 6.213108251e-18 << 1.158318715e-05
+Merging edge (95 3280) since length 6.463592939e-18 << 1.158318715e-05
+Merging edge (97 3282) since length 6.721575869e-18 << 1.158318715e-05
+            Uncollapsed edges = 0 / 15697
+    Number of points : 6370
+    Not visited      : 0
+    Not collapsed    : 6272
+    Collapsed        : 98
+
+Collapsing 0 cells
+Writing mesh to "/Users/akj/Projects/aether/cfd/generated/M3-DP-20260920T1610Z/dp007_coarse_a0/constant/region0"
+
+End
+

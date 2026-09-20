@@ -1,0 +1,124 @@
+# AETHER Milestone M2 - OpenFOAM CFD validation (gate G4, spec §17).
+#
+# EVERYTHING that decides pass/fail is declared here, before the validation cases are run:
+# the convergence criterion, the benchmark tolerances, the mesh sequence. A short coarse
+# prototype (4800 cells, Mach 3) was run first to establish that the pipeline executes and
+# how many iterations a steady state needs; see docs/negative_results.md NR-05..NR-08 and
+# the engineering notebook. No tolerance below was adjusted after seeing a validation result.
+
+meta:
+  name: cfd_validation
+  milestone: M2
+  description: Sphere in supersonic perfect-gas flow; mesh independence; pipeline demo.
+
+openfoam:
+  required_by_spec: v2606
+  # The installed build is recorded at run time; a mismatch is reported, not hidden.
+
+gas:
+  model: calorically_perfect
+  gamma: 1.4
+  # Freestream static state. For the Euler equations of a perfect gas the force
+  # coefficients, p0/p_inf and delta/R depend on Mach number and gamma ONLY, so these two
+  # values set the scale of the numbers in the solver and nothing else.
+  pressure_pa: 1000.0
+  temperature_k: 220.0
+
+solver:
+  application: rhoCentralFoam
+  equations: euler            # inviscid; justification in ASSUMPTIONS.md A-CFD-2
+  flux_scheme: Kurganov
+  limiter: vanLeer
+  max_co: 0.2                 # 0.5 left a limit cycle in C_D on the prototype (NR-07)
+  rdeltat_smoothing: 0.02
+  force_interval: 5
+  n_ranks: 1                  # measured: 8 MPI ranks were SLOWER than 1 on this build (NR-08)
+  # Iterations of local-time-stepping pseudo-time, per refinement factor. A finer mesh
+  # needs more iterations for the same pseudo-time because its cells are smaller.
+  n_iterations:
+    1: 10000
+    2: 20000
+    4: 40000
+  # Run-until-converged (added after NR-09): if the force criterion below is not met at
+  # n_iterations, continue in blocks of extension_fraction * n_iterations, at most
+  # max_extensions times. The criterion itself is never relaxed; a case that still misses
+  # it after the last extension is reported as NOT converged.
+  max_extensions: 3
+  extension_fraction: 0.5
+
+convergence_criterion:        # applied to the forebody C_D of every gate case
+  window_iterations: 2000
+  max_peak_to_peak_rel: 1.0e-3
+  max_drift_rel: 2.0e-4
+
+mesh:
+  n_body_cells_base: 64
+  n_radial_cells_base: 48
+  cells_per_block_base: 4
+  refinement_factors: [1, 2, 4]   # coarse, medium, fine: constant ratio r = 2
+  radial_expansion_ratio: 4.0
+  standoff_margin: 2.0
+  asymptote_margin_deg: 6.0
+  wake_length_diameters: 3.0   # used by extent: full only
+  wedge_angle_deg: 5.0
+  # Forebody only: nose to the maximum-radius station, closed by a supersonic outflow plane.
+  # Decided BEFORE the validation runs, after the full-body prototype's inviscid wake failed
+  # to reach a steady state (NR-06). Consequence: base drag is not computed by this CFD.
+  extent: forebody
+
+mesh_independence:            # condition 1 of the gate, applied to the sphere benchmark
+  max_gci_fine_cd_rel: 0.02             # GCI of forebody C_D on the fine mesh
+  max_fine_medium_change_cd_rel: 0.01   # |C_D,fine - C_D,medium| / C_D,fine
+  # C_D must converge monotonically. The shock stand-off is reported with its GCI but is
+  # NOT part of this condition: a captured shock moves in cell-sized steps, so its observed
+  # order is not expected to be clean. It is judged against the references instead.
+
+benchmark:
+  body: sphere
+  radius_m: 0.5
+  mach_numbers: [3.0, 6.0]
+  reference_data: data/reference/sphere_supersonic.yaml
+  # Tolerances are on the FINE-mesh value. `basis` says why each number was chosen.
+  tolerances:
+    stagnation_pressure_rel:
+      value: 0.01
+      basis: Exact perfect-gas relation (Rayleigh pitot); only discretisation error remains.
+    standoff_vs_van_dyke_gordon_rel:
+      value: 0.05
+      basis: >
+        Like-for-like inviscid perfect-gas numerical reference (NASA TR R-1), tabulated to
+        3 significant figures; 5% allows for shock-capturing smearing of about one cell.
+    standoff_vs_billig_rel:
+      value: 0.10
+      basis: >
+        Empirical correlation of experimental data. No stated accuracy could be verified
+        from a fetched source, so 10% is a project choice, not a literature value.
+    forebody_cd_vs_clark_rel:
+      value: 0.03
+      basis: Pressure-only forebody drag; like-for-like with an Euler forebody integral.
+    total_cd_vs_bailey_hiatt_rel:
+      value: 0.05
+      basis: >
+        Free-flight total drag at Re ~ 1e4 includes skin friction and a viscous wake that an
+        Euler computation does not model; +/-2% experimental uncertainty. NOT like-for-like.
+    mach_match_abs:
+      value: 0.2
+      basis: Largest accepted |M_cfd - M_reference| when pairing with a tabulated row.
+
+negative_cases:
+  # Reproduces NR-06 inside the audited pipeline: full body + inviscid wake.
+  full_body_sphere:
+    mach: 3.0
+    refinement_factor: 1
+
+pipeline_demo:
+  # A generic blunted-cone capsule-like body, defined locally (NOT the project capsule
+  # module, NOT a flown vehicle). Run on the medium mesh only, after the benchmark.
+  mach: 6.0
+  refinement_factor: 2
+  nose_radius_m: 0.6
+  diameter_m: 1.2
+  cone_half_angle_deg: 60.0
+  shoulder_radius_m: 0.06
+  aft_cone_angle_deg: 30.0
+  base_radius_m: 0.3

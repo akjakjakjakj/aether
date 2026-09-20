@@ -1,0 +1,78 @@
+# Published reference data for a sphere in supersonic perfect-gas flow (gamma = 1.4).
+#
+# PROVENANCE RULE: every number below was read from the cited document itself (PDF page
+# image or text), on 2026-09-20. `how_read` records whether it is a tabulated value or a
+# value read off a graph. Anything that could not be seen in a fetched source is absent
+# from this file - it is listed under `not_verified` instead of being quoted from memory.
+
+sources:
+  bailey_hiatt_1971:
+    citation: >
+      A. B. Bailey and J. Hiatt, "Free-Flight Measurements of Sphere Drag at Subsonic,
+      Transonic, Supersonic, and Hypersonic Speeds for Continuum, Transition, and
+      Near-Free-Molecular Flow Conditions", AEDC-TR-70-291, Arnold Engineering Development
+      Center, March 1971 (DTIC AD0721208). This is the report underlying Bailey & Hiatt,
+      "Sphere Drag Coefficients for a Broad Range of Mach and Reynolds Numbers",
+      AIAA Journal 10(11), 1436-1440, 1972.
+    url: https://archive.org/download/DTIC_AD0721208/DTIC_AD0721208.pdf
+    stated_uncertainty: >
+      Abstract: approximately +/-2 percent for 0.1 < M < 6 and 2e1 < Re < 1e5.
+  van_dyke_gordon_1959:
+    citation: >
+      M. D. Van Dyke and H. D. Gordon, "Supersonic Flow Past a Family of Blunt Axisymmetric
+      Bodies", NASA Technical Report R-1, 1959. Table III, p. 20.
+    url: https://ntrs.nasa.gov/api/citations/19980223623/downloads/19980223623.pdf
+    nature: >
+      INVISCID NUMERICAL solutions (inverse method), perfect gas. Not an experiment. It is
+      the like-for-like reference for an Euler computation.
+  billig_1967:
+    citation: >
+      F. S. Billig, "Shock-Wave Shapes around Spherical- and Cylindrical-Nosed Bodies",
+      J. Spacecraft and Rockets 4(6), 822-823, 1967.
+    verification: >
+      The original paper is paywalled and was NOT fetched. The sphere correlation
+      delta/R = 0.143 exp(3.24/M^2) was confirmed as quoted in arXiv 2604.00953 eq. (5) and
+      arXiv 2509.10411 eq. (1); R_c/R = 1.143 exp(0.54/(M-1)^1.2) in arXiv 2410.18827
+      eq. (A.3). One secondary source (arXiv 2410.18827 eq. A.4) prints the exponent as 3.2
+      rather than 3.24. No stated accuracy of the correlation could be verified.
+
+# Total drag coefficient, free-flight ballistic range, T_wall/T_inf ~ 1.
+# Highest-Reynolds-number row in each Mach band of Table II (report pp. 79-80).
+sphere_total_cd:
+  source: bailey_hiatt_1971
+  how_read: tabulated (Table II)
+  rows:
+    - {mach: 1.990, reynolds: 4947,  cd: 0.993}
+    - {mach: 3.171, reynolds: 21104, cd: 0.944}
+    - {mach: 4.135, reynolds: 10255, cd: 0.945}
+    - {mach: 5.929, reynolds: 9934,  cd: 0.940}
+  caveat: >
+    Re ~ 1e4: a few percent of this total is skin friction, which an Euler computation
+    does not contain. The report (Sec. 4.5) states that at supersonic speed C_D DEcreases
+    as Re falls from 1e6 to 1e4.
+
+# Forebody PRESSURE drag of a sphere. Clark's expression as quoted in AEDC-TR-70-291
+# Sec. 4.5 (report p. 15), "in good agreement with Hoerner's". C_DPF = a - b / M^2.
+sphere_forebody_pressure_cd:
+  source: bailey_hiatt_1971
+  how_read: equation in text (Sec. 4.5)
+  a: 0.901
+  b: 0.462
+  caveat: Clark's and Hoerner's original publications were NOT fetched.
+
+# Shock stand-off distance over BODY radius, sphere, gamma = 1.4.
+sphere_standoff_over_radius:
+  source: van_dyke_gordon_1959
+  how_read: tabulated (Table III, column Delta/R_b, cases 175-178)
+  rows:
+    - {mach: 2.0, standoff_over_radius: 0.340}
+    - {mach: 3.0, standoff_over_radius: 0.213}
+    - {mach: 4.0, standoff_over_radius: 0.174}
+    - {mach: 6.0, standoff_over_radius: 0.148}
+
+not_verified:
+  - Tabulated sphere C_D at Re 1e5-1e6 (the AEDC report's own data stop near Re 2e4).
+  - Afterbody (base) pressure drag of a sphere, available only as a curve in AEDC-TR-70-291
+    Fig. 13 (after Lehnert, NAVORD Rep. 2774); graph-read values are deliberately NOT used.
+  - Hodges (1957) C_D ~ 0.92, Hoerner, Charters & Thomas, Clift et al., Loth (2008).
+  - Experimental stand-off data points (Van Dyke & Gordon Fig. 16b is not machine-readable).

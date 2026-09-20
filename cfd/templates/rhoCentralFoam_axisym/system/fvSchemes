@@ -1,0 +1,44 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSchemes;
+}
+// AETHER template - upper-case placeholders between at-signs are filled by aether.cfd.case.
+
+fluxScheme          @FLUX_SCHEME@;
+
+ddtSchemes
+{
+    default         localEuler;      // pseudo-time marching to steady state
+}
+
+gradSchemes
+{
+    default         Gauss linear;
+}
+
+divSchemes
+{
+    default         none;
+    div(tauMC)      Gauss linear;
+}
+
+laplacianSchemes
+{
+    default         Gauss linear corrected;
+}
+
+interpolationSchemes
+{
+    default         linear;
+    reconstruct(rho) @LIMITER@;
+    reconstruct(U)  @LIMITER@V;
+    reconstruct(T)  @LIMITER@;
+}
+
+snGradSchemes
+{
+    default         corrected;
+}

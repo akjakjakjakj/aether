@@ -14,6 +14,9 @@ cfd/generated/
 
 # M2 CFD evidence is small and citable: keep it in git (heavy fields stay in cfd/generated/)
 !results/M2/**/*.csv
+# M3 design-point evidence likewise: tables, force histories, dictionaries, log tails
+!results/M3/**/*.csv
 data/raw/
 data/processed/
 .DS_Store
+results/M3/smoke-*/
