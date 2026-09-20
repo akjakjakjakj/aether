@@ -1,0 +1,1117 @@
+Propose exactly 20 new designs to evaluate next.
+Rules:
+- Reply with ONE JSON object matching `response_schema`. No other text.
+- Every proposal names a `parent_id`: the `id` of a design in the tables below. It inherits the parent's variable values; `parameter_changes` lists the variables you change, as NEW ABSOLUTE VALUES (not deltas).
+- Values must lie inside [min, max] of `design_variables`. Out-of-range, malformed or duplicate proposals are rejected and the evaluation slot is lost; nothing is clipped or repaired for you.
+- `expected_outcome` is your numeric prediction of both objectives and of feasibility for that design. It will be scored against the simulator.
+- `requested_fidelity`: 0 = this reduced-order simulator, 1 = you think this design deserves a higher-fidelity check.
+- `observation`, `evidence`, `mechanism`, `uncertainty` describe what you see in the data, which rows support it (cite ids), the physical mechanism you believe explains it, and what you are unsure of.
+
+DATA:
+{
+ "schema_version": "aether.m5.agent/1",
+ "problem": "Design of an atmospheric-entry capsule and its entry flight-path angle. Each design is scored by a reduced-order simulator. Both objectives are MINIMISED. A design is feasible only if every constraint margin is >= 0; a margin is (limit - value) / limit. Some parameter combinations are not a buildable geometry: they return no metrics, only a failure_reason, and still cost one evaluation. Progress is measured by the hypervolume of the feasible non-dominated set against the fixed reference point below (larger is better): it rewards both better designs and a well-covered trade-off.",
+ "design_variables": [
+  {
+   "name": "diameter_m",
+   "units": "m",
+   "min": 0.8,
+   "max": 4.5
+  },
+  {
+   "name": "bluntness_ratio",
+   "units": "-",
+   "min": 0.25,
+   "max": 1.35
+  },
+  {
+   "name": "cone_half_angle_deg",
+   "units": "deg",
+   "min": 20.0,
+   "max": 70.0
+  },
+  {
+   "name": "flight_path_angle_deg",
+   "units": "deg",
+   "min": -8.0,
+   "max": -1.5
+  }
+ ],
+ "fixed_parameters": {
+  "shoulder_ratio": {
+   "value": 0.1,
+   "units": "-"
+  },
+  "aft_cone_angle_deg": {
+   "value": 20.0,
+   "units": "deg"
+  },
+  "fineness_ratio": {
+   "value": 0.875,
+   "units": "-"
+  },
+  "entry_velocity_m_s": {
+   "value": 7400.0,
+   "units": "m/s"
+  },
+  "mass_kg": {
+   "value": 350.0,
+   "units": "kg"
+  },
+  "insulator_thickness_m": {
+   "value": 0.015,
+   "units": "m"
+  }
+ },
+ "objectives": [
+  {
+   "name": "peak_heat_flux_w_m2",
+   "goal": "minimise",
+   "hypervolume_reference": 2500000.0,
+   "ideal": 0.0
+  },
+  {
+   "name": "peak_bondline_temperature_k",
+   "goal": "minimise",
+   "hypervolume_reference": 450.0,
+   "ideal": 300.0
+  }
+ ],
+ "constraints": [
+  "max_g",
+  "peak_bondline_temperature_k",
+  "heatshield_mass_fraction"
+ ],
+ "budget": {
+  "total_evaluations": 200,
+  "spent": 100,
+  "remaining": 100,
+  "rounds_remaining": 5,
+  "proposals_requested_now": 20
+ },
+ "evaluated_summary": {
+  "n_evaluated": 100,
+  "n_feasible": 59,
+  "n_no_geometry": 29,
+  "constraint_violation_counts": {
+   "heatshield_mass_fraction": 5,
+   "max_g": 8,
+   "peak_bondline_temperature_k": 2
+  },
+  "feasible_front_size": 22,
+  "hypervolume_normalised": 0.340673
+ },
+ "feasible_non_dominated": [
+  {
+   "id": "C-8bece2ff79ef",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -1.5
+   },
+   "peak_heat_flux_w_m2": 240100.0,
+   "peak_bondline_temperature_k": 420.69,
+   "max_g": 9.2105,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.2325,
+    "peak_bondline_temperature_k": 0.06513,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-e427961b763e",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -1.7
+   },
+   "peak_heat_flux_w_m2": 244250.0,
+   "peak_bondline_temperature_k": 417.36,
+   "max_g": 9.3964,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.217,
+    "peak_bondline_temperature_k": 0.07253,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-06539a94511b",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -1.9
+   },
+   "peak_heat_flux_w_m2": 248660.0,
+   "peak_bondline_temperature_k": 414.18,
+   "max_g": 9.6031,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1997,
+    "peak_bondline_temperature_k": 0.07961,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-2b37eff55f1f",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.1
+   },
+   "peak_heat_flux_w_m2": 253260.0,
+   "peak_bondline_temperature_k": 411.15,
+   "max_g": 9.8294,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1809,
+    "peak_bondline_temperature_k": 0.08634,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-2a675fdefeb0",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.35
+   },
+   "peak_heat_flux_w_m2": 259210.0,
+   "peak_bondline_temperature_k": 407.57,
+   "max_g": 10.137,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1552,
+    "peak_bondline_temperature_k": 0.09428,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-32d7640d833e",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.65
+   },
+   "peak_heat_flux_w_m2": 266580.0,
+   "peak_bondline_temperature_k": 403.6,
+   "max_g": 10.54,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1216,
+    "peak_bondline_temperature_k": 0.1031,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-877906932fbe",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.8
+   },
+   "peak_heat_flux_w_m2": 269710.0,
+   "peak_bondline_temperature_k": 401.64,
+   "max_g": 10.754,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1038,
+    "peak_bondline_temperature_k": 0.1075,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-cf2a7d0c6a7b",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.1
+   },
+   "peak_heat_flux_w_m2": 277240.0,
+   "peak_bondline_temperature_k": 398.14,
+   "max_g": 11.202,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.06646,
+    "peak_bondline_temperature_k": 0.1152,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-0cb178769684",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.35
+   },
+   "peak_heat_flux_w_m2": 283530.0,
+   "peak_bondline_temperature_k": 395.44,
+   "max_g": 11.595,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.03373,
+    "peak_bondline_temperature_k": 0.1212,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-137cb284577a",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.48
+   },
+   "peak_heat_flux_w_m2": 286790.0,
+   "peak_bondline_temperature_k": 394.11,
+   "max_g": 11.806,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.01619,
+    "peak_bondline_temperature_k": 0.1242,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-7d6687d08e1f",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.52
+   },
+   "peak_heat_flux_w_m2": 288440.0,
+   "peak_bondline_temperature_k": 393.79,
+   "max_g": 11.871,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.01073,
+    "peak_bondline_temperature_k": 0.1249,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-ebbe73ff27de",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.58
+   },
+   "peak_heat_flux_w_m2": 289950.0,
+   "peak_bondline_temperature_k": 393.19,
+   "max_g": 11.97,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.002472,
+    "peak_bondline_temperature_k": 0.1262,
+    "heatshield_mass_fraction": 0.002256
+   }
+  }
+ ],
+ "nearly_feasible": [
+  {
+   "id": "C-ee99f55de428",
+   "x": {
+    "diameter_m": 2.3521,
+    "bluntness_ratio": 0.32596,
+    "cone_half_angle_deg": 49.671,
+    "flight_path_angle_deg": -2.637
+   },
+   "peak_heat_flux_w_m2": 723010.0,
+   "peak_bondline_temperature_k": 453.81,
+   "max_g": 10.169,
+   "feasible": false,
+   "margins": {
+    "max_g": 0.1526,
+    "peak_bondline_temperature_k": -0.008466,
+    "heatshield_mass_fraction": 0.4422
+   },
+   "failure_reason": "constraint violated: peak_bondline_temperature_k"
+  },
+  {
+   "id": "C-ffcd43d3a722",
+   "x": {
+    "diameter_m": 3.1,
+    "bluntness_ratio": 1.0,
+    "cone_half_angle_deg": 66.0,
+    "flight_path_angle_deg": -3.8
+   },
+   "peak_heat_flux_w_m2": 350280.0,
+   "peak_bondline_temperature_k": 397.87,
+   "max_g": 12.219,
+   "feasible": false,
+   "margins": {
+    "max_g": -0.01823,
+    "peak_bondline_temperature_k": 0.1158,
+    "heatshield_mass_fraction": 0.1527
+   },
+   "failure_reason": "constraint violated: max_g"
+  },
+  {
+   "id": "C-2439bd64c673",
+   "x": {
+    "diameter_m": 3.45,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.4
+   },
+   "peak_heat_flux_w_m2": 277530.0,
+   "peak_bondline_temperature_k": 393.84,
+   "max_g": 11.7,
+   "feasible": false,
+   "margins": {
+    "max_g": 0.02502,
+    "peak_bondline_temperature_k": 0.1248,
+    "heatshield_mass_fraction": -0.03704
+   },
+   "failure_reason": "constraint violated: heatshield_mass_fraction"
+  },
+  {
+   "id": "C-63aaa0985529",
+   "x": {
+    "diameter_m": 2.985,
+    "bluntness_ratio": 0.52287,
+    "cone_half_angle_deg": 29.661,
+    "flight_path_angle_deg": -4.0986
+   },
+   "peak_heat_flux_w_m2": 459840.0,
+   "peak_bondline_temperature_k": 404.43,
+   "max_g": 12.669,
+   "feasible": false,
+   "margins": {
+    "max_g": -0.05574,
+    "peak_bondline_temperature_k": 0.1013,
+    "heatshield_mass_fraction": 0.02835
+   },
+   "failure_reason": "constraint violated: max_g"
+  },
+  {
+   "id": "C-50a0a474d0f6",
+   "x": {
+    "diameter_m": 1.2317,
+    "bluntness_ratio": 0.60802,
+    "cone_half_angle_deg": 42.501,
+    "flight_path_angle_deg": -3.1047
+   },
+   "peak_heat_flux_w_m2": 1437900.0,
+   "peak_bondline_temperature_k": 484.97,
+   "max_g": 11.992,
+   "feasible": false,
+   "margins": {
+    "max_g": 0.0007028,
+    "peak_bondline_temperature_k": -0.07772,
+    "heatshield_mass_fraction": 0.8524
+   },
+   "failure_reason": "constraint violated: peak_bondline_temperature_k"
+  },
+  {
+   "id": "C-ab9827dc6929",
+   "x": {
+    "diameter_m": 3.2119,
+    "bluntness_ratio": 0.39901,
+    "cone_half_angle_deg": 52.819,
+    "flight_path_angle_deg": -4.2603
+   },
+   "peak_heat_flux_w_m2": 478430.0,
+   "peak_bondline_temperature_k": 403.24,
+   "max_g": 13.059,
+   "feasible": false,
+   "margins": {
+    "max_g": -0.08824,
+    "peak_bondline_temperature_k": 0.1039,
+    "heatshield_mass_fraction": -0.004004
+   },
+   "failure_reason": "constraint violated: heatshield_mass_fraction, max_g"
+  },
+  {
+   "id": "C-f97dae207371",
+   "x": {
+    "diameter_m": 3.1918,
+    "bluntness_ratio": 0.42979,
+    "cone_half_angle_deg": 37.633,
+    "flight_path_angle_deg": -1.8548
+   },
+   "peak_heat_flux_w_m2": 375800.0,
+   "peak_bondline_temperature_k": 435.89,
+   "max_g": 9.5095,
+   "feasible": false,
+   "margins": {
+    "max_g": 0.2075,
+    "peak_bondline_temperature_k": 0.03136,
+    "heatshield_mass_fraction": -0.1268
+   },
+   "failure_reason": "constraint violated: heatshield_mass_fraction"
+  },
+  {
+   "id": "C-36f9165b9496",
+   "x": {
+    "diameter_m": 2.5481,
+    "bluntness_ratio": 0.86769,
+    "cone_half_angle_deg": 64.967,
+    "flight_path_angle_deg": -4.8581
+   },
+   "peak_heat_flux_w_m2": 520730.0,
+   "peak_bondline_temperature_k": 400.65,
+   "max_g": 13.735,
+   "feasible": false,
+   "margins": {
+    "max_g": -0.1446,
+    "peak_bondline_temperature_k": 0.1097,
+    "heatshield_mass_fraction": 0.4228
+   },
+   "failure_reason": "constraint violated: max_g"
+  }
+ ],
+ "most_recent": [
+  {
+   "id": "C-2edb7c27b8e6",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -1.6
+   },
+   "peak_heat_flux_w_m2": 241610.0,
+   "peak_bondline_temperature_k": 418.9,
+   "max_g": 9.3007,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.2249,
+    "peak_bondline_temperature_k": 0.06911,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-e427961b763e",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -1.7
+   },
+   "peak_heat_flux_w_m2": 244250.0,
+   "peak_bondline_temperature_k": 417.36,
+   "max_g": 9.3964,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.217,
+    "peak_bondline_temperature_k": 0.07253,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-fad0ce376e4d",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -1.8
+   },
+   "peak_heat_flux_w_m2": 245890.0,
+   "peak_bondline_temperature_k": 415.65,
+   "max_g": 9.497,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.2086,
+    "peak_bondline_temperature_k": 0.07634,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-06539a94511b",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -1.9
+   },
+   "peak_heat_flux_w_m2": 248660.0,
+   "peak_bondline_temperature_k": 414.18,
+   "max_g": 9.6031,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1997,
+    "peak_bondline_temperature_k": 0.07961,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-41c4e441f7e0",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.0
+   },
+   "peak_heat_flux_w_m2": 250380.0,
+   "peak_bondline_temperature_k": 412.54,
+   "max_g": 9.7139,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1905,
+    "peak_bondline_temperature_k": 0.08324,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-2b37eff55f1f",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.1
+   },
+   "peak_heat_flux_w_m2": 253260.0,
+   "peak_bondline_temperature_k": 411.15,
+   "max_g": 9.8294,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1809,
+    "peak_bondline_temperature_k": 0.08634,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-8be76b10448d",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.2
+   },
+   "peak_heat_flux_w_m2": 255060.0,
+   "peak_bondline_temperature_k": 409.59,
+   "max_g": 9.9493,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1709,
+    "peak_bondline_temperature_k": 0.0898,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-2a675fdefeb0",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.35
+   },
+   "peak_heat_flux_w_m2": 259210.0,
+   "peak_bondline_temperature_k": 407.57,
+   "max_g": 10.137,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1552,
+    "peak_bondline_temperature_k": 0.09428,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-fefe9c28e00f",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.5
+   },
+   "peak_heat_flux_w_m2": 262300.0,
+   "peak_bondline_temperature_k": 405.45,
+   "max_g": 10.334,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1388,
+    "peak_bondline_temperature_k": 0.09899,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-32d7640d833e",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.65
+   },
+   "peak_heat_flux_w_m2": 266580.0,
+   "peak_bondline_temperature_k": 403.6,
+   "max_g": 10.54,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1216,
+    "peak_bondline_temperature_k": 0.1031,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-877906932fbe",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.8
+   },
+   "peak_heat_flux_w_m2": 269710.0,
+   "peak_bondline_temperature_k": 401.64,
+   "max_g": 10.754,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.1038,
+    "peak_bondline_temperature_k": 0.1075,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-7dc3674aac6a",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -2.95
+   },
+   "peak_heat_flux_w_m2": 274080.0,
+   "peak_bondline_temperature_k": 399.94,
+   "max_g": 10.975,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.08544,
+    "peak_bondline_temperature_k": 0.1112,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-cf2a7d0c6a7b",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.1
+   },
+   "peak_heat_flux_w_m2": 277240.0,
+   "peak_bondline_temperature_k": 398.14,
+   "max_g": 11.202,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.06646,
+    "peak_bondline_temperature_k": 0.1152,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-6ffededfb3fb",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.25
+   },
+   "peak_heat_flux_w_m2": 281640.0,
+   "peak_bondline_temperature_k": 396.59,
+   "max_g": 11.436,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.04703,
+    "peak_bondline_temperature_k": 0.1187,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-0cb178769684",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.35
+   },
+   "peak_heat_flux_w_m2": 283530.0,
+   "peak_bondline_temperature_k": 395.44,
+   "max_g": 11.595,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.03373,
+    "peak_bondline_temperature_k": 0.1212,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-33cfd33aaf84",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.42
+   },
+   "peak_heat_flux_w_m2": 285920.0,
+   "peak_bondline_temperature_k": 394.8,
+   "max_g": 11.708,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.02434,
+    "peak_bondline_temperature_k": 0.1227,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-137cb284577a",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.48
+   },
+   "peak_heat_flux_w_m2": 286790.0,
+   "peak_bondline_temperature_k": 394.11,
+   "max_g": 11.806,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.01619,
+    "peak_bondline_temperature_k": 0.1242,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-7d6687d08e1f",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.52
+   },
+   "peak_heat_flux_w_m2": 288440.0,
+   "peak_bondline_temperature_k": 393.79,
+   "max_g": 11.871,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.01073,
+    "peak_bondline_temperature_k": 0.1249,
+    "heatshield_mass_fraction": 0.002256
+   }
+  },
+  {
+   "id": "C-55939772769b",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.265,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.55
+   },
+   "peak_heat_flux_w_m2": 288560.0,
+   "peak_bondline_temperature_k": 393.41,
+   "max_g": 11.921,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.006604,
+    "peak_bondline_temperature_k": 0.1258,
+    "heatshield_mass_fraction": 0.002724
+   }
+  },
+  {
+   "id": "C-ebbe73ff27de",
+   "x": {
+    "diameter_m": 3.384,
+    "bluntness_ratio": 1.25,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.58
+   },
+   "peak_heat_flux_w_m2": 289950.0,
+   "peak_bondline_temperature_k": 393.19,
+   "max_g": 11.97,
+   "feasible": true,
+   "margins": {
+    "max_g": 0.002472,
+    "peak_bondline_temperature_k": 0.1262,
+    "heatshield_mass_fraction": 0.002256
+   }
+  }
+ ],
+ "recent_geometry_failures": [
+  {
+   "id": "C-7895ff2e9de5",
+   "x": {
+    "diameter_m": 3.375,
+    "bluntness_ratio": 1.35,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.52
+   },
+   "peak_heat_flux_w_m2": null,
+   "peak_bondline_temperature_k": null,
+   "max_g": null,
+   "feasible": false,
+   "failure_reason": "invalid geometry: cone_half_angle_deg (70.000 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-33.812 mm) - the nose sphere and the shoulder torus overlap. I"
+  },
+  {
+   "id": "C-5e1f72b77efe",
+   "x": {
+    "diameter_m": 3.375,
+    "bluntness_ratio": 1.35,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.58
+   },
+   "peak_heat_flux_w_m2": null,
+   "peak_bondline_temperature_k": null,
+   "max_g": null,
+   "feasible": false,
+   "failure_reason": "invalid geometry: cone_half_angle_deg (70.000 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-33.812 mm) - the nose sphere and the shoulder torus overlap. I"
+  },
+  {
+   "id": "C-b9e18bc41ef0",
+   "x": {
+    "diameter_m": 3.38,
+    "bluntness_ratio": 1.35,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.58
+   },
+   "peak_heat_flux_w_m2": null,
+   "peak_bondline_temperature_k": null,
+   "max_g": null,
+   "feasible": false,
+   "failure_reason": "invalid geometry: cone_half_angle_deg (70.000 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-33.862 mm) - the nose sphere and the shoulder torus overlap. I"
+  },
+  {
+   "id": "C-14d00eff317e",
+   "x": {
+    "diameter_m": 3.385,
+    "bluntness_ratio": 1.35,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.55
+   },
+   "peak_heat_flux_w_m2": null,
+   "peak_bondline_temperature_k": null,
+   "max_g": null,
+   "feasible": false,
+   "failure_reason": "invalid geometry: cone_half_angle_deg (70.000 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-33.912 mm) - the nose sphere and the shoulder torus overlap. I"
+  },
+  {
+   "id": "C-0fe9a1421877",
+   "x": {
+    "diameter_m": 3.39,
+    "bluntness_ratio": 1.35,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.55
+   },
+   "peak_heat_flux_w_m2": null,
+   "peak_bondline_temperature_k": null,
+   "max_g": null,
+   "feasible": false,
+   "failure_reason": "invalid geometry: cone_half_angle_deg (70.000 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-33.962 mm) - the nose sphere and the shoulder torus overlap. I"
+  },
+  {
+   "id": "C-6fbbc439e70d",
+   "x": {
+    "diameter_m": 3.375,
+    "bluntness_ratio": 1.3,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.58
+   },
+   "peak_heat_flux_w_m2": null,
+   "peak_bondline_temperature_k": null,
+   "max_g": null,
+   "feasible": false,
+   "failure_reason": "invalid geometry: cone_half_angle_deg (70.000 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-12.805 mm) - the nose sphere and the shoulder torus overlap. I"
+  },
+  {
+   "id": "C-f9392ac5ab18",
+   "x": {
+    "diameter_m": 3.375,
+    "bluntness_ratio": 1.35,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.59
+   },
+   "peak_heat_flux_w_m2": null,
+   "peak_bondline_temperature_k": null,
+   "max_g": null,
+   "feasible": false,
+   "failure_reason": "invalid geometry: cone_half_angle_deg (70.000 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-33.812 mm) - the nose sphere and the shoulder torus overlap. I"
+  },
+  {
+   "id": "C-8a3c7e034331",
+   "x": {
+    "diameter_m": 3.3,
+    "bluntness_ratio": 1.35,
+    "cone_half_angle_deg": 70.0,
+    "flight_path_angle_deg": -3.6
+   },
+   "peak_heat_flux_w_m2": null,
+   "peak_bondline_temperature_k": null,
+   "max_g": null,
+   "feasible": false,
+   "failure_reason": "invalid geometry: cone_half_angle_deg (70.000 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-33.061 mm) - the nose sphere and the shoulder torus overlap. I"
+  }
+ ],
+ "your_previous_rounds": [
+  {
+   "round": 1,
+   "mechanism": "Stagnation heat flux scales with sqrt(rho_peak/Rn). Peak-heating density scales with ballistic coefficient (1/D^2) times sin(gamma), and nose radius is b*D. Large D and large b therefore lower q. Bondline temperature follows total heat load, which falls with steeper entry (shorter pulse) and lower q. Peak g rises with steepness and pushes back toward shallow angles. Mass fraction limits D, and a l",
+   "n_accepted": 20,
+   "n_rejected": 0,
+   "n_feasible_new": 19,
+   "n_no_geometry_new": 0,
+   "hypervolume_before": 0.0,
+   "hypervolume_after": 0.298074
+  },
+  {
+   "round": 2,
+   "mechanism": "Peak stagnation heat flux scales roughly as D^-1.36 and weakly with bluntness (b^-0.2 to -0.3). It depends weakly on gamma, roughly sin(gamma)^0.25. Bondline temperature follows heat load, so it falls with D, b and steeper entry. Peak g depends mainly on gamma, so it caps steepness at about -3.6. Cone 70 gives the lightest shield and the largest allowed b, which lets D rise to about 3.3-3.35 befor",
+   "n_accepted": 20,
+   "n_rejected": 0,
+   "n_feasible_new": 19,
+   "n_no_geometry_new": 0,
+   "hypervolume_before": 0.298074,
+   "hypervolume_after": 0.33378
+  },
+  {
+   "round": 3,
+   "mechanism": "Peak heat flux scales roughly as D^-1.5 and b^-0.2, and depends weakly on gamma. Bondline temperature follows heat load, which falls with larger nose radius (b*D), lower ballistic coefficient (larger D) and steeper entry. The active constraints are mass fraction (upper limit on D, eased slightly by b) and g (limit on steepness). The best design is therefore D about 3.375-3.39, b 1.35, cone 70, wit",
+   "n_accepted": 19,
+   "n_rejected": 0,
+   "n_feasible_new": 0,
+   "n_no_geometry_new": 19,
+   "hypervolume_before": 0.33378,
+   "hypervolume_after": 0.33378
+  },
+  {
+   "round": 4,
+   "mechanism": "Larger D lowers the ballistic coefficient and raises nose radius, which lowers both peak flux and heat load. Larger b lowers heat flux weakly (about b^-0.2). Steeper entry shortens the heat pulse and lowers bondline temperature but raises peak flux and g. So both objectives improve with D and b up to the mass-fraction and geometry limits, and the front is traced by gamma alone. I propose sweeping ",
+   "n_accepted": 21,
+   "n_rejected": 0,
+   "n_feasible_new": 21,
+   "n_no_geometry_new": 0,
+   "hypervolume_before": 0.33378,
+   "hypervolume_after": 0.340673
+  }
+ ],
+ "response_schema": {
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+   "observation",
+   "evidence",
+   "mechanism",
+   "uncertainty",
+   "proposals"
+  ],
+  "properties": {
+   "observation": {
+    "type": "string",
+    "minLength": 1,
+    "maxLength": 1500
+   },
+   "evidence": {
+    "type": "array",
+    "minItems": 1,
+    "maxItems": 12,
+    "items": {
+     "type": "string",
+     "minLength": 1,
+     "maxLength": 1500
+    }
+   },
+   "mechanism": {
+    "type": "string",
+    "minLength": 1,
+    "maxLength": 1500
+   },
+   "uncertainty": {
+    "type": "string",
+    "minLength": 1,
+    "maxLength": 1500
+   },
+   "proposals": {
+    "type": "array",
+    "minItems": 1,
+    "maxItems": 20,
+    "items": {
+     "type": "object",
+     "additionalProperties": false,
+     "required": [
+      "parent_id",
+      "rationale",
+      "parameter_changes",
+      "expected_outcome",
+      "uncertainty",
+      "reason_to_simulate",
+      "requested_fidelity"
+     ],
+     "properties": {
+      "parent_id": {
+       "type": "string"
+      },
+      "rationale": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 1500
+      },
+      "parameter_changes": {
+       "type": "object",
+       "additionalProperties": false,
+       "minProperties": 1,
+       "properties": {
+        "diameter_m": {
+         "type": "number"
+        },
+        "bluntness_ratio": {
+         "type": "number"
+        },
+        "cone_half_angle_deg": {
+         "type": "number"
+        },
+        "flight_path_angle_deg": {
+         "type": "number"
+        }
+       }
+      },
+      "expected_outcome": {
+       "type": "object",
+       "additionalProperties": false,
+       "required": [
+        "peak_heat_flux_w_m2",
+        "peak_bondline_temperature_k",
+        "feasible"
+       ],
+       "properties": {
+        "peak_heat_flux_w_m2": {
+         "type": "number"
+        },
+        "peak_bondline_temperature_k": {
+         "type": "number"
+        },
+        "feasible": {
+         "type": "boolean"
+        }
+       }
+      },
+      "uncertainty": {
+       "enum": [
+        "low",
+        "medium",
+        "high"
+       ]
+      },
+      "reason_to_simulate": {
+       "type": "string",
+       "minLength": 1,
+       "maxLength": 1500
+      },
+      "requested_fidelity": {
+       "enum": [
+        0,
+        1
+       ]
+      }
+     }
+    }
+   }
+  }
+ }
+}

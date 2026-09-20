@@ -55,6 +55,25 @@ optimize:
 optimize-report:
 	$(PY) scripts/run_optimize.py --report-only $(RUN_ID)
 
+# Milestone M5 (configs/ai_ablation.yaml). Uses the latest `doe` run's active variables.
+#   make ablation                        LIVE: shells out to the Claude Code CLI (`claude -p`,
+#                                        signed in; no API key). Hard-capped at 80 LLM calls.
+#                                        Tens of minutes - run it in the background.
+#   make ablation-replay RUN_ID=M5-ABL-...   NO LLM access needed: re-runs every evaluation
+#                                        from that run's recorded responses and config
+#                                        snapshot, checks the hypervolumes match. Never
+#                                        overwrites the published report.
+#   make ablation-report RUN_ID=M5-ABL-...   rebuild summary, figures and report only
+.PHONY: ablation ablation-replay ablation-report
+ablation:
+	$(PY) scripts/run_ai_ablation.py $(if $(DOE_RUN),--doe-run $(DOE_RUN),)
+
+ablation-replay:
+	$(PY) scripts/run_ai_ablation.py --replay $(RUN_ID) $(if $(STRICT),--strict-replay,)
+
+ablation-report:
+	$(PY) scripts/run_ai_ablation.py --report-only $(RUN_ID)
+
 clean:
 	rm -rf results/* reports/figures/* .pytest_cache .ruff_cache
 	find . -name __pycache__ -type d -exec rm -rf {} +

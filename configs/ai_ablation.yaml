@@ -1,0 +1,118 @@
+# AETHER M5 - AI vs conventional optimiser ablation (spec sections 23-25, 46).
+#
+# Everything the ablation decides is decided HERE, before the run: budget, seeds, method
+# settings, the LLM and its call caps, and - most importantly - what will count as "the AI
+# helped". The design space, the objectives, the hypervolume reference/ideal points and the
+# exploit-audit thresholds are NOT repeated here: they are read from `meta.design_space`
+# (the M4 file), so every method in this study is measured with M4's ruler by construction.
+# The active variables are the ones the latest M4 DOE's screening.json left active.
+
+meta:
+  name: m5_ai_ablation
+  design_space: configs/design_space.yaml
+
+ablation:
+  workers: 6                       # process pool for evaluations; one BLAS thread each
+  budget_evaluations: 200          # per (method, seed); identical for every method
+  seeds: [37, 41, 59, 67, 73]      # five of M4's seven seeds. NOT 11 and NOT 23: seed 11 was
+                                   # used in the development smoke test that led to two
+                                   # changes in bo_parego (NR-17, A-AI-3), and seeds 11 and 23
+                                   # in a 60-evaluation pipeline dry run whose hypervolumes
+                                   # were printed. Seeds 37/41/59 were EXECUTED by the aborted
+                                   # run M5-ABL-20260920T141724Z (NR-18) but no number from it
+                                   # was ever summarised or inspected; 67 and 73 never ran.
+  curve_step: 10                   # hypervolume-vs-evaluations resolution [evaluations]
+  # WHY 200 x 5 and not M4's 1000 x 7: the LLM is the scarce resource. The whole study is
+  # capped at 80 LLM calls; 9 rounds of ~20 proposals spend the ~180 evaluations left after
+  # the initial design, so 5 seeds cost 45 calls and leave room for retries and for
+  # the two plumbing seeds of `ai_adaptive`. M4's 1000-evaluation runs stay the
+  # conventional reference for what a large budget reaches (NSGA-II: HV 0.3773 +/- 0.0070).
+
+  methods:
+    lhs_search:                    # M4 implementation, unchanged
+      kind: lhs_search
+      enabled: true
+    nsga2:                         # M4 implementation AND M4 settings, unchanged
+      kind: nsga2
+      enabled: true
+      population_size: 40          # at 200 evaluations this is only 5 generations
+    nsga2_pop20:                   # same code, population scaled to the smaller budget so
+      kind: nsga2                  # NSGA-II is not handicapped by a setting chosen for
+      enabled: true                # 1000 evaluations. Declared before the run; the better
+      population_size: 20          # of the two is the NSGA-II the AI has to beat.
+    bo_parego:
+      kind: bo_parego
+      enabled: true
+      n_initial_per_variable: 5    # x however many variables the screening left active;
+                                   # same seeded LHS as ai_agent, seed for seed
+      batch_size: 10
+      pool_size: 4096
+      mc_samples: 64
+      local_sigma: 0.05            # unit-cube s.d. of perturbations about the front
+      min_probability_feasible: 0.05
+      gp_restarts: 2
+      transforms:
+        peak_heat_flux_w_m2: log10
+    ai_agent:
+      kind: ai_agent
+      enabled: true
+      n_initial_per_variable: 5    # identical initial design to bo_parego, seed for seed
+      rounds: 9                    # planned LLM rounds; the per-round quota is
+                                   # ceil(remaining / rounds left), ~20 with 4 active variables
+      max_proposals_per_call: 30   # ceiling when earlier rejections push the quota up
+      tables:                      # rows of each table shown to the LLM
+        front: 12
+        near_feasible: 8
+        recent: 20
+        failures: 8
+    ai_adaptive:                   # NOT YET MEANINGFUL: no Fidelity 1 exists (gate G4).
+      kind: ai_adaptive            # Runs the same agent plus the promotion-policy hook at
+      enabled: true                # F0 only, on two seeds, to test the plumbing. M6 fills
+      seeds: [37, 41]              # this row in. It is excluded from every comparison.
+      n_initial_per_variable: 5
+      rounds: 9
+      max_proposals_per_call: 30
+      tables: {front: 12, near_feasible: 8, recent: 20, failures: 8}
+      transforms:
+        peak_heat_flux_w_m2: log10
+      promotion_policy:            # PLACEHOLDERS - to be set at M6 against real CFD cost
+        min_predicted_hv_gain: 1.0e-4
+        min_uncertainty: 0.25      # predictive s.d. / training s.d., modelled space
+        min_novelty: 0.10          # unit-cube distance to the nearest evaluated design
+        max_high_fidelity_fraction: 0.10
+
+  llm:
+    model: claude-sonnet-5         # passed to `claude -p --model`; no API key anywhere
+    max_llm_calls: 12              # HARD cap per (method, seed), enforced in code
+    max_llm_calls_study: 80        # HARD cap for the whole run, enforced in code
+    timeout_s: 1500                # per call; a 20-proposal answer took 3-5 min in the smoke test
+    concurrency: 4                 # seeds of an LLM method run in parallel threads
+
+  surrogate_validation:
+    # Static held-out test (section 25): for each seed, GPs are trained on that seed's
+    # `lhs_search` candidates and scored on the NEXT seed's - data the model never saw,
+    # bought by the ablation anyway, so validation costs no extra evaluation.
+    train_method: lhs_search
+    transforms:
+      peak_heat_flux_w_m2: log10
+
+  # -------------------------------------------------------------------------------------
+  # PRE-DECLARED SUCCESS CRITERIA. Written before any method ran.
+  #   metric       normalised hypervolume of the feasible set after `checkpoints`
+  #                evaluations (50 = early/sample-efficiency, 200 = final).
+  #   comparator   at each checkpoint, the NON-LLM method with the highest mean
+  #                hypervolume ("best conventional"). Beating only the LHS floor or only
+  #                a badly-configured NSGA-II does not count.
+  #   "AI helped"  at a checkpoint iff BOTH: mean HV(ai_agent) - mean HV(comparator) >=
+  #                `min_hv_gain`, AND the one-sided exact permutation (Mann-Whitney) test
+  #                gives p < `alpha` after Holm correction across the checkpoints.
+  #   "AI hurt"    the mirror image. Anything else is "no measured difference".
+  # With 5 seeds the smallest attainable one-sided p is 1/252 = 0.004, so the test CAN
+  # reject, but only when the two samples barely overlap: power is low and a null result
+  # is weak evidence of equivalence. `min_hv_gain` is of the order of NSGA-II's
+  # seed-to-seed s.d. in M4 (0.007).
+  success_criteria:
+    subject: ai_agent
+    checkpoints: [50, 100, 200]
+    min_hv_gain: 0.005
+    alpha: 0.05

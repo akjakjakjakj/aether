@@ -12,6 +12,7 @@ dependencies = [
     "pandas>=2.1",
     "pyarrow>=15.0",
     "pymoo>=0.6.2",
+    "scikit-learn>=1.9.1",
 ]
 
 [project.optional-dependencies]

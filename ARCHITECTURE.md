@@ -122,3 +122,25 @@ candidate (invalid geometry included, with the reason) to `results/M4/<run>/cand
 every candidate row. `make doe` writes `screening.json`; `make optimize` frees exactly the
 variables it left active. Moving M4 to Fidelity 1 is: register the response-surface model,
 change `vehicle.aero.model`, re-run both targets.
+
+## M5 in one paragraph
+
+The ablation adds methods, not a second meter. `bo_parego` (`optimization/bayes.py`), the LLM
+agent (`optimization/ai_agent.py`) and its adaptive-fidelity variant all take the same
+`BudgetedEvaluator` as M4's optimisers and are driven by `scripts/run_ai_ablation.py` from
+`configs/ai_ablation.yaml`, which *reads* the design space, objectives and hypervolume points
+from `configs/design_space.yaml` instead of repeating them. `aether.surrogate` holds the GPs:
+`GPSurrogate.predict` raises outside the convex hull of its training inputs unless the caller
+asks for a flagged guess, and `validation.py` scores held-out accuracy and interval coverage.
+The agent sees structured JSON only and answers in a strict schema; its output is parsed with
+`json.loads`, validated field by field, and rejected — never clipped — when out of bounds. LLM
+access is a subprocess call to the Claude Code CLI in an empty directory with tools and
+project context disabled; every prompt and raw response lands in
+`results/M5/<run>/llm/<method>/seed_<n>/`, and `ReplayClient` re-runs a recorded study with no
+LLM access. `optimization/fidelity.py` is the §26 promotion policy; with `available=(0,)` it
+records promotions as requested-not-granted, and M6 changes that tuple. `optimization/ablation.py`
+does the exact small-sample statistics, surrogate/agent scoring and the per-method gaming audit
+from the persisted logs only. The runner takes its active variables only from the DOE's
+`screening.json`, refuses to start if that screening was made on a different design space, and
+hashes `src/aether` at launch: if the source changes mid-study it logs what was paid for,
+writes `ABORTED.md` and stops (NR-18).

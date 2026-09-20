@@ -469,6 +469,72 @@ verified in NASA/TM-2005-213457 (`docs/validation/sourcing_report.md`, item 7). 
 *value* is therefore sourced as the edge of flown experience; that it is a fence rather than
 a model is unchanged.
 
+**Follow-up, 2026-09-20 — the fence is gone, and the entry was right about the direction
+but wrong about the size.** The correction the entry asked for has been found in the
+literature and implemented, so this is what the fence was hiding.
+
+*The relation.* Zoby & Sullivan (NASA TM X-1067, 1965) define an effective radius by
+declaring the blunt body's stagnation velocity gradient to be that of a hemisphere of some
+other radius — `R_b/R_eff = (dU/dS)_BB / (dU/dS)_hemi`, their eq. (5) — and Ellison
+(NASA TN D-5121, 1969) table I *measures* `R_b/R_eff` on nine models at M = 8 over
+`K = R_b/R_n` ∈ {0, 0.417, 0.707} and `R_c/R_b` ∈ {0, 0.2, 0.4}. Both documents were
+opened and read; Ellison's table was transcribed from the page. Neither publishes a
+formula, so the interpolation between their points is this project's own and is labelled
+as such (A-GEO-3a, `docs/theory/effective_nose_radius.md`).
+
+*How badly the old model was wrong, measured.* The entry said the benefit of flattening
+"saturates". It does, and the unsaturated version was not a little wrong:
+
+| bluntness change | Δ peak flux, legacy `R_eff = R_n` | Δ peak flux, corrected |
+|---|---|---|
+| 1.2 → 1.26 (where geometry refuses) | −2.41% | **−0.92%** |
+| 1.2 → 1.35 (box edge) | −5.72% | **−2.15%** |
+| 1.2 → infinitely flat | **−98.90%** | **−21.31%** |
+
+An infinitely flat nose removing 98.9% of the stagnation heat flux is not a small
+extrapolation error; it is the wrong answer by construction, because `1/√R_n` sends
+heating to zero as `R_n → ∞` while the real flat-faced body has a perfectly finite
+velocity gradient. That was the lever the fence was holding shut.
+
+*Effect on the 64 front designs.* Re-evaluated through `evaluate_design` under both models
+in one process (`scripts/reevaluate_m4_front.py`; output in
+`results/M4/nose-model-recheck/`). Every one of them lands at `K` = 0.417–0.425 and
+`R_c/R_b` = 0.200 — essentially **on** Ellison's tabulated (0.417, 0.2) point — so none is
+extrapolated. `R_eff` is 0.685–0.693 of the cap radius; peak flux rises **20.2–20.8%**
+(0.202–0.244 → 0.243–0.294 MW/m²) and peak bondline by **6.7–9.1 K** (386.9–412.0 →
+393.7–421.2 K). All 64 remain feasible against the 450 K allowable, and no constraint is
+newly violated. Under the legacy setting the same script reproduces the logged M4 values
+to 2.4×10⁻⁵ relative on flux and 8.7×10⁻⁴ K on bondline — the residue of the run's own
+`git_dirty: true`, not of this change.
+
+*The fence.* `max_bluntness_ratio` is now `null`. It was never a design limit; it was the
+edge of a model's validity, and the model no longer has that edge anywhere the optimiser
+can reach (`K ≤ 1` covers every bluntness ≥ 0.5). What stops the nose flattening now is
+`CapsuleGeometry.validate()` refusing a cap that does not fit inside the body — a geometry
+bound, returned as an infeasible candidate that stays in the log. **NR-15 is closed.**
+
+*What this entry did not anticipate, and what replaces it as the open item.* The
+correction makes the corner radius matter, and it matters in the direction an optimiser
+will exploit: a **sharper** shoulder gives a larger `R_eff` and less stagnation heating,
+worth 1.45% of peak flux across `shoulder_ratio`'s box. Two consequences. First, M4 froze
+`shoulder_ratio` on a Sobol total-order index of exactly zero; that screening decision is
+void and must be re-derived on the next `make doe`, not reused. Second — and this is the
+new open item — a sharp shoulder is precisely where real vehicles are damaged, and this
+model is stagnation-point-only (A-HEAT-4) and says nothing about shoulder heating at all.
+The fence at 1.2 has been replaced by a lower bound on `shoulder_ratio` that is doing
+exactly the same job for exactly the same reason: keeping an optimiser out of a region the
+model cannot see. It is written down here *before* the run rather than discovered in the
+audit afterwards.
+
+*Residual uncertainty, from the primaries themselves.* Ellison, p. 5, verbatim: "The data
+of the present investigation agree with the results of Zoby and Sullivan (ref. 6) within
+10 percent for K = 0 and K = 0.707; however, for K = 0.417 and R = 0, the disagreement is
+about 20 percent." K = 0.417 is where the whole front sits. That is ±10% on heat flux —
+larger than A-HEAT-1's ±4% on the Sutton–Graves constant — and it is now the dominant
+stated uncertainty on the heating chain. Ellison is the conservative of the two and is
+what the model uses. This is a real disagreement in the literature and is carried, not
+resolved by picking a side.
+
 ### NR-16 — Two tooling traps in the M4 pipeline, each caught by its own output
 
 **An uncentred Sobol' estimator.** The first DOE analysis reported first-order confidence
@@ -489,3 +555,89 @@ now says `2.5e+6` and the driver coerces the reference and ideal points to float
 
 **Kept because** both are the kind of fault that produces a plausible number rather than an
 error, and the second is the argument for the append-only candidate log.
+
+### NR-17 — The first Bayesian optimiser converged in 50 evaluations and then spent 60% of its budget on capsules that cannot exist
+
+**What happened.** The M5 GP/ParEGO optimiser (expected improvement × probability of
+feasibility) was smoke-tested on one seed (11, 200 evaluations) before the ablation ran. Two
+faults, both of which produced a plausible hypervolume rather than an error.
+
+*A classifier that returned NaN.* Validity ("does this design return physics at all") was
+first modelled with scikit-learn's `GaussianProcessClassifier`. Once the batch started
+clustering near the front its Laplace approximation produced a negative latent variance and
+`predict_proba` returned NaN for the whole pool. NaN × EI is NaN, `argmax` of an all-NaN
+acquisition is not finite, and the loop's guard quietly fell through to space-filling
+samples: the prediction log held 20 records for 180 model-driven evaluations, and the
+hypervolume curve went flat at 0.351 from 50 evaluations on. Replaced by least-squares GP
+classification (regress the labels ±1 with the same `GPSurrogate`, probit-squash the
+predictive distribution) — cruder, cannot return NaN, and scored on held-out designs.
+
+*EI × PoF chasing its own prior.* With the classifier fixed, the run reached a normalised
+hypervolume of 0.3766 at 50 evaluations and 0.3851 at 200 — the value of M4's pooled front
+of 21 000 evaluations — but only **49 of its 200 designs returned physics**. The classifier
+was calibrated (of 75 picks it rated under 5% likely to be valid, none was). The acquisition
+picked them anyway: after convergence, Monte-Carlo EI inside the feasible region is exactly
+zero for most of the pool, while in the invalid region the objective GPs — trained on valid
+designs only — revert to their prior mean with a large variance, so EI there is huge and
+even a 1% probability of feasibility wins the product. A floor was added: pool points the
+model itself rates below 5% probability of feasibility are excluded unless nothing else is
+left (`min_probability_feasible`, A-AI-3). Same seed afterwards: hypervolume unchanged to
+four decimals (0.3851), share of picks rated ≥ 0.7 likely valid up from 36 to 95 of 180.
+
+**Why it matters.** (1) The hypervolume did not show either fault: the front on this problem
+is found early, so a broken optimiser and a working one score alike at 200 evaluations. The
+faults were visible only in *where the budget went*, which is why the M5 report carries a
+budget-use figure and a no-physics share per method. (2) Both fixes were made after looking
+at one seed of one method and before the study ran; that is disclosed in the report's
+limitations. No setting of any method was changed after the ablation's results were seen.
+
+**Provenance of the numbers above.** They were read off a console during a scratch run
+(seed 11, physics as it stood before the effective-nose-radius change) whose script and
+candidate log lived in a session scratch directory that no longer exists. They are real
+observations but they are **not reproducible from anything on disk** and must not be quoted
+as results; the mechanism is what is recorded here. Seed 11 was removed from the M5 study
+seeds because this test informed a design change (A-AI-3).
+
+**Kept because** an optimiser that silently stops optimising, and a metric that cannot tell,
+is the failure this project's audit sections exist to catch.
+
+### NR-18 — The physics changed under a live study, and nothing in the runner noticed
+
+**What happened.** The first full M5 run (`M5-ABL-20260920T141724Z`) was launched as a
+detached two-hour job. While it ran, a concurrent work-stream changed the evaluator:
+`src/aether/evaluate.py` moved to a velocity-gradient effective nose radius and
+`configs/design_space.yaml` now defaults to `effective_nose_radius_model: velocity_gradient`
+with `max_bluntness_ratio: null`. The runner had snapshotted its *config* at launch, so the
+config edit could not reach it — but worker processes import `src/aether` when they are
+spawned (the pool starts them on demand, not all at launch), so an edit to
+the *source* can split one candidate log between two physics models with nothing in the log
+to say which row is which. The run's header said only "dirty tree". The coordinator killed
+it part-way through the agent phase (four seeds, four recorded LLM calls each); four orphaned
+CLI calls were still running and were stopped. No `summary.json` was ever written and no
+number from the run was inspected. The directory is kept, with a README saying it must not
+be analysed. The same change made `shoulder_ratio` non-inert, which voids the M4 screening
+the run's active-variable list came from.
+
+**Why it matters.** "Config snapshot + git commit + dirty flag" is not provenance for a
+long run in a repository several agents edit at once: the dirty flag is read once, at
+launch, and says nothing about what changes afterwards. A matched-budget comparison whose
+methods were evaluated by different physics is not a comparison.
+
+**What changed.**
+1. `scripts/run_ai_ablation.py` hashes every `.py` file under `src/aether` at launch
+   (`source_tree_hash`), records the hash in `summary.json` and the report header, and
+   re-checks it before and after every (method, seed) and after every logged batch. On a
+   mismatch it writes `ABORTED.md` into the run directory and raises `SourceChanged` — the
+   batch already paid for is logged first, then the run stops.
+2. The runner refuses to start if the DOE screening it would take its active variables from
+   was made on a different design space or base config (`screening_is_current`): the
+   active-variable list is a property of the model it was screened on. It is read from
+   `screening.json` and nowhere else; the initial-design size follows the number of active
+   variables instead of assuming four.
+3. The generated report no longer contains pre-written findings. Its first version stated,
+   as prose, that every front leans on the bluntness and mass fences — true of M4's model,
+   false of the one that replaced it an hour later. Interpretive sentences are now emitted
+   by code from the gaming-audit table, or not at all.
+
+**Kept because** the failure was organisational, not numerical, and would have produced a
+complete, plausible, well-formatted report.

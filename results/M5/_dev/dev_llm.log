@@ -1,0 +1,9 @@
+AETHER M5 ablation  run=M5-ABL-20260920T140754Z  mode=LIVE  git=715ac9f (dirty)  workers=6
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg']
+  ai_agent     seed   7: spent 60 of 60, 0 cache hits, 2 LLM calls, 514 s
+
+  ai_agent     HV = 0.3843 +/- nan [0.3843, 0.3843]  (n = 1)
+LLM calls: 2
+figures: ['M5_hypervolume.png', 'M5_hypervolume_per_seed.png', 'M5_fronts.png', 'M5_budget_use.png']
+report -> /Users/akj/Projects/aether/reports/milestones/M5_ai_ablation.md
+results -> /Users/akj/Projects/aether/results/M5/M5-ABL-20260920T140754Z

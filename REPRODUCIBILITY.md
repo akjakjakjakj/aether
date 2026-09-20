@@ -40,6 +40,8 @@ Measured on an Apple M4, single-threaded. Nothing here is parallelised yet.
 | `make burn-vs-bake` | ~4 min (27 one-dimensional + 140 grid evaluations) |
 | `make doe` | ~6 min on 6 worker processes (~9300 coupled evaluations; M4, added 2026-09-20) |
 | `make optimize` | ~13 min on 6 worker processes (3 methods × 7 seeds × 1000 evaluations) |
+| `make ablation` | M5, added 2026-09-20. **Not yet run to completion**; estimated ~2–3 h, almost all LLM latency (≈ 5 min per call, ≤ 80 calls). Needs the Claude Code CLI installed and signed in; reads no API key. |
+| `make ablation-replay RUN_ID=…` | re-runs a recorded M5 study with **no LLM access**; a few minutes (evaluations and GP fits only) |
 
 A single `evaluate_design` call takes roughly 1.5 s, dominated by the TPS solve
 (~2800 implicit timesteps over 140 cells).

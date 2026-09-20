@@ -1,0 +1,83 @@
+meta:
+  name: m5_ai_ablation
+  design_space: configs/design_space.yaml
+ablation:
+  workers: 6
+  budget_evaluations: 60
+  seeds:
+  - 11
+  - 23
+  curve_step: 10
+  methods:
+    lhs_search:
+      kind: lhs_search
+      enabled: true
+    nsga2:
+      kind: nsga2
+      enabled: true
+      population_size: 40
+    nsga2_pop20:
+      kind: nsga2
+      enabled: true
+      population_size: 20
+    bo_parego:
+      kind: bo_parego
+      enabled: true
+      n_initial: 20
+      batch_size: 10
+      pool_size: 4096
+      mc_samples: 64
+      local_sigma: 0.05
+      min_probability_feasible: 0.05
+      gp_restarts: 2
+      transforms:
+        peak_heat_flux_w_m2: log10
+    ai_agent:
+      kind: ai_agent
+      enabled: false
+      n_initial: 20
+      rounds: 9
+      max_proposals_per_call: 30
+      tables:
+        front: 12
+        near_feasible: 8
+        recent: 20
+        failures: 8
+    ai_adaptive:
+      kind: ai_adaptive
+      enabled: false
+      seeds:
+      - 11
+      - 23
+      n_initial: 20
+      rounds: 9
+      max_proposals_per_call: 30
+      tables:
+        front: 12
+        near_feasible: 8
+        recent: 20
+        failures: 8
+      transforms:
+        peak_heat_flux_w_m2: log10
+      promotion_policy:
+        min_predicted_hv_gain: 0.0001
+        min_uncertainty: 0.25
+        min_novelty: 0.1
+        max_high_fidelity_fraction: 0.1
+  llm:
+    model: claude-sonnet-5
+    max_llm_calls: 12
+    max_llm_calls_study: 80
+    timeout_s: 900
+    concurrency: 3
+  surrogate_validation:
+    train_method: lhs_search
+    transforms:
+      peak_heat_flux_w_m2: log10
+  success_criteria:
+    subject: ai_agent
+    checkpoints:
+    - 50
+    - 60
+    min_hv_gain: 0.005
+    alpha: 0.05

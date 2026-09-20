@@ -1,0 +1,305 @@
+{
+  "run_id": "M5-REPLAY-20260920T141649Z",
+  "replay_of": "M5-ABL-20260920T140754Z",
+  "doe_run_id": "M4-DOE-20260920T131334Z",
+  "git_commit": "715ac9f",
+  "git_dirty": true,
+  "config_hash": "03bcd43e2e56",
+  "workers": 6,
+  "wall_s": {
+    "ai_agent": [
+      5.323508874993422
+    ]
+  },
+  "aero_model": "constant",
+  "replay_check": {
+    "prompt_mismatches": 0,
+    "hv_per_seed_identical": {
+      "ai_agent": true
+    },
+    "all_identical": true
+  },
+  "fidelity": 0,
+  "objectives": [
+    "peak_heat_flux_w_m2",
+    "peak_bondline_temperature_k"
+  ],
+  "active": [
+    "diameter_m",
+    "bluntness_ratio",
+    "cone_half_angle_deg",
+    "flight_path_angle_deg"
+  ],
+  "frozen": {
+    "shoulder_ratio": 0.1,
+    "aft_cone_angle_deg": 20.0,
+    "fineness_ratio": 0.875,
+    "entry_velocity_m_s": 7400.0,
+    "mass_kg": 350.0,
+    "insulator_thickness_m": 0.015
+  },
+  "variables": {
+    "diameter_m": {
+      "units": "m",
+      "lower": 0.8,
+      "upper": 4.5
+    },
+    "bluntness_ratio": {
+      "units": "-",
+      "lower": 0.25,
+      "upper": 1.35
+    },
+    "cone_half_angle_deg": {
+      "units": "deg",
+      "lower": 20.0,
+      "upper": 70.0
+    },
+    "flight_path_angle_deg": {
+      "units": "deg",
+      "lower": -8.0,
+      "upper": -1.5
+    }
+  },
+  "budget": 60,
+  "seeds": [
+    7
+  ],
+  "checkpoints": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60
+  ],
+  "hypervolume": {
+    "reference_point": {
+      "peak_heat_flux_w_m2": 2500000.0,
+      "peak_bondline_temperature_k": 450.0
+    },
+    "ideal_point": {
+      "peak_heat_flux_w_m2": 0.0,
+      "peak_bondline_temperature_k": 300.0
+    }
+  },
+  "method_kinds": {
+    "ai_agent": "ai_agent"
+  },
+  "method_settings": {
+    "ai_agent": {
+      "kind": "ai_agent",
+      "enabled": true,
+      "n_initial": 20,
+      "rounds": 2,
+      "max_proposals_per_call": 30,
+      "tables": {
+        "front": 12,
+        "near_feasible": 8,
+        "recent": 20,
+        "failures": 8
+      }
+    }
+  },
+  "methods": {
+    "ai_agent": {
+      "seeds": [
+        7
+      ],
+      "n_seeds": 1,
+      "hv_final_per_seed": [
+        0.3843012184000309
+      ],
+      "hv_mean": 0.3843012184000309,
+      "hv_std": NaN,
+      "hv_min": 0.3843012184000309,
+      "hv_max": 0.3843012184000309,
+      "hv_curve_mean": [
+        0.0,
+        0.0,
+        0.35395284981375336,
+        0.3591832774351231,
+        0.3828056449789812,
+        0.3843012184000309
+      ],
+      "hv_curve_min": [
+        0.0,
+        0.0,
+        0.35395284981375336,
+        0.3591832774351231,
+        0.3828056449789812,
+        0.3843012184000309
+      ],
+      "hv_curve_max": [
+        0.0,
+        0.0,
+        0.35395284981375336,
+        0.3591832774351231,
+        0.3828056449789812,
+        0.3843012184000309
+      ],
+      "per_seed": {
+        "budget_used": [
+          60
+        ],
+        "n_feasible": [
+          39
+        ],
+        "n_no_physics": [
+          11
+        ],
+        "cache_hits": [
+          0
+        ],
+        "front_size": [
+          13
+        ],
+        "spacing": [
+          0.008539037821737773
+        ],
+        "diversity_all": [
+          0.5411681620281412
+        ],
+        "diversity_feasible": [
+          0.15671894174822884
+        ],
+        "inert_repeats": [
+          0
+        ],
+        "cfd_calls": [
+          0
+        ]
+      },
+      "budget_used_mean": 60.0,
+      "n_feasible_mean": 39.0,
+      "n_no_physics_mean": 11.0,
+      "cache_hits_mean": 0.0,
+      "front_size_mean": 13.0,
+      "spacing_mean": 0.008539037821737773,
+      "diversity_all_mean": 0.5411681620281412,
+      "diversity_feasible_mean": 0.15671894174822884,
+      "inert_repeats_mean": 0.0,
+      "cfd_calls_mean": 0.0
+    }
+  },
+  "criteria_declared": {
+    "subject": "ai_agent",
+    "checkpoints": [
+      50,
+      60
+    ],
+    "min_hv_gain": 0.005,
+    "alpha": 0.05
+  },
+  "criteria": {
+    "subject": "ai_agent",
+    "status": "no non-LLM method was run on the same seeds"
+  },
+  "surrogate": {
+    "static": {
+      "status": "needs >= 2 seeds of 'lhs_search'"
+    },
+    "prospective": {
+      "n_records": 0
+    }
+  },
+  "agent": {
+    "ai_agent": {
+      "llm_calls": 2,
+      "call_outcomes": {
+        "ok": 2
+      },
+      "models": [
+        "claude-sonnet-5"
+      ],
+      "input_tokens": 26256,
+      "output_tokens": 49316,
+      "llm_wall_s": 506.04621125000995,
+      "cost_usd_list_price": 0.598176,
+      "replayed": true,
+      "n_proposals_received": 40,
+      "n_proposals_accepted": 40,
+      "n_proposals_rejected": 0,
+      "rejections_by_reason": {},
+      "n_malformed_responses": 0,
+      "n_failed_calls": 0,
+      "fallback_evaluations": 0,
+      "expected_outcome": {
+        "n_scored": 40,
+        "feasibility_accuracy": 0.975,
+        "n_predicted_feasible": 38,
+        "n_actually_feasible": 39,
+        "peak_heat_flux_w_m2": {
+          "n": 40,
+          "mae": 11353.434495860158,
+          "bias": -11353.434495860158
+        },
+        "peak_bondline_temperature_k": {
+          "n": 40,
+          "mae": 2.3991095799665714,
+          "bias": 2.278232207539523
+        }
+      },
+      "fidelity": {
+        "n_decisions": 0,
+        "n_agent_requested_high": 0,
+        "n_policy_promotions": 0,
+        "n_granted": 0
+      }
+    }
+  },
+  "llm": {
+    "model": "claude-sonnet-5",
+    "max_llm_calls": 3,
+    "max_llm_calls_study": 3,
+    "timeout_s": 900,
+    "concurrency": 3,
+    "calls_total": 2
+  },
+  "gaming": {
+    "ai_agent": {
+      "n_front_designs": 13,
+      "front_share_within_1pct_of_constraint": {
+        "max_g": 0.15384615384615385,
+        "peak_bondline_temperature_k": 0.0,
+        "bluntness_ratio": 1.0,
+        "heatshield_mass_fraction": 0.15384615384615385
+      },
+      "front_share_parked_on_bound": {
+        "diameter_m": {
+          "at_lower": 0.0,
+          "at_upper": 0.0
+        },
+        "bluntness_ratio": {
+          "at_lower": 0.0,
+          "at_upper": 0.0
+        },
+        "cone_half_angle_deg": {
+          "at_lower": 0.0,
+          "at_upper": 1.0
+        },
+        "flight_path_angle_deg": {
+          "at_lower": 0.0,
+          "at_upper": 0.0
+        }
+      },
+      "cache_hits": 0,
+      "cache_hits_counted_in_hypervolume": 0,
+      "budget_share_no_physics": 0.18333333333333332,
+      "budget_share_inert_repeat": 0.0,
+      "near_repeats": 0,
+      "max_heat_load_fraction_above_86km_on_front": 0.191408792098124
+    }
+  },
+  "combined": {
+    "n_front": 13,
+    "hv": 0.3843012184000309
+  },
+  "m4_reference": {
+    "run_id": "M4-OPT-20260920T132037Z",
+    "budget": 1000,
+    "n_seeds": 7,
+    "nsga2_hv_mean_at_full_budget": 0.3772585437179937,
+    "nsga2_hv_std_at_full_budget": 0.006974375306334842,
+    "nsga2_hv_at_m5_budget": {}
+  }
+}

@@ -1,0 +1,1226 @@
+{
+ "ai_agent": {
+  "rounds": [
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "quota": 20,
+    "budget_spent_before": 20,
+    "prompt_sha256": "296afd7fb6c4a15391269d348ee7366d68439af47d682a0f1d07c319111ca44d",
+    "model_requested": "claude-sonnet-5",
+    "wall_s": 316.9114925000031,
+    "returncode": 0,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "input_tokens": 12838,
+    "output_tokens": 30861,
+    "api_duration_s": 315.068,
+    "cost_usd_list_price": 0.359958,
+    "replayed": true,
+    "outcome": "ok",
+    "n_proposed": 20,
+    "n_accepted": 20,
+    "n_rejected": 0,
+    "observation": "None of the 20 evaluated designs is feasible: 11 returned no geometry and the 9 that ran each violate at least one constraint. The constraint limits back-computed from the margins are max_g <= 12, bondline temperature <= 450 K and bluntness <= 1.2. The heatshield mass limit is not stated. Geometry failures come from a small cone angle combined with high bluntness or large diameter. A rough fit to the reported negative cone lengths gives a validity condition of about 0.917*b*cos(theta) + 0.133*(1-cos(theta)) < 0.5, checked by hand against the data. I keep it below about 0.46. The mass-fraction ratio scales roughly with D^2 and falls with cone angle, about 0.087*D^2 relative to the limit at 70 deg. A diameter of about 3.0-3.3 m with high cone angle should therefore sit near the mass limit. Peak g is set mainly by |gamma|: about 11.4 at 3.08 deg, 11.9 at 3.5 deg and 12.7 at 3.96 deg, so |gamma| must stay at or below roughly 3.5 deg. Peak heat flux fits q ~ 295e3*sqrt((m/A)*sin|gamma|/(b*D)) to within about 5-10%, and bondline temperature rise fits roughly 14*Y^0.4*sin|gamma|^-0.3 with Y = sqrt((m/A)/(b*D*sin|gamma|)). Both fits are my own regressions on 9 points. So the region to target is D about 2.7-3.3 m, b about 1.0-1.18, theta 66-70 deg and |gamma| about 2-3.6 deg.",
+    "evidence": [
+     "C-1b6a532a4589: margin_g 0.00983 at 11.882 g gives limit 12; T 456.89 at margin -0.01531 gives limit 450; C-763297ba691c: b 1.2307 at margin -0.02558 gives limit 1.2.",
+     "Invalid geometries: C-ef541f66418a (b 1.18, theta 61.9), C-68844c149dc6 (b 0.99, theta 59.7, D 2.0) and C-8918773e968b (b 0.87, theta 52.7, D 4.05). Valid: C-763297ba691c (b 1.23, theta 69.8), C-7929904365f5 and C-0f5c4bbcbbf2. High bluntness needs theta near 70 deg.",
+     "Mass fraction: C-763297ba691c (D 2.5, margin +0.45), C-7929904365f5 (D 3.63, -0.18), C-d0ebb2a4a17d (D 4.3, -0.69), C-a7c3287a38ba (D 4.36, -0.99). Low-theta rows C-04af890b3186 (theta 31, -0.52) and C-697f9dd9337a (theta 38, +0.08) show higher mass per D^2.",
+     "g vs gamma: C-d0ebb2a4a17d gamma -3.08 gives 11.45 g, C-1b6a532a4589 gamma -3.50 gives 11.88 g, C-7929904365f5 gamma -3.96 gives 12.71 g, C-951f544259a7 gamma -5.09 gives 14.58 g.",
+     "Heat flux scaling holds across rows: C-763297ba691c 447k, C-d0ebb2a4a17d 333k, C-7929904365f5 320k, C-697f9dd9337a 668k, C-1b6a532a4589 1.07M. The fitted constant is 280-308k.",
+     "Bondline T rises as gamma gets shallower and diameter smaller: C-1b6a532a4589 (D 1.65) 457 K, C-d0ebb2a4a17d 404 K, C-0f5c4bbcbbf2 (steep, D 3.86) 367 K."
+    ],
+    "mechanism": "Ballistic-entry scaling from prior knowledge, checked against the rows above. Peak stagnation heat flux scales with sqrt(ballistic coefficient * sin gamma / nose radius). Bondline temperature follows the integrated heat load, which grows with a low-drag, small-nose-radius, shallow-entry pulse. A larger diameter lowers the ballistic coefficient and so lowers both objectives, but it is capped by heatshield mass fraction. A larger bluntness raises the nose radius and lowers heat flux, but it is capped at 1.2 and by geometry validity, which needs a large cone half-angle. Steeper entry lowers bondline temperature but raises g, which is capped at 12. Because the reference is 450 K over a 150 K range, bondline temperature dominates the hypervolume. The best feasible region should therefore be the corner of maximum diameter, maximum bluntness, theta about 70 deg and |gamma| near the g limit.",
+    "uncertainty": "The geometry-validity fit, mass-fraction scaling and g(gamma) relation are inferred from 9 valid points and can be off by a few percent. Diameters of 3.3-3.4 m sit at the mass boundary, and |gamma| of 3.5-3.6 deg sits at the g boundary. Whether high bluntness and cone angle lower g at a given gamma is unknown. The bondline-temperature fit has about 5-10 K scatter. Low-gamma probes (2-2.4 deg) risk unmodelled skip-out or long-pulse effects.",
+    "hv_before": 0.0,
+    "hv_after": 0.3591832774351231,
+    "n_feasible_new": 19
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "quota": 20,
+    "budget_spent_before": 40,
+    "prompt_sha256": "ed49225f60bd7b5233397cabfde3ff4af25886fedc00886008670c172ea62013",
+    "model_requested": "claude-sonnet-5",
+    "wall_s": 189.13471875000687,
+    "returncode": 0,
+    "models": [
+     "claude-sonnet-5"
+    ],
+    "input_tokens": 13418,
+    "output_tokens": 18455,
+    "api_duration_s": 187.48,
+    "cost_usd_list_price": 0.23821799999999999,
+    "replayed": true,
+    "outcome": "ok",
+    "n_proposed": 20,
+    "n_accepted": 20,
+    "n_rejected": 0,
+    "observation": "Of 40 evaluations, 19 are feasible and 3 sit on the front, all at cone_half_angle 70 (the maximum), bluntness 1.18 and diameter 3.2-3.3. The constraint limits implied by the margins are max_g <= 12, bondline temperature <= 450 K and bluntness <= 1.2. The heatshield mass fraction margin depends only on diameter, bluntness and cone angle. It falls from 0.106 at D=3.2 to 0.049 at D=3.3 and is -0.009 at D=3.4, so it reaches zero near D=3.38. g depends only on diameter and flight-path angle. Because the hypervolume reference is 450 K, temperature carries far more weight than heat flux: 1 K of temperature is worth about 0.0067 of normalised HV, while 10 kW/m2 is worth about 0.004 x (450-T)/150. The best strategy is to sit at the largest buildable diameter, maximum bluntness and maximum cone angle, and sweep flight-path angle from the g limit (about -3.6) to shallow angles to cover the front. All numbers below are my own extrapolations from the tabulated rows.",
+    "evidence": [
+     "C-0149edccdafc (D3.3, gamma -2.8) and C-acebb6e3a142 (D3.3, gamma -3.3) show that steeper entry lowers bondline temperature (396.4 to 391.1 K) and raises heat flux (235.7k to 246.6k).",
+     "C-8e40abb65d5d (D3.4) has margin -0.009 on mass fraction, while C-acebb6e3a142 (D3.3) has +0.049 and C-b35840b70e3f (D3.2) has +0.106. The mass limit is therefore near D~3.38 and I stay at or below 3.375.",
+     "The D=3.0, b=1.18 gamma sweep (C-8ea797b7e7be, C-665a0318f7e1, C-71a80f5821da, C-1d43ab7c8761, C-6235648fc97f, C-c4e456e7ba92) gives T = 413.4, 407.7, 402.5, 400.2, 395.8, 393.8 K and g = 9.62 to 11.85. This gives about 1.6 g/deg near -3.6, so g=12 is reached near -3.69 at D=3.0.",
+     "g rises about 0.037 per 0.1 m of diameter (C-8e40abb65d5d 11.681 at D3.4 vs 11.527 at D3.0, same -3.4). At D~3.36 I therefore cap gamma at about -3.57 to keep g < 12.",
+     "Heat flux scales roughly as D^-1.5 (C-6235648fc97f 285.7k vs C-8e40abb65d5d 238.3k at gamma -3.4) and falls with higher bluntness (C-c26631ea4756 with b=1.0 is worse than the b=1.18 trend).",
+     "Lower cone angle and lower bluntness raise both objectives and reduce the mass margin (C-6aa6f3f26271, C-d9f3953251f5, C-189429d88e59), so cone stays at 70. Bluntness limit is 1.2 (margin 0.01667 at 1.18).",
+     "Geometry failures (C-12a940ca6a66 etc.) all involve small cone angles. Cone 70 and D>=3 has never failed, so I avoid that region."
+    ],
+    "mechanism": "Ballistic-entry scaling: a larger diameter lowers the ballistic coefficient and, through a larger nose radius, lowers stagnation heat flux (~D^-1.5) and integrated heat load. A steeper entry shortens the heating pulse, which lowers bondline temperature but raises peak flux and g. Higher bluntness enlarges the nose radius and lowers both objectives. The feasible optimum therefore sits on the intersection of the mass-fraction limit (D~3.36-3.375), the bluntness limit (~1.2), the maximum cone angle (70) and the g limit (gamma ~ -3.55 to -3.58). Sweeping gamma at fixed D~3.36 traces the front from about 387 K / 243k W/m2 down to about 412 K / 203k W/m2.",
+    "uncertainty": "The mass-fraction margin near D=3.36-3.375 is extrapolated (predicted +0.003 to +0.015), so the D>=3.37 points may violate it. g near -3.57 to -3.58 has predicted margins of only 0.3-0.6%. Bluntness 1.2 sits exactly on its limit (margin 0), so I use 1.195 for most designs. Shallow-gamma behaviour (-1.6) is extrapolated beyond the tabulated range, and my predicted temperatures could be off by 1-3 K.",
+    "hv_before": 0.3591832774351231,
+    "hv_after": 0.3843012184000309,
+    "n_feasible_new": 20
+   }
+  ],
+  "proposals": [
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-6235648fc97f",
+    "index": 0,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.4
+    },
+    "parameter_changes": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.4
+    },
+    "rationale": "Core candidate: bluntness just under the 1.2 limit, theta 70 deg for validity and low mass, D 3.0 m, gamma -3.4 deg for g of about 11.8.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 269000,
+     "peak_bondline_temperature_k": 398.5,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "First likely-feasible point; anchors the fitted heat-flux, bondline-temperature and mass models.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-56f83c3f982a",
+    "index": 1,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 3.2,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.3
+    },
+    "parameter_changes": {
+     "diameter_m": 3.2,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.3
+    },
+    "rationale": "Larger D lowers ballistic coefficient; predicted mass fraction about 0.90 of the limit.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 240000,
+     "peak_bondline_temperature_k": 396.0,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Probes the mass-fraction constraint near its expected boundary with lower predicted objectives.",
+    "requested_fidelity": 1
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-acebb6e3a142",
+    "index": 2,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 3.3,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.3
+    },
+    "parameter_changes": {
+     "diameter_m": 3.3,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.3
+    },
+    "rationale": "Push D to 3.3 m; predicted mass fraction about 0.96 of the limit.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 229000,
+     "peak_bondline_temperature_k": 394.5,
+     "feasible": true
+    },
+    "uncertainty": "high",
+    "reason_to_simulate": "Locates the mass-fraction boundary; a pass gives a strong corner point.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-8e40abb65d5d",
+    "index": 3,
+    "parent_id": "C-7929904365f5",
+    "values": {
+     "diameter_m": 3.4,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.4
+    },
+    "parameter_changes": {
+     "diameter_m": 3.4,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.4
+    },
+    "rationale": "Deliberate boundary probe: D 3.4 m at theta 70 deg is predicted just over the mass limit.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 223000,
+     "peak_bondline_temperature_k": 391.0,
+     "feasible": false
+    },
+    "uncertainty": "high",
+    "reason_to_simulate": "Brackets the maximum usable diameter for the final round; a pass would move the front.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-dd8d2f98eb31",
+    "index": 4,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 2.8,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.45
+    },
+    "parameter_changes": {
+     "diameter_m": 2.8,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.45
+    },
+    "rationale": "Smaller D leaves mass margin for a steeper gamma of -3.45 deg.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 300000,
+     "peak_bondline_temperature_k": 402.0,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Mass-safe fallback point that also tests g near 11.85.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-98c67d26db8c",
+    "index": 5,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 2.7,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.4
+    },
+    "parameter_changes": {
+     "diameter_m": 2.7,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.4
+    },
+    "rationale": "D 2.7 m hedges against the mass-fraction estimate being optimistic.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 315000,
+     "peak_bondline_temperature_k": 405.0,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Safe feasible design near the boundary; sensitivity to D.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-d9f3953251f5",
+    "index": 6,
+    "parent_id": "C-7929904365f5",
+    "values": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.0,
+     "cone_half_angle_deg": 66.0,
+     "flight_path_angle_deg": -3.4
+    },
+    "parameter_changes": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.0,
+     "cone_half_angle_deg": 66.0,
+     "flight_path_angle_deg": -3.4
+    },
+    "rationale": "Lower bluntness (1.0) with theta 66 deg tests the bluntness effect on heat flux at fixed D and gamma.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 292000,
+     "peak_bondline_temperature_k": 402.0,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Checks whether the sqrt(1/(b*D)) scaling holds and whether theta 66 stays valid.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-71a80f5821da",
+    "index": 7,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.8
+    },
+    "parameter_changes": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.8
+    },
+    "rationale": "Shallower gamma of -2.8 deg trades higher bondline T for lower heat flux and lower g.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 244000,
+     "peak_bondline_temperature_k": 408.5,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Maps the trade-off front in gamma at fixed geometry.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-665a0318f7e1",
+    "index": 8,
+    "parent_id": "C-d0ebb2a4a17d",
+    "values": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.4
+    },
+    "parameter_changes": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.4
+    },
+    "rationale": "Gamma -2.4 deg extends the front toward low heat flux.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 226000,
+     "peak_bondline_temperature_k": 417.0,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Covers the low-heat-flux end of the trade-off and tests the bondline temperature extrapolation.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-8ea797b7e7be",
+    "index": 9,
+    "parent_id": "C-d0ebb2a4a17d",
+    "values": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.0
+    },
+    "parameter_changes": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.0
+    },
+    "rationale": "Gamma -2.0 deg is the low-flux extreme; bondline T should stay under 450 K.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 206000,
+     "peak_bondline_temperature_k": 428.0,
+     "feasible": true
+    },
+    "uncertainty": "high",
+    "reason_to_simulate": "Extends the front and tests extrapolation to very shallow entry, where heat load and any skip-out behaviour are unmodelled.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-0149edccdafc",
+    "index": 10,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 3.3,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.8
+    },
+    "parameter_changes": {
+     "diameter_m": 3.3,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.8
+    },
+    "rationale": "Large D at shallower gamma of -2.8 deg to see combined effects.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 211000,
+     "peak_bondline_temperature_k": 402.5,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Low heat flux with lower g margin risk; a second point on the large-D branch.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-c4e456e7ba92",
+    "index": 11,
+    "parent_id": "C-7929904365f5",
+    "values": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.6
+    },
+    "parameter_changes": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.6
+    },
+    "rationale": "Gamma -3.6 deg tests whether high bluntness and theta let g stay at or below 12.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 276000,
+     "peak_bondline_temperature_k": 395.7,
+     "feasible": false
+    },
+    "uncertainty": "high",
+    "reason_to_simulate": "Locates the g boundary; g is predicted at about 12.0-12.1 by interpolation of the nearby rows.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-b35840b70e3f",
+    "index": 12,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 3.2,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.55
+    },
+    "parameter_changes": {
+     "diameter_m": 3.2,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.55
+    },
+    "rationale": "D 3.2 m with gamma -3.55 deg pushes toward the g and mass boundaries together.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 249000,
+     "peak_bondline_temperature_k": 392.7,
+     "feasible": true
+    },
+    "uncertainty": "high",
+    "reason_to_simulate": "A pass gives the best predicted bondline temperature among the plausible feasible designs.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-6aa6f3f26271",
+    "index": 13,
+    "parent_id": "C-7929904365f5",
+    "values": {
+     "diameter_m": 3.2,
+     "bluntness_ratio": 0.8,
+     "cone_half_angle_deg": 60.0,
+     "flight_path_angle_deg": -3.3
+    },
+    "parameter_changes": {
+     "diameter_m": 3.2,
+     "bluntness_ratio": 0.8,
+     "cone_half_angle_deg": 60.0,
+     "flight_path_angle_deg": -3.3
+    },
+    "rationale": "Moderate bluntness 0.8 with theta 60 deg and D 3.2 m tests a different cone angle and nose radius.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 292000,
+     "peak_bondline_temperature_k": 404.0,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Tests the theta-dependent mass fraction and geometry validity at theta 60.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-189429d88e59",
+    "index": 14,
+    "parent_id": "C-951f544259a7",
+    "values": {
+     "diameter_m": 3.1,
+     "bluntness_ratio": 0.9,
+     "cone_half_angle_deg": 66.0,
+     "flight_path_angle_deg": -3.3
+    },
+    "parameter_changes": {
+     "diameter_m": 3.1,
+     "bluntness_ratio": 0.9,
+     "cone_half_angle_deg": 66.0,
+     "flight_path_angle_deg": -3.3
+    },
+    "rationale": "Intermediate design: D 3.1 m, b 0.9, theta 66 deg, gamma -3.3 deg.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 288500,
+     "peak_bondline_temperature_k": 403.5,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Adds a mid-bluntness point to separate the effects of bluntness and diameter.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-cf4d34efa0e5",
+    "index": 15,
+    "parent_id": "C-1b6a532a4589",
+    "values": {
+     "diameter_m": 2.9,
+     "bluntness_ratio": 1.1,
+     "cone_half_angle_deg": 68.0,
+     "flight_path_angle_deg": -3.5
+    },
+    "parameter_changes": {
+     "diameter_m": 2.9,
+     "bluntness_ratio": 1.1,
+     "cone_half_angle_deg": 68.0,
+     "flight_path_angle_deg": -3.5
+    },
+    "rationale": "D 2.9 m, b 1.1, theta 68 deg, gamma -3.5 deg gives a mass-safe design at the g edge.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 297000,
+     "peak_bondline_temperature_k": 400.5,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Tests validity at theta 68 deg with b 1.1, and g at 3.5 deg.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-cf21f11f2911",
+    "index": 16,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 3.15,
+     "bluntness_ratio": 1.15,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.0
+    },
+    "parameter_changes": {
+     "diameter_m": 3.15,
+     "bluntness_ratio": 1.15,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.0
+    },
+    "rationale": "Mid-range gamma of -3.0 deg with D 3.15 m and b 1.15.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 237600,
+     "peak_bondline_temperature_k": 402.3,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Fills the front between the gamma -2.8 and -3.3 deg points.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-5de7da587d5c",
+    "index": 17,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 3.25,
+     "bluntness_ratio": 1.1,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.1
+    },
+    "parameter_changes": {
+     "diameter_m": 3.25,
+     "bluntness_ratio": 1.1,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.1
+    },
+    "rationale": "D 3.25 m, b 1.1, gamma -3.1 deg as another mass-boundary sample.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 235700,
+     "peak_bondline_temperature_k": 399.7,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Extra data on mass and bondline temperature at high D with slightly lower bluntness.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-c26631ea4756",
+    "index": 18,
+    "parent_id": "C-d0ebb2a4a17d",
+    "values": {
+     "diameter_m": 3.3,
+     "bluntness_ratio": 1.0,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.2
+    },
+    "parameter_changes": {
+     "diameter_m": 3.3,
+     "bluntness_ratio": 1.0,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.2
+    },
+    "rationale": "D 3.3 m with lower bluntness of 1.0 separates the bluntness effect from the diameter effect at the mass boundary.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 245000,
+     "peak_bondline_temperature_k": 399.0,
+     "feasible": true
+    },
+    "uncertainty": "high",
+    "reason_to_simulate": "Tests whether mass fraction depends on bluntness at high D.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 1,
+    "candidate_id": "C-1d43ab7c8761",
+    "index": 19,
+    "parent_id": "C-763297ba691c",
+    "values": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.0
+    },
+    "parameter_changes": {
+     "diameter_m": 3.0,
+     "bluntness_ratio": 1.18,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.0
+    },
+    "rationale": "Fill point at gamma -3.0 deg with D 3.0 m and b 1.18.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 252000,
+     "peak_bondline_temperature_k": 404.8,
+     "feasible": true
+    },
+    "uncertainty": "low",
+    "reason_to_simulate": "Gives a smooth gamma sweep at fixed geometry for a clean model of the trade-off.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-bd9887492c37",
+    "index": 0,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.57
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -3.57
+    },
+    "rationale": "Corner of the front: near-maximum diameter, high bluntness, gamma close to the g limit, to minimise bondline temperature.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 243000,
+     "peak_bondline_temperature_k": 387.1,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Tests whether the D/gamma combination stays inside the g and mass limits and beats 390.5 K.",
+    "requested_fidelity": 1
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-703753c149ee",
+    "index": 1,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.5
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -3.5
+    },
+    "rationale": "Slightly shallower than the corner, to hedge the g limit.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 241400,
+     "peak_bondline_temperature_k": 387.8,
+     "feasible": true
+    },
+    "uncertainty": "low",
+    "reason_to_simulate": "Robust low-temperature front point.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-15fc5b4471e0",
+    "index": 2,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.4
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -3.4
+    },
+    "rationale": "Front point between the corner and the mid-range.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 239500,
+     "peak_bondline_temperature_k": 388.8,
+     "feasible": true
+    },
+    "uncertainty": "low",
+    "reason_to_simulate": "Improves on C-8e40abb65d5d while staying inside the mass limit.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-558af3783545",
+    "index": 3,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.2
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -3.2
+    },
+    "rationale": "Mid-front point at larger D and higher b than existing points.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 235300,
+     "peak_bondline_temperature_k": 391.0,
+     "feasible": true
+    },
+    "uncertainty": "low",
+    "reason_to_simulate": "Should dominate C-acebb6e3a142 (246.6k, 391.1 K).",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-79cd47e6d72d",
+    "index": 4,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.0
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -3.0
+    },
+    "rationale": "Mid front, moderate gamma.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 231100,
+     "peak_bondline_temperature_k": 393.2,
+     "feasible": true
+    },
+    "uncertainty": "low",
+    "reason_to_simulate": "Should dominate C-0149edccdafc (235.7k, 396.4 K).",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-414fac346f03",
+    "index": 5,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.7
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -2.7
+    },
+    "rationale": "Lower-flux side of the front.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 224900,
+     "peak_bondline_temperature_k": 396.8,
+     "feasible": true
+    },
+    "uncertainty": "low",
+    "reason_to_simulate": "Extends the front toward lower flux with modest temperature.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-8a9dcd634ca3",
+    "index": 6,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.4
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -2.4
+    },
+    "rationale": "Shallower entry for lower heat flux.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 218800,
+     "peak_bondline_temperature_k": 400.7,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Fills the low-flux part of the front.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-aabac569f28a",
+    "index": 7,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.1
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -2.1
+    },
+    "rationale": "Shallow entry at the maximum buildable diameter.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 212800,
+     "peak_bondline_temperature_k": 404.9,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Front extension toward low flux.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-463dce5001af",
+    "index": 8,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -1.8
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -1.8
+    },
+    "rationale": "Further shallow point to extend the flux range.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 207000,
+     "peak_bondline_temperature_k": 409.2,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Checks extrapolation toward shallower angles and lower flux.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-0c52b3457ac6",
+    "index": 9,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -1.6
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -1.6
+    },
+    "rationale": "Extreme shallow end of the front; still feasible on g and temperature.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 202600,
+     "peak_bondline_temperature_k": 411.8,
+     "feasible": true
+    },
+    "uncertainty": "high",
+    "reason_to_simulate": "Extrapolation beyond tabulated gamma range; could add a low-flux anchor.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-9a68ecb8604f",
+    "index": 10,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.375,
+     "bluntness_ratio": 1.2,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.55
+    },
+    "parameter_changes": {
+     "diameter_m": 3.375,
+     "bluntness_ratio": 1.2,
+     "flight_path_angle_deg": -3.55
+    },
+    "rationale": "Push diameter toward the mass-fraction limit with bluntness at its limit, for the lowest temperature.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 240200,
+     "peak_bondline_temperature_k": 386.8,
+     "feasible": true
+    },
+    "uncertainty": "high",
+    "reason_to_simulate": "Probes the mass and bluntness limits; a success gives the lowest-temperature point.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-3e5fe5688040",
+    "index": 11,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.37,
+     "bluntness_ratio": 1.2,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.57
+    },
+    "parameter_changes": {
+     "diameter_m": 3.37,
+     "bluntness_ratio": 1.2,
+     "flight_path_angle_deg": -3.57
+    },
+    "rationale": "Aggressive corner point with b at its limit.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 241500,
+     "peak_bondline_temperature_k": 386.4,
+     "feasible": true
+    },
+    "uncertainty": "high",
+    "reason_to_simulate": "Tests the joint g, mass and bluntness limits at the extreme corner.",
+    "requested_fidelity": 1
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-764c593a20a3",
+    "index": 12,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.34,
+     "bluntness_ratio": 1.2,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.58
+    },
+    "parameter_changes": {
+     "diameter_m": 3.34,
+     "bluntness_ratio": 1.2,
+     "flight_path_angle_deg": -3.58
+    },
+    "rationale": "Hedged corner: slightly smaller D to guarantee the mass margin.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 244800,
+     "peak_bondline_temperature_k": 387.0,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Lower mass risk than D=3.37 but nearly the same temperature.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-a52a4536bf3f",
+    "index": 13,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.2,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.45
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.2,
+     "flight_path_angle_deg": -3.45
+    },
+    "rationale": "Intermediate gamma at D=3.36 with b=1.2.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 240500,
+     "peak_bondline_temperature_k": 388.3,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Fills the gap between corner points and checks the effect of b=1.2.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-3583b7488cf2",
+    "index": 14,
+    "parent_id": "C-acebb6e3a142",
+    "values": {
+     "diameter_m": 3.3,
+     "bluntness_ratio": 1.2,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.6
+    },
+    "parameter_changes": {
+     "diameter_m": 3.3,
+     "bluntness_ratio": 1.2,
+     "flight_path_angle_deg": -3.6
+    },
+    "rationale": "Safe diameter (mass margin ~0.05) at gamma near the g limit, as a hedge against mass violations at larger D.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 249900,
+     "peak_bondline_temperature_k": 387.4,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Likely improves on C-b35840b70e3f (263.6k, 390.5 K) with low mass risk.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-0a628c5c4ad6",
+    "index": 15,
+    "parent_id": "C-acebb6e3a142",
+    "values": {
+     "diameter_m": 3.3,
+     "bluntness_ratio": 1.2,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.4
+    },
+    "parameter_changes": {
+     "diameter_m": 3.3,
+     "bluntness_ratio": 1.2,
+     "flight_path_angle_deg": -2.4
+    },
+    "rationale": "Safe-diameter shallow point with b=1.2.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 224400,
+     "peak_bondline_temperature_k": 401.2,
+     "feasible": true
+    },
+    "uncertainty": "low",
+    "reason_to_simulate": "Hedges the front at D=3.3 in case D=3.36 designs fail.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-df8026c08f78",
+    "index": 16,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -2.55
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -2.55
+    },
+    "rationale": "Fills the gap between -2.4 and -3.0 on the front.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 222200,
+     "peak_bondline_temperature_k": 398.4,
+     "feasible": true
+    },
+    "uncertainty": "low",
+    "reason_to_simulate": "Improves coverage of the trade-off curve.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-684501eafb04",
+    "index": 17,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.3
+    },
+    "parameter_changes": {
+     "diameter_m": 3.36,
+     "bluntness_ratio": 1.195,
+     "flight_path_angle_deg": -3.3
+    },
+    "rationale": "Fills the gap between -3.0 and -3.4.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 237200,
+     "peak_bondline_temperature_k": 389.9,
+     "feasible": true
+    },
+    "uncertainty": "low",
+    "reason_to_simulate": "Front coverage; dominates C-acebb6e3a142 if the model holds.",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-93c809c339ee",
+    "index": 18,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.32,
+     "bluntness_ratio": 1.2,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.0
+    },
+    "parameter_changes": {
+     "diameter_m": 3.32,
+     "bluntness_ratio": 1.2,
+     "flight_path_angle_deg": -3.0
+    },
+    "rationale": "Intermediate diameter (3.32) at moderate gamma, as a hedge against mass violations.",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 234800,
+     "peak_bondline_temperature_k": 393.7,
+     "feasible": true
+    },
+    "uncertainty": "low",
+    "reason_to_simulate": "Hedge point with a safe mass margin (~0.03).",
+    "requested_fidelity": 0
+   },
+   {
+    "method": "ai_agent",
+    "seed": 7,
+    "call": 2,
+    "candidate_id": "C-b460a0993d3f",
+    "index": 19,
+    "parent_id": "C-0149edccdafc",
+    "values": {
+     "diameter_m": 3.35,
+     "bluntness_ratio": 1.2,
+     "cone_half_angle_deg": 70.0,
+     "flight_path_angle_deg": -3.55
+    },
+    "parameter_changes": {
+     "diameter_m": 3.35,
+     "bluntness_ratio": 1.2,
+     "flight_path_angle_deg": -3.55
+    },
+    "rationale": "Second hedge near the corner (D=3.35, gamma -3.55).",
+    "expected_outcome": {
+     "peak_heat_flux_w_m2": 242900,
+     "peak_bondline_temperature_k": 387.3,
+     "feasible": true
+    },
+    "uncertainty": "medium",
+    "reason_to_simulate": "Near-corner point with somewhat lower mass and g risk than D=3.37.",
+    "requested_fidelity": 0
+   }
+  ],
+  "rejections": [],
+  "fidelity_decisions": [],
+  "fallback_evaluations": 0
+ }
+}

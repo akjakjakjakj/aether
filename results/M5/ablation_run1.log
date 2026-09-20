@@ -1,0 +1,24 @@
+.venv/bin/python scripts/run_ai_ablation.py 
+AETHER M5 ablation  run=M5-ABL-20260920T141724Z  mode=LIVE  git=715ac9f (dirty)  workers=6
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg']
+  lhs_search   seed  11: spent 200 of 200, 0 cache hits, 0 LLM calls, 7 s
+  lhs_search   seed  23: spent 200 of 200, 0 cache hits, 0 LLM calls, 4 s
+  lhs_search   seed  37: spent 200 of 200, 0 cache hits, 0 LLM calls, 3 s
+  lhs_search   seed  41: spent 200 of 200, 0 cache hits, 0 LLM calls, 3 s
+  lhs_search   seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 4 s
+  nsga2        seed  11: spent 200 of 200, 0 cache hits, 0 LLM calls, 6 s
+  nsga2        seed  23: spent 200 of 200, 0 cache hits, 0 LLM calls, 6 s
+  nsga2        seed  37: spent 200 of 200, 0 cache hits, 0 LLM calls, 7 s
+  nsga2        seed  41: spent 200 of 200, 0 cache hits, 0 LLM calls, 6 s
+  nsga2        seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 7 s
+  nsga2_pop20  seed  11: spent 200 of 200, 0 cache hits, 0 LLM calls, 7 s
+  nsga2_pop20  seed  23: spent 200 of 200, 0 cache hits, 0 LLM calls, 8 s
+  nsga2_pop20  seed  37: spent 200 of 200, 0 cache hits, 0 LLM calls, 8 s
+  nsga2_pop20  seed  41: spent 200 of 200, 0 cache hits, 0 LLM calls, 8 s
+  nsga2_pop20  seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 13 s
+  bo_parego    seed  11: spent 200 of 200, 0 cache hits, 0 LLM calls, 60 s
+  bo_parego    seed  23: spent 200 of 200, 0 cache hits, 0 LLM calls, 57 s
+  bo_parego    seed  37: spent 200 of 200, 0 cache hits, 0 LLM calls, 45 s
+  bo_parego    seed  41: spent 200 of 200, 0 cache hits, 0 LLM calls, 39 s
+  bo_parego    seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 45 s
+make: *** [ablation] Terminated: 15
