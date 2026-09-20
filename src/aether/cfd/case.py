@@ -94,6 +94,16 @@ def set_end_iteration(case_dir: Path, n_iterations: int) -> None:
     path.write_text(text)
 
 
+def set_max_courant(case_dir: Path, max_co: float) -> None:
+    """Set maxCo of an existing case (used only by restarts; see pipeline.restart_case)."""
+    path = Path(case_dir) / "system" / "controlDict"
+    text, n = re.subn(r"(?m)^maxCo\s+[\d.eE+-]+;", f"maxCo           {max_co:.12g};",
+                      path.read_text())
+    if n != 1:
+        raise RuntimeError(f"could not update maxCo in {path}")
+    path.write_text(text)
+
+
 def render_template(text: str, values: dict[str, object]) -> str:
     """Substitute @NAME@ placeholders. An unfilled placeholder is an error, not a default."""
     def sub(match: re.Match) -> str:

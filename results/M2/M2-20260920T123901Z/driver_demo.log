@@ -1,0 +1,5 @@
+AETHER M2 CFD validation   run=M2-20260920T123901Z   OpenFOAM=v2512
+                   case         status              failure_reason        verdict  cd_total  outlet_min_mach
+0     capsuledemo_M6_x2  SOLVER_FAILED  rhoCentralFoam returned -4  SOLVER_FAILED       NaN              NaN
+1  capsuledemo_M6_x2_a1             OK                                     USABLE  1.396737         1.524535
+isolation case: {'case': 'capsuledemo_M6_x2_isolate_startup', 'status': 'SOLVER_FAILED', 'failure_reason': 'rhoCentralFoam returned -4', 'what_differs_from_attempt_0': 'first-order start only; same domain'}

@@ -1,0 +1,139 @@
+{
+  "case_name": "sphere_M6_fine",
+  "case_dir": "/Users/akj/Projects/aether/cfd/generated/M2-20260920T123901Z/sphere_M6_fine",
+  "status": "OK",
+  "failure_reason": "",
+  "steps": [
+    {
+      "name": "blockMesh",
+      "command": "blockMesh",
+      "returncode": 0,
+      "wall_time_s": 4.6412257500051055,
+      "timed_out": false
+    },
+    {
+      "name": "extrudeMesh",
+      "command": "extrudeMesh",
+      "returncode": 0,
+      "wall_time_s": 4.542313625002862,
+      "timed_out": false
+    },
+    {
+      "name": "checkMesh",
+      "command": "checkMesh",
+      "returncode": 0,
+      "wall_time_s": 4.264730875001987,
+      "timed_out": false
+    },
+    {
+      "name": "setFields",
+      "command": "setFields",
+      "returncode": 0,
+      "wall_time_s": 3.4348167499992996,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 3049.730234542003,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_ext1",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 2067.913905708003,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_ext2",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 1975.3724036670028,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_ext3",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 1817.7811217920098,
+      "timed_out": false
+    },
+    {
+      "name": "sampleLine",
+      "command": "postProcess -func sampleLine -latestTime",
+      "returncode": 0,
+      "wall_time_s": 1.1071990839991486,
+      "timed_out": false
+    },
+    {
+      "name": "sampleBody",
+      "command": "postProcess -func sampleBody -latestTime",
+      "returncode": 0,
+      "wall_time_s": 0.7776583329978166,
+      "timed_out": false
+    },
+    {
+      "name": "sampleOutlet",
+      "command": "postProcess -func sampleOutlet -latestTime",
+      "returncode": 0,
+      "wall_time_s": 0.785278625000501,
+      "timed_out": false
+    }
+  ],
+  "mesh_quality": {
+    "mesh_ok": true,
+    "n_failed_checks": 0,
+    "n_cells": 49152.0,
+    "max_non_orthogonality_deg": 35.77604966,
+    "avg_non_orthogonality_deg": 9.148832316,
+    "n_severely_non_orthogonal_faces": null,
+    "max_skewness": 0.9551029376,
+    "max_aspect_ratio": 6.195434697
+  },
+  "n_cells": 49152,
+  "representative_cell_size_m": 0.0020309318226349265,
+  "solver_wall_time_s": 8910.797665709018,
+  "total_wall_time_s": 8930.350888751025,
+  "metrics": {
+    "cd_total": 0.872212167097538,
+    "cd_fore": 0.872212167097538,
+    "cd_aft": NaN,
+    "mesh_extent": "forebody",
+    "outlet_min_mach": 2.330767101065294,
+    "cd_total_last_iteration": 0.8724553642322815,
+    "standoff_m": 0.07447578444298286,
+    "standoff_over_max_radius": 0.14895156888596572,
+    "shock_thickness_m": 0.0014212435596367562,
+    "shock_thickness_cells": 1.552476781763972,
+    "stagnation_line_cell_size_at_shock_m": 0.0009154684800000007,
+    "p_stag_wall_face_pa": 46833.11528,
+    "p_stag_line_extrapolated_pa": 46851.60632190362,
+    "p_max_on_body_pa": 46833.11528,
+    "p_stag_over_p_inf": 46.851606321903624,
+    "final_mean_abs_drho_dtau": 72.152135964,
+    "initial_mean_abs_drho_dtau": 37.101017813,
+    "n_iterations": 100000,
+    "n_iterations_planned": 40000,
+    "n_extensions": 3
+  },
+  "convergence": {
+    "cd_total": {
+      "quantity": "cd_total",
+      "mean": 0.872212167097538,
+      "peak_to_peak_rel": 0.002228636657372806,
+      "drift_rel": 1.6354529371832627e-05,
+      "window_iterations": 2000,
+      "converged": false
+    },
+    "cd_fore": {
+      "quantity": "cd_fore",
+      "mean": 0.872212167097538,
+      "peak_to_peak_rel": 0.002228636657372806,
+      "drift_rel": 1.6354529371832627e-05,
+      "window_iterations": 2000,
+      "converged": false
+    }
+  }
+}

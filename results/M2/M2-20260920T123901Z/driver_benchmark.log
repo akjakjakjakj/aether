@@ -1,0 +1,8 @@
+AETHER M2 CFD validation   run=M2-20260920T123901Z   OpenFOAM=v2512
+               case status  n_cells  solver_wall_time_s  cd_total  standoff_over_max_radius  p_stag_over_p_inf
+0  sphere_M3_coarse     OK     3072           92.860555  0.844402                  0.216969          11.964860
+1  sphere_M3_medium     OK    12288          498.455784  0.846128                  0.215811          12.044701
+2    sphere_M3_fine     OK    49152        14246.818227  0.847213                  0.215014          11.995204
+3  sphere_M6_coarse     OK     3072           63.328753  0.868904                  0.150566          46.277059
+4  sphere_M6_medium     OK    12288          483.823481  0.870898                  0.149560          46.741412
+5    sphere_M6_fine     OK    49152         8910.797666  0.872212                  0.148952          46.851606

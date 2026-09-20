@@ -1,0 +1,16 @@
+[
+  {
+    "end_iteration": 105000,
+    "mean": 0.846911089703052,
+    "peak_to_peak_rel": 0.0001808747848109537,
+    "drift_rel": 1.0450541047599506e-05,
+    "converged": true
+  },
+  {
+    "end_iteration": 110000,
+    "mean": 0.846920791930521,
+    "peak_to_peak_rel": 0.00010718634207269039,
+    "drift_rel": 9.328556292107468e-06,
+    "converged": true
+  }
+]

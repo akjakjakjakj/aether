@@ -1,0 +1,3 @@
+AETHER M2 CFD validation   run=M2-20260920T123901Z   OpenFOAM=v2512
+                   case status failure_reason  cd_total_converged
+0  spherefullbody_M3_x1     OK                              False

@@ -30,7 +30,12 @@ from src.aether.utils.run import (  # noqa: E402
     snapshot_config,
 )
 
-STAGES = ("benchmark", "negative", "demo", "report")
+STAGES = ("benchmark", "restart", "negative", "demo", "report")
+
+
+def _show(table, columns: list[str]) -> str:
+    """A failed case has no metric columns; print what exists instead of raising."""
+    return table.reindex(columns=columns).to_string()
 
 
 def main() -> int:
@@ -52,21 +57,32 @@ def main() -> int:
         snapshot_config(cfg, run_dir, meta)
     print(f"AETHER M2 CFD validation   run={run_id}   OpenFOAM={openfoam_version()}", flush=True)
 
-    needs_solver = set(stages) & {"benchmark", "negative", "demo"}
+    needs_solver = set(stages) & {"benchmark", "restart", "negative", "demo"}
     if needs_solver and not openfoam_available():
         print("OpenFOAM launcher not found - cannot run solver stages.", file=sys.stderr)
         return 2
 
     if "benchmark" in stages:
         study = val.run_mesh_study(cfg, run_id, run_dir, generated)
-        print(study[["case", "status", "n_cells", "solver_wall_time_s", "cd_total",
-                     "standoff_over_max_radius", "p_stag_over_p_inf"]].to_string(), flush=True)
+        print(_show(study, ["case", "status", "n_cells", "solver_wall_time_s", "cd_total",
+                            "standoff_over_max_radius", "p_stag_over_p_inf"]), flush=True)
+    if "restart" in stages and "courant_restarts" in cfg:
+        print("limit-cycle field diagnostics:",
+              val.run_limit_cycle_diagnostics(cfg, run_id, run_dir, generated), flush=True)
+        rs = val.run_courant_restarts(cfg, run_id, run_dir, generated)
+        if len(rs):
+            val.write_tables(run_dir, courant_restarts=rs)
+            print(_show(rs, ["case", "status", "max_co", "cd_fore", "cd_fore_converged",
+                             "cd_fore_peak_to_peak_rel", "cd_fore_drift_rel"]), flush=True)
     if "negative" in stages:
         neg = val.run_negative_cases(cfg, run_id, run_dir, generated)
-        print(neg[["case", "status", "cd_total_converged"]].to_string(), flush=True)
+        print(_show(neg, ["case", "status", "failure_reason", "cd_total_converged"]), flush=True)
     if "demo" in stages:
         demo = val.run_pipeline_demo(cfg, run_id, run_dir, generated)
-        print(demo[["case", "status", "cd_total", "outlet_min_mach"]].to_string(), flush=True)
+        print(_show(demo, ["case", "status", "failure_reason", "verdict", "cd_total",
+                           "outlet_min_mach"]), flush=True)
+        print("isolation case:", val.run_demo_isolation(cfg, run_id, run_dir, generated),
+              flush=True)
 
     if "report" in stages:
         gate = build_report(cfg, run_id, run_dir, generated / run_id, ROOT)

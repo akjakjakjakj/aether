@@ -1,0 +1,6 @@
+
+G4 status: PASS
+  MET      1_mesh_independence
+  MET      2_force_convergence
+  MET      3_published_benchmark
+  MET      4_model_limitations_documented

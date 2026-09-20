@@ -1,0 +1,25 @@
+
+Flow time scale min/max = 5.124954444e-08, 5.670707504e-07
+Courant Numbers: min = 0.05891020709, average = 0.1902339627, max = 0.2
+Time = 299
+
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUx, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUy, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUz, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoE, Initial residual = 0, Final residual = 0, No Iterations 0
+ExecutionTime = 44.49 s  ClockTime = 45 s
+
+Flow time scale min/max = 5.152449309e-08, 5.670707504e-07
+Courant Numbers: min = 0.05919032477, average = 0.190227879, max = 0.2
+Time = 300
+
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUx, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUy, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUz, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoE, Initial residual = 0, Final residual = 0, No Iterations 0
+ExecutionTime = 44.8 s  ClockTime = 45 s
+
+End
+

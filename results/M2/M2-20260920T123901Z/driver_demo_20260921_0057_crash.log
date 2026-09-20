@@ -1,0 +1,16 @@
+AETHER M2 CFD validation   run=M2-20260920T123901Z   OpenFOAM=v2512
+Traceback (most recent call last):
+  File "/Users/akj/Projects/aether/scripts/run_cfd_validation.py", line 80, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/akj/Projects/aether/scripts/run_cfd_validation.py", line 69, in main
+    print(demo[["case", "status", "cd_total", "outlet_min_mach"]].to_string(), flush=True)
+          ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/akj/Projects/aether/.venv/lib/python3.12/site-packages/pandas/core/frame.py", line 4384, in __getitem__
+    indexer = self.columns._get_indexer_strict(key, "columns")[1]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/akj/Projects/aether/.venv/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 6302, in _get_indexer_strict
+    self._raise_if_missing(keyarr, indexer, axis_name)
+  File "/Users/akj/Projects/aether/.venv/lib/python3.12/site-packages/pandas/core/indexes/base.py", line 6355, in _raise_if_missing
+    raise KeyError(f"{not_found} not in index")
+KeyError: "['cd_total', 'outlet_min_mach'] not in index"

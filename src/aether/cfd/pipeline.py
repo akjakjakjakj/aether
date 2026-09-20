@@ -16,12 +16,20 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 import pandas as pd
+import yaml
 
-from .case import FlowCondition, SolverSettings, set_end_iteration, write_case
+from .case import (
+    FlowCondition,
+    SolverSettings,
+    set_end_iteration,
+    set_max_courant,
+    write_case,
+)
 from .mesh import MeshSettings, build_mesh_plan
 from .outline import Outline
 from .postprocess import (
     ConvergenceCriterion,
+    ConvergenceResult,
     assess_convergence,
     force_coefficient_history,
     outlet_min_mach,
@@ -156,6 +164,18 @@ def run_case(
                       f"{steps[-1].name} returned {steps[-1].returncode}"
                       + (" (timeout)" if steps[-1].timed_out else ""))
 
+    return _postprocess(case_dir, out_dir, case_name, outline, flow, mesh_settings,
+                        plan.body_patches, plan.n_cells, plan.representative_cell_size_m,
+                        abs(plan.upstream_axis_x_m), solver.n_iterations, n_ext,
+                        startup_first_order_iterations, criterion, result, step, finish)
+
+
+def _postprocess(case_dir, out_dir, case_name, outline, flow, mesh_settings, body_patches,
+                 n_cells, h_m, upstream_distance_m, n_iterations_planned, n_ext,
+                 startup_first_order_iterations, criterion, result, step, finish,
+                 extra_metrics: dict | None = None) -> CaseResult:
+    """Sample the latest time, compute the metrics, judge convergence, archive. Shared by
+    :func:`run_case` and :func:`restart_case` so both are judged by the same code."""
     # -- postprocess --------------------------------------------------------------------
     if not (step("sampleLine", "postProcess -func sampleLine -latestTime")
             and step("sampleBody", "postProcess -func sampleBody -latestTime")
@@ -177,7 +197,7 @@ def run_case(
     body["cp"] = (body["p_pa"] - flow.pressure_pa) / flow.dynamic_pressure_pa
     body.to_csv(out_dir / "body_pressure.csv", index=False)
 
-    quantities = ["cd_total", "cd_fore"] + (["cd_aft"] if "body_aft" in plan.body_patches
+    quantities = ["cd_total", "cd_fore"] + (["cd_aft"] if "body_aft" in body_patches
                                             else [])
     conv = {q: assess_convergence(history, q, criterion) for q in quantities}
     result.convergence = {q: c.to_dict() for q, c in conv.items()}
@@ -192,7 +212,7 @@ def run_case(
         "standoff_over_max_radius": shock.standoff_m / outline.max_radius_m,
         # 1 - standoff / (distance from nose to the inflow boundary on the axis). Near 0 means
         # the bow shock is touching the fixed-value inflow boundary and the case is invalid.
-        "upstream_clearance_fraction": 1.0 - shock.standoff_m / abs(plan.upstream_axis_x_m),
+        "upstream_clearance_fraction": 1.0 - shock.standoff_m / upstream_distance_m,
         "shock_thickness_m": shock.shock_thickness_m,
         "shock_thickness_cells": shock.shock_thickness_cells,
         "stagnation_line_cell_size_at_shock_m": shock.local_cell_size_m,
@@ -203,15 +223,143 @@ def run_case(
         "final_mean_abs_drho_dtau": float(history["mean_abs_drho_dtau_kg_m3_s"].iloc[-1]),
         "initial_mean_abs_drho_dtau": float(history["mean_abs_drho_dtau_kg_m3_s"].iloc[0]),
         "n_iterations": int(history["iteration"].iloc[-1]),
-        "n_iterations_planned": solver.n_iterations,
+        "n_iterations_planned": n_iterations_planned,
         "n_extensions": n_ext,
     }
     if startup_first_order_iterations > 0:      # key absent == M2 behaviour
         result.metrics["startup_first_order_iterations"] = int(startup_first_order_iterations)
-    pd.DataFrame([{**{"case": case_name, "mach": flow.mach, "n_cells": plan.n_cells,
-                      "h_m": plan.representative_cell_size_m}, **result.metrics}]
+    result.metrics.update(extra_metrics or {})
+    pd.DataFrame([{**{"case": case_name, "mach": flow.mach, "n_cells": n_cells,
+                      "h_m": h_m}, **result.metrics}]
                  ).to_csv(out_dir / "metrics.csv", index=False)
     return finish("OK")
+
+
+def _latest_time_dir(case_dir: Path) -> Path:
+    times = [d for d in Path(case_dir).iterdir()
+             if d.is_dir() and d.name.replace(".", "", 1).isdigit() and float(d.name) > 0]
+    if not times:
+        raise FileNotFoundError(f"no written solution under {case_dir}")
+    return max(times, key=lambda d: float(d.name))
+
+
+def restart_case(
+    case_name: str,
+    source_case_dir: Path,
+    outline: Outline,
+    flow: FlowCondition,
+    mesh_settings: MeshSettings,
+    solver: SolverSettings,
+    criterion: ConvergenceCriterion,
+    generated_root: Path,
+    results_dir: Path,
+    block_iterations: int,
+    max_blocks: int,
+    sizing_radius_m: float | None = None,
+    solver_timeout_s: float = 6 * 3600.0,
+    min_blocks: int = 1,
+) -> CaseResult:
+    """Continue a FINISHED case under different numerical controls, as a NEW case.
+
+    Spec §36 step 6 ("check Courant/time step") applied to a case that ran but did not meet
+    the force criterion: the source case's mesh and final solution are copied into
+    ``generated_root/case_name``, ``solver.max_co`` replaces the source's Courant limit, and
+    the solver is advanced in blocks of ``block_iterations`` until the UNCHANGED ``criterion``
+    is met or ``max_blocks`` blocks have run. The source case is never modified. The force
+    history of the new case starts at the source's last iteration, so the judged window
+    contains only iterations computed under the new controls (enforced: at least one full
+    window must have been computed here before the criterion can be met).
+
+    ``min_blocks`` makes the test STRICTER, never looser: the run does not stop before that
+    many blocks even if the criterion is already met, so a pass has to be seen in
+    ``min_blocks`` separate windows, and the verdict is always the one at the end of the
+    last block run. Resumable: if the new case directory already holds solutions, it
+    continues from its own latest time. The check after every block is appended to
+    ``restart_blocks.json`` next to the case result.
+    """
+    source_case_dir = Path(source_case_dir)
+    case_dir = Path(generated_root) / case_name
+    out_dir = Path(results_dir) / case_name
+    out_dir.mkdir(parents=True, exist_ok=True)
+    plan = build_mesh_plan(outline, flow.mach, sizing_radius_m, mesh_settings)
+    result = CaseResult(case_name, str(case_dir), "OK", n_cells=plan.n_cells,
+                        representative_cell_size_m=plan.representative_cell_size_m)
+    steps: list[StepResult] = []
+
+    def step(name: str, command: str, timeout_s: float = 1800.0) -> bool:
+        s = run_foam(case_dir, name, command, timeout_s)
+        steps.append(s)
+        return s.ok
+
+    def finish(status: str, reason: str = "") -> CaseResult:
+        result.status, result.failure_reason = status, reason
+        result.steps = [s.to_dict() for s in steps]
+        result.total_wall_time_s = sum(s.wall_time_s for s in steps)
+        _archive(case_dir, out_dir)
+        with open(out_dir / "case_result.json", "w") as fh:
+            json.dump(result.to_dict(), fh, indent=2, default=str)
+        return result
+
+    source_latest = _latest_time_dir(source_case_dir)
+    start_iteration = int(float(source_latest.name))
+    if not case_dir.exists() or not any(case_dir.iterdir()):
+        case_dir.mkdir(parents=True, exist_ok=True)
+        for sub in ("constant", "system", "0.orig", "0"):
+            shutil.copytree(source_case_dir / sub, case_dir / sub)
+        shutil.copytree(source_latest, case_dir / source_latest.name)
+        shutil.copy2(source_case_dir / "log.checkMesh", case_dir / "log.checkMesh")
+        (case_dir / "case.foam").write_text("")
+        record = yaml.safe_load((source_case_dir / "aether_case.yaml").read_text())
+        source_max_co = record.get("solver_settings", {}).get("max_co")
+        record["solver_settings"] = asdict(solver)
+        record["restart"] = {
+            "source_case_dir": str(source_case_dir), "source_iteration": start_iteration,
+            "source_max_co": source_max_co,
+            "block_iterations": block_iterations, "max_blocks": max_blocks,
+            "reason": "spec §36 step 6: lower Courant limit on a case that ran but did not "
+                      "meet the declared force criterion; criterion unchanged"}
+        with open(case_dir / "aether_case.yaml", "w") as fh:
+            yaml.safe_dump(record, fh, sort_keys=False)
+    set_max_courant(case_dir, solver.max_co)
+    result.mesh_quality = parse_check_mesh((case_dir / "log.checkMesh").read_text())
+
+    def check() -> ConvergenceResult:
+        h = force_coefficient_history(case_dir, flow, outline.frontal_area_m2,
+                                      mesh_settings.wedge_angle_deg)
+        return assess_convergence(h, "cd_total", criterion)
+
+    blocks_file = out_dir / "restart_blocks.json"
+    blocks: list[dict] = json.loads(blocks_file.read_text()) if blocks_file.exists() else []
+    n_now = int(float(_latest_time_dir(case_dir).name))
+    ok, n_done = True, (n_now - start_iteration) // block_iterations
+    while ok and n_done < max_blocks:
+        if (n_done >= min_blocks and n_now - start_iteration >= criterion.window_iterations
+                and check().converged):
+            break
+        n_done += 1
+        n_now = start_iteration + n_done * block_iterations
+        set_end_iteration(case_dir, n_now)
+        ok = step(f"rhoCentralFoam_block{n_done}", "rhoCentralFoam", solver_timeout_s)
+        if ok:
+            c = check()
+            blocks.append({"end_iteration": n_now, "mean": c.mean,
+                           "peak_to_peak_rel": c.peak_to_peak_rel, "drift_rel": c.drift_rel,
+                           "converged": c.converged})
+            with open(blocks_file, "w") as fh:
+                json.dump(blocks, fh, indent=2)
+    result.solver_wall_time_s = sum(s.wall_time_s for s in steps
+                                    if s.name.startswith("rhoCentralFoam"))
+    if not ok:
+        return finish("SOLVER_FAILED", f"{steps[-1].name} returned {steps[-1].returncode}"
+                      + (" (timeout)" if steps[-1].timed_out else ""))
+    return _postprocess(case_dir, out_dir, case_name, outline, flow, mesh_settings,
+                        plan.body_patches, plan.n_cells, plan.representative_cell_size_m,
+                        abs(plan.upstream_axis_x_m), block_iterations * max_blocks, 0, 0,
+                        criterion, result, step, finish,
+                        extra_metrics={"restart_source_case": source_case_dir.name,
+                                       "restart_source_iteration": start_iteration,
+                                       "max_co": solver.max_co,
+                                       "restart_blocks_run": n_done})
 
 
 def _archive(case_dir: Path, out_dir: Path) -> None:

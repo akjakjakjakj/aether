@@ -843,3 +843,105 @@ calls: it used the greedy arm, which promotes only believed-feasible designs, an
 shows none in its first ~60 evaluations. Not a bug — greedy cannot act before something is
 feasible — but a smoke test that exercises nothing is not a smoke test; the overlay now uses the
 random arm.
+
+---
+
+### NR-25 — Both fine-mesh sphere cases ended in a limit cycle and failed the force criterion; the Courant number, not the criterion, was changed
+
+**What happened.** Run `M2-20260920T123901Z`. All six benchmark cases ran. The coarse and medium
+cases met the declared force criterion. **Both fine cases did not**: after the planned 40 000
+iterations and all three extensions (100 000 iterations; 14 247 s and 8 911 s on a loaded
+machine) `sphere_M3_fine` sat at 0.282% peak-to-peak and `sphere_M6_fine` at 0.223%, against a
+declared 0.1%, with drifts of 0.0007% and 0.0016% against a declared 0.02%. Gate G4 was
+**LIMITED** on that evidence (`gate_assessment_20260921_0057_before_restarts.json`, kept).
+
+**What it was.** Not slow convergence: a bounded oscillation about a fixed mean, so more
+iterations could never have cured it. Measured (`<case>_cyclediag/`, force every iteration, the
+pressure field every 2 iterations): period 33 iterations at Mach 3 and 40 at Mach 6, i.e. 6.7 and
+8 *cell-transit times* (under local time stepping there is no global time, so "flow-through
+times" are not defined). The density residual of the fine cases ends ABOVE its starting value,
+while the coarse one falls by a factor of 30. The fluctuation is **not** shock jitter on the
+axis: the stagnation region is the quietest part of the shock layer (relative pressure
+fluctuation 1e-4 and below); it grows along the body to about 1% rms near the supersonic outflow,
+in ray-like bands that start at the captured shock, and 90% of its variance is spread over about
+40% of the cells. That is the picture of disturbances shed where the captured shock flickers
+between cells and then convected downstream; this reading of the map was not separately tested.
+
+**What was NOT done.** The 0.1% limit was not moved, the window was not lengthened, and the
+criterion was not re-read as "drift only". The non-converged fine cases were not deleted or
+overwritten; they are tabulated, plotted in the warning colour and labelled NOT MET.
+
+**What was done (spec §36, step 6; NR-07's lever one level finer).** Each fine case was continued
+from its final solution as a NEW case at max Courant 0.1 and at 0.05 (`sphere_M*_fine_Co0p1`,
+`_Co0p05`), in blocks of 5000 iterations, at least two blocks, verdict at the end of the last
+block. All four met the unchanged criterion at the end of BOTH blocks:
+
+| case | peak-to-peak, block 1 → block 2 | drift, block 2 | window-mean C_D vs the Co 0.2 case |
+|---|---|---|---|
+| sphere_M3_fine_Co0p1 | 0.044% → 0.033% | 0.0002% | −0.035% |
+| sphere_M3_fine_Co0p05 | 0.018% → 0.011% | 0.0009% | −0.035% |
+| sphere_M6_fine_Co0p1 | 0.056% → 0.077% | 0.0015% | −0.026% |
+| sphere_M6_fine_Co0p05 | 0.048% → 0.038% | 0.0003% | −0.027% |
+
+(`<case>/restart_blocks.json`, `limit_cycle.csv`.) The amplitude scales with the Courant number
+and the clean 33/40-iteration line disappears from the spectrum. The two Courant numbers agree
+with each other to 0.001% in C_D, and both differ from the Co 0.2 window mean by about 0.03%:
+**the mean of the limit cycle was not the fixed point.** That is small against every tolerance,
+but it is a third of the fine–medium difference, and it moved the observed order of C_D from
+0.67/0.60 to 1.13/0.88 and the GCI_fine from 0.27%/0.36% to 0.10%/0.19%.
+
+**Caveats, stated rather than hidden.** (1) The restart rule, the two-block minimum and the rule
+for which solution is "of record" (the largest Courant number that met the criterion) were all
+written AFTER the original results had been seen; the two-block minimum was added while block 1
+was running, after an interim look. Each makes the test stricter or is outcome-neutral, but none
+is pre-declared. (2) The Mach 6 margin is thin: 0.077% of an allowed 0.1%, and it went UP
+between blocks. (3) p0/p∞ and Δ/R come from the last iteration's field, not a window mean; across
+the two restarts on the same mesh p0/p∞ differs by 0.4% at Mach 3, as much as between mesh
+levels, so its "oscillatory" mesh convergence moved from Mach 3 to Mach 6 when the fine solution
+changed. It is judged against the exact Rayleigh-pitot value, never by its GCI. (4) The fine
+level now runs at a different Courant number from the coarse and medium levels. For a converged
+local-time-stepping solution the steady residual does not contain the time step, so this should
+not matter, and the Co 0.1 / 0.05 agreement supports that; it is recorded as A-CFD-15.
+
+**Consequence.** `gate_assessment.json` now reads PASS. A reader who does not accept a restart
+rule written after the fact should read the gate as LIMITED; the evidence for both readings is
+in the run directory. M3 saw the same signature in 6 of 62 capsule cases (NR-21); the same cure
+has NOT been tried there.
+
+**Evidence.** `results/M2/M2-20260920T123901Z/` — `level_candidates.csv`, `limit_cycle.csv`,
+`gci.csv` vs `gci_original_fine_cases.csv` and `gci_20260921_0057_before_restarts.csv`,
+`sphere_M*_fine*/`, `sphere_M*_fine_cyclediag/`; `reports/figures/M2_force_convergence.png`,
+`M2_limit_cycle.png`; `tests/test_cfd_validation_gate.py`.
+
+---
+
+### NR-26 — The pipeline demonstration died in the sphere's domain, and two stages crashed on their own bookkeeping
+
+**The demo.** `capsuledemo_M6_x2` (60° blunted cone, Mach 6, medium mesh) crashed at iteration
+8000 with a floating-point exception in `sqrt` (a negative temperature or energy). Its domain was
+the one M2 sizes for a sphere, from the Billig stand-off of the NOSE radius. The retry
+(`capsuledemo_M6_x2_a1`) reuses M3's capsule machinery unchanged — blunt-cone sizing radius
+(0.6 m → 1.0 m), first-order start, on- and off-axis clearance checks, automatic enlargement — and
+is USABLE at the first enlarged attempt: criterion met after one extension, outflow supersonic,
+p0/p∞ within 0.4% of Rayleigh-pitot. Because that retry changes two things at once, a third case
+(`capsuledemo_M6_x2_isolate_startup`) keeps the sphere-sized domain and adds ONLY the first-order
+start: **it crashes the same way**, so the domain is the cause and the impulsive start is not.
+On the axis the sphere-sized boundary would have left room (the converged stand-off is about half
+the distance to it), so the shock must meet the boundary off the axis; that was not observed,
+because a crashed case writes no field. Same lesson as NR-20, now reproduced inside M2.
+
+**The bookkeeping.** (1) The demo stage's driver printed columns a failed case does not have and
+died with a `KeyError` — a failure that hid a failure. The driver now prints whatever columns
+exist. (2) The negative stage had earlier died with `FileExistsError` on a case directory left by
+a killed driver. A generated case directory without a `case_result.json` is now set aside as
+`<case>__aborted_<time>` (never deleted, never resumed), logged in `aborted_attempts.json`, and
+the case re-run; a finished case, including a failed one, is loaded. In this run the full-body
+case had in fact finished, and was loaded. (3) A resumed restart's `case_result.json` times only
+its last session; the report takes restart wall times from the archived solver logs instead.
+
+**The negative case did its job.** `spherefullbody_M3_x1` ran to 25 000 iterations with all three
+extensions and **failed** the criterion on total C_D (afterbody C_D still drifting), as NR-06
+says it must. A gate that this case passed would be worthless.
+
+**Evidence.** `results/M2/M2-20260920T123901Z/pipeline_demo.csv`, `capsuledemo_M6_x2*/`,
+`negative_cases.csv`, `driver_demo_20260921_0057_crash.log`; `tests/test_cfd_validation_gate.py`.

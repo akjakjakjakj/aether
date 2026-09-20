@@ -1,0 +1,51 @@
+{
+  "gate": "G4",
+  "status": "LIMITED",
+  "conditions": {
+    "1_mesh_independence": {
+      "met": true,
+      "detail": {
+        "all_three_levels_ran_at_every_mach": true,
+        "cd_fore_gci_fine_max": 0.0036334000253086694,
+        "cd_fore_fine_medium_change_max": 0.001506236557557806,
+        "cd_fore_convergence_types": [
+          "monotone"
+        ],
+        "standoff_gci_fine_max": 0.010252838405188085,
+        "standoff_convergence_types": [
+          "monotone"
+        ]
+      }
+    },
+    "2_force_convergence": {
+      "met": false,
+      "detail": {
+        "cd_fore_converged": {
+          "sphere_M3_coarse": true,
+          "sphere_M3_medium": true,
+          "sphere_M3_fine": false,
+          "sphere_M6_coarse": true,
+          "sphere_M6_medium": true,
+          "sphere_M6_fine": false
+        }
+      }
+    },
+    "3_published_benchmark": {
+      "met": true,
+      "detail": {
+        "like_for_like_all_within_tolerance": true,
+        "like_for_like_misses": [],
+        "not_like_for_like_misses": []
+      }
+    },
+    "4_model_limitations_documented": {
+      "met": true,
+      "detail": {
+        "document": "docs/validation/M2_model_form_limits.md"
+      }
+    }
+  },
+  "openfoam_version_installed": "v2512",
+  "openfoam_version_required_by_spec": "v2606",
+  "pipeline_demo_status": "SOLVER_FAILED"
+}

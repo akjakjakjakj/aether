@@ -28,40 +28,101 @@ def _cases(study: pd.DataFrame) -> pd.DataFrame:
 
 
 def plot_force_histories(study: pd.DataFrame, run_dir: Path, cfg: dict, run_id: str,
-                         out_dir: Path) -> Path:
-    """C_D history per case, with the declared convergence window and band drawn in."""
+                         out_dir: Path, candidates: pd.DataFrame | None = None) -> Path:
+    """C_D history per case, with the declared convergence window and band drawn in.
+
+    ``candidates`` (every solution that exists, incl. lower-Courant restarts and the cases
+    that did NOT meet the criterion) are all drawn in the bottom row; a case that missed the
+    criterion is drawn in the warning colour and says so in the legend."""
     crit = cfg["convergence_criterion"]
-    machs = sorted(_cases(study)["mach"].unique())
-    fig, axes = plt.subplots(2, len(machs), figsize=(3.9 * len(machs), 5.6), squeeze=False,
-                             sharex="col")
+    cand = _cases(study if candidates is None else candidates)
+    if "is_restart" not in cand:
+        cand = cand.assign(is_restart=False, max_co=float(cfg["solver"]["max_co"]))
+    machs = sorted(cand["mach"].unique())
+    tail = 2 * int(crit["window_iterations"])
+    fig, axes = plt.subplots(2, len(machs), figsize=(4.6 * len(machs), 6.6), squeeze=False)
     for j, mach in enumerate(machs):
         ax, axz = axes[0, j], axes[1, j]
-        for _, c in _cases(study)[study["mach"] == mach].iterrows():
+        for _, c in cand[cand["mach"] == mach].iterrows():
             h = pd.read_csv(run_dir / c["case"] / "force_history.csv")
             ls, col = LEVEL_STYLE[c["level"]]
-            frac = h["iteration"] / h["iteration"].iloc[-1]
-            lbl = f"{c['level']} ({int(c['n_cells']):,} cells, {int(c['n_iterations']):,} it.)"
-            ax.plot(frac, h["cd_total"], ls, color=col, lw=1.2, label=lbl)
-            axz.plot(frac, 100.0 * (h["cd_total"] / c["cd_total"] - 1.0), ls, color=col, lw=1.2)
-            w0 = 1.0 - crit["window_iterations"] / h["iteration"].iloc[-1]
-            axz.axvline(w0, color=col, ls=ls, lw=0.6, alpha=0.6)
+            met = bool(c["cd_fore_converged"])
+            if c["is_restart"]:       # of the restarts, the largest Courant number is solid
+                first = c["max_co"] == cand[(cand["mach"] == mach) & cand["is_restart"]][
+                    "max_co"].max()
+                ls, col = ("-" if first else "-."), ((ACCENT if first else INK) if met else HOT)
+            elif not met:
+                col = HOT
+            if not c["is_restart"]:
+                frac = h["iteration"] / h["iteration"].iloc[-1]
+                ax.plot(frac, h["cd_total"], ls, color=col, lw=1.2,
+                        label=f"{c['level']} ({int(c['n_cells']):,} cells, "
+                              f"{int(c['n_iterations']):,} it.)"
+                              + ("" if met else " - criterion NOT MET"))
+            t = h[h["iteration"] >= h["iteration"].iloc[-1] - tail]
+            axz.plot(t["iteration"] - h["iteration"].iloc[-1],
+                     100.0 * (t["cd_total"] / c["cd_total"] - 1.0), ls, color=col,
+                     lw=0.9 if met else 0.6, alpha=1.0 if met else 0.75,
+                     label=f"{c['level']}, max Co {c['max_co']:g}: p-p "
+                           f"{100 * c['cd_fore_peak_to_peak_rel']:.3f}% - "
+                           + ("met" if met else "NOT MET"))
         band = 50.0 * crit["max_peak_to_peak_rel"]
-        axz.axhspan(-band, band, color=ACCENT, alpha=0.25,
+        axz.axhspan(-band, band, color=MUTED, alpha=0.18,
                     label=f"declared band: peak-to-peak ≤ {100 * crit['max_peak_to_peak_rel']:g}%")
-        axz.set_ylim(-1.0, 1.0)
+        axz.axvline(-crit["window_iterations"], color=MUTED, lw=0.7, ls=":")
+        axz.set_ylim(-0.3, 0.3)
         ax.set_ylim(0.0, 1.6)
         ax.set_title(f"sphere, $M_\\infty$ = {mach:g}")
         ax.set_ylabel("forebody drag coefficient  $C_D$  [-]")
+        ax.set_xlabel("fraction of the case's iterations  [-]")
         axz.set_ylabel("$C_D$ deviation from final-window mean  [%]")
-        axz.set_xlabel("fraction of the run's iterations  [-]")
+        axz.set_xlabel("iterations before the end of the case  [-]")
         ax.legend(fontsize=7, loc="lower right")
-        axz.legend(fontsize=7, loc="upper right")
+        axz.legend(fontsize=6, loc="upper center", bbox_to_anchor=(0.5, -0.2), ncol=1)
     fig.tight_layout()
     return _save(fig, out_dir, "M2_force_convergence",
                  f"AETHER M2 · run {run_id} · rhoCentralFoam, Euler, local time stepping. "
-                 f"Top: full history, axis from zero. Bottom: zoom on ±1% about the mean of "
-                 f"the last {crit['window_iterations']} iterations; vertical lines mark where "
-                 f"each level's assessment window starts.")
+                 f"Top: full history of the original cases, axis from zero. Bottom: EVERY "
+                 f"solution (originals and lower-Courant restarts), last {tail} iterations, "
+                 f"±0.3% about the mean of the last {crit['window_iterations']} iterations "
+                 f"(right of the dotted line = judged window). Cases that did not meet the "
+                 f"declared criterion are drawn in the warning colour and labelled NOT MET.")
+
+
+def plot_limit_cycle(diagnostics: list[tuple[str, float, dict, pd.DataFrame, pd.DataFrame]],
+                     run_id: str, out_dir: Path) -> Path:
+    """Where the fine-mesh C_D limit cycle lives. One column per diagnosed case:
+    (case name, Mach, summary, per-cell table, every-iteration force history)."""
+    n = len(diagnostics)
+    fig, axes = plt.subplots(2, n, figsize=(4.8 * n, 7.4), squeeze=False,
+                             gridspec_kw={"height_ratios": [2.2, 1.0]})
+    for j, (case, mach, summ, cells, hist) in enumerate(diagnostics):
+        ax, axh = axes[0, j], axes[1, j]
+        rel = np.maximum(cells["p_std_over_p_inf"] / cells["p_mean_over_p_inf"], 1e-7)
+        sc = ax.scatter(cells["x_m"], cells["r_m"], c=np.log10(rel), s=0.5, cmap="cividis",
+                        vmin=-6.0, vmax=-1.5, rasterized=True)
+        fig.colorbar(sc, ax=ax, shrink=0.8,
+                     label="log$_{10}$( std of $p$ over the cycle / mean $p$ )  [-]")
+        ax.set_aspect("equal")
+        ax.set_xlabel("axial position  $x$  [m]")
+        ax.set_ylabel("radius  $r$  [m]")
+        ax.set_title(f"{case}, $M_\\infty$ = {mach:g}", fontsize=9)
+        fc = summ["force_cycle_every_iteration"]
+        axh.plot(hist["iteration"] - hist["iteration"].iloc[0],
+                 100.0 * (hist["cd_fore"] / fc["mean"] - 1.0), color=INK, lw=0.9)
+        axh.axhline(0.0, color=MUTED, lw=0.6)
+        axh.set_xlabel(f"iterations after iteration {summ['source_iteration']:,}  [-]")
+        axh.set_ylabel("$C_D$ deviation from mean  [%]")
+        axh.set_title(f"period ≈ {fc['dominant_period_iterations']:.0f} iterations "
+                      f"= {fc['dominant_period_cell_transit_times']:.1f} cell-transit times; "
+                      f"peak-to-peak {100 * fc['peak_to_peak_rel']:.2f}%", fontsize=8)
+    fig.tight_layout()
+    return _save(fig, out_dir, "M2_limit_cycle",
+                 f"AETHER M2 · run {run_id} · the original fine cases (max Courant 0.2), "
+                 f"continued for a few periods with the pressure field written every 2 "
+                 f"iterations and the force every iteration. Top: relative pressure "
+                 f"fluctuation per cell (log colour scale, legend on the bar). Bottom: "
+                 f"forebody C_D sampled every iteration.")
 
 
 def plot_residuals(study: pd.DataFrame, run_dir: Path, run_id: str, out_dir: Path) -> Path:
@@ -74,17 +135,20 @@ def plot_residuals(study: pd.DataFrame, run_dir: Path, run_id: str, out_dir: Pat
             h = pd.read_csv(run_dir / c["case"] / "force_history.csv")
             ls, col = LEVEL_STYLE[c["level"]]
             r = h["mean_abs_drho_dtau_kg_m3_s"]
-            ax.semilogy(h["iteration"] / h["iteration"].iloc[-1], r / r.iloc[0], ls, color=col,
-                        lw=1.0, label=c["level"])
+            met = bool(c.get("cd_fore_converged", True))
+            ax.semilogy(h["iteration"] / h["iteration"].iloc[-1], r / r.iloc[0], ls,
+                        color=col if met else HOT, lw=1.0,
+                        label=c["level"] + ("" if met else " (force criterion NOT met)"))
         ax.set_title(f"sphere, $M_\\infty$ = {mach:g}")
         ax.set_xlabel("fraction of the run's iterations  [-]")
         ax.legend(fontsize=7)
     axes[0, 0].set_ylabel("volume-mean $|\\partial\\rho/\\partial\\tau|$ / initial value  [-]")
     fig.tight_layout()
     return _save(fig, out_dir, "M2_residuals",
-                 f"AETHER M2 · run {run_id}. Steady-state density residual in local pseudo-time "
-                 f"τ, normalised by its first recorded value. rhoCentralFoam's explicit "
-                 f"(diagonal) solves report no linear-solver residual, so this is the "
+                 f"AETHER M2 · run {run_id}. ORIGINAL cases (max Courant 0.2; the lower-Courant "
+                 f"restarts are in the report's table). Steady-state density residual in local "
+                 f"pseudo-time τ, normalised by its first recorded value. rhoCentralFoam's "
+                 f"explicit (diagonal) solves report no linear-solver residual, so this is the "
                  f"residual of record.")
 
 
@@ -94,7 +158,7 @@ def plot_mesh_convergence(study: pd.DataFrame, gci: pd.DataFrame, run_id: str,
                   ("standoff_over_max_radius", "shock stand-off  $\\Delta/R$  [-]"),
                   ("p_stag_over_p_inf", "stagnation pressure  $p_0/p_\\infty$  [-]")]
     machs = sorted(_cases(study)["mach"].unique())
-    fig, axes = plt.subplots(len(machs), 3, figsize=(10.0, 3.1 * len(machs)), squeeze=False)
+    fig, axes = plt.subplots(len(machs), 3, figsize=(10.0, 3.9 * len(machs)), squeeze=False)
     for i, mach in enumerate(machs):
         g = _cases(study)[study["mach"] == mach].sort_values("h_m")
         h_rel = g["h_m"] / g["h_m"].min()
@@ -114,10 +178,12 @@ def plot_mesh_convergence(study: pd.DataFrame, gci: pd.DataFrame, run_id: str,
             ax.set_xlabel("relative cell size  $h/h_{fine}$  [-]")
             ax.set_ylabel(label)
             ax.set_title(f"$M_\\infty$ = {mach:g}", fontsize=9)
-            ax.legend(fontsize=6.5)
+            ax.legend(fontsize=6.5, loc="upper center", bbox_to_anchor=(0.5, -0.24))
     fig.tight_layout()
     return _save(fig, out_dir, "M2_mesh_convergence",
-                 f"AETHER M2 · run {run_id} · sphere, three geometrically similar meshes, "
+                 f"AETHER M2 · run {run_id} · fine level = solution of record "
+                 f"({', '.join(_cases(study)[study['level'] == 'fine']['case'])}) · "
+                 f"sphere, three geometrically similar meshes, "
                  f"refinement ratio 2. Procedure of Celik et al. (2008). The y-axes are "
                  f"deliberately zoomed to the variation between meshes; the absolute values "
                  f"are in the report's tables.")
@@ -181,9 +247,13 @@ def plot_flow_field(fields: pd.DataFrame, outline_xr: tuple[np.ndarray, np.ndarr
     """Density field in the meridional plane, optionally with Billig's shock shape."""
     import matplotlib.tri as mtri
 
-    fig, ax = plt.subplots(figsize=(7.2, 4.2))
-    tri = mtri.Triangulation(fields["x_m"], fields["r_m"])
     xb, rb = outline_xr
+    x_lo = fields["x_m"].min()
+    x_hi = min(fields["x_m"].max(), xb.max() + 2.5 * rb.max())
+    r_hi = min(fields["r_m"].max(), 3.2 * rb.max())
+    # figure width follows the domain's aspect ratio, so an equal-aspect axes fills it
+    fig, ax = plt.subplots(figsize=(max(4.6, 4.2 * (x_hi - x_lo) / r_hi + 2.4), 5.0))
+    tri = mtri.Triangulation(fields["x_m"], fields["r_m"])
     # mask triangles whose centroid falls inside the body
     cx = fields["x_m"].to_numpy()[tri.triangles].mean(axis=1)
     cr = fields["r_m"].to_numpy()[tri.triangles].mean(axis=1)
@@ -202,8 +272,8 @@ def plot_flow_field(fields: pd.DataFrame, outline_xr: tuple[np.ndarray, np.ndarr
         ax.legend(fontsize=7, loc="upper left", frameon=True, facecolor="white",
                   edgecolor="none")
     ax.set_aspect("equal")
-    ax.set_xlim(fields["x_m"].min(), min(fields["x_m"].max(), xb.max() + 2.5 * rb.max()))
-    ax.set_ylim(0.0, min(fields["r_m"].max(), 3.2 * rb.max()))
+    ax.set_xlim(x_lo, x_hi)
+    ax.set_ylim(0.0, r_hi)
     ax.set_xlabel("axial position  $x$  [m]")
     ax.set_ylabel("radius  $r$  [m]")
     ax.set_title(title)

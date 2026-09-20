@@ -1,0 +1,25 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      sampleBody;
+}
+// AETHER template - upper-case placeholders between at-signs are filled by aether.cfd.case.
+
+type            surfaces;
+libs            (sampling);
+interpolationScheme cell;
+surfaceFormat   raw;
+fields          (p);
+
+surfaces
+{
+    body
+    {
+        type        patch;
+        patches     (body_fore);
+        interpolate false;
+        triangulate false;
+    }
+}

@@ -1,0 +1,196 @@
+{
+  "gate": "G4",
+  "status": "PASS",
+  "conditions": {
+    "1_mesh_independence": {
+      "met": true,
+      "detail": {
+        "all_three_levels_ran_at_every_mach": true,
+        "cd_fore_gci_fine_max": 0.001867030494316074,
+        "cd_fore_fine_medium_change_max": 0.0012467196520378457,
+        "cd_fore_convergence_types": [
+          "monotone"
+        ],
+        "standoff_gci_fine_max": 0.010114424486746444,
+        "standoff_convergence_types": [
+          "monotone"
+        ]
+      }
+    },
+    "2_force_convergence": {
+      "met": true,
+      "detail": {
+        "cd_fore_converged": {
+          "sphere_M3_coarse": true,
+          "sphere_M3_medium": true,
+          "sphere_M3_fine_Co0p1": true,
+          "sphere_M6_coarse": true,
+          "sphere_M6_medium": true,
+          "sphere_M6_fine_Co0p1": true
+        },
+        "all_candidate_solutions": [
+          {
+            "case": "sphere_M3_coarse",
+            "mach": 3.0,
+            "level": "coarse",
+            "max_co": 0.2,
+            "is_restart": false,
+            "status": "OK",
+            "cd_fore": 0.8444017431768727,
+            "cd_fore_converged": true,
+            "cd_fore_peak_to_peak_rel": 0.00048470079574490705,
+            "cd_fore_drift_rel": 4.6332576694526066e-05,
+            "n_iterations": 15000
+          },
+          {
+            "case": "sphere_M3_medium",
+            "mach": 3.0,
+            "level": "medium",
+            "max_co": 0.2,
+            "is_restart": false,
+            "status": "OK",
+            "cd_fore": 0.8461282616531345,
+            "cd_fore_converged": true,
+            "cd_fore_peak_to_peak_rel": 0.0007633476996629906,
+            "cd_fore_drift_rel": 2.7636163121338493e-05,
+            "n_iterations": 20000
+          },
+          {
+            "case": "sphere_M3_fine",
+            "mach": 3.0,
+            "level": "fine",
+            "max_co": 0.2,
+            "is_restart": false,
+            "status": "OK",
+            "cd_fore": 0.847213070571906,
+            "cd_fore_converged": false,
+            "cd_fore_peak_to_peak_rel": 0.0028204583842054557,
+            "cd_fore_drift_rel": 7.076763565031402e-06,
+            "n_iterations": 100000
+          },
+          {
+            "case": "sphere_M3_fine_Co0p1",
+            "mach": 3.0,
+            "level": "fine",
+            "max_co": 0.1,
+            "is_restart": true,
+            "status": "OK",
+            "cd_fore": 0.8469180989657618,
+            "cd_fore_converged": true,
+            "cd_fore_peak_to_peak_rel": 0.0003265354110450587,
+            "cd_fore_drift_rel": 1.593890273361108e-06,
+            "n_iterations": 110000
+          },
+          {
+            "case": "sphere_M3_fine_Co0p05",
+            "mach": 3.0,
+            "level": "fine",
+            "max_co": 0.05,
+            "is_restart": true,
+            "status": "OK",
+            "cd_fore": 0.846920791930521,
+            "cd_fore_converged": true,
+            "cd_fore_peak_to_peak_rel": 0.00010718634207269039,
+            "cd_fore_drift_rel": 9.328556292107468e-06,
+            "n_iterations": 110000
+          },
+          {
+            "case": "sphere_M6_coarse",
+            "mach": 6.0,
+            "level": "coarse",
+            "max_co": 0.2,
+            "is_restart": false,
+            "status": "OK",
+            "cd_fore": 0.8689038737159874,
+            "cd_fore_converged": true,
+            "cd_fore_peak_to_peak_rel": 0.0002977691740565481,
+            "cd_fore_drift_rel": 3.114161099000784e-05,
+            "n_iterations": 10000
+          },
+          {
+            "case": "sphere_M6_medium",
+            "mach": 6.0,
+            "level": "medium",
+            "max_co": 0.2,
+            "is_restart": false,
+            "status": "OK",
+            "cd_fore": 0.870898409245509,
+            "cd_fore_converged": true,
+            "cd_fore_peak_to_peak_rel": 0.0009098270241342604,
+            "cd_fore_drift_rel": 1.769363223148516e-05,
+            "n_iterations": 20000
+          },
+          {
+            "case": "sphere_M6_fine",
+            "mach": 6.0,
+            "level": "fine",
+            "max_co": 0.2,
+            "is_restart": false,
+            "status": "OK",
+            "cd_fore": 0.872212167097538,
+            "cd_fore_converged": false,
+            "cd_fore_peak_to_peak_rel": 0.002228636657372806,
+            "cd_fore_drift_rel": 1.6354529371832627e-05,
+            "n_iterations": 100000
+          },
+          {
+            "case": "sphere_M6_fine_Co0p1",
+            "mach": 6.0,
+            "level": "fine",
+            "max_co": 0.1,
+            "is_restart": true,
+            "status": "OK",
+            "cd_fore": 0.8719855307429789,
+            "cd_fore_converged": true,
+            "cd_fore_peak_to_peak_rel": 0.0007672609152564633,
+            "cd_fore_drift_rel": 1.5188178452181947e-05,
+            "n_iterations": 110000
+          },
+          {
+            "case": "sphere_M6_fine_Co0p05",
+            "mach": 6.0,
+            "level": "fine",
+            "max_co": 0.05,
+            "is_restart": true,
+            "status": "OK",
+            "cd_fore": 0.8719794117807054,
+            "cd_fore_converged": true,
+            "cd_fore_peak_to_peak_rel": 0.00037760529028129264,
+            "cd_fore_drift_rel": 3.4337619889867695e-06,
+            "n_iterations": 110000
+          }
+        ],
+        "solutions_of_record": [
+          "sphere_M3_coarse",
+          "sphere_M3_medium",
+          "sphere_M3_fine_Co0p1",
+          "sphere_M6_coarse",
+          "sphere_M6_medium",
+          "sphere_M6_fine_Co0p1"
+        ],
+        "criterion": {
+          "window_iterations": 2000,
+          "max_peak_to_peak_rel": 0.001,
+          "max_drift_rel": 0.0002
+        }
+      }
+    },
+    "3_published_benchmark": {
+      "met": true,
+      "detail": {
+        "like_for_like_all_within_tolerance": true,
+        "like_for_like_misses": [],
+        "not_like_for_like_misses": []
+      }
+    },
+    "4_model_limitations_documented": {
+      "met": true,
+      "detail": {
+        "document": "docs/validation/M2_model_form_limits.md"
+      }
+    }
+  },
+  "openfoam_version_installed": "v2512",
+  "openfoam_version_required_by_spec": "v2606",
+  "pipeline_demo_status": "OK"
+}

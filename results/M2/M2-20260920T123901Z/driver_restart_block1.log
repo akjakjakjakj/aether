@@ -1,0 +1,10 @@
+AETHER M2 CFD validation   run=M2-20260920T123901Z   OpenFOAM=v2512
+sphere_M3_fine_Co0p05: OK converged=True
+sphere_M6_fine_Co0p05: OK converged=True
+sphere_M3_fine_Co0p1: OK converged=True
+sphere_M6_fine_Co0p1: OK converged=True
+                    case status  max_co   cd_fore  cd_fore_converged  cd_fore_peak_to_peak_rel  cd_fore_drift_rel
+0   sphere_M3_fine_Co0p1     OK    0.10  0.846929               True                  0.000439           0.000004
+1  sphere_M3_fine_Co0p05     OK    0.05  0.846911               True                  0.000181           0.000010
+2   sphere_M6_fine_Co0p1     OK    0.10  0.871978               True                  0.000557           0.000022
+3  sphere_M6_fine_Co0p05     OK    0.05  0.871961               True                  0.000479           0.000007

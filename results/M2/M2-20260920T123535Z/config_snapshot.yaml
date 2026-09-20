@@ -1,0 +1,108 @@
+_meta:
+  run_id: M2-20260920T123535Z
+  config_hash: 521e0e2f33b8
+  git_commit: 046e0a1
+  git_dirty: true
+  created_utc: '2026-09-20T12:35:37+00:00'
+  aether_version: 0.1.0
+  notes: M2 CFD validation; OpenFOAM v2512
+config:
+  meta:
+    name: cfd_validation
+    milestone: M2
+    description: Sphere in supersonic perfect-gas flow; mesh independence; pipeline
+      demo.
+  openfoam:
+    required_by_spec: v2606
+  gas:
+    model: calorically_perfect
+    gamma: 1.4
+    pressure_pa: 1000.0
+    temperature_k: 220.0
+  solver:
+    application: rhoCentralFoam
+    equations: euler
+    flux_scheme: Kurganov
+    limiter: vanLeer
+    max_co: 0.2
+    rdeltat_smoothing: 0.02
+    force_interval: 5
+    n_ranks: 1
+    n_iterations:
+      1: 10000
+      2: 20000
+      4: 40000
+  convergence_criterion:
+    window_iterations: 2000
+    max_peak_to_peak_rel: 0.001
+    max_drift_rel: 0.0002
+  mesh:
+    n_body_cells_base: 64
+    n_radial_cells_base: 48
+    cells_per_block_base: 4
+    refinement_factors:
+    - 1
+    - 2
+    - 4
+    radial_expansion_ratio: 4.0
+    standoff_margin: 2.0
+    asymptote_margin_deg: 6.0
+    wake_length_diameters: 3.0
+    wedge_angle_deg: 5.0
+    extent: forebody
+  mesh_independence:
+    max_gci_fine_cd_rel: 0.02
+    max_fine_medium_change_cd_rel: 0.01
+  benchmark:
+    body: sphere
+    radius_m: 0.5
+    mach_numbers:
+    - 3.0
+    - 6.0
+    reference_data: data/reference/sphere_supersonic.yaml
+    tolerances:
+      stagnation_pressure_rel:
+        value: 0.01
+        basis: Exact perfect-gas relation (Rayleigh pitot); only discretisation error
+          remains.
+      standoff_vs_van_dyke_gordon_rel:
+        value: 0.05
+        basis: 'Like-for-like inviscid perfect-gas numerical reference (NASA TR R-1),
+          tabulated to 3 significant figures; 5% allows for shock-capturing smearing
+          of about one cell.
+
+          '
+      standoff_vs_billig_rel:
+        value: 0.1
+        basis: 'Empirical correlation of experimental data. No stated accuracy could
+          be verified from a fetched source, so 10% is a project choice, not a literature
+          value.
+
+          '
+      forebody_cd_vs_clark_rel:
+        value: 0.03
+        basis: Pressure-only forebody drag; like-for-like with an Euler forebody integral.
+      total_cd_vs_bailey_hiatt_rel:
+        value: 0.05
+        basis: 'Free-flight total drag at Re ~ 1e4 includes skin friction and a viscous
+          wake that an Euler computation does not model; +/-2% experimental uncertainty.
+          NOT like-for-like.
+
+          '
+      mach_match_abs:
+        value: 0.2
+        basis: Largest accepted |M_cfd - M_reference| when pairing with a tabulated
+          row.
+  negative_cases:
+    full_body_sphere:
+      mach: 3.0
+      refinement_factor: 1
+  pipeline_demo:
+    mach: 6.0
+    refinement_factor: 2
+    nose_radius_m: 0.6
+    diameter_m: 1.2
+    cone_half_angle_deg: 60.0
+    shoulder_radius_m: 0.06
+    aft_cone_angle_deg: 30.0
+    base_radius_m: 0.3

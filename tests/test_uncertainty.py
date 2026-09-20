@@ -256,8 +256,17 @@ def test_fidelity0_skips_the_cfd_terms_and_says_which(model):
     assert "cd_fidelity0_judgment" in model.names
 
 
-def test_the_run_refuses_when_the_gci_term_is_unavailable(design_space):
-    """A-CFD-9: sampling the discretisation band RAISES rather than silently becoming 0."""
+def test_the_run_refuses_when_the_gci_term_is_unavailable(design_space, monkeypatch):
+    """A-CFD-9: sampling the discretisation band RAISES rather than silently becoming 0.
+
+    Hermetic since 2026-09-21: the test used to read the live `results/M2/`, so it started
+    failing the moment M2 produced a three-level GCI (i.e. when the band became available,
+    which is the behaviour working). The 'no GCI yet' state is now constructed."""
+    import src.aether.uncertainty.inputs as uq_inputs
+
+    monkeypatch.setattr(uq_inputs, "discretisation_band",
+                        lambda level, *a, **k: {"available": False, "rel_band": None,
+                                                "source": None, "mesh_level": level})
     study = load_config(UQ_CONFIG)
     base = copy.deepcopy(design_space.base_config)
     base["vehicle"]["aero"] = {"model": "cfd_surface_v1", "allow_provisional": True}

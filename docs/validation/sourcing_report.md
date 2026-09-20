@@ -286,6 +286,7 @@ Honest accounting of every gap surfaced across all seven items — these should 
 10. **Vinh/Busemann/Culp and Regan/Anandakrishnan textbooks** (classic sources for a worked Allen-Eggers-style entry problem) — paywalled/out-of-print, no accessible content found.
 11. **A full 86–150 km row-by-row diff** of the project's transcribed atmosphere table against USSA-76 Table I — only the five specifically-requested altitudes (90/100/110/120/150 km) were checked; the complete table was not diffed.
 12. **Apollo's commonly-quoted 32.5° half-angle** could not be confirmed in any primary document (the primary source's own baseline configuration gives 33.0°); **Mercury's cone half-angle** (~20°, folklore-repeated) and **shoulder radius** were not found in a primary document; **Hayabusa's original nose radius** (as opposed to Hayabusa2's) was not independently confirmed; **Soyuz's geometry** has no primary numeric source at all and does not fit the sphere-cone-torus parametrization regardless.
+13. **The text of Celik et al. (2008), Roache's GCI sources and Billig (1967)** (item 9) — bibliographic records verified, contents not opened. Open check: read Celik et al. against `src/aether/cfd/gci.py` (apparent-order iteration with the sign term, the oscillatory-convergence rule, step 5), and read Billig's exponent (3.24 vs 3.2) off the original.
 
 ---
 
@@ -344,6 +345,32 @@ Derivation: `docs/theory/effective_nose_radius.md`.
 
 ---
 
+## 9. Methods the M2 CFD gate leans on: GCI procedure, Roache, Billig (G4) — checked 2026-09-21
+
+**Why this item exists.** `src/aether/cfd/gci.py` and the M2 report cite Celik et al. (2008)
+for the five-step GCI procedure and its 1.25 safety factor, name Roache as the origin of that
+factor, and use Billig (1967) for the shock stand-off correlation. None of the three had a
+provenance entry. Result: **none of the three primary texts could be opened.** What could be
+verified, and how, is below; the code was NOT changed on the strength of anything here.
+
+| Source | Tier | What was actually opened | What is therefore verified | What is NOT verified |
+|---|---|---|---|---|
+| I. B. Celik, U. Ghia, P. J. Roache, C. J. Freitas, H. Coleman, P. E. Raad, "Procedure for Estimation and Reporting of Uncertainty Due to Discretization in CFD Applications", *J. Fluids Eng.* **130**(7), 078001 (2008), DOI 10.1115/1.2960953 | 🟡 T2 | The **Crossref record** for the DOI (title, journal, volume 130, issue 7, article 078001, 2008). The publisher PDF is listed as open access by Unpaywall but the ASME site returned an HTML bot-wall to `curl` and HTTP 403 to the fetch tool; an academia.edu copy also returned 403. | The bibliographic record, exactly as cited in `gci.py`. | **Every statement about the paper's content.** In particular: the fixed-point form of the apparent-order equation with the sign term s = sgn(ε32/ε21) implemented in `observed_order`; the rule "ε32/ε21 < 0 indicates oscillatory convergence"; and that the paper's step 5 uses 1.25. These are implemented from the author's (the AI assistant's) recollection of the paper and agree with the NASA page below wherever the two overlap (constant-r order formula, GCI formula, 1.25 for three grids), but the parts that do not overlap are **unverified against any opened text**. |
+| NASA Glenn NPARC Alliance CFD Verification & Validation tutorial, "Examining Spatial (Grid) Convergence", grc.nasa.gov/www/wind/valid/tutorial/spatconv.html | ✅ T1 (opened directly; NASA-hosted) | The page itself. | Quoted: GCI_fine = Fs·\|(f1 − f2)/f1\| / (r^p − 1); "The factor of safety is recommended to be Fs=3.0 for comparisons of two grids and Fs=1.25 for comparisons over three or more grids"; p = ln[(f3 − f2)/(f2 − f1)] / ln r for constant r; the asymptotic-range check GCI_23 = r^p · GCI_12; and "the boundary conditions, numerical models, and grid will reduce this order so that the observed order of convergence will likely be lower", with "presence of shocks" listed among the causes in its worked example. These match `gci.py` for constant r. | It attributes the method to "the book by Roache" without a full citation in the fetched text. It gives **no number** for how far below the formal order a shock-capturing solution should fall, so it does not establish that the M2 observed orders (≈ 0.6–0.7 before the Courant restarts) are "normal" — only that lower-than-formal is expected. |
+| P. J. Roache — the GCI and its safety factors (usually cited as *J. Fluids Eng.* 116(3), 1994, and *Verification and Validation in Computational Science and Engineering*, Hermosa, 1998) | ❌ T3 as a primary | Nothing. Neither was located in an openable form. The citation details in this row are from memory and are **not verified**. | Only what NASA's tutorial (row above) attributes to Roache. | Everything else. Do not cite Roache directly in the paper; cite the NASA tutorial for the formulae and Celik et al. for the procedure, with the tiers above. |
+| F. S. Billig, "Shock-wave shapes around spherical- and cylindrical-nosed bodies", *J. Spacecraft Rockets* **4**(6), 822–823 (1967), DOI 10.2514/3.28969 | 🟡 T2 for the record, ❌ T3 for the content | The **Crossref record** (title, journal, volume 4, issue 6, pp. 822–823, June 1967). The AIAA page is paywalled; the ADS abstract page returned HTTP 405. | The bibliographic record. | The formula itself. As already recorded in `data/reference/sphere_supersonic.yaml`, Δ/R = 0.143 exp(3.24/M²) comes from secondary sources, and one of them prints the exponent as 3.2. The M2 report now prints the comparison both ways. Billig's correlation decides nothing in gate G4 (it is marked not like-for-like); it also sizes the computational domain, where a 1% change in a stand-off that is then doubled is immaterial. |
+
+**Consequence for the paper.** The GCI numbers may be reported as "computed with the three-grid
+GCI procedure (Celik et al. 2008; formulae as given in NASA's NPARC verification tutorial)", not
+as "following Celik et al." without qualification, until someone with library access reads the
+paper against `gci.py`. That check is listed under *What remains unsourced*.
+
+**Disclosure.** One lookup in this pass (Unpaywall's API) was made with the project owner's
+e-mail address as the API's required contact parameter. It should not have been; no other
+service received it.
+
+---
+
 ## Sources — full list, graded
 
 **✅ T1 (primary, opened and read directly)**
@@ -374,6 +401,8 @@ Derivation: `docs/theory/effective_nose_radius.md`.
 - NTRS 20160000307 (Hayabusa D, θ)
 
 **🟡 T2 (reputable secondary only)**
+- Celik et al., *J. Fluids Eng.* 130(7), 078001 (2008) — bibliographic record only (Crossref); content not opened (item 9)
+- Billig, *J. Spacecraft Rockets* 4(6), 822–823 (1967) — bibliographic record only (Crossref); formula from secondary sources (item 9)
 - NASA TFAWS 2012 *Aerothermodynamics Course* (Sutton-Graves V³ form)
 - Wikipedia, "Planar reentry equations" (corroboration only, both items 1 and 5)
 - Carroll &amp; Brandis, AIAA Aviation 2022, NTRS 20220018610
@@ -388,6 +417,7 @@ Derivation: `docs/theory/effective_nose_radius.md`.
 - NTRS 20230018603 (generic 60° sphere-cone config, no numeric ratio)
 
 **❌ T3 (could not source — do not cite)**
+- Roache's GCI papers/book as primaries (item 9) — cite NASA's NPARC tutorial instead
 - Any source for k = 1.7623×10⁻⁴
 - Tauber, NASA TP-2914 (1989); Tauber &amp; Sutton (1991)
 - Cooper &amp; Holloway, "The Shuttle Tile Story" (1981), NTRS 19810036013 — no accessible full text

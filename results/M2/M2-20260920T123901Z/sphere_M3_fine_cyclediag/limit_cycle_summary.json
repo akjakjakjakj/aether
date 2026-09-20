@@ -1,0 +1,44 @@
+{
+  "source_case": "sphere_M3_fine",
+  "source_iteration": 100000,
+  "n_snapshots": 100,
+  "snapshot_interval_iterations": 2,
+  "n_cells": 49152,
+  "max_cell_p_peak_to_peak_over_p_inf": 0.313175706,
+  "max_cell_location_x_m": 0.05525433112,
+  "max_cell_location_r_m": 0.2288065596,
+  "max_cell_mean_p_over_p_inf": 9.45948569013,
+  "cells_holding_50pct_of_variance": 5403,
+  "cells_holding_90pct_of_variance": 18132,
+  "fraction_of_cells_holding_90pct_of_variance": 0.368896484375,
+  "top90_x_range_m": [
+    -0.1065725312,
+    0.4945551826
+  ],
+  "top90_r_range_m": [
+    0.002054609734,
+    0.7118089115
+  ],
+  "top90_polar_angle_from_axis_deg_range": [
+    1.4266716414336025,
+    131.8329651091147
+  ],
+  "top90_mean_p_over_p_inf_range": [
+    1.3694458954099997,
+    12.041956774999994
+  ],
+  "normal_shock_density_ratio": 3.857142857142857,
+  "force_cycle_every_iteration": {
+    "quantity": "cd_fore",
+    "window_iterations": 200,
+    "sample_interval_iterations": 1.0,
+    "mean": 0.8471959254409017,
+    "peak_to_peak_rel": 0.002615034292095897,
+    "half_peak_to_peak_rel": 0.0013075171460479485,
+    "rms_rel": 0.000708427607608923,
+    "dominant_period_iterations": 33.333333333333336,
+    "dominant_period_power_fraction": 0.5464058388997701,
+    "dominant_period_cell_transit_times": 6.666666666666668,
+    "period_resolved": true
+  }
+}
