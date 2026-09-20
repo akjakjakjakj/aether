@@ -1,0 +1,221 @@
+# AETHER M4 - design space, DOE, sensitivity and optimiser settings.
+#
+# Everything the M4 pipeline decides is decided HERE, before a run, not in source and not
+# after looking at a result: variable ranges, which variables are design variables and
+# which are mission givens, the screening thresholds that freeze a variable, the
+# hypervolume reference point, the evaluation budgets and the seeds.
+#
+# FIDELITY. `base_overrides.vehicle.aero.model` selects the aerodynamic model. `constant`
+# is Fidelity 0 (constant C_D, ASSUMPTIONS A-TRAJ-2): the capsule SHAPE has no aerodynamic
+# consequence, only the diameter acts, through the reference area. Swapping in the M3 CFD
+# response surface is: register the model in src/aether/aerodynamics, change this one
+# line, re-run `make doe` and `make optimize`. Nothing else changes.
+
+meta:
+  name: m4_design_space
+  base_config: configs/baseline.yaml
+  geometry_bounds: configs/geometry_bounds.yaml
+
+base_overrides:
+  vehicle:
+    aero:
+      model: constant
+  limits:
+    # Both added at M4, anticipating metric-gaming (confirmed by the audit's counterfactual); see docs/negative_results.md NR-15
+    # and NR-13 and ASSUMPTIONS A-OPT-5 / A-OPT-6. null would skip them (A-LIM-2).
+    max_bluntness_ratio: 1.2          # R_n / D. Upper edge of the range in which
+                                      # effective_nose_radius_m == nose_radius_m is
+                                      # defensible; PLACEHOLDER, see A-OPT-5.
+    max_heatshield_mass_fraction: 1.0 # logical necessity, not a design judgment: the
+                                      # forebody TPS stack cannot outweigh the vehicle.
+
+# ---------------------------------------------------------------------------------------
+# Variables. `kind`:
+#   direct          value is written to `path`
+#   times_diameter  value * diameter_m is written to `path` (a ratio variable; keeps the
+#                   sampled box mostly geometrically valid and makes size and shape
+#                   separately interpretable)
+# `role`:
+#   design    a quantity the designer chooses; optimised unless screening freezes it
+#   given     a mission given (set by the orbit / the payload). Screened for sensitivity
+#             because M7 needs it as an uncertainty, NEVER optimised. See A-OPT-2.
+#   deferred  a legitimate design variable deliberately held out of M4, reason stated.
+# `bounds_ref` names an entry of geometry_bounds.yaml; the loader refuses a range that
+# leaves it. `reference` is the value used when the variable is frozen and the centre of
+# the one-at-a-time sweeps; the shape references are the Phase-F baseline capsule
+# (geometry/parametric/baseline.yaml) expressed as ratios.
+# ---------------------------------------------------------------------------------------
+variables:
+  diameter_m:
+    kind: direct
+    path: vehicle.geometry.diameter_m
+    units: m
+    role: design
+    bounds_ref: diameter_m
+    min: 0.8
+    max: 4.5          # deliberately ABOVE where the mass-closure constraint binds, so a
+                      # physical constraint and not this box stops the optimiser (A-LIM-3)
+    reference: 1.2
+  bluntness_ratio:
+    kind: times_diameter
+    path: vehicle.geometry.nose_radius_m
+    units: "-"
+    role: design
+    min: 0.25
+    max: 1.35         # above the 1.2 constraint on purpose: the rejected region stays
+                      # visible to the optimiser and in the candidate log
+    reference: 0.5
+  shoulder_ratio:
+    kind: times_diameter
+    path: vehicle.geometry.shoulder_radius_m
+    units: "-"
+    role: design
+    min: 0.02
+    max: 0.10
+    reference: 0.10
+  cone_half_angle_deg:
+    kind: direct
+    path: vehicle.geometry.cone_half_angle_deg
+    units: deg
+    role: design
+    bounds_ref: cone_half_angle_deg
+    min: 20.0
+    max: 70.0
+    reference: 25.0
+  aft_cone_angle_deg:
+    kind: direct
+    path: vehicle.geometry.aft_cone_angle_deg
+    units: deg
+    role: design
+    bounds_ref: aft_cone_angle_deg
+    min: 0.0
+    max: 35.0
+    reference: 20.0
+  fineness_ratio:
+    kind: times_diameter
+    path: vehicle.geometry.length_m
+    units: "-"
+    role: design
+    bounds_ref: fineness_ratio
+    min: 0.5
+    max: 1.2
+    reference: 0.875
+  flight_path_angle_deg:
+    kind: direct
+    path: entry.flight_path_angle_deg
+    units: deg
+    role: design
+    min: -8.0         # the M1 sweep range
+    max: -1.5
+    reference: -3.0
+  entry_velocity_m_s:
+    kind: direct
+    path: entry.velocity_m_s
+    units: m/s
+    role: given
+    min: 7200.0
+    max: 7800.0
+    reference: 7400.0
+  mass_kg:
+    kind: direct
+    path: vehicle.mass_kg
+    units: kg
+    role: given
+    min: 250.0
+    max: 450.0
+    reference: 350.0
+  insulator_thickness_m:
+    kind: direct
+    path: tps.layers.0.thickness_m
+    units: m
+    role: deferred
+    min: 0.010
+    max: 0.030
+    reference: 0.015
+
+objectives:            # both MINIMISED (spec section 3). Never collapsed to one score.
+  - peak_heat_flux_w_m2
+  - peak_bondline_temperature_k
+
+reported_metrics:      # carried on every candidate, NOT optimised
+  - integrated_external_heat_j_m2   # rank-redundant with the bondline peak: TPI study, NR-10
+  - peak_surface_temperature_k
+  - max_g
+  - entry_duration_s
+
+# ---------------------------------------------------------------------------------------
+doe:
+  seed: 20260920
+  workers: 6
+  oat:
+    points_per_variable: 15
+  lhs:
+    n_samples: 3000
+    given_data_bins: 20
+  sobol:
+    # Saltelli sampling needs a rectangular box in which EVERY point can be evaluated. The
+    # full box above is not such a box (many shape combinations are geometrically
+    # invalid), so the variance-based indices are computed on this all-valid sub-box and
+    # the full box is covered by the LHS given-data analysis. Ranges not listed are
+    # unchanged. If any sample in the sub-box is invalid the run stops rather than
+    # estimating indices from a biased subset.
+    n_base: 512            # power of two; total evaluations = n_base * (k + 2)
+    n_bootstrap: 500
+    confidence: 0.95
+    sub_box:
+      bluntness_ratio: {min: 0.25, max: 0.90}
+      cone_half_angle_deg: {min: 60.0, max: 70.0}
+      aft_cone_angle_deg: {min: 0.0, max: 20.0}
+      fineness_ratio: {min: 0.6, max: 1.2}
+  screening:
+    # A `design` variable is FROZEN at its reference value iff both hold:
+    #   - its Sobol total-order index has an upper confidence bound below
+    #     `total_index_threshold` for every objective and every constraint output, AND
+    #   - its given-data first-order index on the geometry-validity indicator has an
+    #     upper confidence bound below `validity_index_threshold` (a variable that moves
+    #     no objective can still decide which designs EXIST).
+    total_index_threshold: 0.01
+    validity_index_threshold: 0.03   # the binned estimator is biased up by ~bins/N
+    outputs:
+      - peak_heat_flux_w_m2
+      - peak_bondline_temperature_k
+      - max_g
+      - heatshield_mass_fraction
+
+# ---------------------------------------------------------------------------------------
+optimize:
+  workers: 6
+  budget_evaluations: 1000        # per (method, seed); identical for every method
+  seeds: [11, 23, 37, 41, 59, 67, 73]
+  hypervolume:
+    # FIXED reference (nadir) and ideal points, set before any optimiser ran. Hypervolume
+    # is reported normalised to the rectangle they span, so it lies in [0, 1].
+    #   bondline axis: the allowable is the largest value a FEASIBLE design can have;
+    #                  the ideal is the TPS initial temperature, which no bondline can
+    #                  go below.
+    #   flux axis:     2.5 MW/m^2 sits above every feasible LHS candidate of the DOE (the
+    #                  run is asserted against this at report time); the ideal is zero.
+    # They move only by an explicit edit here, which invalidates earlier comparisons.
+    reference_point:
+      peak_heat_flux_w_m2: 2.5e+6   # exponent sign required: PyYAML reads '2.5e6' as a string
+      peak_bondline_temperature_k: 450.0
+    ideal_point:
+      peak_heat_flux_w_m2: 0.0
+      peak_bondline_temperature_k: 300.0
+  curve_checkpoints: 40           # hypervolume-vs-evaluations resolution
+  methods:
+    lhs_search:
+      enabled: true
+    nsga2:
+      enabled: true
+      population_size: 40
+    scalarised_de:
+      enabled: true
+      n_weights: 5                # budget is split equally across the weight sweep
+      population_size: 20
+      mutation: [0.5, 1.0]
+      recombination: 0.7
+  exploit_audit:
+    bound_tolerance_fraction: 0.01      # "parked on a bound" = within 1% of the range
+    max_heat_load_fraction_above_86km: 0.05
+    max_bondline_end_rate_k_s: 0.0      # > 0 means the soak-out window closed too early

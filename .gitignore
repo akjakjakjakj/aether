@@ -11,6 +11,9 @@ results/**/*.csv
 results/**/*.png
 results/**/*.pdf
 cfd/generated/
+
+# M2 CFD evidence is small and citable: keep it in git (heavy fields stay in cfd/generated/)
+!results/M2/**/*.csv
 data/raw/
 data/processed/
 .DS_Store

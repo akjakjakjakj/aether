@@ -1,0 +1,237 @@
+_meta:
+  run_id: M4-DOE-20260920T131334Z
+  config_hash: 3515d893e9be
+  git_commit: c238735
+  git_dirty: true
+  created_utc: '2026-09-20T13:13:35+00:00'
+  aether_version: 0.1.0
+  notes: M4 DOE / sensitivity / screening
+config:
+  study:
+    meta:
+      name: m4_design_space
+      base_config: configs/baseline.yaml
+      geometry_bounds: configs/geometry_bounds.yaml
+    base_overrides:
+      vehicle:
+        aero:
+          model: constant
+      limits:
+        max_bluntness_ratio: 1.2
+        max_heatshield_mass_fraction: 1.0
+    variables:
+      diameter_m:
+        kind: direct
+        path: vehicle.geometry.diameter_m
+        units: m
+        role: design
+        bounds_ref: diameter_m
+        min: 0.8
+        max: 4.5
+        reference: 1.2
+      bluntness_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.nose_radius_m
+        units: '-'
+        role: design
+        min: 0.25
+        max: 1.35
+        reference: 0.5
+      shoulder_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.shoulder_radius_m
+        units: '-'
+        role: design
+        min: 0.02
+        max: 0.1
+        reference: 0.1
+      cone_half_angle_deg:
+        kind: direct
+        path: vehicle.geometry.cone_half_angle_deg
+        units: deg
+        role: design
+        bounds_ref: cone_half_angle_deg
+        min: 20.0
+        max: 70.0
+        reference: 25.0
+      aft_cone_angle_deg:
+        kind: direct
+        path: vehicle.geometry.aft_cone_angle_deg
+        units: deg
+        role: design
+        bounds_ref: aft_cone_angle_deg
+        min: 0.0
+        max: 35.0
+        reference: 20.0
+      fineness_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.length_m
+        units: '-'
+        role: design
+        bounds_ref: fineness_ratio
+        min: 0.5
+        max: 1.2
+        reference: 0.875
+      flight_path_angle_deg:
+        kind: direct
+        path: entry.flight_path_angle_deg
+        units: deg
+        role: design
+        min: -8.0
+        max: -1.5
+        reference: -3.0
+      entry_velocity_m_s:
+        kind: direct
+        path: entry.velocity_m_s
+        units: m/s
+        role: given
+        min: 7200.0
+        max: 7800.0
+        reference: 7400.0
+      mass_kg:
+        kind: direct
+        path: vehicle.mass_kg
+        units: kg
+        role: given
+        min: 250.0
+        max: 450.0
+        reference: 350.0
+      insulator_thickness_m:
+        kind: direct
+        path: tps.layers.0.thickness_m
+        units: m
+        role: deferred
+        min: 0.01
+        max: 0.03
+        reference: 0.015
+    objectives:
+    - peak_heat_flux_w_m2
+    - peak_bondline_temperature_k
+    reported_metrics:
+    - integrated_external_heat_j_m2
+    - peak_surface_temperature_k
+    - max_g
+    - entry_duration_s
+    doe:
+      seed: 20260920
+      workers: 6
+      oat:
+        points_per_variable: 15
+      lhs:
+        n_samples: 3000
+        given_data_bins: 20
+      sobol:
+        n_base: 512
+        n_bootstrap: 500
+        confidence: 0.95
+        sub_box:
+          bluntness_ratio:
+            min: 0.25
+            max: 0.9
+          cone_half_angle_deg:
+            min: 60.0
+            max: 70.0
+          aft_cone_angle_deg:
+            min: 0.0
+            max: 20.0
+          fineness_ratio:
+            min: 0.6
+            max: 1.2
+      screening:
+        total_index_threshold: 0.01
+        validity_index_threshold: 0.03
+        outputs:
+        - peak_heat_flux_w_m2
+        - peak_bondline_temperature_k
+        - max_g
+        - heatshield_mass_fraction
+    optimize:
+      workers: 6
+      budget_evaluations: 1000
+      seeds:
+      - 11
+      - 23
+      - 37
+      - 41
+      - 59
+      - 67
+      - 73
+      hypervolume:
+        reference_point:
+          peak_heat_flux_w_m2: 2.5e6
+          peak_bondline_temperature_k: 450.0
+        ideal_point:
+          peak_heat_flux_w_m2: 0.0
+          peak_bondline_temperature_k: 300.0
+      curve_checkpoints: 40
+      methods:
+        lhs_search:
+          enabled: true
+        nsga2:
+          enabled: true
+          population_size: 40
+        scalarised_de:
+          enabled: true
+          n_weights: 5
+          population_size: 20
+          mutation:
+          - 0.5
+          - 1.0
+          recombination: 0.7
+      exploit_audit:
+        bound_tolerance_fraction: 0.01
+        max_heat_load_fraction_above_86km: 0.05
+        max_bondline_end_rate_k_s: 0.0
+  base:
+    meta:
+      name: baseline
+      description: Nominal ballistic entry of a spherically-blunted capsule.
+    vehicle:
+      mass_kg: 350.0
+      cd: 1.2
+      cl: 0.0
+      bank_angle_deg: 0.0
+      geometry:
+        nose_radius_m: 0.6
+        diameter_m: 1.2
+      aero:
+        model: constant
+    entry:
+      altitude_m: 120000.0
+      velocity_m_s: 7400.0
+      flight_path_angle_deg: -3.0
+    tps:
+      emissivity: 0.85
+      t_initial_k: 300.0
+      t_radiation_sink_k: 4.0
+      bondline_after_layer: 0
+      t_bondline_reference_k: 400.0
+      t_penetration_threshold_k: 500.0
+      layers:
+      - name: insulator
+        thickness_m: 0.015
+        conductivity_w_mk: 0.3
+        density_kg_m3: 280.0
+        specific_heat_j_kgk: 1200.0
+        n_cells: 120
+      - name: structure
+        thickness_m: 0.01
+        conductivity_w_mk: 150.0
+        density_kg_m3: 2700.0
+        specific_heat_j_kgk: 900.0
+        n_cells: 20
+    limits:
+      max_g: 12.0
+      max_dynamic_pressure_pa: null
+      t_bondline_allowable_k: 450.0
+      t_surface_allowable_k: null
+      max_bluntness_ratio: 1.2
+      max_heatshield_mass_fraction: 1.0
+    numerics:
+      terminal_altitude_m: 20000.0
+      max_time_s: 3000.0
+      rtol: 1.0e-09
+      atol: 1.0e-09
+      max_step_s: 0.5
+      soak_time_s: 1200.0
+      soak_samples: 400

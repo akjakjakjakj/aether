@@ -6,19 +6,25 @@ Status values are exactly as defined in the specification (§30):
 **`LIMITED` is never reported as `PASS`.** A row is `PASS` only when it has been checked
 against an independent reference, not merely when the code runs.
 
-Last updated: 2026-09-02 · after M1.
+Last updated: 2026-09-20 · after the §44 TPI study, the M8 support package, and the
+sourcing-report closeout of G1A′, G1B and G2.
 
 | Gate | Subsystem | Verification method | Validation source | Tolerance | Status | Evidence |
 |---|---|---|---|---|---|---|
 | G1A | Atmosphere, 0–86 km | Exact integration of the defined USSA-76 layer profile; ideal-gas closure; monotonic density | Published USSA-76 layer-base T and p values | 0.01% on T, 0.1% on p | **PASS** | `tests/test_atmosphere.py::test_layer_boundaries_against_published_table` |
-| G1A′ | Atmosphere, 86–150 km | Log-interpolation of a transcribed table; runtime `extrapolated` flag; refusal above 150 km | Transcribed USSA-76 table, **not yet checked against a primary copy** | — | **LIMITED** | `src/aether/atmosphere/us76.py` `_UPPER_TABLE`; see ASSUMPTIONS A-ATM-2 |
-| G1B | Trajectory | Integrator tolerance convergence; physical-ordering tests (steeper ⇒ shorter and higher g); ballistic-coefficient ordering; no nonphysical states | No independent flight or published trajectory comparison yet | 0.01% on max-g between rtol 1e-8 and 1e-10 | **LIMITED** | `tests/test_trajectory.py` (7 tests). Verified, not validated — no external reference case has been reproduced. |
-| G2 | Aeroheating | Exact V³, √ρ and 1/√R_n scaling; direct reference evaluation; input-domain rejection | NASA TR R-376 cited as the source of the correlation, but the constant has **not** been re-derived from the primary document | 1e-12 on scaling ratios | **LIMITED** | `tests/test_heating.py` (7 tests); see ASSUMPTIONS A-HEAT-1 |
+| G1A′ | Atmosphere, 86–150 km | Log-interpolation of a transcribed table; runtime `extrapolated` flag; refusal above 150 km; row-by-row diff of the transcribed table against a primary copy | **Primary** *U.S. Standard Atmosphere, 1976* (NOAA-S/T 76-1562 / NASA-TM-X-74335), Table I "Geometric Altitude, Metric Units", pp. 68–69, read off 300 dpi page renders — at **90, 100, 110, 120 and 150 km only** | Half of the primary's own printed resolution: 0.005 K on T, 2.5×10⁻⁴ rel. on ρ. **Measured: exact agreement to every printed digit**, T and ρ, at all five altitudes. No table value was changed | **PASS** (transcription, at the five primary-checked altitudes) / **LIMITED** (everything else) | `tests/test_atmosphere.py::test_upper_table_against_primary_ussa76`; see ASSUMPTIONS A-ATM-2. **Still LIMITED for:** the 86, 95 and 130 km rows (no primary value obtained); the pressure column at every altitude; and the log-interpolation *between* rows, which is not the species-diffusion model USSA-76 actually defines above 86 km. NR-14 makes this material — 5–20% of a feasible design's integrated heat load accrues here |
+| G1B | Trajectory | Integrator tolerance convergence; physical-ordering tests (steeper ⇒ shorter and higher g); ballistic-coefficient ordering; no nonphysical states. **Added 2026-09-20:** comparison against an independently-implemented Allen–Eggers closed form under matched assumptions, on three published entry cases | Allen & Eggers, **NACA Report 1381** (1958), NTRS 19930091020 — closed form. Benchmark: **Putnam & Braun, JGCD 38(3) 2015, Table 2 p. 419**, which runs the same three cases through both the closed form and a full numerical integration and publishes the disagreement | **The published disagreement is the expected result**, not zero — Allen–Eggers neglects gravity and holds γ constant, so a correct integrator must disagree, increasingly as entry flattens. Allowance on reproducing each published figure: **1.0 percentage point**, which is the largest residual measured once every published assumption is matched, not a physics tolerance | **PASS** | `tests/test_trajectory_allen_eggers.py` (10 tests) + `tests/test_trajectory.py` (7). **Measured, (AE − numerical)/numerical, ours vs. published:** peak deceleration −5.89% vs −5.1% (γ₀ = −30°), +35.82% vs +34.9% (−8.2°), −58.18% vs −57.3% (−1.35°); velocity at peak −1.78/−2.29/+35.25% vs −1.8/−2.1/+34.9%; altitude at peak +3.56/−4.73/+27.30% vs +3.6/−4.6/+27.0%. Max residual 0.92 points. Matched assumptions: ρ = 1.215 e^(−h/8500), g = 9.81 const., R = 6378 km, L/D = 0, non-rotating (A-ATM-5, A-TRAJ-5) |
+| G2 | Aeroheating — the constant | Exact V³, √ρ and 1/√R_n scaling; direct reference evaluation; input-domain rejection. **Added 2026-09-20:** the constant re-derived from the primary, and TR R-376 eq. (33) evaluated end-to-end in the report's own units (MW/m², atm, m, MJ/kg) | **Primary** NASA TR R-376 (Sutton & Graves, 1971), NTRS 19720003329: eq. (33) p. 13, SYMBOLS units pp. 2–3, K(air) = 0.1113 from Table II p. 39, all read off 300 dpi renders. **The report contains neither the V³ form nor 1.7415×10⁻⁴** | 1e-12 on scaling ratios. On the constant: **the primary's own average correlation error for air, 3.3%** (its Table II) — the tolerance is the source's, not this project's. **Measured: 0.39%** | **PASS** | `tests/test_heating.py` (10 tests); derivation `docs/theory/sutton_graves_constant.md`; decision not to change the value `docs/negative_results.md` NR-12; see ASSUMPTIONS A-HEAT-1 |
+| G2′ | Aeroheating — model form | *Not attempted.* | — | — | **LIMITED** | Catalycity is the largest unquantified term (equilibrium-boundary-layer basis ≈ fully catalytic; catalytic flux reported ~2× non-catalytic, 🟡 T2 ONERA/CNES 2019), the cold-wall assumption is applied to a ~2400 K surface, radiative heating is neglected, and the code does not reject inputs outside the primary's fitted domain (2.3–116.2 MJ/kg, 0.001–100 atm). Tauber's review papers (NASA TP-2914 1989; Tauber & Sutton 1991) remain unread (❌ T3). These are carried as assumptions A-HEAT-2..4, and **G2 being PASS says nothing about them** |
 | G3 | TPS conduction | Analytical benchmark at four depths and at the surface; grid-refinement convergence; timestep-refinement convergence; energy-balance closure; null test; physical-ordering tests | Carslaw & Jaeger, *Conduction of Heat in Solids* 2nd ed. §2.9, semi-infinite solid under constant surface flux | 0.2% against analytical; energy residual < 1e-6 | **PASS** | `tests/test_tps.py` (11 tests). Measured: 0.002% surface error, energy residual ~1e-14. |
+| G3b | TPS conduction — bench boundary options | Closed-form steady state with a convective back face and a contact resistance; lumped Newton-cooling decay for the front-face loss; energy closure with all four sinks active; regression test that the defaults leave the entry model bit-identical | Closed-form solutions only. Added 2026-09-20 for the M8 coupon; these terms are **off by default** and no M1/M1b result uses them | 1e-4 rel. on the steady state; 2e-3 rel. on the lumped decay; energy residual < 1e-4 | **PASS** (internal) | `tests/test_tps_boundaries.py` (12 tests); see ASSUMPTIONS A-TPS-8 |
+| G-GEO | Parametric capsule geometry (Phase F) | Closed-form spherical-cap/cone-frustum checks (hemisphere, full-sphere, cone, cylinder limits); independent numerical washer integration of `.profile()` cross-checked against the closed-form + quadrature volume; tangent-continuity at all 3 internal joins by finite difference; STL watertightness (edge-count) and mesh volume (divergence theorem) both computed by reading the exported file back, not assumed from construction; byte-identical determinism | Internal cross-checks only (textbook closed forms + an independent numerical method each time) - no external/published capsule geometry has been reproduced | 1e-12 on closed-form building blocks; 1e-5 rel. on profile-integrated vs. closed-form+quadrature volume; 5e-3 rel. on STL mesh volume vs. closed-form volume; 0.05 deg on join tangent angles | **PASS** (internal) / **LIMITED** (no external geometry reference) | `tests/test_geometry.py` (42 tests); see ASSUMPTIONS A-GEO-1..9. Every check here is against another computation this project derived, not an outside reference - genuinely `PASS` for internal consistency, `LIMITED` for the row as a whole until a published capsule's moldline is reproduced. |
 | M1 | Burn-vs-bake result | Full-domain sweep; automated signature-pair search with pre-declared thresholds; rank correlation | Self-consistent within the model. No external validation exists for this claim. | — | **IN_PROGRESS** | `reports/milestones/M1_burn_vs_bake.md`. The *mechanism* is verified; the *magnitude* is model-dependent and awaits Fidelity 1 and the physical coupon experiment. |
 | G4 | OpenFOAM CFD | Mesh independence, force convergence, published blunt-body benchmark, model-form limitations | Not begun | — | **NOT_STARTED** | Gated: no CFD data may enter the optimisation loop until this row is PASS. |
 | G5 | Coupled model | End-to-end evaluator determinism and provenance | Not begun | — | **IN_PROGRESS** | `src/aether/evaluate.py` exists and is the sole evaluation path; formal gate not yet run. |
-| M8 | Physical thermal coupon | Blind prediction, frozen before measurement | Not begun | — | **NOT_STARTED** | `experiments/thermal_coupon/` scaffolded only. |
+| M8 | Physical thermal coupon | Blind prediction, frozen before measurement (spec §47) | **No measurement exists.** Synthetic twin only: data generated by this project's own solver | Tolerance to be declared before the runs, per `protocol.md` §9 | **IN_PROGRESS** | Support package and synthetic chain verified; physical experiment not yet run. `experiments/thermal_coupon/`, `tests/test_thermal_coupon.py` |
+| §44 | Thermal Penetration Index | Rank-redundancy test against peak bondline T and integrated heat, thresholds pre-declared in `configs/tpi_study.yaml` | Self-consistent within the model; prior art reviewed in `docs/theory/tpi.md` | rank R² ≥ 0.98 ⇒ discard | **LIMITED** | `reports/milestones/TPI_study.md`. Verdict **DISCARD** on this design space; see `docs/negative_results.md` NR-05. |
+| M4 | DOE, sensitivity, Pareto optimisation infrastructure | Dominance, 2-D hypervolume, spacing and knee against hand-worked cases; Sobol' estimator against the Ishigami function's analytical indices; LHS one-point-per-stratum property; candidate-log CSV/Parquet round trip; budget wrapper spends exactly its budget for every method (duplicates free, invalid geometry charged); identical candidate log under a fixed seed; full-geometry evaluator path reproduces the legacy two-parameter result bit-for-bit; per-design artefact audit (bounds, active constraints, >86 km heat-load share, soak-out truncation) | Algorithms: analytical test cases only. **Results: none — Fidelity 0 (constant C_D), no CFD-derived input, no external optimisation benchmark reproduced** | 1e-12 on hand-worked Pareto cases; 0.03 abs. on Ishigami indices at n_base = 4096 | **IN_PROGRESS** | `tests/test_pareto.py`, `tests/test_optimization.py`; `reports/milestones/M4_pareto_optimisation.md`. The machinery is verified; the fronts are Fidelity-0 and are to be regenerated (`make doe && make optimize`) once G4 is PASS and the M3 response surface is registered. Two model exploits found and constrained: NR-15, NR-13; one open model-validity finding: NR-14. |
 
 ## What the current evidence does and does not support
 
@@ -29,7 +35,51 @@ objective does. The conduction solver underlying that claim agrees with an analy
 benchmark to 0.002% and closes its energy balance to ~10⁻¹⁴.
 
 **Not supported.** Any statement about a real vehicle, a real TPS material, or a flight
-condition. The aerodynamics are a constant coefficient, the heating correlation has not
-been re-derived from its primary source, and no CFD or experimental validation exists
-yet. Three of the six active rows above are `LIMITED`, and that is the honest state of
-the project.
+condition. The aerodynamics are a constant coefficient and no CFD or experimental
+validation exists yet.
+
+### The three 2026-09-20 upgrades, and what they did *not* buy
+
+G1A′, G1B and G2 moved off `LIMITED` on the strength of the sourcing pass. Each upgrade is
+narrower than the row title suggests, and the narrowing is the point:
+
+- **G1A′** validates a *transcription*, at five altitudes, and nothing else. The
+  interpolation between those altitudes is still a log-linear stand-in for USSA-76's
+  species-diffusion model, and NR-14 shows the bondline objective draws 5–20% of its heat
+  load from exactly that region. The row is `PASS` for the five rows checked and `LIMITED`
+  everywhere else, deliberately written that way rather than rounded up.
+- **G1B** now reproduces a published integrator-vs-closed-form comparison to within 0.92
+  percentage points — but under an *exponential* atmosphere, constant gravity and a
+  constant C_D, because those are the assumptions under which a closed form exists. It
+  validates the integration, not the production configuration, and no flight trajectory
+  has been reproduced.
+- **G2** validates the *constant*, to 0.39% against a re-derivation from the primary. It
+  says nothing about whether Sutton–Graves is the right correlation for this problem;
+  that is G2′, which is untouched, and where catalycity alone is worth a factor of about
+  two. Treat the correlation as ±4% at best (A-HEAT-1, NR-12).
+
+Two constraint limits were also sourced without being changed: the 450 K bondline
+allowable is the Space Shuttle Orbiter's aluminium-structure design limit (A-LIM-1a), and
+the 12 g deceleration limit turns out to correspond to **no** documented sustained-g curve
+(A-LIM-1b). The second is left as an explicit open student decision with its measured
+effect on the feasible region, because adopting the NASA-STD-3001 deconditioned curve
+would empty the M1b design space entirely — a result, not a tuning knob.
+
+### M8 and §44, added 2026-09-20
+
+**M8 is `IN_PROGRESS`, and specifically it is not `PASS`.** The support package is
+complete — printable holder, dimensioned sensor drawing, data schema, safety and
+calibration protocol, calibration and comparison code, and the archived-prediction
+machinery §47 requires. The calibrate → freeze → predict → compare chain has been
+verified end to end against **synthetic data generated by this project's own solver**,
+which is a check on the software and nothing else. No coupon has been printed, no heater
+has been switched on, and no measurement exists. The row moves off `IN_PROGRESS` only
+when a real blind comparison has been written against a tolerance declared beforehand.
+
+**§44 is `LIMITED` with a verdict of DISCARD.** The Thermal Penetration Index was
+implemented, tested against closed-form cases, and evaluated over the M1b design grid
+against a redundancy criterion declared in advance. Its ranking of designs is 99.94%
+reconstructible from peak bondline temperature and integrated heat load, so it adds no
+interpretable information on this design space and is not adopted. That is a result
+about *this* stack and *this* two-variable space, which is why the row is `LIMITED` and
+not `FAIL`.

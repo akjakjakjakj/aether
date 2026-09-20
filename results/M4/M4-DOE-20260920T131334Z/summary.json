@@ -1,0 +1,1465 @@
+{
+  "run_id": "M4-DOE-20260920T131334Z",
+  "git_commit": "c238735",
+  "git_dirty": true,
+  "config_hash": "3515d893e9be",
+  "config_path": "configs/design_space.yaml",
+  "fidelity": 0,
+  "aero_model": "constant",
+  "seed": 20260920,
+  "workers": 6,
+  "variables": {
+    "diameter_m": {
+      "role": "design",
+      "units": "m",
+      "lower": 0.8,
+      "upper": 4.5,
+      "reference": 1.2,
+      "kind": "direct"
+    },
+    "bluntness_ratio": {
+      "role": "design",
+      "units": "-",
+      "lower": 0.25,
+      "upper": 1.35,
+      "reference": 0.5,
+      "kind": "times_diameter"
+    },
+    "shoulder_ratio": {
+      "role": "design",
+      "units": "-",
+      "lower": 0.02,
+      "upper": 0.1,
+      "reference": 0.1,
+      "kind": "times_diameter"
+    },
+    "cone_half_angle_deg": {
+      "role": "design",
+      "units": "deg",
+      "lower": 20.0,
+      "upper": 70.0,
+      "reference": 25.0,
+      "kind": "direct"
+    },
+    "aft_cone_angle_deg": {
+      "role": "design",
+      "units": "deg",
+      "lower": 0.0,
+      "upper": 35.0,
+      "reference": 20.0,
+      "kind": "direct"
+    },
+    "fineness_ratio": {
+      "role": "design",
+      "units": "-",
+      "lower": 0.5,
+      "upper": 1.2,
+      "reference": 0.875,
+      "kind": "times_diameter"
+    },
+    "flight_path_angle_deg": {
+      "role": "design",
+      "units": "deg",
+      "lower": -8.0,
+      "upper": -1.5,
+      "reference": -3.0,
+      "kind": "direct"
+    },
+    "entry_velocity_m_s": {
+      "role": "given",
+      "units": "m/s",
+      "lower": 7200.0,
+      "upper": 7800.0,
+      "reference": 7400.0,
+      "kind": "direct"
+    },
+    "mass_kg": {
+      "role": "given",
+      "units": "kg",
+      "lower": 250.0,
+      "upper": 450.0,
+      "reference": 350.0,
+      "kind": "direct"
+    },
+    "insulator_thickness_m": {
+      "role": "deferred",
+      "units": "m",
+      "lower": 0.01,
+      "upper": 0.03,
+      "reference": 0.015,
+      "kind": "direct"
+    }
+  },
+  "sobol_sub_box": {
+    "diameter_m": [
+      0.8,
+      4.5
+    ],
+    "bluntness_ratio": [
+      0.25,
+      0.9
+    ],
+    "shoulder_ratio": [
+      0.02,
+      0.1
+    ],
+    "cone_half_angle_deg": [
+      60.0,
+      70.0
+    ],
+    "aft_cone_angle_deg": [
+      0.0,
+      20.0
+    ],
+    "fineness_ratio": [
+      0.6,
+      1.2
+    ],
+    "flight_path_angle_deg": [
+      -8.0,
+      -1.5
+    ],
+    "entry_velocity_m_s": [
+      7200.0,
+      7800.0
+    ],
+    "mass_kg": [
+      250.0,
+      450.0
+    ],
+    "insulator_thickness_m": [
+      0.01,
+      0.03
+    ]
+  },
+  "cost": {
+    "n_evaluations_paid": 9292,
+    "n_physics_evaluations": 7609,
+    "per_evaluation_wall_s": {
+      "mean": 0.26732000884972984,
+      "median": 0.2555149169929791,
+      "p95": 0.37934551659855054,
+      "max": 0.7552999579929747
+    },
+    "total_wall_s": 349.54520604100253,
+    "throughput_evaluations_per_s": 26.583113827371516
+  },
+  "oat": {
+    "diameter_m": {
+      "n_points": 15,
+      "n_invalid_geometry": 0,
+      "n_not_ok": 0,
+      "n_feasible": 4,
+      "peak_heat_flux_w_m2": {
+        "range": 2792532.7835398354,
+        "min": 235218.50495972508,
+        "max": 3027751.2884995607
+      },
+      "peak_bondline_temperature_k": {
+        "range": 144.159795952578,
+        "min": 391.5288766871094,
+        "max": 535.6886726396874
+      },
+      "max_g": {
+        "range": 2.2297202761820163,
+        "min": 10.668147085606131,
+        "max": 12.897867361788148
+      },
+      "heatshield_mass_fraction": {
+        "range": 2.2831717083248857,
+        "min": 0.0745145279616485,
+        "max": 2.357686236286534
+      }
+    },
+    "bluntness_ratio": {
+      "n_points": 15,
+      "n_invalid_geometry": 11,
+      "n_not_ok": 11,
+      "n_feasible": 0,
+      "peak_heat_flux_w_m2": {
+        "range": 640507.1374576464,
+        "min": 1626213.53286814,
+        "max": 2266720.6703257863
+      },
+      "peak_bondline_temperature_k": {
+        "range": 21.979879502427423,
+        "min": 495.6959666486519,
+        "max": 517.6758461510793
+      },
+      "max_g": {
+        "range": 0.0,
+        "min": 11.892458216639486,
+        "max": 11.892458216639486
+      },
+      "heatshield_mass_fraction": {
+        "range": 0.05516604325391619,
+        "min": 0.1721371901020235,
+        "max": 0.2273032333559397
+      }
+    },
+    "shoulder_ratio": {
+      "n_points": 15,
+      "n_invalid_geometry": 0,
+      "n_not_ok": 0,
+      "n_feasible": 0,
+      "peak_heat_flux_w_m2": {
+        "range": 0.0,
+        "min": 1602813.5570430805,
+        "max": 1602813.5570430805
+      },
+      "peak_bondline_temperature_k": {
+        "range": 0.0,
+        "min": 494.7759074630962,
+        "max": 494.7759074630962
+      },
+      "max_g": {
+        "range": 0.0,
+        "min": 11.892458216639486,
+        "max": 11.892458216639486
+      },
+      "heatshield_mass_fraction": {
+        "range": 0.006898829656119904,
+        "min": 0.1607588582575892,
+        "max": 0.1676576879137091
+      }
+    },
+    "cone_half_angle_deg": {
+      "n_points": 15,
+      "n_invalid_geometry": 0,
+      "n_not_ok": 0,
+      "n_feasible": 0,
+      "peak_heat_flux_w_m2": {
+        "range": 0.0,
+        "min": 1602813.5570430805,
+        "max": 1602813.5570430805
+      },
+      "peak_bondline_temperature_k": {
+        "range": 0.0,
+        "min": 494.7759074630962,
+        "max": 494.7759074630962
+      },
+      "max_g": {
+        "range": 0.0,
+        "min": 11.892458216639486,
+        "max": 11.892458216639486
+      },
+      "heatshield_mass_fraction": {
+        "range": 0.046593600864357404,
+        "min": 0.1275130826545162,
+        "max": 0.1741066835188736
+      }
+    },
+    "aft_cone_angle_deg": {
+      "n_points": 15,
+      "n_invalid_geometry": 0,
+      "n_not_ok": 0,
+      "n_feasible": 0,
+      "peak_heat_flux_w_m2": {
+        "range": 0.0,
+        "min": 1602813.5570430805,
+        "max": 1602813.5570430805
+      },
+      "peak_bondline_temperature_k": {
+        "range": 0.0,
+        "min": 494.7759074630962,
+        "max": 494.7759074630962
+      },
+      "max_g": {
+        "range": 0.0,
+        "min": 11.892458216639486,
+        "max": 11.892458216639486
+      },
+      "heatshield_mass_fraction": {
+        "range": 0.0,
+        "min": 0.1676576879137091,
+        "max": 0.1676576879137091
+      }
+    },
+    "fineness_ratio": {
+      "n_points": 15,
+      "n_invalid_geometry": 0,
+      "n_not_ok": 0,
+      "n_feasible": 0,
+      "peak_heat_flux_w_m2": {
+        "range": 0.0,
+        "min": 1602813.5570430805,
+        "max": 1602813.5570430805
+      },
+      "peak_bondline_temperature_k": {
+        "range": 0.0,
+        "min": 494.7759074630962,
+        "max": 494.7759074630962
+      },
+      "max_g": {
+        "range": 0.0,
+        "min": 11.892458216639486,
+        "max": 11.892458216639486
+      },
+      "heatshield_mass_fraction": {
+        "range": 0.0,
+        "min": 0.1676576879137091,
+        "max": 0.1676576879137091
+      }
+    },
+    "flight_path_angle_deg": {
+      "n_points": 15,
+      "n_invalid_geometry": 0,
+      "n_not_ok": 0,
+      "n_feasible": 0,
+      "peak_heat_flux_w_m2": {
+        "range": 882602.4565559195,
+        "min": 1423847.2137944202,
+        "max": 2306449.6703503397
+      },
+      "peak_bondline_temperature_k": {
+        "range": 114.10879681955919,
+        "min": 423.6941104527833,
+        "max": 537.8029072723425
+      },
+      "max_g": {
+        "range": 12.514704636552219,
+        "min": 10.0864454155475,
+        "max": 22.60115005209972
+      },
+      "heatshield_mass_fraction": {
+        "range": 0.0,
+        "min": 0.1676576879137091,
+        "max": 0.1676576879137091
+      }
+    },
+    "entry_velocity_m_s": {
+      "n_points": 15,
+      "n_invalid_geometry": 0,
+      "n_not_ok": 0,
+      "n_feasible": 0,
+      "peak_heat_flux_w_m2": {
+        "range": 110153.35763029661,
+        "min": 1554746.1141442312,
+        "max": 1664899.4717745278
+      },
+      "peak_bondline_temperature_k": {
+        "range": 38.85580677916818,
+        "min": 483.8068307722959,
+        "max": 522.6626375514641
+      },
+      "max_g": {
+        "range": 1.9818550078499069,
+        "min": 10.473909147980352,
+        "max": 12.45576415583026
+      },
+      "heatshield_mass_fraction": {
+        "range": 0.0,
+        "min": 0.1676576879137091,
+        "max": 0.1676576879137091
+      }
+    },
+    "mass_kg": {
+      "n_points": 15,
+      "n_invalid_geometry": 0,
+      "n_not_ok": 0,
+      "n_feasible": 0,
+      "peak_heat_flux_w_m2": {
+        "range": 456674.75083339843,
+        "min": 1365227.20621266,
+        "max": 1821901.9570460585
+      },
+      "peak_bondline_temperature_k": {
+        "range": 18.821006332215006,
+        "min": 484.0749196532171,
+        "max": 502.8959259854321
+      },
+      "max_g": {
+        "range": 0.7321853706145074,
+        "min": 11.47267655936012,
+        "max": 12.204861929974628
+      },
+      "heatshield_mass_fraction": {
+        "range": 0.10432033914630798,
+        "min": 0.1304004239328848,
+        "max": 0.2347207630791928
+      }
+    },
+    "insulator_thickness_m": {
+      "n_points": 15,
+      "n_invalid_geometry": 0,
+      "n_not_ok": 0,
+      "n_feasible": 7,
+      "peak_heat_flux_w_m2": {
+        "range": 0.0,
+        "min": 1602813.5570430805,
+        "max": 1602813.5570430805
+      },
+      "peak_bondline_temperature_k": {
+        "range": 165.03076515149667,
+        "min": 409.88960536301295,
+        "max": 574.9203705145096
+      },
+      "max_g": {
+        "range": 0.0,
+        "min": 11.892458216639486,
+        "max": 11.892458216639486
+      },
+      "heatshield_mass_fraction": {
+        "range": 0.030092405522973403,
+        "min": 0.1601345865329657,
+        "max": 0.1902269920559391
+      }
+    }
+  },
+  "lhs": {
+    "n_samples": 3000,
+    "n_valid_geometry": 1328,
+    "n_evaluated_ok": 1328,
+    "n_feasible": 185,
+    "failure_reasons": {
+      "invalid geometry: cone_half_angle_deg (# deg) is too small for this nose_radius_m / diamet": 1606,
+      "constraint violated: max_g": 481,
+      "constraint violated: heatshield_mass_fraction, max_g": 359,
+      "constraint violated: heatshield_mass_fraction": 120,
+      "constraint violated: peak_bondline_temperature_k": 111,
+      "constraint violated: max_g, peak_bondline_temperature_k": 65,
+      "invalid geometry: aft_cone_angle_deg (# deg) closes the aft body to a point before reachin": 40,
+      "invalid geometry: length_m (# m) is too short to contain the nose, fore cone and shoulder,": 25
+    },
+    "violation_counts": {
+      "max_g": 908,
+      "peak_bondline_temperature_k": 178,
+      "bluntness_ratio": 5,
+      "heatshield_mass_fraction": 482
+    },
+    "validity": {
+      "diameter_m": {
+        "first": 0.01040165446474895,
+        "ci": [
+          0.008113026146241108,
+          0.024969217926431992
+        ]
+      },
+      "bluntness_ratio": {
+        "first": 0.5332406179742896,
+        "ci": [
+          0.5079614646291577,
+          0.5667407933257067
+        ]
+      },
+      "shoulder_ratio": {
+        "first": 0.008221882746296191,
+        "ci": [
+          0.00768874363039448,
+          0.02346745420466204
+        ]
+      },
+      "cone_half_angle_deg": {
+        "first": 0.1380353951691935,
+        "ci": [
+          0.12319407906688987,
+          0.16652935081814643
+        ]
+      },
+      "aft_cone_angle_deg": {
+        "first": 0.009068570934455528,
+        "ci": [
+          0.009400281625102917,
+          0.023402613257134514
+        ]
+      },
+      "fineness_ratio": {
+        "first": 0.005285496051190407,
+        "ci": [
+          0.00642622151675291,
+          0.02031676531434029
+        ]
+      },
+      "flight_path_angle_deg": {
+        "first": 0.006726667435291408,
+        "ci": [
+          0.0066043402858472116,
+          0.021461659159356977
+        ]
+      },
+      "entry_velocity_m_s": {
+        "first": 0.005861964604830809,
+        "ci": [
+          0.007008050084993384,
+          0.020630887354073663
+        ]
+      },
+      "mass_kg": {
+        "first": 0.005483657116504294,
+        "ci": [
+          0.006153808188289153,
+          0.020358349987345304
+        ]
+      },
+      "insulator_thickness_m": {
+        "first": 0.008365999884706292,
+        "ci": [
+          0.006895952918561357,
+          0.022161849392047024
+        ]
+      }
+    },
+    "outputs": {
+      "peak_heat_flux_w_m2": {
+        "diameter_m": {
+          "first": 0.8369912953247961,
+          "ci": [
+            0.814571510443154,
+            0.8572758582864916
+          ],
+          "spearman": -0.9190563304828452
+        },
+        "bluntness_ratio": {
+          "first": 0.08517578166650543,
+          "ci": [
+            0.06676120927966997,
+            0.12434567448188519
+          ],
+          "spearman": -0.308409579569697
+        },
+        "shoulder_ratio": {
+          "first": 0.014426022067926291,
+          "ci": [
+            0.015490394992058292,
+            0.05179356787562699
+          ],
+          "spearman": -0.03421796927939465
+        },
+        "cone_half_angle_deg": {
+          "first": 0.031103996910999347,
+          "ci": [
+            0.027636469527175637,
+            0.06620076231943109
+          ],
+          "spearman": -0.15250401993439028
+        },
+        "aft_cone_angle_deg": {
+          "first": 0.0176017775899275,
+          "ci": [
+            0.017384008682756743,
+            0.04986612461180168
+          ],
+          "spearman": 0.04077863419192427
+        },
+        "fineness_ratio": {
+          "first": 0.013800522037021376,
+          "ci": [
+            0.013414957461861712,
+            0.0451073613025323
+          ],
+          "spearman": 0.007795814693757108
+        },
+        "flight_path_angle_deg": {
+          "first": 0.029537479882870924,
+          "ci": [
+            0.023811598873782917,
+            0.0714763173072629
+          ],
+          "spearman": -0.15850274867247427
+        },
+        "entry_velocity_m_s": {
+          "first": 0.018196159955194257,
+          "ci": [
+            0.014525007141312545,
+            0.047302359897139996
+          ],
+          "spearman": 0.07349595674233539
+        },
+        "mass_kg": {
+          "first": 0.008294795907578098,
+          "ci": [
+            0.011833957149583985,
+            0.04273890466731702
+          ],
+          "spearman": 0.054496992701516214
+        },
+        "insulator_thickness_m": {
+          "first": 0.013213570943554331,
+          "ci": [
+            0.01314659135434617,
+            0.04260571613061899
+          ],
+          "spearman": -0.0172073246230673
+        }
+      },
+      "peak_bondline_temperature_k": {
+        "diameter_m": {
+          "first": 0.4030072550064949,
+          "ci": [
+            0.37530288016077157,
+            0.44873478272619066
+          ],
+          "spearman": -0.6483225800673353
+        },
+        "bluntness_ratio": {
+          "first": 0.050787982211077595,
+          "ci": [
+            0.0393482355024374,
+            0.08913642089736495
+          ],
+          "spearman": -0.1837239544558347
+        },
+        "shoulder_ratio": {
+          "first": 0.016577235719533776,
+          "ci": [
+            0.015555072361619921,
+            0.0496008138526007
+          ],
+          "spearman": -0.0009536872528857582
+        },
+        "cone_half_angle_deg": {
+          "first": 0.01830853303381574,
+          "ci": [
+            0.015954715365928473,
+            0.0479553906870544
+          ],
+          "spearman": -0.07789097980153205
+        },
+        "aft_cone_angle_deg": {
+          "first": 0.014424031408369141,
+          "ci": [
+            0.015984363301509825,
+            0.05289737091255361
+          ],
+          "spearman": 0.0947627198077703
+        },
+        "fineness_ratio": {
+          "first": 0.019681851443619867,
+          "ci": [
+            0.016374863278927922,
+            0.04981788207096067
+          ],
+          "spearman": -0.01738058396437171
+        },
+        "flight_path_angle_deg": {
+          "first": 0.23619851240094603,
+          "ci": [
+            0.20371068805036924,
+            0.2823552311554025
+          ],
+          "spearman": 0.4781804107736886
+        },
+        "entry_velocity_m_s": {
+          "first": 0.009577765689222405,
+          "ci": [
+            0.011199734345215963,
+            0.035900711202207315
+          ],
+          "spearman": 0.03618320108169165
+        },
+        "mass_kg": {
+          "first": 0.01787837298537139,
+          "ci": [
+            0.017017282422796702,
+            0.05013190921896718
+          ],
+          "spearman": 0.05495080766879918
+        },
+        "insulator_thickness_m": {
+          "first": 0.33516256661543786,
+          "ci": [
+            0.30458232914220396,
+            0.3773487805168582
+          ],
+          "spearman": -0.5913933110939695
+        }
+      },
+      "max_g": {
+        "diameter_m": {
+          "first": 0.03966949061562709,
+          "ci": [
+            0.03496264832939552,
+            0.07682750321140633
+          ],
+          "spearman": 0.009955938276778526
+        },
+        "bluntness_ratio": {
+          "first": 0.020108284807249407,
+          "ci": [
+            0.015500562278450886,
+            0.05222091403909225
+          ],
+          "spearman": -0.0033185094591351126
+        },
+        "shoulder_ratio": {
+          "first": 0.010807644566997938,
+          "ci": [
+            0.013291782634350689,
+            0.04510477505500615
+          ],
+          "spearman": -0.00471644052893989
+        },
+        "cone_half_angle_deg": {
+          "first": 0.016499312154150132,
+          "ci": [
+            0.015601282180050864,
+            0.04259430627701443
+          ],
+          "spearman": 0.000507604012529558
+        },
+        "aft_cone_angle_deg": {
+          "first": 0.017592314926204288,
+          "ci": [
+            0.017992046868849976,
+            0.05590549653301207
+          ],
+          "spearman": -0.05437251138562117
+        },
+        "fineness_ratio": {
+          "first": 0.016558956923913362,
+          "ci": [
+            0.014627338720157574,
+            0.048108136135720486
+          ],
+          "spearman": -0.0025739067527704024
+        },
+        "flight_path_angle_deg": {
+          "first": 0.9573768968833737,
+          "ci": [
+            0.9554433135269148,
+            0.9627178575902254
+          ],
+          "spearman": -0.9826171769603023
+        },
+        "entry_velocity_m_s": {
+          "first": 0.015077270377195051,
+          "ci": [
+            0.013735187286931723,
+            0.043782403775971694
+          ],
+          "spearman": 0.011151783831859441
+        },
+        "mass_kg": {
+          "first": 0.008383720432024344,
+          "ci": [
+            0.013730826428775291,
+            0.03932710203767292
+          ],
+          "spearman": 0.0043625846475509955
+        },
+        "insulator_thickness_m": {
+          "first": 0.016553889292168247,
+          "ci": [
+            0.014836305879010124,
+            0.04850753913739824
+          ],
+          "spearman": 0.038903749335220075
+        }
+      },
+      "heatshield_mass_fraction": {
+        "diameter_m": {
+          "first": 0.8414887047797942,
+          "ci": [
+            0.8233501899385177,
+            0.8660231734958352
+          ],
+          "spearman": 0.9619786615404105
+        },
+        "bluntness_ratio": {
+          "first": 0.03163522286216313,
+          "ci": [
+            0.024873663539960265,
+            0.06489281458813023
+          ],
+          "spearman": -0.05585091082612493
+        },
+        "shoulder_ratio": {
+          "first": 0.018462358639760052,
+          "ci": [
+            0.015183215649769745,
+            0.05240954385349666
+          ],
+          "spearman": 0.05356792502973256
+        },
+        "cone_half_angle_deg": {
+          "first": 0.05094348614127829,
+          "ci": [
+            0.038752852840101965,
+            0.09354077005106842
+          ],
+          "spearman": -0.12168572531376415
+        },
+        "aft_cone_angle_deg": {
+          "first": 0.015820459612541214,
+          "ci": [
+            0.015165365138745921,
+            0.04990605141238919
+          ],
+          "spearman": -0.05776102653395464
+        },
+        "fineness_ratio": {
+          "first": 0.013454956611841496,
+          "ci": [
+            0.014331159940711097,
+            0.04789971300547034
+          ],
+          "spearman": 0.034825937153449296
+        },
+        "flight_path_angle_deg": {
+          "first": 0.015713321622300144,
+          "ci": [
+            0.016149500221159456,
+            0.046989967549744396
+          ],
+          "spearman": -0.053171419118563455
+        },
+        "entry_velocity_m_s": {
+          "first": 0.015762549325712135,
+          "ci": [
+            0.015587964787050735,
+            0.04708597363961867
+          ],
+          "spearman": -0.004554105005930936
+        },
+        "mass_kg": {
+          "first": 0.04188813269474566,
+          "ci": [
+            0.03506800417551103,
+            0.08415700392660695
+          ],
+          "spearman": -0.125617551833774
+        },
+        "insulator_thickness_m": {
+          "first": 0.024128982665352062,
+          "ci": [
+            0.02058197899682802,
+            0.053289614746809225
+          ],
+          "spearman": 0.08710286873609967
+        }
+      }
+    },
+    "feasible_objective_max": {
+      "peak_heat_flux_w_m2": 2045178.63009333,
+      "peak_bondline_temperature_k": 448.0856340218866,
+      "max_g": 11.990596240655012,
+      "heatshield_mass_fraction": 0.9950063231737734
+    }
+  },
+  "sobol": {
+    "n_evaluations": 6144,
+    "outputs": {
+      "peak_heat_flux_w_m2": {
+        "variance": 581252939420.3839,
+        "variables": {
+          "diameter_m": {
+            "first": 0.8189268325633687,
+            "first_ci": [
+              0.6730870026611556,
+              0.978393036729768
+            ],
+            "total": 0.8856622010678147,
+            "total_ci": [
+              0.7804243956702942,
+              1.0070361435556028
+            ]
+          },
+          "bluntness_ratio": {
+            "first": 0.05371255508515345,
+            "first_ci": [
+              0.020584330939159033,
+              0.08210152381310924
+            ],
+            "total": 0.08048180641403509,
+            "total_ci": [
+              0.06239053372032806,
+              0.10538435482061587
+            ]
+          },
+          "shoulder_ratio": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "cone_half_angle_deg": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "aft_cone_angle_deg": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "fineness_ratio": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "flight_path_angle_deg": {
+            "first": 0.037191076433507345,
+            "first_ci": [
+              0.014338092902829242,
+              0.06276961634699565
+            ],
+            "total": 0.05358658920548706,
+            "total_ci": [
+              0.03947984826937649,
+              0.06960796188208433
+            ]
+          },
+          "entry_velocity_m_s": {
+            "first": 0.00497278752610633,
+            "first_ci": [
+              -0.004824817100881015,
+              0.014621140409097122
+            ],
+            "total": 0.005569105213644221,
+            "total_ci": [
+              0.004020533817746171,
+              0.007567532931748151
+            ]
+          },
+          "mass_kg": {
+            "first": 0.010052815654534123,
+            "first_ci": [
+              -0.00793498642121004,
+              0.030163443367944444
+            ],
+            "total": 0.019440134634460895,
+            "total_ci": [
+              0.013717138468305093,
+              0.026865525024515106
+            ]
+          },
+          "insulator_thickness_m": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "peak_bondline_temperature_k": {
+        "variance": 1970.5736631521106,
+        "variables": {
+          "diameter_m": {
+            "first": 0.3775952694474675,
+            "first_ci": [
+              0.3015426928876354,
+              0.453888694707791
+            ],
+            "total": 0.418721468405837,
+            "total_ci": [
+              0.33936440004076573,
+              0.494949567358967
+            ]
+          },
+          "bluntness_ratio": {
+            "first": 0.015534227569691831,
+            "first_ci": [
+              -0.0022938899257418013,
+              0.03423536507409698
+            ],
+            "total": 0.023448896938988262,
+            "total_ci": [
+              0.01920231361001136,
+              0.02853051277199991
+            ]
+          },
+          "shoulder_ratio": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "cone_half_angle_deg": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "aft_cone_angle_deg": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "fineness_ratio": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "flight_path_angle_deg": {
+            "first": 0.1937677306848484,
+            "first_ci": [
+              0.1373950704566632,
+              0.2554918763074738
+            ],
+            "total": 0.24185341258295914,
+            "total_ci": [
+              0.18921368545966266,
+              0.30269094477923286
+            ]
+          },
+          "entry_velocity_m_s": {
+            "first": 0.006990260277222815,
+            "first_ci": [
+              -0.005887476737578161,
+              0.021826857759624726
+            ],
+            "total": 0.01155436043881254,
+            "total_ci": [
+              0.00897672168767694,
+              0.014666313349796336
+            ]
+          },
+          "mass_kg": {
+            "first": 0.010091293252781894,
+            "first_ci": [
+              -0.000128030797699637,
+              0.020231716581464828
+            ],
+            "total": 0.006110163556434315,
+            "total_ci": [
+              0.005081136125913025,
+              0.007345713996653719
+            ]
+          },
+          "insulator_thickness_m": {
+            "first": 0.31454579969072244,
+            "first_ci": [
+              0.2324338069420137,
+              0.4059204734733493
+            ],
+            "total": 0.37865903889460273,
+            "total_ci": [
+              0.3213551005805729,
+              0.4382632036954074
+            ]
+          }
+        }
+      },
+      "max_g": {
+        "variance": 13.810980318628632,
+        "variables": {
+          "diameter_m": {
+            "first": 0.024602195697179186,
+            "first_ci": [
+              0.002728090824665761,
+              0.04928735791735981
+            ],
+            "total": 0.032782299732558445,
+            "total_ci": [
+              0.02785312811671542,
+              0.03887292980159758
+            ]
+          },
+          "bluntness_ratio": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "shoulder_ratio": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "cone_half_angle_deg": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "aft_cone_angle_deg": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "fineness_ratio": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "flight_path_angle_deg": {
+            "first": 0.967547477703525,
+            "first_ci": [
+              0.8650633366656192,
+              1.0808765092541044
+            ],
+            "total": 0.9718126559908948,
+            "total_ci": [
+              0.8859735581729026,
+              1.0674787664378618
+            ]
+          },
+          "entry_velocity_m_s": {
+            "first": 0.0004854043141241676,
+            "first_ci": [
+              -0.011441898952586176,
+              0.012017555125063363
+            ],
+            "total": 0.007494992527132944,
+            "total_ci": [
+              0.0064323527274105195,
+              0.008606344997531169
+            ]
+          },
+          "mass_kg": {
+            "first": -0.0006681609457321851,
+            "first_ci": [
+              -0.006848306191249903,
+              0.005116776785152163
+            ],
+            "total": 0.0024872242971385582,
+            "total_ci": [
+              0.0021346560982185812,
+              0.002915074176384681
+            ]
+          },
+          "insulator_thickness_m": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "heatshield_mass_fraction": {
+        "variance": 0.30042290659809845,
+        "variables": {
+          "diameter_m": {
+            "first": 0.9104635277303291,
+            "first_ci": [
+              0.7999107544254636,
+              1.0094134616852497
+            ],
+            "total": 0.9452729530820916,
+            "total_ci": [
+              0.8453181507468338,
+              1.043111574238745
+            ]
+          },
+          "bluntness_ratio": {
+            "first": -0.0001672400042264657,
+            "first_ci": [
+              -0.001732636529747166,
+              0.0012778018046776917
+            ],
+            "total": 0.00018301890673412871,
+            "total_ci": [
+              0.00014696877768663238,
+              0.00022352206475185032
+            ]
+          },
+          "shoulder_ratio": {
+            "first": 0.0036931295976647596,
+            "first_ci": [
+              -0.0042178858090823465,
+              0.01145033878976041
+            ],
+            "total": 0.003970254432179011,
+            "total_ci": [
+              0.0032516184406612457,
+              0.0047589451233594655
+            ]
+          },
+          "cone_half_angle_deg": {
+            "first": 0.00026444178376687944,
+            "first_ci": [
+              -0.0030716112671988903,
+              0.003526984248216388
+            ],
+            "total": 0.0005041737585123762,
+            "total_ci": [
+              0.0004126320130426917,
+              0.000609146470789186
+            ]
+          },
+          "aft_cone_angle_deg": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "fineness_ratio": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "flight_path_angle_deg": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "entry_velocity_m_s": {
+            "first": 0.0,
+            "first_ci": [
+              0.0,
+              0.0
+            ],
+            "total": 0.0,
+            "total_ci": [
+              0.0,
+              0.0
+            ]
+          },
+          "mass_kg": {
+            "first": 0.06841170816814394,
+            "first_ci": [
+              0.03436401229383688,
+              0.10497815318463936
+            ],
+            "total": 0.08180827948860257,
+            "total_ci": [
+              0.0673476543246007,
+              0.09748941941314623
+            ]
+          },
+          "insulator_thickness_m": {
+            "first": 0.003348913627779278,
+            "first_ci": [
+              -0.006521114964827733,
+              0.01390283502407351
+            ],
+            "total": 0.007080772768409481,
+            "total_ci": [
+              0.005877641960517415,
+              0.008545222750447416
+            ]
+          }
+        }
+      }
+    },
+    "n_base": 512
+  },
+  "screening": {
+    "thresholds": {
+      "total_index": 0.01,
+      "validity_index": 0.03
+    },
+    "variables": {
+      "diameter_m": {
+        "role": "design",
+        "reference": 1.2,
+        "max_total_index_upper": 1.043111574238745,
+        "max_total_index_output": "heatshield_mass_fraction",
+        "validity_index_upper": 0.024969217926431992,
+        "decision": "active",
+        "reason": "total-order index on heatshield_mass_fraction is not below 0.01"
+      },
+      "bluntness_ratio": {
+        "role": "design",
+        "reference": 0.5,
+        "max_total_index_upper": 0.10538435482061587,
+        "max_total_index_output": "peak_heat_flux_w_m2",
+        "validity_index_upper": 0.5667407933257067,
+        "decision": "active",
+        "reason": "total-order index on peak_heat_flux_w_m2 is not below 0.01"
+      },
+      "shoulder_ratio": {
+        "role": "design",
+        "reference": 0.1,
+        "max_total_index_upper": 0.0047589451233594655,
+        "max_total_index_output": "heatshield_mass_fraction",
+        "validity_index_upper": 0.02346745420466204,
+        "decision": "frozen",
+        "reason": "total-order upper bound < 0.01 on every output and validity index upper bound < 0.03"
+      },
+      "cone_half_angle_deg": {
+        "role": "design",
+        "reference": 25.0,
+        "max_total_index_upper": 0.000609146470789186,
+        "max_total_index_output": "heatshield_mass_fraction",
+        "validity_index_upper": 0.16652935081814643,
+        "decision": "active",
+        "reason": "moves no objective or constraint, but decides which geometries are valid"
+      },
+      "aft_cone_angle_deg": {
+        "role": "design",
+        "reference": 20.0,
+        "max_total_index_upper": 0.0,
+        "max_total_index_output": "peak_heat_flux_w_m2",
+        "validity_index_upper": 0.023402613257134514,
+        "decision": "frozen",
+        "reason": "total-order upper bound < 0.01 on every output and validity index upper bound < 0.03"
+      },
+      "fineness_ratio": {
+        "role": "design",
+        "reference": 0.875,
+        "max_total_index_upper": 0.0,
+        "max_total_index_output": "peak_heat_flux_w_m2",
+        "validity_index_upper": 0.02031676531434029,
+        "decision": "frozen",
+        "reason": "total-order upper bound < 0.01 on every output and validity index upper bound < 0.03"
+      },
+      "flight_path_angle_deg": {
+        "role": "design",
+        "reference": -3.0,
+        "max_total_index_upper": 1.0674787664378618,
+        "max_total_index_output": "max_g",
+        "validity_index_upper": 0.021461659159356977,
+        "decision": "active",
+        "reason": "total-order index on max_g is not below 0.01"
+      },
+      "entry_velocity_m_s": {
+        "role": "given",
+        "reference": 7400.0,
+        "max_total_index_upper": 0.014666313349796336,
+        "max_total_index_output": "peak_bondline_temperature_k",
+        "validity_index_upper": 0.020630887354073663,
+        "decision": "frozen",
+        "reason": "mission given, not a design choice"
+      },
+      "mass_kg": {
+        "role": "given",
+        "reference": 350.0,
+        "max_total_index_upper": 0.09748941941314623,
+        "max_total_index_output": "heatshield_mass_fraction",
+        "validity_index_upper": 0.020358349987345304,
+        "decision": "frozen",
+        "reason": "mission given, not a design choice"
+      },
+      "insulator_thickness_m": {
+        "role": "deferred",
+        "reference": 0.015,
+        "max_total_index_upper": 0.4382632036954074,
+        "max_total_index_output": "peak_bondline_temperature_k",
+        "validity_index_upper": 0.022161849392047024,
+        "decision": "frozen",
+        "reason": "deferred design variable (A-OPT-2)"
+      }
+    },
+    "active": [
+      "diameter_m",
+      "bluntness_ratio",
+      "cone_half_angle_deg",
+      "flight_path_angle_deg"
+    ],
+    "frozen": [
+      "shoulder_ratio",
+      "aft_cone_angle_deg",
+      "fineness_ratio",
+      "entry_velocity_m_s",
+      "mass_kg",
+      "insulator_thickness_m"
+    ]
+  },
+  "limits": {
+    "max_g": 12.0,
+    "max_dynamic_pressure_pa": null,
+    "t_bondline_allowable_k": 450.0,
+    "t_surface_allowable_k": null,
+    "max_bluntness_ratio": 1.2,
+    "max_heatshield_mass_fraction": 1.0
+  }
+}

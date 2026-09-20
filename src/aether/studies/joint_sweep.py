@@ -23,6 +23,7 @@ from typing import Any
 import numpy as np
 
 from ..evaluate import DesignEvaluation, evaluate_design
+from ..optimization.pareto import pareto_front  # noqa: F401  (canonical home since M4; re-exported)
 
 
 @dataclass
@@ -44,28 +45,6 @@ class JointSweep:
 
     def feasible_evaluations(self) -> list[DesignEvaluation]:
         return [ev for ev in self.evaluations if ev.performance.feasible]
-
-
-def pareto_front(points: np.ndarray) -> np.ndarray:
-    """Indices of the non-dominated rows of `points`. All objectives are MINIMISED.
-
-    Row i is non-dominated iff no other row j is at least as good in every objective and
-    strictly better in at least one. Self-comparison is harmless: `points[i] <= points[i]`
-    holds everywhere but `points[i] < points[i]` holds nowhere, so a point never dominates
-    itself.
-
-    A correct front must be monotone in a 2-objective problem - if a plotted front
-    zigzags, this function is wrong, not the data.
-    """
-    n = points.shape[0]
-    keep = np.ones(n, dtype=bool)
-    for i in range(n):
-        dominates_i = (
-            np.all(points <= points[i], axis=1) & np.any(points < points[i], axis=1)
-        )
-        if np.any(dominates_i):
-            keep[i] = False
-    return np.flatnonzero(keep)
 
 
 def run_joint_sweep(

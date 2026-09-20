@@ -47,12 +47,18 @@ def compute_metrics(
     limits: dict[str, float | None],
     t_bondline_reference_k: float,
     t_penetration_threshold_k: float,
+    extra_constraints: dict[str, tuple[float, float | None]] | None = None,
 ) -> PerformanceVector:
     """Reduce one coupled evaluation to the canonical performance vector.
 
     `limits` may contain None values for constraints that have not yet been sourced.
     A None limit is SKIPPED, never silently treated as satisfied - an unsourced limit is
     an open question, not a pass.
+
+    `extra_constraints` maps a constraint name to (actual, limit) for upper-bound
+    constraints the evaluator computes outside the trajectory/TPS results (geometry- and
+    mass-closure checks added at M4). They follow exactly the same rule: a None limit is
+    skipped, and the margin is (limit - actual)/limit.
     """
     q = np.asarray(heat_flux_w_m2, dtype=float)
     t = trajectory.time_s
@@ -79,6 +85,8 @@ def compute_metrics(
           limits.get("t_bondline_allowable_k"))
     check("peak_surface_temperature_k", tps_result.peak_surface_temperature_k,
           limits.get("t_surface_allowable_k"))
+    for name, (actual, limit) in (extra_constraints or {}).items():
+        check(name, actual, limit)
 
     status = "OK"
     if trajectory.termination not in ("terminal_altitude",):

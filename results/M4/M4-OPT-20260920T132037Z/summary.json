@@ -1,0 +1,938 @@
+{
+  "run_id": "M4-OPT-20260920T132037Z",
+  "doe_run_id": "M4-DOE-20260920T131334Z",
+  "git_commit": "c238735",
+  "git_dirty": true,
+  "config_hash": "a1c6cdb81a77",
+  "fidelity": 0,
+  "aero_model": "constant",
+  "reference_design": {
+    "candidate_id": "reference",
+    "peak_heat_flux_w_m2": 1602813.5570430805,
+    "integrated_external_heat_j_m2": 112517188.84282775,
+    "peak_surface_temperature_k": 2380.796297543467,
+    "peak_bondline_temperature_k": 494.7759074630962,
+    "bondline_exposure_metric_k_s": 90865.65461306766,
+    "thermal_penetration_depth_m": 0.014312500000000011,
+    "max_g": 11.892458216639486,
+    "max_dynamic_pressure_pa": 30076.461121271754,
+    "entry_duration_s": 244.47913113804069,
+    "time_of_peak_heating_s": 147.47883802229296,
+    "energy_balance_residual": 3.201903600461393e-12,
+    "margin__max_g": 0.008961815280042806,
+    "margin__max_dynamic_pressure_pa": NaN,
+    "margin__peak_bondline_temperature_k": -0.0995020165846582,
+    "margin__peak_surface_temperature_k": NaN,
+    "margin__bluntness_ratio": 0.5833333333333334,
+    "margin__heatshield_mass_fraction": 0.8323423120862908,
+    "diag__bluntness_ratio": 0.5,
+    "diag__heatshield_mass_fraction": 0.16765768791370914,
+    "diag__wetted_forebody_area_m2": 1.8807753451858396,
+    "diag__heat_load_fraction_above_86km": 0.05192145339344133,
+    "diag__bondline_peak_time_s": 374.6946699851585,
+    "diag__thermal_window_end_s": 1444.4791311380407,
+    "diag__bondline_end_rate_k_s": -0.041414298198616396,
+    "feasible": false,
+    "failure_reason": "constraint violated: peak_bondline_temperature_k",
+    "violated_constraints": [
+      "peak_bondline_temperature_k"
+    ],
+    "termination": "terminal_altitude",
+    "status": "OK",
+    "fidelity": 0,
+    "wall_time_s": 0.12198779200844001
+  },
+  "wall_s": {
+    "lhs_search": [
+      23.916534417003277,
+      20.48701091700059,
+      19.69186708299094,
+      18.265506750001805,
+      18.54064829100389,
+      19.521535833991948,
+      21.04386608400091
+    ],
+    "nsga2": [
+      44.07651995799097,
+      48.76662350000697,
+      44.8407513750135,
+      52.375762374998885,
+      46.04291083299904,
+      46.849045625000144,
+      43.3123257499974
+    ],
+    "scalarised_de": [
+      40.15165875000821,
+      35.24398004100658,
+      37.90229741699295,
+      38.18881350000447,
+      57.23570620799728,
+      40.18968462500197,
+      37.01488062500721
+    ]
+  },
+  "workers": 6,
+  "objectives": [
+    "peak_heat_flux_w_m2",
+    "peak_bondline_temperature_k"
+  ],
+  "active": [
+    "diameter_m",
+    "bluntness_ratio",
+    "cone_half_angle_deg",
+    "flight_path_angle_deg"
+  ],
+  "frozen": {
+    "shoulder_ratio": 0.1,
+    "aft_cone_angle_deg": 20.0,
+    "fineness_ratio": 0.875,
+    "entry_velocity_m_s": 7400.0,
+    "mass_kg": 350.0,
+    "insulator_thickness_m": 0.015
+  },
+  "variables": {
+    "diameter_m": {
+      "role": "design",
+      "units": "m",
+      "lower": 0.8,
+      "upper": 4.5,
+      "reference": 1.2,
+      "kind": "direct"
+    },
+    "bluntness_ratio": {
+      "role": "design",
+      "units": "-",
+      "lower": 0.25,
+      "upper": 1.35,
+      "reference": 0.5,
+      "kind": "times_diameter"
+    },
+    "shoulder_ratio": {
+      "role": "design",
+      "units": "-",
+      "lower": 0.02,
+      "upper": 0.1,
+      "reference": 0.1,
+      "kind": "times_diameter"
+    },
+    "cone_half_angle_deg": {
+      "role": "design",
+      "units": "deg",
+      "lower": 20.0,
+      "upper": 70.0,
+      "reference": 25.0,
+      "kind": "direct"
+    },
+    "aft_cone_angle_deg": {
+      "role": "design",
+      "units": "deg",
+      "lower": 0.0,
+      "upper": 35.0,
+      "reference": 20.0,
+      "kind": "direct"
+    },
+    "fineness_ratio": {
+      "role": "design",
+      "units": "-",
+      "lower": 0.5,
+      "upper": 1.2,
+      "reference": 0.875,
+      "kind": "times_diameter"
+    },
+    "flight_path_angle_deg": {
+      "role": "design",
+      "units": "deg",
+      "lower": -8.0,
+      "upper": -1.5,
+      "reference": -3.0,
+      "kind": "direct"
+    },
+    "entry_velocity_m_s": {
+      "role": "given",
+      "units": "m/s",
+      "lower": 7200.0,
+      "upper": 7800.0,
+      "reference": 7400.0,
+      "kind": "direct"
+    },
+    "mass_kg": {
+      "role": "given",
+      "units": "kg",
+      "lower": 250.0,
+      "upper": 450.0,
+      "reference": 350.0,
+      "kind": "direct"
+    },
+    "insulator_thickness_m": {
+      "role": "deferred",
+      "units": "m",
+      "lower": 0.01,
+      "upper": 0.03,
+      "reference": 0.015,
+      "kind": "direct"
+    }
+  },
+  "budget": 1000,
+  "seeds": [
+    11,
+    23,
+    37,
+    41,
+    59,
+    67,
+    73
+  ],
+  "checkpoints": [
+    25,
+    50,
+    75,
+    100,
+    125,
+    150,
+    175,
+    200,
+    225,
+    250,
+    275,
+    300,
+    325,
+    350,
+    375,
+    400,
+    425,
+    450,
+    475,
+    500,
+    525,
+    550,
+    575,
+    600,
+    625,
+    650,
+    675,
+    700,
+    725,
+    750,
+    775,
+    800,
+    825,
+    850,
+    875,
+    900,
+    925,
+    950,
+    975,
+    1000
+  ],
+  "hypervolume": {
+    "reference_point": {
+      "peak_heat_flux_w_m2": 2500000.0,
+      "peak_bondline_temperature_k": 450.0
+    },
+    "ideal_point": {
+      "peak_heat_flux_w_m2": 0.0,
+      "peak_bondline_temperature_k": 300.0
+    }
+  },
+  "methods": {
+    "lhs_search": {
+      "hv_final_per_seed": [
+        0.2939914640660085,
+        0.294116330704558,
+        0.30873083987286615,
+        0.3076308629707684,
+        0.3456573663038877,
+        0.25688584559056354,
+        0.2997738214625797
+      ],
+      "hv_mean": 0.30096950442446174,
+      "hv_std": 0.0262744321099049,
+      "hv_min": 0.25688584559056354,
+      "hv_max": 0.3456573663038877,
+      "n_feasible_mean": 39.714285714285715,
+      "front_size_mean": 2.5714285714285716,
+      "spacing_mean": 0.014291010561638465,
+      "cache_hits_mean": 0.0,
+      "evals_to_95pct_median": 525.0,
+      "wall_s_mean": 20.209567053713336,
+      "per_seed": {
+        "n_feasible": [
+          46,
+          45,
+          37,
+          35,
+          39,
+          40,
+          36
+        ],
+        "front_size": [
+          2,
+          3,
+          3,
+          2,
+          3,
+          2,
+          3
+        ],
+        "spacing": [
+          NaN,
+          0.0014641918416973495,
+          0.014133713767546678,
+          NaN,
+          0.012522763141372543,
+          NaN,
+          0.029043373495937285
+        ],
+        "cache_hits": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "budget_used": [
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000
+        ],
+        "not_evaluable": [
+          554,
+          554,
+          545,
+          568,
+          572,
+          560,
+          563
+        ],
+        "evals_to_95pct": [
+          775.0,
+          525.0,
+          950.0,
+          925.0,
+          100.0,
+          100.0,
+          50.0
+        ]
+      },
+      "hv_curve_median": [
+        0.09326345922871439,
+        0.17792295204554853,
+        0.19836015786643046,
+        0.25380176362800055,
+        0.25380176362800055,
+        0.25380176362800055,
+        0.25380176362800055,
+        0.25380176362800055,
+        0.25688584559056354,
+        0.26673878975782567,
+        0.26673878975782567,
+        0.26673878975782567,
+        0.26673878975782567,
+        0.26800792192699535,
+        0.26800792192699535,
+        0.26800792192699535,
+        0.26800792192699535,
+        0.26800792192699535,
+        0.26800792192699535,
+        0.268087305813649,
+        0.27585595619241005,
+        0.27585595619241005,
+        0.27585595619241005,
+        0.27585595619241005,
+        0.28550905409800553,
+        0.28550905409800553,
+        0.28550905409800553,
+        0.28550905409800553,
+        0.28550905409800553,
+        0.28550905409800553,
+        0.2939914640660085,
+        0.2939914640660085,
+        0.2939914640660085,
+        0.2939914640660085,
+        0.2939914640660085,
+        0.2939914640660085,
+        0.294116330704558,
+        0.2997738214625797,
+        0.2997738214625797,
+        0.2997738214625797
+      ]
+    },
+    "nsga2": {
+      "hv_final_per_seed": [
+        0.3660767451011555,
+        0.370420501187017,
+        0.3794372231914124,
+        0.3773212536249577,
+        0.37787977492994235,
+        0.3846746008722781,
+        0.3849997071191931
+      ],
+      "hv_mean": 0.3772585437179937,
+      "hv_std": 0.006974375306334842,
+      "hv_min": 0.3660767451011555,
+      "hv_max": 0.3849997071191931,
+      "n_feasible_mean": 693.5714285714286,
+      "front_size_mean": 23.142857142857142,
+      "spacing_mean": 0.007589282794601215,
+      "cache_hits_mean": 0.0,
+      "evals_to_95pct_median": 625.0,
+      "wall_s_mean": 46.609134202286704,
+      "per_seed": {
+        "n_feasible": [
+          647,
+          731,
+          694,
+          695,
+          702,
+          716,
+          670
+        ],
+        "front_size": [
+          13,
+          11,
+          17,
+          18,
+          14,
+          55,
+          34
+        ],
+        "spacing": [
+          0.009942878219141246,
+          0.009180943168112339,
+          0.009863346206487185,
+          0.008117814122597565,
+          0.011893273490598126,
+          0.0017081559120196495,
+          0.002418568443252394
+        ],
+        "cache_hits": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "budget_used": [
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000
+        ],
+        "not_evaluable": [
+          125,
+          58,
+          121,
+          103,
+          117,
+          87,
+          89
+        ],
+        "evals_to_95pct": [
+          850.0,
+          875.0,
+          525.0,
+          825.0,
+          550.0,
+          625.0,
+          575.0
+        ]
+      },
+      "hv_curve_median": [
+        0.10842651321063546,
+        0.25177051980715875,
+        0.25177051980715875,
+        0.27386912848509803,
+        0.2765439996910969,
+        0.2880375149281398,
+        0.28982990896271466,
+        0.29006162143963043,
+        0.2900970438140978,
+        0.31366804395027875,
+        0.31396326769523714,
+        0.3259463824736274,
+        0.3275817679086032,
+        0.33243713778738854,
+        0.33315587780049677,
+        0.3383103156383819,
+        0.3453729722234852,
+        0.34558877818441963,
+        0.34632610753871806,
+        0.3580745261775214,
+        0.3581185657193996,
+        0.35942446027561736,
+        0.3595891480800915,
+        0.36285933101334994,
+        0.36331038368867263,
+        0.3647783341577998,
+        0.36483513659153727,
+        0.3656938726199526,
+        0.36661128696091394,
+        0.37280963734997546,
+        0.3728386586359999,
+        0.373008049035121,
+        0.37306113296186083,
+        0.37411765302674116,
+        0.3743512540570607,
+        0.3773826211239113,
+        0.3773981694589302,
+        0.3775426262850432,
+        0.3776942080087056,
+        0.37787977492994235
+      ]
+    },
+    "scalarised_de": {
+      "hv_final_per_seed": [
+        0.32414995558933274,
+        0.29502944119729135,
+        0.30550535477473795,
+        0.2874697052679385,
+        0.2725961997315767,
+        0.2723573554955593,
+        0.308533463161706
+      ],
+      "hv_mean": 0.2950916393168775,
+      "hv_std": 0.01921155924940044,
+      "hv_min": 0.2723573554955593,
+      "hv_max": 0.32414995558933274,
+      "n_feasible_mean": 104.0,
+      "front_size_mean": 3.2857142857142856,
+      "spacing_mean": 0.029477918326078333,
+      "cache_hits_mean": 1.0,
+      "evals_to_95pct_median": 375.0,
+      "wall_s_mean": 40.84671730943124,
+      "per_seed": {
+        "n_feasible": [
+          105,
+          103,
+          111,
+          125,
+          76,
+          90,
+          118
+        ],
+        "front_size": [
+          1,
+          5,
+          3,
+          4,
+          3,
+          5,
+          2
+        ],
+        "spacing": [
+          NaN,
+          0.012492389039171417,
+          0.059822601237928416,
+          0.006123201869483656,
+          0.04591479585252849,
+          0.02303660363127969,
+          NaN
+        ],
+        "cache_hits": [
+          1,
+          2,
+          1,
+          1,
+          0,
+          1,
+          1
+        ],
+        "budget_used": [
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000,
+          1000
+        ],
+        "not_evaluable": [
+          309,
+          348,
+          301,
+          305,
+          306,
+          355,
+          305
+        ],
+        "evals_to_95pct": [
+          350.0,
+          200.0,
+          575.0,
+          125.0,
+          375.0,
+          750.0,
+          675.0
+        ]
+      },
+      "hv_curve_median": [
+        0.1630150609054467,
+        0.1630150609054467,
+        0.16758681116969099,
+        0.18423551817000283,
+        0.23413272592297263,
+        0.2614325930393887,
+        0.272020188796671,
+        0.27582566371657297,
+        0.27582566371657297,
+        0.27582566371657297,
+        0.27582566371657297,
+        0.27582566371657297,
+        0.27582566371657297,
+        0.2764273233984625,
+        0.2764273233984625,
+        0.28634494545003153,
+        0.28634494545003153,
+        0.286728183995206,
+        0.286728183995206,
+        0.286728183995206,
+        0.2874697052679385,
+        0.2874697052679385,
+        0.2884501686742638,
+        0.28990838076314634,
+        0.28990838076314634,
+        0.28990838076314634,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135,
+        0.29502944119729135
+      ]
+    }
+  },
+  "combined": {
+    "n_front": 64,
+    "hv": 0.3851447938064452,
+    "spacing": 0.001382251185391206,
+    "n_feasible_distinct": 5861,
+    "n_feasible_outside_reference": 0
+  },
+  "selected": {
+    "peak_flux_only": {
+      "run_id": "M4-OPT-20260920T132037Z",
+      "method": "nsga2",
+      "seed": 67,
+      "fidelity": 0,
+      "eval_index": 795,
+      "budget_index": 795,
+      "generation": 19,
+      "candidate_id": "C-52b4dbb040f4",
+      "parent_ids": [
+        "C-1ae8b886ba58",
+        "C-0a2d67fcd0ce"
+      ],
+      "cache_hit": false,
+      "feasible": true,
+      "failure_reason": "",
+      "violated_constraints": [],
+      "wall_time_s": 0.3386512919969391,
+      "x__diameter_m": 3.3763676636276,
+      "x__bluntness_ratio": 1.1894849349743533,
+      "x__shoulder_ratio": 0.1,
+      "x__cone_half_angle_deg": 68.82917059099299,
+      "x__aft_cone_angle_deg": 20.0,
+      "x__fineness_ratio": 0.875,
+      "x__flight_path_angle_deg": -1.5088055161671106,
+      "x__entry_velocity_m_s": 7400.0,
+      "x__mass_kg": 350.0,
+      "x__insulator_thickness_m": 0.015,
+      "peak_heat_flux_w_m2": 201867.34793318983,
+      "integrated_external_heat_j_m2": 17378163.727053575,
+      "peak_surface_temperature_k": 1377.7679725621963,
+      "peak_bondline_temperature_k": 412.0445691140759,
+      "bondline_exposure_metric_k_s": 4380.72902322593,
+      "thermal_penetration_depth_m": 0.0125625,
+      "max_g": 9.216535046229373,
+      "max_dynamic_pressure_pa": 2944.3254088136755,
+      "entry_duration_s": 383.3750194925436,
+      "time_of_peak_heating_s": 177.4870864874209,
+      "energy_balance_residual": 1.7667910726970448e-11,
+      "margin__max_g": 0.231955412814219,
+      "margin__max_dynamic_pressure_pa": NaN,
+      "margin__peak_bondline_temperature_k": 0.0843454019687201,
+      "margin__peak_surface_temperature_k": NaN,
+      "margin__bluntness_ratio": 0.0087625541880389,
+      "margin__heatshield_mass_fraction": 0.004552917665296,
+      "diag__bluntness_ratio": 1.1894849349743533,
+      "diag__heatshield_mass_fraction": 0.995447082334704,
+      "diag__wetted_forebody_area_m2": 11.166874321062384,
+      "diag__heat_load_fraction_above_86km": 0.1949816534704772,
+      "diag__bondline_peak_time_s": 432.45521999379673,
+      "diag__thermal_window_end_s": 1583.3750194925435,
+      "diag__bondline_end_rate_k_s": -0.0253399874317723,
+      "termination": "terminal_altitude",
+      "status": "OK"
+    },
+    "joint_knee": {
+      "run_id": "M4-OPT-20260920T132037Z",
+      "method": "nsga2",
+      "seed": 67,
+      "fidelity": 0,
+      "eval_index": 997,
+      "budget_index": 997,
+      "generation": 24,
+      "candidate_id": "C-f82c7382fe40",
+      "parent_ids": [
+        "C-897d0c0c34ed",
+        "C-8afebc611484"
+      ],
+      "cache_hit": false,
+      "feasible": true,
+      "failure_reason": "",
+      "violated_constraints": [],
+      "wall_time_s": 0.2839817499916535,
+      "x__diameter_m": 3.376762395251836,
+      "x__bluntness_ratio": 1.1883936457687947,
+      "x__shoulder_ratio": 0.1,
+      "x__cone_half_angle_deg": 69.7112442770933,
+      "x__aft_cone_angle_deg": 20.0,
+      "x__fineness_ratio": 0.875,
+      "x__flight_path_angle_deg": -2.4516569708543665,
+      "x__entry_velocity_m_s": 7400.0,
+      "x__mass_kg": 350.0,
+      "x__insulator_thickness_m": 0.015,
+      "peak_heat_flux_w_m2": 219909.1379757751,
+      "integrated_external_heat_j_m2": 15800089.474727323,
+      "peak_surface_temperature_k": 1406.3848118363403,
+      "peak_bondline_temperature_k": 398.92833309850624,
+      "bondline_exposure_metric_k_s": 0.0,
+      "thermal_penetration_depth_m": 0.0124375,
+      "max_g": 10.267920841059247,
+      "max_dynamic_pressure_pa": 3279.4355403164795,
+      "entry_duration_s": 334.73182545838694,
+      "time_of_peak_heating_s": 134.85620371004927,
+      "energy_balance_residual": 1.8681036856112528e-11,
+      "margin__max_g": 0.1443399299117292,
+      "margin__max_dynamic_pressure_pa": NaN,
+      "margin__peak_bondline_temperature_k": 0.1134925931144305,
+      "margin__peak_surface_temperature_k": NaN,
+      "margin__bluntness_ratio": 0.0096719618593377,
+      "margin__heatshield_mass_fraction": 0.0045293279360331,
+      "diag__bluntness_ratio": 1.1883936457687947,
+      "diag__heatshield_mass_fraction": 0.9954706720639668,
+      "diag__wetted_forebody_area_m2": 11.167138949435524,
+      "diag__heat_load_fraction_above_86km": 0.1636880184116215,
+      "diag__bondline_peak_time_s": 392.827063553625,
+      "diag__thermal_window_end_s": 1534.731825458387,
+      "diag__bondline_end_rate_k_s": -0.0231862085915448,
+      "termination": "terminal_altitude",
+      "status": "OK"
+    },
+    "bondline_only": {
+      "run_id": "M4-OPT-20260920T132037Z",
+      "method": "nsga2",
+      "seed": 73,
+      "fidelity": 0,
+      "eval_index": 907,
+      "budget_index": 907,
+      "generation": 22,
+      "candidate_id": "C-bafff098d167",
+      "parent_ids": [
+        "C-22f7b3ab43d7",
+        "C-24bd90fb2865"
+      ],
+      "cache_hit": false,
+      "feasible": true,
+      "failure_reason": "",
+      "violated_constraints": [],
+      "wall_time_s": 0.3307104580017039,
+      "x__diameter_m": 3.3724564477562913,
+      "x__bluntness_ratio": 1.1915142566031047,
+      "x__shoulder_ratio": 0.1,
+      "x__cone_half_angle_deg": 69.48997012755018,
+      "x__aft_cone_angle_deg": 20.0,
+      "x__fineness_ratio": 0.875,
+      "x__flight_path_angle_deg": -3.5872808486304253,
+      "x__entry_velocity_m_s": 7400.0,
+      "x__mass_kg": 350.0,
+      "x__insulator_thickness_m": 0.015,
+      "peak_heat_flux_w_m2": 243932.34851286624,
+      "integrated_external_heat_j_m2": 14218835.322840896,
+      "peak_surface_temperature_k": 1441.5476602053825,
+      "peak_bondline_temperature_k": 386.93955283119845,
+      "bondline_exposure_metric_k_s": 0.0,
+      "thermal_penetration_depth_m": 0.0121875,
+      "max_g": 11.977631216196915,
+      "max_dynamic_pressure_pa": 3835.2689998370606,
+      "entry_duration_s": 295.2374148501641,
+      "time_of_peak_heating_s": 103.1685410007468,
+      "energy_balance_residual": 1.9800793676474623e-11,
+      "margin__max_g": 0.0018640653169235,
+      "margin__max_dynamic_pressure_pa": NaN,
+      "margin__peak_bondline_temperature_k": 0.1401343270417812,
+      "margin__peak_surface_temperature_k": NaN,
+      "margin__bluntness_ratio": 0.007071452830746,
+      "margin__heatshield_mass_fraction": 0.0070825267422017,
+      "diag__bluntness_ratio": 1.1915142566031047,
+      "diag__heatshield_mass_fraction": 0.9929174732577982,
+      "diag__wetted_forebody_area_m2": 11.138497296161198,
+      "diag__heat_load_fraction_above_86km": 0.1367978518188125,
+      "diag__bondline_peak_time_s": 368.3577156020438,
+      "diag__thermal_window_end_s": 1495.237414850164,
+      "diag__bondline_end_rate_k_s": -0.0212977866311343,
+      "termination": "terminal_altitude",
+      "status": "OK"
+    }
+  },
+  "selected_limits": {
+    "peak_flux_only": {
+      "box_bounds": [
+        "flight_path_angle_deg at its upper box bound -1.5"
+      ],
+      "active_constraints": [
+        "bluntness_ratio",
+        "heatshield_mass_fraction"
+      ]
+    },
+    "joint_knee": {
+      "box_bounds": [
+        "cone_half_angle_deg at its upper box bound 70"
+      ],
+      "active_constraints": [
+        "bluntness_ratio",
+        "heatshield_mass_fraction"
+      ]
+    },
+    "bondline_only": {
+      "box_bounds": [],
+      "active_constraints": [
+        "max_g",
+        "bluntness_ratio",
+        "heatshield_mass_fraction"
+      ]
+    }
+  },
+  "method_settings": {
+    "lhs_search": {
+      "enabled": true
+    },
+    "nsga2": {
+      "enabled": true,
+      "population_size": 40
+    },
+    "scalarised_de": {
+      "enabled": true,
+      "n_weights": 5,
+      "population_size": 20,
+      "mutation": [
+        0.5,
+        1.0
+      ],
+      "recombination": 0.7
+    }
+  },
+  "audit": {
+    "n_front": 64,
+    "parked_on_bounds": {
+      "diameter_m": {
+        "at_lower": 0,
+        "at_upper": 0,
+        "lower": 0.8,
+        "upper": 4.5,
+        "front_min": 3.345454342467577,
+        "front_max": 3.379720054349211
+      },
+      "bluntness_ratio": {
+        "at_lower": 0,
+        "at_upper": 0,
+        "lower": 0.25,
+        "upper": 1.35,
+        "front_min": 1.177079319319642,
+        "front_max": 1.1977496730754562
+      },
+      "cone_half_angle_deg": {
+        "at_lower": 0,
+        "at_upper": 49,
+        "lower": 20.0,
+        "upper": 70.0,
+        "front_min": 68.75372348051118,
+        "front_max": 69.99995704030627
+      },
+      "flight_path_angle_deg": {
+        "at_lower": 0,
+        "at_upper": 6,
+        "lower": -8.0,
+        "upper": -1.5,
+        "front_min": -3.5872808486304253,
+        "front_max": -1.5088055161671106
+      }
+    },
+    "active_constraints": {
+      "max_g": {
+        "n_active": 3,
+        "min_margin": 0.0018640653169235
+      },
+      "peak_bondline_temperature_k": {
+        "n_active": 0,
+        "min_margin": 0.0843454019687201
+      },
+      "bluntness_ratio": {
+        "n_active": 54,
+        "min_margin": 0.0018752724371197
+      },
+      "heatshield_mass_fraction": {
+        "n_active": 57,
+        "min_margin": 0.0023502324012621
+      }
+    },
+    "heat_load_above_86km": {
+      "max_fraction": 0.1959793739281435,
+      "limit": 0.05,
+      "n_over": 64
+    },
+    "soak_truncation": {
+      "max_end_rate_k_s": -0.0212977866311343,
+      "limit_k_s": 0.0,
+      "n_still_warming": 0
+    },
+    "counterfactual_without_constraint": {
+      "max_g": {
+        "n_front_without_constraint": 83,
+        "n_of_those_violating_it": 12,
+        "worst_margin": -0.6195064887459957
+      },
+      "peak_bondline_temperature_k": {
+        "n_front_without_constraint": 71,
+        "n_of_those_violating_it": 0,
+        "worst_margin": 0.0843454019687201
+      },
+      "bluntness_ratio": {
+        "n_front_without_constraint": 25,
+        "n_of_those_violating_it": 17,
+        "worst_margin": -0.0494994061742398
+      },
+      "heatshield_mass_fraction": {
+        "n_front_without_constraint": 4,
+        "n_of_those_violating_it": 4,
+        "worst_margin": -0.7757534227249339
+      }
+    }
+  },
+  "comparison": {
+    "bondline_delta_k": -13.116236015569655,
+    "peak_flux_delta_w_m2": 18041.790042585286,
+    "heat_load_delta_j_m2": -1578074.252326252,
+    "front_bondline_span_k": 25.105016282877443,
+    "front_flux_span_w_m2": 42065.000579676416
+  }
+}

@@ -1,0 +1,11 @@
+AETHER M4 DOE  run=M4-DOE-20260920T131334Z  git=c238735 (dirty)  workers=6
+  one-at-a-time: 150 evaluations
+  Latin Hypercube: 3000 evaluations
+  Saltelli design: 6144 evaluations
+
+per-evaluation wall time: median 0.256 s, 26.6 evaluations/s overall
+active after screening: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg']
+frozen:                 ['shoulder_ratio', 'aft_cone_angle_deg', 'fineness_ratio', 'entry_velocity_m_s', 'mass_kg', 'insulator_thickness_m']
+figures: ['M4_doe_sobol.png', 'M4_doe_oat.png', 'M4_doe_lhs.png']
+report -> /Users/akj/Projects/aether/reports/milestones/M4_pareto_optimisation.md
+results -> /Users/akj/Projects/aether/results/M4/M4-DOE-20260920T131334Z

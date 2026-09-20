@@ -1,0 +1,34 @@
+AETHER M4 optimise  run=M4-OPT-20260920T132037Z  doe=M4-DOE-20260920T131334Z  git=c238735 (dirty)  workers=6
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg']
+  lhs_search     seed  11: spent 1000 of 1000, 0 cache hits, 24 s
+  lhs_search     seed  23: spent 1000 of 1000, 0 cache hits, 20 s
+  lhs_search     seed  37: spent 1000 of 1000, 0 cache hits, 20 s
+  lhs_search     seed  41: spent 1000 of 1000, 0 cache hits, 18 s
+  lhs_search     seed  59: spent 1000 of 1000, 0 cache hits, 19 s
+  lhs_search     seed  67: spent 1000 of 1000, 0 cache hits, 20 s
+  lhs_search     seed  73: spent 1000 of 1000, 0 cache hits, 21 s
+  nsga2          seed  11: spent 1000 of 1000, 0 cache hits, 44 s
+  nsga2          seed  23: spent 1000 of 1000, 0 cache hits, 49 s
+  nsga2          seed  37: spent 1000 of 1000, 0 cache hits, 45 s
+  nsga2          seed  41: spent 1000 of 1000, 0 cache hits, 52 s
+  nsga2          seed  59: spent 1000 of 1000, 0 cache hits, 46 s
+  nsga2          seed  67: spent 1000 of 1000, 0 cache hits, 47 s
+  nsga2          seed  73: spent 1000 of 1000, 0 cache hits, 43 s
+  scalarised_de  seed  11: spent 1000 of 1000, 1 cache hits, 40 s
+  scalarised_de  seed  23: spent 1000 of 1000, 2 cache hits, 35 s
+  scalarised_de  seed  37: spent 1000 of 1000, 1 cache hits, 38 s
+  scalarised_de  seed  41: spent 1000 of 1000, 1 cache hits, 38 s
+  scalarised_de  seed  59: spent 1000 of 1000, 0 cache hits, 57 s
+  scalarised_de  seed  67: spent 1000 of 1000, 1 cache hits, 40 s
+  scalarised_de  seed  73: spent 1000 of 1000, 1 cache hits, 37 s
+Traceback (most recent call last):
+  File "/Users/akj/Projects/aether/scripts/run_optimize.py", line 264, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/akj/Projects/aether/scripts/run_optimize.py", line 248, in main
+    figures = plot_optimisation_figures(summary, frame, fronts, combined, selected, curves,
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/akj/Projects/aether/src/aether/optimization/plots.py", line 169, in plot_optimisation_figures
+    written.append(save_figure(
+                                
+ValueError: Unknown format code 'g' for object of type 'str'

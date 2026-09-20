@@ -10,12 +10,14 @@ aerodynamic surrogate will later be swapped in without touching any caller.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any
 
 import numpy as np
 
+from .aerodynamics import build_cd_model
 from .atmosphere import USStandardAtmosphere1976
+from .geometry import CapsuleGeometry
 from .heating import heat_flux_history
 from .scoring import PerformanceVector, compute_metrics
 from .tps import Layer, TPSStack, solve_tps
@@ -34,6 +36,81 @@ class DesignEvaluation:
     heat_flux_w_m2: np.ndarray
     tps: Any
     fidelity: int = 0
+    diagnostics: dict[str, float] = field(default_factory=dict)
+    """Scalars that are neither objectives nor constraints but let a reviewer check that
+    a result is not an artefact: bluntness ratio, heat-shield mass fraction, share of the
+    heat load accumulated in the flagged >86 km atmosphere, and whether the bondline was
+    still warming when the soak-out window closed. See `_diagnostics`."""
+
+
+_SHAPE_FIELDS = ("shoulder_radius_m", "cone_half_angle_deg", "aft_cone_angle_deg", "length_m")
+_USSA76_EXACT_CEILING_M = 86_000.0
+
+
+def _capsule_from_config(geom: dict[str, Any]) -> CapsuleGeometry | None:
+    """Full `CapsuleGeometry` if the config carries one, else None (legacy path).
+
+    Configs written before Phase F carry only nose radius and diameter. They keep working
+    unchanged - and bit-identically - through the legacy branch. A config that carries ANY
+    shape field must carry all of them: a half-specified capsule is a config error.
+    """
+    present = [name for name in _SHAPE_FIELDS if name in geom]
+    if not present:
+        return None
+    missing = [name for name in _SHAPE_FIELDS if name not in geom]
+    if missing:
+        raise KeyError(f"vehicle.geometry is missing capsule fields {missing}")
+    return CapsuleGeometry(
+        nose_radius_m=float(geom["nose_radius_m"]),
+        diameter_m=float(geom["diameter_m"]),
+        shoulder_radius_m=float(geom["shoulder_radius_m"]),
+        cone_half_angle_deg=float(geom["cone_half_angle_deg"]),
+        aft_cone_angle_deg=float(geom["aft_cone_angle_deg"]),
+        length_m=float(geom["length_m"]),
+    )
+
+
+def _rejected(design_id: str | None, design_vector: dict[str, Any], reason: str,
+              fidelity: int = 0) -> DesignEvaluation:
+    """An evaluation that was refused before any physics ran.
+
+    Every metric is NaN - NOT zero and NOT a large penalty number. A NaN cannot be
+    mistaken for a measurement, and it cannot win a minimisation by accident.
+    """
+    nan = float("nan")
+    perf = PerformanceVector(
+        peak_heat_flux_w_m2=nan, integrated_external_heat_j_m2=nan,
+        peak_surface_temperature_k=nan, peak_bondline_temperature_k=nan,
+        bondline_exposure_metric_k_s=nan, thermal_penetration_depth_m=nan,
+        max_g=nan, max_dynamic_pressure_pa=nan, entry_duration_s=nan,
+        time_of_peak_heating_s=nan, energy_balance_residual=nan,
+        feasible=False, constraint_margins={}, termination="not_run", status=reason,
+    )
+    return DesignEvaluation(
+        design_id=design_id or f"D-{config_hash(design_vector)}",
+        design_vector=design_vector, performance=perf, trajectory=None,
+        heat_flux_w_m2=np.array([]), tps=None, fidelity=fidelity,
+    )
+
+
+def _diagnostics(traj, q: np.ndarray, tps_res) -> dict[str, float]:
+    """Artefact checks, computed for every evaluation (M4 metric-gaming audit)."""
+    load = float(np.trapezoid(q, traj.time_s))
+    high = np.where(traj.altitude_m > _USSA76_EXACT_CEILING_M, q, 0.0)
+    t_bond = tps_res.bondline_temperature_k
+    t = tps_res.time_s
+    # Mean bondline warming rate over the last 5% of the thermal window. Positive means
+    # the soak-out window closed before the bondline peaked, i.e. the reported peak
+    # bondline temperature is a LOWER bound (the NR-02 failure, re-checked per design).
+    tail = max(2, int(0.05 * len(t)))
+    end_rate = float((t_bond[-1] - t_bond[-tail]) / (t[-1] - t[-tail]))
+    return {
+        "heat_load_fraction_above_86km": float(np.trapezoid(high, traj.time_s) / load)
+        if load > 0.0 else 0.0,
+        "bondline_peak_time_s": float(t[int(np.argmax(t_bond))]),
+        "thermal_window_end_s": float(t[-1]),
+        "bondline_end_rate_k_s": end_rate,
+    }
 
 
 def _build_stack(cfg: dict[str, Any]) -> TPSStack:
@@ -58,10 +135,10 @@ def _build_stack(cfg: dict[str, Any]) -> TPSStack:
 
 
 def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> DesignEvaluation:
-    """Run the full Fidelity-0 chain for one design.
+    """Run the full coupled chain for one design.
 
-    1. validate inputs
-    2. obtain aerodynamics (constant Cd at Fidelity 0)
+    1. validate inputs - a full capsule goes through `CapsuleGeometry.validate()`
+    2. obtain aerodynamics via `aerodynamics.build_cd_model` (constant Cd at Fidelity 0)
     3. integrate the trajectory
     4. compute the heat-flux history
     5. solve the TPS response
@@ -69,7 +146,9 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
 
     Returns a DesignEvaluation. Never raises on a *physically* bad design - it comes
     back with feasible=False and a status string, because the optimiser needs to see
-    failures, not exceptions.
+    failures, not exceptions. A geometrically invalid capsule is such a design: it is
+    returned with status 'invalid geometry: <reason>' and NaN metrics, and no physics is
+    run on it. A malformed CONFIG (missing keys, unknown aero model) still raises.
     """
     veh = config["vehicle"]
     ent = config["entry"]
@@ -78,9 +157,29 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
     lim = config.get("limits", {})
 
     geom = veh["geometry"]
-    nose_radius = float(geom["nose_radius_m"])
+    capsule = _capsule_from_config(geom)
     diameter = float(geom["diameter_m"])
-    area = np.pi * (diameter / 2.0) ** 2
+    if capsule is None:
+        # Legacy two-parameter path (pre-Phase-F configs): unchanged behaviour.
+        nose_radius = float(geom["nose_radius_m"])
+        area = np.pi * (diameter / 2.0) ** 2
+    else:
+        try:
+            capsule.validate()
+        except ValueError as exc:
+            shape = {name: float(geom[name]) for name in ("nose_radius_m", "diameter_m",
+                                                          *_SHAPE_FIELDS)}
+            rejected_vector = {
+                **shape,
+                "mass_kg": float(veh["mass_kg"]),
+                "entry_velocity_m_s": float(ent["velocity_m_s"]),
+                "entry_flight_path_angle_deg": float(ent["flight_path_angle_deg"]),
+            }
+            return _rejected(design_id, rejected_vector, f"invalid geometry: {exc}")
+        nose_radius = capsule.effective_nose_radius_m
+        area = capsule.reference_area_m2
+
+    cd_model, fidelity = build_cd_model(veh.get("aero"), capsule)
 
     vehicle = VehicleAero(
         mass_kg=float(veh["mass_kg"]),
@@ -104,6 +203,7 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
         atol=float(num.get("atol", 1e-9)),
         max_step_s=float(num.get("max_step_s", 0.5)),
         atmosphere=atm,
+        cd_model=cd_model,
     )
 
     q = heat_flux_history(traj, nose_radius)
@@ -126,8 +226,26 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
     stack = _build_stack(tps_cfg)
     tps_res = solve_tps(stack, t_thermal, q_thermal)
 
+    # ---- geometry / mass-closure constraints (added at M4, see NR-15 and NR-13) ---------
+    # Both default to null == skipped, so every pre-M4 config evaluates exactly as before.
+    bluntness_ratio = nose_radius / diameter
+    extra: dict[str, tuple[float, float | None]] = {
+        "bluntness_ratio": (bluntness_ratio, lim.get("max_bluntness_ratio")),
+    }
+    diagnostics: dict[str, float] = {"bluntness_ratio": float(bluntness_ratio)}
+    if capsule is not None:
+        areal_mass = sum(layer.thickness_m * layer.density_kg_m3 for layer in stack.layers)
+        shield_fraction = (areal_mass * capsule.wetted_forebody_area_m2
+                           / float(veh["mass_kg"]))
+        extra["heatshield_mass_fraction"] = (
+            shield_fraction, lim.get("max_heatshield_mass_fraction"))
+        diagnostics["heatshield_mass_fraction"] = float(shield_fraction)
+        diagnostics["wetted_forebody_area_m2"] = capsule.wetted_forebody_area_m2
+    diagnostics.update(_diagnostics(traj, q, tps_res))
+
     perf = compute_metrics(
         traj, q, tps_res,
+        extra_constraints=extra,
         limits={
             "max_g": lim.get("max_g"),
             "max_dynamic_pressure_pa": lim.get("max_dynamic_pressure_pa"),
@@ -148,6 +266,8 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
         "entry_velocity_m_s": initial.velocity_m_s,
         "entry_flight_path_angle_deg": float(ent["flight_path_angle_deg"]),
     }
+    if capsule is not None:
+        design_vector.update({name: float(geom[name]) for name in _SHAPE_FIELDS})
 
     return DesignEvaluation(
         design_id=design_id or f"D-{config_hash(design_vector)}",
@@ -156,4 +276,6 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
         trajectory=traj,
         heat_flux_w_m2=q,
         tps=tps_res,
+        fidelity=fidelity,
+        diagnostics=diagnostics,
     )

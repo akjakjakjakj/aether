@@ -38,6 +38,8 @@ Measured on an Apple M4, single-threaded. Nothing here is parallelised yet.
 | `make test` | ~25 s |
 | `make baseline` | ~3 s |
 | `make burn-vs-bake` | ~4 min (27 one-dimensional + 140 grid evaluations) |
+| `make doe` | ~6 min on 6 worker processes (~9300 coupled evaluations; M4, added 2026-09-20) |
+| `make optimize` | ~13 min on 6 worker processes (3 methods × 7 seeds × 1000 evaluations) |
 
 A single `evaluate_design` call takes roughly 1.5 s, dominated by the TPS solve
 (~2800 implicit timesteps over 140 cells).
