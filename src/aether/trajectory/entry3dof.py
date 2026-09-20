@@ -38,7 +38,7 @@ from dataclasses import dataclass
 import numpy as np
 from scipy.integrate import solve_ivp
 
-from ..atmosphere import USStandardAtmosphere1976
+from ..atmosphere import AtmosphereModel, USStandardAtmosphere1976
 from ..utils.constants import EARTH
 
 
@@ -118,8 +118,10 @@ def integrate_entry(
     rtol: float = 1e-9,
     atol: float = 1e-9,
     max_step_s: float = 1.0,
-    atmosphere: USStandardAtmosphere1976 | None = None,
+    atmosphere: AtmosphereModel | None = None,
     cd_model: Callable[[float, float], float] | None = None,
+    gravity_m_s2: float | None = None,
+    planet_radius_m: float | None = None,
 ) -> TrajectoryResult:
     """Integrate the entry from `initial` down to `terminal_altitude_m`.
 
@@ -132,13 +134,30 @@ def integrate_entry(
     cd_model:
         Optional callable (mach, altitude_m) -> Cd, used in place of the constant
         `vehicle.cd`. This is the hook for the Fidelity-1 aerodynamic response surface.
+    atmosphere:
+        Anything satisfying `aether.atmosphere.AtmosphereModel`. Defaults to USSA-76,
+        which is what every production result uses. Passing an
+        `ExponentialAtmosphere` is what makes the Allen-Eggers closed form an
+        applicable reference (gate G1B) - it is a validation hook, not a modelling
+        option, and no config selects it.
+    gravity_m_s2:
+        If given, use this CONSTANT gravitational acceleration instead of the default
+        inverse-square `mu/r^2`. Validation hook only: a published reference case may
+        have been computed with constant gravity, and reproducing it then requires
+        matching that choice rather than arguing about it. `None` (the default) is the
+        inverse-square field every AETHER result uses. See ASSUMPTIONS A-TRAJ-5.
+    planet_radius_m:
+        If given, override the planet radius used for `r = R + h` and for the downrange
+        rate. Same purpose and same default-is-production rule as `gravity_m_s2`.
 
     Returns
     -------
     TrajectoryResult with dense-sampled histories.
     """
     atm = atmosphere or USStandardAtmosphere1976(warn_above_86km=False)
-    mu, r_e = EARTH.mu, EARTH.radius
+    mu = EARTH.mu
+    r_e = EARTH.radius if planet_radius_m is None else float(planet_radius_m)
+    g_const = None if gravity_m_s2 is None else float(gravity_m_s2)
 
     def cd_of(mach: float, altitude: float) -> float:
         return vehicle.cd if cd_model is None else float(cd_model(mach, altitude))
@@ -149,7 +168,7 @@ def integrate_entry(
         st = atm.state(h)
         rho = st.density_kg_m3
         r = r_e + h
-        g = mu / (r * r)
+        g = mu / (r * r) if g_const is None else g_const
         q_dyn = 0.5 * rho * v * v
         mach = v / st.speed_of_sound_m_s
         drag = q_dyn * cd_of(mach, h) * vehicle.reference_area_m2

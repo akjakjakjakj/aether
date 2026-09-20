@@ -69,8 +69,13 @@ def _layer_base_pressures() -> tuple[float, ...]:
 _P_BASE = _layer_base_pressures()
 
 # --- Transcribed USSA-76 values above 86 km (geometric altitude) ---------------------
-# SOURCE STATUS: transcribed from published USSA-76 tables; NOT yet checked against a
-# primary copy of NOAA/NASA/USAF (1976). VALIDATION_MATRIX marks this LIMITED.
+# SOURCE STATUS (updated 2026-09-20): the 90, 100, 110, 120 and 150 km rows were checked
+# against a PRIMARY copy of U.S. Standard Atmosphere, 1976 (NOAA-S/T 76-1562 /
+# NASA-TM-X-74335), Table I, pp. 68-69, read off 300 dpi page renders. T and rho agree
+# exactly to every printed digit; no value was changed. The 86, 95 and 130 km rows are
+# still unchecked, as is the log-interpolation BETWEEN rows and the pressure column at
+# every altitude. VALIDATION_MATRIX G1A' and ASSUMPTIONS A-ATM-2 carry the split verdict.
+# Pinned by tests/test_atmosphere.py::test_upper_table_against_primary_ussa76.
 # columns: Z [m], T [K], rho [kg m^-3], p [Pa]
 _UPPER_TABLE = np.array([
     [86_000.0, 186.87, 6.958e-06, 3.7338e-01],

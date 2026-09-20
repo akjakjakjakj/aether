@@ -19,12 +19,25 @@ levers:
 Reference
 ---------
 K. Sutton and R. A. Graves Jr., "A General Stagnation-Point Convective-Heating Equation
-for Arbitrary Gas Mixtures", NASA TR R-376, 1971.
+for Arbitrary Gas Mixtures", NASA TR R-376, 1971 (NTRS 19720003329).
 
-The Earth-air constant below is the widely used SI reduction of that correlation.
-STATUS: reproduced against the standard worked value in tests/test_heating.py, but the
-student has NOT yet re-derived it from TR R-376 directly - see VALIDATION_MATRIX.md
-row G2 (LIMITED, not PASS).
+IMPORTANT: that report does NOT contain the equation above. It gives
+
+    q_dot [MW/m^2] = K sqrt(p_s[atm] / R[m]) * (h_s - h_w)[MJ/kg]     (its eq. 33, p. 13)
+
+with K(air) = 0.1113 kg/s-m^3/2-atm^1/2 (its Table II, p. 39). The V^3 form used here is
+a later simplification obtained by substituting p_s = rho V^2, h_s = V^2/2 and a cold
+wall. Carrying that chain through, in the report's own declared units, gives
+k = 1.74826e-4 - within 0.39% of the 1.7415e-4 below, and well inside the primary's own
+3.3% average correlation error for air.
+
+STATUS (2026-09-20): re-derived from the primary; gate G2 is PASS for the constant's
+provenance and magnitude. The derivation is step-by-step in
+`docs/theory/sutton_graves_constant.md` and pinned by
+`tests/test_heating.py::test_constant_matches_rederivation_from_tr_r376`. The constant
+was deliberately NOT changed - see `docs/negative_results.md` NR-12. What remains
+out of scope rather than unvalidated is the MODEL FORM: catalycity, hot wall, radiation
+(A-HEAT-2..4 below).
 
 Limitations that matter for this project
 ----------------------------------------

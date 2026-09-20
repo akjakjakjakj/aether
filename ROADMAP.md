@@ -49,7 +49,31 @@ package, external review record.
 
 ## Immediate open items
 
-Carried from `PROJECT_STATUS.md`: justify or widen the active diameter bound; re-derive
-the Sutton–Graves constant from TR R-376; check the >86 km atmosphere table against a
-primary source; reproduce an external trajectory reference case; source the constraint
-limits; consider Crank–Nicolson before evaluation count starts to matter.
+**Closed 2026-09-20** by the sourcing report and its follow-through — struck, not deleted,
+so the sequence stays legible:
+
+- ~~re-derive the Sutton–Graves constant from TR R-376~~ — done,
+  `docs/theory/sutton_graves_constant.md`. Constant deliberately unchanged (NR-12);
+  gate G2 → PASS.
+- ~~check the >86 km atmosphere table against a primary source~~ — done at five
+  altitudes, exact agreement, nothing changed; gate G1A′ → PASS/LIMITED split.
+- ~~reproduce an external trajectory reference case~~ — done, Allen–Eggers (NACA 1381)
+  against the Putnam & Braun 2015 benchmark; gate G1B → PASS.
+- ~~source the constraint limits~~ — both sourced, neither changed. The bondline
+  allowable now cites the Shuttle aluminium-structure limit (A-LIM-1a); the 12 g figure
+  matches no documented sustained-g curve and is now an explicit open **student
+  decision** in `ASSUMPTIONS.md`, with its measured effect on the feasible region.
+
+**Still open:**
+
+- justify or widen the active diameter bound (A-LIM-3; partially superseded by the
+  mass-closure constraint A-OPT-6, not closed by it);
+- **decide the deceleration limit** — Option A (relabel 12 g as an emergency envelope) or
+  Option B (adopt the NASA-STD-3001 duration-dependent deconditioned curve, which empties
+  the M1b feasible region). Option B additionally requires a *pulse-duration* metric; the
+  evaluator currently stores `max_g` only;
+- close the rest of G1A′: the 86/95/130 km rows, the pressure column, and the
+  interpolation between rows — promoted from housekeeping by NR-14;
+- read Tauber (NASA TP-2914, 1989) and Tauber & Sutton (1991) and quantify the
+  Sutton–Graves model-form limits (gate G2′), catalycity first;
+- consider Crank–Nicolson before evaluation count starts to matter.
