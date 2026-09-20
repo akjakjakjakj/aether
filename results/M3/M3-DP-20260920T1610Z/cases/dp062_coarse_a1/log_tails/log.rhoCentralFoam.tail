@@ -1,0 +1,60 @@
+
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUx, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUy, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUz, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoE, Initial residual = 0, Final residual = 0, No Iterations 0
+ExecutionTime = 0.32 s  ClockTime = 0 s
+
+Flow time scale min/max = 6.425221664e-08, 4.563574234e-07
+Courant Numbers: min = 0.0603634309, average = 0.1083897553, max = 0.2
+Time = 1551
+
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUx, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUy, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUz, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoE, Initial residual = 0, Final residual = 0, No Iterations 0
+ExecutionTime = 0.32 s  ClockTime = 0 s
+
+Flow time scale min/max = 6.425761811e-08, 4.563957878e-07
+Courant Numbers: min = 0.06037302954, average = 0.1083926842, max = 0.2
+Time = 1552
+
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUx, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUy, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUz, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoE, Initial residual = 0, Final residual = 0, No Iterations 0
+ExecutionTime = 0.33 s  ClockTime = 0 s
+
+Flow time scale min/max = 6.426400522e-08, 4.564411529e-07
+Courant Numbers: min = 0.06038554557, average = 0.1083968234, max = 0.2
+Time = 1553
+
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUx, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUy, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUz, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoE, Initial residual = 0, Final residual = 0, No Iterations 0
+ExecutionTime = 0.34 s  ClockTime = 0 s
+
+Flow time scale min/max = 6.427131545e-08, 4.564930745e-07
+Courant Numbers: min = 0.0604001574, average = 0.1084019825, max = 0.2
+Time = 1554
+
+diagonal:  Solving for rho, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUx, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUy, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoUz, Initial residual = 0, Final residual = 0, No Iterations 0
+diagonal:  Solving for rhoE, Initial residual = 0, Final residual = 0, No Iterations 0
+ExecutionTime = 0.34 s  ClockTime = 0 s
+
+[stack trace]
+=============
+#1  Foam::sigFpe::sigHandler(int) in /Volumes/OpenFOAM-v2512/platforms/darwin64ClangDPInt32Opt/lib/libOpenFOAM.dylib
+#2  _sigtramp in /usr/lib/system/libsystem_platform.dylib
+#3  Foam::tmp<Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>> Foam::sqrt<Foam::fvPatchField, Foam::volMesh>(Foam::tmp<Foam::GeometricField<double, Foam::fvPatchField, Foam::volMesh>> const&) in /Volumes/OpenFOAM-v2512/platforms/darwin64ClangDPInt32Opt/bin/rhoCentralFoam
+#4  main in /Volumes/OpenFOAM-v2512/platforms/darwin64ClangDPInt32Opt/bin/rhoCentralFoam
+#5  start in /usr/lib/dyld
+=============

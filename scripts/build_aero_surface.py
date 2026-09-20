@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Milestone M3: fit, cross-validate and persist the CFD drag surface `cfd_surface_v1`.
+"""Milestone M3: fit, cross-validate and persist the CURRENT drag surface (`cfd_surface_v2`).
 
     build_aero_surface.py --run-id M3-DP-...            # production mesh level of the config
     build_aero_surface.py --run-id M3-DP-... --level medium
 
 Reads results/M3/<run>/design_points_<level>.csv. Writes the surface to
-data/aero/cfd_surface_v1/ (what `vehicle.aero.model: cfd_surface_v1` loads) and the
-validation tables + figures next to the run. Seconds, no OpenFOAM needed.
+data/aero/cfd_surface_v2/ (what `vehicle.aero.model: cfd_surface_v2` loads; v1 is never
+rebuilt) and the validation tables + figures next to the run. Seconds, no OpenFOAM needed.
 """
 
 from __future__ import annotations

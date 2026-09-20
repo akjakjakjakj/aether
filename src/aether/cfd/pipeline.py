@@ -258,6 +258,7 @@ def restart_case(
     sizing_radius_m: float | None = None,
     solver_timeout_s: float = 6 * 3600.0,
     min_blocks: int = 1,
+    consecutive_passes: int = 1,
 ) -> CaseResult:
     """Continue a FINISHED case under different numerical controls, as a NEW case.
 
@@ -273,9 +274,13 @@ def restart_case(
     ``min_blocks`` makes the test STRICTER, never looser: the run does not stop before that
     many blocks even if the criterion is already met, so a pass has to be seen in
     ``min_blocks`` separate windows, and the verdict is always the one at the end of the
-    last block run. Resumable: if the new case directory already holds solutions, it
-    continues from its own latest time. The check after every block is appended to
-    ``restart_blocks.json`` next to the case result.
+    last block run. ``consecutive_passes`` (default 1 == the M2 behaviour, unchanged) is
+    stricter again: the run stops early only once the criterion has been met at the end of
+    that many blocks IN A ROW; a case that never does runs to ``max_blocks`` and is judged
+    there like any other. Added for M3's capsule restarts (NR-27), where a slowly drifting
+    case met the criterion in one window after one that had not. Resumable: if the new
+    case directory already holds solutions, it continues from its own latest time. The
+    check after every block is appended to ``restart_blocks.json`` next to the case result.
     """
     source_case_dir = Path(source_case_dir)
     case_dir = Path(generated_root) / case_name
@@ -332,9 +337,13 @@ def restart_case(
     blocks: list[dict] = json.loads(blocks_file.read_text()) if blocks_file.exists() else []
     n_now = int(float(_latest_time_dir(case_dir).name))
     ok, n_done = True, (n_now - start_iteration) // block_iterations
+    def passed_in_a_row() -> bool:
+        tail = blocks[-consecutive_passes:]
+        return len(tail) == consecutive_passes and all(b["converged"] for b in tail)
+
     while ok and n_done < max_blocks:
         if (n_done >= min_blocks and n_now - start_iteration >= criterion.window_iterations
-                and check().converged):
+                and check().converged and (consecutive_passes <= 1 or passed_in_a_row())):
             break
         n_done += 1
         n_now = start_iteration + n_done * block_iterations
@@ -359,7 +368,11 @@ def restart_case(
                         extra_metrics={"restart_source_case": source_case_dir.name,
                                        "restart_source_iteration": start_iteration,
                                        "max_co": solver.max_co,
-                                       "restart_blocks_run": n_done})
+                                       "restart_blocks_run": n_done,
+                                       **({"restart_consecutive_passes_required":
+                                           int(consecutive_passes),
+                                           "restart_passed_in_a_row": bool(passed_in_a_row())}
+                                          if consecutive_passes > 1 else {})})
 
 
 def _archive(case_dir: Path, out_dir: Path) -> None:

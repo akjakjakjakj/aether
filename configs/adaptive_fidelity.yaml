@@ -13,7 +13,7 @@
 # on anything other than the CFD drag surface.
 #
 # FIDELITIES (A-AF-1)
-#   F0  evaluate_design with the arm's CURRENT GP drag surface (`cfd_surface_v1`), ~0.2 s.
+#   F0  evaluate_design with the arm's CURRENT GP drag surface (`cfd_surface_v2`), ~0.2 s.
 #   F1  a real OpenFOAM case for the candidate's forebody shape, through M3's design-point
 #       runner UNCHANGED (configs/cfd_design_points.yaml: shock-clearance check, first-order
 #       start, M2's force-convergence criterion, domain retry, patience pass), on the SAME
@@ -36,10 +36,10 @@ adaptive_fidelity:
   # the runner rejects it in `mode: study`.
   # ---------------------------------------------------------------------------------------
   allow_provisional: false
-  require_aero_model: cfd_surface_v1      # the design space (and its DOE) must select this
+  require_aero_model: cfd_surface_v2      # the design space (and its DOE) must select this
 
   initial_surface:
-    directory: data/aero/cfd_surface_v1   # every arm, every seed starts from THIS surface,
+    directory: data/aero/cfd_surface_v2   # every arm, every seed starts from THIS surface,
                                           # rebuilt bit-for-bit (pinned kernel). Its M3 CFD
                                           # points are sunk cost and charged to nobody.
   f1:

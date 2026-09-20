@@ -54,7 +54,7 @@ def main() -> int:
     if not (run_dir / "config_snapshot.yaml").exists():
         meta = RunMeta(run_id=run_id, config_hash=config_hash(cfg),
                        notes=f"M3 CFD design points; OpenFOAM {openfoam_version()}; "
-                             f"gate_G4_status_at_build={dp.GATE_G4_STATUS_AT_BUILD}")
+                             f"gate_G4_status_at_build={dp.gate_g4_status_at_build()}")
         snapshot_config(cfg, run_dir, meta)
     points, skipped = dp.build_design(cfg)
     print(f"AETHER M3 design points  run={run_id}  level={level}  OpenFOAM={openfoam_version()}"
@@ -79,7 +79,7 @@ def main() -> int:
     wall = time.perf_counter() - t0
     summary = {
         "run_id": run_id, "mesh_level": level, "subset": args.subset,
-        "gate_G4_status_at_build": dp.GATE_G4_STATUS_AT_BUILD,
+        "gate_G4_status_at_build": dp.gate_g4_status_at_build(),
         "openfoam_version": openfoam_version(),
         "n_planned": len(points), "n_skipped_invalid_geometry": int(len(skipped)),
         "n_run": int(len(table)),

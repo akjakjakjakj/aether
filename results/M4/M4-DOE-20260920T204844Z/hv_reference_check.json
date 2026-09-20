@@ -1,0 +1,27 @@
+{
+  "written_utc": "2026-09-20T20:52:41.170124+00:00",
+  "written_before": "any Fidelity-1 optimiser run existed (results/M4 held only the Fidelity-0 M4-OPT-20260920T132037Z)",
+  "reference_point": {
+    "peak_heat_flux_w_m2": 2500000.0,
+    "peak_bondline_temperature_k": 450.0
+  },
+  "declared_basis": "2.5 MW/m2 sits above every feasible LHS candidate of the DOE (configs/design_space.yaml, A-OPT-4)",
+  "checks": {
+    "doe_lhs": {
+      "n_feasible": 186,
+      "max_feasible_peak_heat_flux_w_m2": 1995160.199773623,
+      "n_feasible_above_reference_flux": 0
+    },
+    "doe_sobol": {
+      "n_feasible": 964,
+      "max_feasible_peak_heat_flux_w_m2": 3135681.363325628,
+      "n_feasible_above_reference_flux": 1
+    },
+    "doe_oat": {
+      "n_feasible": 3,
+      "max_feasible_peak_heat_flux_w_m2": 680883.9588227216,
+      "n_feasible_above_reference_flux": 0
+    }
+  },
+  "decision": "NOT MOVED. The declared basis still holds at Fidelity 1: the largest feasible LHS peak flux is 1.995e+06 W/m2 (Fidelity 0: 2.045e6). 1 feasible Saltelli samples do exceed 2.5e6 W/m2 (max 3.14e6) - small-diameter designs made feasible by an insulator thicker than the 15 mm the optimiser holds fixed; they lie at the hot, dominated end of objective space and contribute nothing to a hypervolume whichever way the point is set. The low-flux end, where every front has sat, is a factor ~10 inside the box. Keeping the point keeps Fidelity-0 and Fidelity-1 hypervolumes on one scale."
+}

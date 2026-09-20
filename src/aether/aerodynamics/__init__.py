@@ -16,10 +16,12 @@ Swapping in the M3 CFD response surface is meant to be a config change plus a re
 register a builder under a new model name here, point `vehicle.aero.model` at it, and no
 study, DOE or optimiser changes.
 
-M3 registered `cfd_surface_v1` (see `cfd_surface.py`). It is registered but OFF: no config
-selects it, and while validation gate G4 is not PASS the builder REFUSES to serve it
-(`GateNotPassedError`) unless the config carries `allow_provisional: true`, which exists for
-the coupled-model gate G5 tests and labels every result it produces (spec section 17).
+M3 registered `cfd_surface_v1`, built while gate G4 was IN_PROGRESS; it stays registered for
+provenance and stays PROVISIONAL. `cfd_surface_v2` (see `cfd_surface.py`) is the current
+surface. Whether a surface is provisional is READ - from the gate status its own
+`surface.json` recorded at build time and from M2's `gate_assessment.json` now - and a
+provisional surface is REFUSED (`GateNotPassedError`) unless the config carries
+`allow_provisional: true`, which labels every result it produces (spec section 17).
 """
 
 from __future__ import annotations
@@ -52,15 +54,20 @@ def _build_constant(aero_cfg: dict[str, Any], geometry: Any) -> tuple[CdModel | 
 register_aero_model("constant", _build_constant)
 
 
-def _build_cfd_surface_v1(aero_cfg: dict[str, Any], geometry: Any) -> tuple[CdModel | None, int]:
+def _cfd_surface_builder(model_name: str) -> _Builder:
     """Fidelity 1: CFD-derived C_D(Mach, forebody shape). Imported lazily - the surrogate
     package imports the evaluator, which imports this module."""
-    from .cfd_surface import build_cfd_surface_model
+    def build(aero_cfg: dict[str, Any], geometry: Any) -> tuple[CdModel | None, int]:
+        from .cfd_surface import build_cfd_surface_model
 
-    return build_cfd_surface_model(aero_cfg, geometry)
+        return build_cfd_surface_model(aero_cfg, geometry, model_name=model_name)
+    return build
 
 
-register_aero_model("cfd_surface_v1", _build_cfd_surface_v1)
+# v1 was built while gate G4 was IN_PROGRESS: kept for provenance, provisional for ever (its
+# own surface.json says so, and the builder reads it). v2 is the current surface.
+register_aero_model("cfd_surface_v1", _cfd_surface_builder("cfd_surface_v1"))
+register_aero_model("cfd_surface_v2", _cfd_surface_builder("cfd_surface_v2"))
 
 
 def build_cd_model(aero_cfg: dict[str, Any] | None, geometry: Any) -> tuple[CdModel | None, int]:

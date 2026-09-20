@@ -1,4 +1,15 @@
-"""`cfd_surface_v1`: the CFD-derived drag response surface (spec §18, §25), Fidelity 1.
+"""`cfd_surface_v2` (and the retained `cfd_surface_v1`): the CFD-derived drag response
+surface (spec §18, §25), Fidelity 1.
+
+Versions
+--------
+* ``cfd_surface_v1`` - built while gate G4 was IN_PROGRESS (its ``surface.json`` says so and
+  always will). Kept on disk and registered for provenance; PROVISIONAL for ever, so the
+  builder refuses it without ``allow_provisional: true``.
+* ``cfd_surface_v2`` - the current surface: v1's design plus NR-21's cases recovered by a
+  lower Courant limit and a Mach-extension node, built after G4 was PASS. The gate status in
+  its ``surface.json`` was READ from M2's ``gate_assessment.json`` at build time.
+Same class, same code path; they differ only in the directory they load.
 
 Conceptual anchor
 -----------------
@@ -63,11 +74,24 @@ from scipy.interpolate import PchipInterpolator
 from ..utils.run import REPO_ROOT
 from .base_drag import BaseDragModel
 
-MODEL_NAME = "cfd_surface_v1"
-SURFACE_DIR = REPO_ROOT / "data" / "aero" / MODEL_NAME
+MODEL_V1 = "cfd_surface_v1"
+MODEL_NAME = "cfd_surface_v2"
+"""The CURRENT surface: what `make aero-surface` builds and the design space selects."""
+MODEL_NAMES = (MODEL_V1, MODEL_NAME)
+
+
+def surface_dir(model: str = MODEL_NAME) -> Path:
+    if model not in MODEL_NAMES:
+        raise KeyError(f"unknown CFD surface '{model}'; known: {MODEL_NAMES}")
+    return REPO_ROOT / "data" / "aero" / model
+
+
+SURFACE_DIR = surface_dir(MODEL_NAME)
 SHAPE_INPUTS = ("bluntness_ratio", "cone_half_angle_deg", "shoulder_ratio")
 INPUTS = ("log_mach", *SHAPE_INPUTS)
 N_MACH_NODES = 48
+N_MACH_NODES_EXTENSION = 8
+"""Nodes between the design's core Mach maximum and the Mach-extension node (v2 only)."""
 M2_RESULTS = REPO_ROOT / "results" / "M2"
 
 
@@ -122,10 +146,13 @@ def discretisation_band(level: str = "medium", root: Path = M2_RESULTS,
         return out
     rows = table[table["quantity"] == quantity]
     if level == "coarse":
-        if not {"phi_coarse", "phi_extrapolated"} <= set(rows.columns):
+        if "band_coarse_rel" in rows.columns and rows["band_coarse_rel"].notna().any():
+            band = rows["band_coarse_rel"].abs()          # the rebuilt file states it itself
+        elif {"phi_coarse", "phi_extrapolated"} <= set(rows.columns):
+            band = 1.25 * (rows["phi_coarse"] - rows["phi_extrapolated"]).abs() \
+                / rows["phi_extrapolated"].abs()
+        else:
             return out
-        band = 1.25 * (rows["phi_coarse"] - rows["phi_extrapolated"]).abs() \
-            / rows["phi_extrapolated"].abs()
     else:
         if f"gci_{level}" not in rows.columns:
             return out
@@ -136,6 +163,23 @@ def discretisation_band(level: str = "medium", root: Path = M2_RESULTS,
     out.update(available=True, rel_band=float(band.max()), n_mach=int(len(band)),
                source=str(path.relative_to(REPO_ROOT)) if path.is_relative_to(REPO_ROOT)
                else str(path))
+    # The rebuilt gci.csv (NR-25) also carries LABELLED iterative columns: the half
+    # peak-to-peak of the residual C_D limit cycle at each level, the band re-computed at the
+    # cycle's extremes, and their combination. They are passed through under their own names
+    # so no reader can mistake iterative scatter for discretisation error. `rel_band` stays
+    # the pure discretisation band; `rel_band_sampled` is what `z_discretisation` scales -
+    # the file's combined discretisation + iterative value when it exists, else `rel_band`.
+    labelled = {"iterative_half_p2p_rel": f"limit_cycle_half_p2p_rel_{level}",
+                "rel_band_at_cycle_extremes_max": (
+                    "band_coarse_at_cycle_extremes_max" if level == "coarse"
+                    else f"gci_{level}_at_cycle_extremes_max"),
+                "discretisation_plus_iterative_rel": f"discretisation_plus_cycle_rel_{level}"}
+    for key, column in labelled.items():
+        vals = rows[column].dropna() if column in rows.columns else pd.Series(dtype=float)
+        out[key] = float(vals.abs().max()) if len(vals) else None
+    out["rel_band_sampled"] = (out["discretisation_plus_iterative_rel"]
+                               if out["discretisation_plus_iterative_rel"] is not None
+                               else out["rel_band"])
     return out
 
 
@@ -210,17 +254,59 @@ class CfdDragSurface:
         vec = np.array([[shape[k] for k in SHAPE_INPUTS]])
         return self.gp.predict(self.unit(mach, vec), on_extrapolation=on_extrapolation)
 
+    def _nodes_and_prediction(self, shape: dict[str, float], on_extrapolation: str):
+        """Mach nodes for ONE shape and the GP prediction on them.
+
+        v1 (no `mach_core_max` in the meta): N_MACH_NODES log-spaced nodes over the whole CFD
+        Mach range, every one of which must be inside the hull - unchanged, bit for bit.
+
+        v2: the design's CORE range (up to `mach_core_max`, where anchors AND fill points
+        exist) is treated exactly the same way. Above it only the Mach-extension anchors
+        exist, and some of them failed (NR-28), so the hull there is smaller than below. A
+        shape is NOT rejected for that: its table simply stops at the last extension node
+        still inside the hull and the value there is held, exactly as v1 held its Mach-20
+        value. `mach_range` in the provenance and the per-evaluation
+        `aero_heat_fraction_above_cfd_mach` are therefore PER SHAPE, and say so."""
+        from ..surrogate.gp import ExtrapolationError
+
+        core_max = self.meta.get("mach_core_max")
+        if core_max is None or float(core_max) >= self.mach_max:
+            nodes = np.exp(np.linspace(np.log(self.mach_min), np.log(self.mach_max),
+                                       N_MACH_NODES))
+            return nodes, self.predict_fore(nodes, shape,
+                                            on_extrapolation=on_extrapolation), False
+        core_max = float(core_max)
+        nodes = np.concatenate([
+            np.exp(np.linspace(np.log(self.mach_min), np.log(core_max), N_MACH_NODES)),
+            np.exp(np.linspace(np.log(core_max), np.log(self.mach_max),
+                               N_MACH_NODES_EXTENSION + 1))[1:]])
+        pred = self.predict_fore(nodes, shape, on_extrapolation="flag")
+        outside = np.asarray(pred.extrapolated, dtype=bool)
+        n_core = N_MACH_NODES
+        if on_extrapolation == "raise" and np.any(outside[:n_core]):
+            raise ExtrapolationError(
+                f"surrogate '{self.gp.name}': {int(outside[:n_core].sum())} of {n_core} query "
+                f"points lie outside the convex hull of its {self.gp.n_train} training "
+                "points; refusing to extrapolate (pass on_extrapolation='flag' to get a "
+                "flagged guess)")
+        ext_out = outside[n_core:]
+        n_keep = n_core + (int(np.argmax(ext_out)) if ext_out.any() else len(ext_out))
+        kept = type(pred)(**{f: (getattr(pred, f)[:n_keep]
+                                 if isinstance(getattr(pred, f), np.ndarray)
+                                 else getattr(pred, f))
+                             for f in pred.__dataclass_fields__})
+        return nodes[:n_keep], kept, n_keep < len(nodes)
+
     def cd_model(self, shape: dict[str, float], *, on_extrapolation: str = "raise",
                  z_gp: float = 0.0, z_discretisation: float = 0.0,
                  u_model_form: float = 0.0, u_base: float = 0.0) -> TabulatedCd:
-        nodes = np.exp(np.linspace(np.log(self.mach_min), np.log(self.mach_max), N_MACH_NODES))
-        pred = self.predict_fore(nodes, shape, on_extrapolation=on_extrapolation)
+        nodes, pred, truncated = self._nodes_and_prediction(shape, on_extrapolation)
         disc = discretisation_band(str(self.meta.get("mesh_level", "medium")))
         if z_discretisation != 0.0 and not disc["available"]:
             raise GateNotPassedError(
                 "z_discretisation != 0 requested but results/M2/<run>/gci.csv has no "
                 "medium-mesh GCI yet; the discretisation band cannot be sampled before G4")
-        s_disc = 0.5 * disc["rel_band"] if disc["available"] else 0.0
+        s_disc = 0.5 * disc["rel_band_sampled"] if disc["available"] else 0.0
         h_form = float(self.meta.get("model_form_rel_halfband", 0.0))
         if not (-1.0 <= u_model_form <= 1.0):
             raise ValueError("u_model_form must lie in [-1, +1]")
@@ -236,7 +322,7 @@ class CfdDragSurface:
             mach_nodes=nodes, cd_total=total, cd_fore=pred.central, cd_fore_std=std,
             cd_base=self.base.cd_base(nodes, u_base),
             provenance={
-                "aero_model": MODEL_NAME,
+                "aero_model": str(self.meta.get("model", MODEL_NAME)),
                 "surface_training_hash": self.meta["training_hash"],
                 "surface_source_run": self.meta.get("source_run"),
                 "surface_n_train": int(len(self.table)),
@@ -246,10 +332,14 @@ class CfdDragSurface:
                 "gp_sigma_inflation": inflation,
                 "discretisation_band_available": bool(disc["available"]),
                 "discretisation_rel_band": disc["rel_band"],
+                "discretisation_rel_band_sampled": disc.get("rel_band_sampled"),
+                "discretisation_iterative_half_p2p_rel": disc.get("iterative_half_p2p_rel"),
                 "discretisation_source": disc["source"],
                 "shape": dict(shape),
                 "shape_extrapolated": bool(np.any(pred.extrapolated)),
-                "mach_range": [self.mach_min, self.mach_max],
+                "mach_range": [self.mach_min, float(nodes[-1])],
+                "surface_mach_max": self.mach_max,
+                "mach_top_truncated_by_hull": bool(truncated),
                 "uncertainty_draw": {"z_gp": z_gp, "z_discretisation": z_discretisation,
                                      "u_model_form": u_model_form, "u_base": u_base},
             })
@@ -307,6 +397,7 @@ class TabulatedCd:
             "aero_time_fraction_above_cfd_mach": share(above, ones, span),
             "aero_heat_fraction_below_cfd_mach": share(below, heat_flux_w_m2, load),
             "aero_heat_fraction_above_cfd_mach": share(above, heat_flux_w_m2, load),
+            "aero_mach_top_of_table": float(self.mach_nodes[-1]),
             "aero_cd_at_peak_heating": float(self.evaluate(mach[i_peak:i_peak + 1])[0]),
             "aero_mach_at_peak_heating": float(mach[i_peak]),
             "aero_cd_fore_std_max": float(self.cd_fore_std.max()),
@@ -325,12 +416,19 @@ def load_surface(directory: Path = SURFACE_DIR) -> CfdDragSurface:
     return _load_cached(str(directory), meta.stat().st_mtime)
 
 
-def build_cfd_surface_model(aero_cfg: dict[str, Any], geometry: Any):
-    """`register_aero_model` builder. Returns (cd_model, fidelity=1)."""
+def build_cfd_surface_model(aero_cfg: dict[str, Any], geometry: Any,
+                            model_name: str = MODEL_NAME):
+    """`register_aero_model` builder. Returns (cd_model, fidelity=1).
+
+    PROVISIONAL is decided by READING two files, never by a typed string: the gate status the
+    surface's own `surface.json` recorded at build time, and M2's `gate_assessment.json` now.
+    Both PASS -> served without any opt-in. Anything else -> refused unless the config says
+    `allow_provisional: true`, and then every result is labelled."""
     if geometry is None:
-        raise ValueError(f"vehicle.aero.model '{MODEL_NAME}' needs a full capsule geometry; "
+        raise ValueError(f"vehicle.aero.model '{model_name}' needs a full capsule geometry; "
                          "the legacy nose-radius/diameter config has no shape to look up")
-    directory = Path(aero_cfg["surface_dir"]) if aero_cfg.get("surface_dir") else SURFACE_DIR
+    directory = (Path(aero_cfg["surface_dir"]) if aero_cfg.get("surface_dir")
+                 else surface_dir(model_name))
     if not directory.is_absolute():
         directory = REPO_ROOT / directory
     surface = load_surface(directory)
@@ -338,7 +436,7 @@ def build_cfd_surface_model(aero_cfg: dict[str, Any], geometry: Any):
     provisional = g4_now != "PASS" or surface.meta["gate_G4_status_at_build"] != "PASS"
     if provisional and not bool(aero_cfg.get("allow_provisional", False)):
         raise GateNotPassedError(
-            f"'{MODEL_NAME}' is PROVISIONAL: gate G4 is {g4_now} now and was "
+            f"'{model_name}' is PROVISIONAL: gate G4 is {g4_now} now and was "
             f"{surface.meta['gate_G4_status_at_build']} when the surface was built. Spec §17 "
             "forbids CFD data in the optimisation loop until G4 is PASS. For coupled-model "
             "TESTING only, set vehicle.aero.allow_provisional: true - the result is labelled.")

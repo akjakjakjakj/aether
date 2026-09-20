@@ -53,6 +53,10 @@ DIAGNOSTIC_NAMES = (
     "bluntness_ratio", "heatshield_mass_fraction", "wetted_forebody_area_m2",
     "heat_load_fraction_above_86km", "bondline_peak_time_s", "thermal_window_end_s",
     "bondline_end_rate_k_s",
+    # Fidelity 1 only (NaN at Fidelity 0): where THIS design's entry left the CFD Mach range,
+    # and what the drag surface said at peak heating. Needed by the metric-gaming audit.
+    "aero_heat_fraction_above_cfd_mach", "aero_heat_fraction_below_cfd_mach",
+    "aero_mach_top_of_table", "aero_cd_at_peak_heating", "aero_mach_at_peak_heating",
 )
 
 NOT_EVALUABLE_VIOLATION = 10.0

@@ -87,6 +87,44 @@ def _what_stops_it(row, space, audit_cfg) -> dict:
     return {"box_bounds": bounds, "active_constraints": active}
 
 
+def _m3_model_form_sensitivity(space) -> dict | None:
+    """What M3 MEASURED the declared perfect-gas band on C_D to be worth on the baseline
+    capsule - read from the M3 coupled summary of the surface's own source run, never typed."""
+    aero = space.base_config["vehicle"].get("aero", {}) or {}
+    model = str(aero.get("model", "constant"))
+    if not model.startswith("cfd_surface"):
+        return None
+    from src.aether.aerodynamics.cfd_surface import load_surface, surface_dir
+
+    meta = load_surface(surface_dir(model)).meta
+    path = ROOT / "results" / "M3" / str(meta.get("source_run")) / "coupled" / "summary.json"
+    if not path.exists():
+        return None
+    rows = {r["case"]: r for r in json.loads(path.read_text())["sensitivity_baseline_capsule"]}
+    pair = [rows.get("surface:u_model_form=+1"), rows.get("surface:u_model_form=-1")]
+    if None in pair:
+        return None
+    return {"source": str(path.relative_to(ROOT)),
+            "model_form_rel_halfband": meta.get("model_form_rel_halfband"),
+            "bondline_change_k": [r["peak_bondline_change_k"] for r in pair],
+            "peak_flux_rel_change": [r["peak_heat_flux_rel_change"] for r in pair]}
+
+
+def _hull_audit(front, space, audit_cfg) -> dict | None:
+    """Fidelity 1 only: which front designs sit on the edge of where CFD was run?"""
+    aero = space.base_config["vehicle"].get("aero", {}) or {}
+    model = str(aero.get("model", "constant"))
+    if not model.startswith("cfd_surface") or front.empty:
+        return None
+    from src.aether.aerodynamics.cfd_surface import SHAPE_INPUTS, load_surface, surface_dir
+    from src.aether.optimization.hull_coverage import front_hull_audit
+
+    directory = ROOT / aero["surface_dir"] if aero.get("surface_dir") else surface_dir(model)
+    box = {k: (space.variable(k).lower, space.variable(k).upper) for k in SHAPE_INPUTS}
+    return front_hull_audit(front, box, load_surface(directory),
+                            float(audit_cfg["bound_tolerance_fraction"]))
+
+
 def summarise(frame, space, cfg, run_meta: dict, doe_summary: dict, wall: dict) -> tuple:
     opt = cfg["optimize"]
     objectives = tuple(cfg["objectives"])
@@ -169,6 +207,8 @@ def summarise(frame, space, cfg, run_meta: dict, doe_summary: dict, wall: dict) 
         "method_settings": {m: opt["methods"][m] for m in methods},
         "audit": audit_exploits(frame, combined, space, objectives, opt["exploit_audit"]),
     }
+    summary["audit"]["cfd_hull_boundary"] = _hull_audit(combined, space, opt["exploit_audit"])
+    summary["f1_hull"] = doe_summary.get("f1_hull")
     if {"peak_flux_only", "joint_knee"} <= set(selected):
         a, b = selected["peak_flux_only"], selected["joint_knee"]
         summary["comparison"] = {
@@ -209,7 +249,14 @@ def main() -> int:
         run_id = new_run_id("M4-OPT")
         out_dir = results / run_id
     doe_summary = json.loads((doe_dir / "summary.json").read_text())
-    screening = json.loads((doe_dir / "screening.json").read_text())
+    if args.report_only:
+        screening = json.loads((doe_dir / "screening.json").read_text())
+    else:
+        # The ONLY source of the active-variable list, and it REFUSES a screening made on a
+        # different design space / drag model (NR-18): M4 itself now obeys the guard that
+        # M5-M7 already did.
+        from src.aether.optimization.guards import load_current_screening
+        screening = load_current_screening(doe_dir, cfg, full_space.base_config)
     space = full_space.with_active(screening["active"])
 
     if args.report_only:
@@ -261,6 +308,10 @@ def main() -> int:
     run_meta["fidelity"] = int(frame["fidelity"].max())
     summary, fronts, combined, selected, curves, checkpoints = summarise(
         frame, space, cfg, run_meta, doe_summary, wall)
+    summary["m3_model_form_sensitivity"] = _m3_model_form_sensitivity(space)
+    probes = out_dir / "audit_probes.json"      # scripts/run_m4_audit_probes.py, if it was run
+    summary["audit"]["probes"] = (json.loads(probes.read_text())["designs"]
+                                  if probes.exists() else None)
     with open(out_dir / "summary.json", "w") as fh:
         json.dump(summary, fh, indent=2, default=float)
 

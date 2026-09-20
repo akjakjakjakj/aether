@@ -1,0 +1,141 @@
+# AETHER Milestone M3 - CFD design points for the forebody-drag response surface (spec §18).
+#
+# Everything that decides what is run, and what counts as a usable case, is declared HERE
+# before the design is run. Solver, mesh and convergence settings are NOT repeated: they are
+# read from the M2 validation config so the design points are run with exactly the settings
+# gate G4 is judged on. MESH LEVEL: see `production_level` below - it is COARSE, which is a
+# deviation from the M3 brief (medium), forced by measured wall time and stated in the report.
+#
+# GATE STATUS AT BUILD: G4 was IN_PROGRESS when this design was run (the fine-mesh sphere
+# cases had not finished). Every artefact produced from this file records that. The surface
+# is PROVISIONAL until G4 is PASS.
+
+meta:
+  name: cfd_design_points
+  milestone: M3
+  description: Seeded space-filling design over (Mach, forebody shape) for C_D,fore.
+
+inherit:
+  cfd_validation_config: configs/cfd_validation.yaml   # solver, mesh, criterion, gas
+
+# Mesh level of the design. The brief asked for MEDIUM. Measured on this machine (fanless
+# M4, 4 performance cores, M2 benchmark still running): a coarse capsule case takes ~4 min
+# with 4 cases side by side and a medium case ~8x that, i.e. ~7-8 h for this design against
+# a ~2 h budget. So: EVERY point is run on the COARSE mesh, and a seeded subset is re-run on
+# the MEDIUM mesh to MEASURE the coarse->medium change on capsule shapes. M2's sphere shows
+# a coarse->medium change in C_D,fore of ~0.2%. To produce the all-medium surface later:
+#   make cfd-design-points LEVEL=medium RUN_ID=<this run>    (resumable, ~8 h)
+#   make aero-surface      LEVEL=medium RUN_ID=<this run>
+production_level: coarse
+mesh_check:
+  level: medium
+  n_points: 6
+  always_include: [dp015, dp017]   # the M4-front shape and the baseline shape, at Mach 20
+
+execution:
+  max_concurrent_cases: 4      # serial solver per case (NR-08), several side by side
+  threads_per_case: 1          # OMP/BLAS threads pinned in the child environment
+  solver_timeout_s: 10800
+
+# Added after the coarse smoke test (NR-19, NR-20), BEFORE any design point was run.
+startup:
+  # First-order (upwind) reconstruction for this many iterations x refinement factor, then
+  # the declared M2 limiter. Path to the steady state only; applied to EVERY design point.
+  first_order_iterations_per_refinement_factor: 1500
+domain_sizing:
+  # Billig sizing radius = max(R_n, f * R_b), f rising linearly from 1 to the factor below
+  # between the two cone angles. Boundary placement only (A-CFD-8).
+  angle_lo_deg: 40.0
+  angle_hi_deg: 70.0
+  max_body_radius_factor: 2.0
+  # Attached-shock cones: open the inflow boundary at Rasmussen's cone-shock angle + margin
+  # instead of the Mach angle + margin (which a long cone's shock crosses at high Mach).
+  detached_above_deg: 55.0
+  cone_shock_margin_deg: 5.0
+
+# ---------------------------------------------------------------------------------------
+# Inputs of the surface. The forebody-only domain (A-CFD-4) stops at the maximum-radius
+# station, so C_D,fore cannot depend on the aft cone angle or the length: the three
+# forebody shape ratios below are the ONLY geometry inputs. Ranges are the M4 design-space
+# ranges (configs/design_space.yaml), so the surface covers the box the optimiser searches.
+# Angle of attack is fixed at zero (axisymmetric wedge mesh, A-CFD-3).
+# ---------------------------------------------------------------------------------------
+inputs:
+  mach:
+    min: 3.0      # lowest Mach of the M2 benchmark; below it the base dominates (forbidden use)
+    max: 20.0     # see docs/theory/cfd_drag_surface.md for why not 6 and why not 27
+    sampling: log # space-filling in log(Mach); the GP input is log(Mach) too
+  bluntness_ratio: {min: 0.25, max: 1.35}       # R_n / D
+  cone_half_angle_deg: {min: 20.0, max: 70.0}
+  shoulder_ratio: {min: 0.02, max: 0.10}        # R_c / D
+
+# Inviscid perfect-gas flow has no length scale, so C_D depends on SHAPE and Mach only.
+# Every design point is therefore run at one diameter; the claim is checked, not assumed,
+# by re-running `scale_check.shape` at a second diameter.
+fixed:
+  diameter_m: 1.2
+scale_check:
+  enabled: true
+  diameter_m: 3.0
+  mach: 6.0
+  shape: {bluntness_ratio: 0.5, cone_half_angle_deg: 25.0, shoulder_ratio: 0.10}
+  max_rel_difference: 2.0e-3   # twice the declared force-convergence band
+
+design:
+  seed: 20260920
+  n_fill: 34                   # scrambled-Sobol fill points that must be geometrically VALID
+  max_fill_draws: 512          # invalid draws are skipped WITH the reason logged, not hidden
+  # Hull anchors: a GP must not extrapolate (spec §25), and a convex hull of interior
+  # space-filling points never reaches the corners of the box - which is exactly where the
+  # M4 front sits. Anchors are run at BOTH ends of the Mach range.
+  anchors:
+    box_vertices: true                     # every valid vertex of the shape box
+    validity_boundary:                     # smallest valid cone angle at these (b, s) pairs
+      margin_deg: 0.5
+      points:
+        - {bluntness_ratio: 0.8, shoulder_ratio: 0.02}
+        - {bluntness_ratio: 0.8, shoulder_ratio: 0.10}
+        - {bluntness_ratio: 1.2, shoulder_ratio: 0.10}   # the M4 front (R_b/R_n = 0.417)
+    explicit:
+      - {name: baseline, bluntness_ratio: 0.5, cone_half_angle_deg: 25.0, shoulder_ratio: 0.10}
+      - {name: blunt_lo_angle_a, bluntness_ratio: 0.5, cone_half_angle_deg: 20.0, shoulder_ratio: 0.02}
+      - {name: blunt_lo_angle_b, bluntness_ratio: 0.5, cone_half_angle_deg: 20.0, shoulder_ratio: 0.10}
+  # Added 2026-09-20 AFTER the first pass, and said so: the M4 front (R_n/D 1.177-1.198, cone
+  # 68.75-70 deg, R_c/D 0.10) turned out NOT to be enclosed by the hull - the one anchor placed
+  # for it sat at the validity boundary + 0.5 deg, below most of the front. These three shapes
+  # enclose it. Chosen from the front's SHAPE RANGE, not from any CFD result.
+  late_anchors:
+    - {name: m4_front_hi, bluntness_ratio: 1.2, cone_half_angle_deg: 70.0, shoulder_ratio: 0.10}
+    - {name: m4_front_lo_b, bluntness_ratio: 1.15, cone_half_angle_deg: 70.0, shoulder_ratio: 0.10}
+    - {name: m4_front_lo_b_crit, bluntness_ratio: 1.15, cone_half_angle_deg_above_critical: 0.5, shoulder_ratio: 0.10}
+  holdout:
+    n_test: 8                  # fill points only, drawn with `seed` BEFORE any case is run
+
+# ---------------------------------------------------------------------------------------
+# Acceptance of a case. A case that fails any of these is kept, reported, and NOT used.
+# ---------------------------------------------------------------------------------------
+acceptance:
+  require_force_converged: true       # the M2 criterion, unchanged
+  min_outlet_mach: 1.0                # A-CFD-4: a subsonic patch on the outflow plane is ill-posed
+  # Bow-shock clearance from the fixed-value inflow boundary (A-CFD-8), checked automatically:
+  min_upstream_clearance_fraction: 0.25   # 1 - standoff / |x_inflow| on the axis
+  max_outer_outlet_mach_deficit_rel: 0.01 # outermost outflow faces must still be freestream
+  outer_outlet_fraction: 0.05
+  stagnation_pressure_check_rel: 0.01     # vs exact Rayleigh pitot; REPORTED, not a filter
+  # Added 2026-09-20 AFTER the first pass of the coarse design, and said so: 7 of 56 cases
+  # missed the force criterion after M2's 3 extensions, several by a hair, and three of them
+  # were hull anchors. One more attempt with more extensions; the CRITERION is unchanged.
+  convergence_retry:
+    enabled: true
+    max_extensions: 9
+  domain_retry:
+    max_retries: 2
+    standoff_margin_factor: 1.6        # multiplies mesh.standoff_margin per retry
+    asymptote_margin_add_deg: 4.0      # added to mesh.asymptote_margin_deg per retry
+
+gci_hook:
+  # Discretisation uncertainty of the MEDIUM mesh comes from the M2 sphere GCI once it
+  # exists. It is READ from this file at surface-build time and never typed anywhere.
+  m2_run_glob: results/M2/M2-*/gci.csv
+  quantity: cd_fore
+  column: gci_medium

@@ -48,8 +48,11 @@ cfd-report:
 #   make cfd-design-points RUN_ID=M3-DP-... LEVEL=medium SUBSET=mesh-check
 #   make aero-surface RUN_ID=M3-DP-... [LEVEL=medium]       fit + cross-validate + persist
 #   make m3-coupled   RUN_ID=M3-DP-...                      G5, comparison, report
-# The surface is registered as vehicle.aero.model `cfd_surface_v1` and is OFF: nothing
-# selects it, and it refuses to load while gate G4 is not PASS.
+# `aero-surface` builds the CURRENT surface, `cfd_surface_v2` (data/aero/cfd_surface_v2/),
+# which configs/design_space.yaml selects. `cfd_surface_v1` stays on disk and registered for
+# provenance; it was built while G4 was IN_PROGRESS and is refused without allow_provisional.
+# A surface is served only if its own surface.json AND M2's gate_assessment.json say PASS -
+# both are read, neither is typed.
 .PHONY: cfd-design-points aero-surface m3-coupled
 cfd-design-points:
 	$(PY) scripts/run_cfd_design_points.py $(if $(RUN_ID),--run-id $(RUN_ID),) \
@@ -64,7 +67,9 @@ m3-coupled:
 
 # Milestone M4. Both take minutes on 6 cores - run them in the background. `optimize`
 # frees exactly the variables the latest `doe` run's screening.json left active. The
-# fidelity is whatever configs/design_space.yaml's vehicle.aero.model selects (0 today).
+# fidelity is whatever configs/design_space.yaml's vehicle.aero.model selects
+# (cfd_surface_v2 = Fidelity 1 since 2026-09-21). At Fidelity 1 `doe` first measures how much
+# of the shape box the CFD hull leaves and REFUSES if the Saltelli sub-box is not inside it.
 #   make optimize DOE_RUN=M4-DOE-...     pin the DOE run
 #   make optimize-report RUN_ID=M4-OPT-...   rebuild summary, figures and report only
 .PHONY: doe optimize optimize-report

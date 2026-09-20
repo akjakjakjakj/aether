@@ -13,9 +13,20 @@ import numpy as np
 import pandas as pd
 
 from ..viz import ACCENT, DEEP, GRID, HOT, INK, MUTED, _save, plt
-from .cfd_surface import SHAPE_INPUTS, CfdDragSurface
+from .cfd_surface import MODEL_NAME, SHAPE_INPUTS, CfdDragSurface, gate_g4_status, load_surface
 
-PROVISIONAL = "PROVISIONAL: gate G4 IN_PROGRESS at build"
+
+def gate_label() -> str:
+    """Caption suffix stating the gate status. READ from the current surface's `surface.json`
+    and from M2's `gate_assessment.json`; v1's figures carried a typed string here."""
+    try:
+        at_build = str(load_surface().meta.get("gate_G4_status_at_build", "UNKNOWN"))
+    except FileNotFoundError:
+        at_build = "UNKNOWN"
+    now = gate_g4_status()["status"]
+    if at_build == "PASS" and now == "PASS":
+        return "Gate G4 PASS at build and now (read from M2's gate file)"
+    return f"PROVISIONAL: gate G4 {at_build} at build, {now} now"
 SERIES = [(INK, "-", "o"), (DEEP, "--", "s"), (HOT, "-.", "^"), (ACCENT, ":", "D"),
           (MUTED, "-", "v")]
 VERDICT_STYLE = {"USABLE": (DEEP, "o"), "REJECTED": (ACCENT, "X"),
@@ -27,7 +38,7 @@ def _mach_axis(ax) -> None:
     from matplotlib.ticker import NullFormatter
 
     ax.set_xscale("log")
-    ax.set_xticks([3, 5, 10, 20], labels=["3", "5", "10", "20"])
+    ax.set_xticks([3, 5, 10, 20, 27], labels=["3", "5", "10", "20", "27"])
     ax.xaxis.set_minor_formatter(NullFormatter())
 
 
@@ -63,7 +74,7 @@ def plot_design_coverage(table: pd.DataFrame, skipped: pd.DataFrame, run_id: str
     fig.tight_layout()
     return _save(fig, out_dir, "M3_design_coverage",
                  f"Planned CFD design (anchors on the hull + scrambled-Sobol fill) and the "
-                 f"verdict of each case. Run {run_id}. {PROVISIONAL}.")
+                 f"verdict of each case. Run {run_id}. {gate_label()}.")
 
 
 def plot_cd_vs_mach(surface: CfdDragSurface, shapes: dict[str, dict[str, float]],
@@ -95,8 +106,8 @@ def plot_cd_vs_mach(surface: CfdDragSurface, shapes: dict[str, dict[str, float]]
     ax.legend(fontsize=7, loc="lower right")
     fig.tight_layout()
     return _save(fig, out_dir, "M3_cd_vs_mach",
-                 f"cfd_surface_v1 along Mach for named shapes; inviscid perfect gas, α = 0. "
-                 f"Surface hash {surface.meta['training_hash']}, run {run_id}. {PROVISIONAL}.")
+                 f"{MODEL_NAME} along Mach for named shapes; inviscid perfect gas, α = 0. "
+                 f"Surface hash {surface.meta['training_hash']}, run {run_id}. {gate_label()}.")
 
 
 def plot_cv_parity(folds: pd.DataFrame, run_id: str, out_dir: Path) -> Path:
@@ -129,7 +140,7 @@ def plot_cv_parity(folds: pd.DataFrame, run_id: str, out_dir: Path) -> Path:
     fig.tight_layout()
     return _save(fig, out_dir, "M3_surface_cv",
                  f"Every usable CFD point predicted by a GP that did not see it. Run {run_id}. "
-                 f"{PROVISIONAL}.")
+                 f"{gate_label()}.")
 
 
 def plot_base_fraction(base: pd.DataFrame, run_id: str, out_dir: Path) -> Path:
@@ -151,7 +162,7 @@ def plot_base_fraction(base: pd.DataFrame, run_id: str, out_dir: Path) -> Path:
                  "C_D,base = (1 - p_b/p_inf)·2/(γM²): an assumption, not CFD. Band: p_b/p_inf "
                  "from 0 (exact vacuum limit) up to 1 (M ≤ 6) … 3 (M ≥ 10, NASA TN D-4800 fig. "
                  f"11b, read by eye). Negative = base pressure above freestream. Run {run_id}. "
-                 f"{PROVISIONAL}.")
+                 f"{gate_label()}.")
 
 
 def plot_constant_vs_surface(summary: dict, run_id: str, out_dir: Path) -> Path:
@@ -181,8 +192,8 @@ def plot_constant_vs_surface(summary: dict, run_id: str, out_dir: Path) -> Path:
     fig.tight_layout()
     return _save(fig, out_dir, "M3_constant_vs_surface",
                  "Each design evaluated twice through evaluate_design: constant C_D (Fidelity 0) "
-                 "and cfd_surface_v1 (Fidelity 1). C_D shown: constant → surface value at peak "
-                 f"heating. Run {run_id}. {PROVISIONAL}.")
+                 f"and {MODEL_NAME} (Fidelity 1). C_D shown: constant → surface value at peak "
+                 f"heating. Run {run_id}. {gate_label()}.")
 
 
 def plot_shape_sweep(shape: pd.DataFrame, run_id: str, out_dir: Path) -> Path:
@@ -216,4 +227,4 @@ def plot_shape_sweep(shape: pd.DataFrame, run_id: str, out_dir: Path) -> Path:
     return _save(fig, out_dir, "M3_shape_sweep",
                  "Reference capsule, mass, entry state; only the forebody shape varies. Shapes "
                  f"outside the CFD hull or geometrically invalid are not drawn. Run {run_id}. "
-                 f"{PROVISIONAL}.")
+                 f"{gate_label()}.")

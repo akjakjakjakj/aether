@@ -1,11 +1,11 @@
 _meta:
   run_id: M3-DP-20260920T1610Z/coupled
   config_hash: 3b9b3d511061
-  git_commit: 8802cb7
+  git_commit: f5a55b6
   git_dirty: true
-  created_utc: '2026-09-20T17:15:26+00:00'
+  created_utc: '2026-09-20T20:44:43+00:00'
   aether_version: 0.1.0
-  notes: M3 coupled gate G5; gate_G4_status_at_build=IN_PROGRESS
+  notes: 'M3 coupled gate G5; gate G4 read at launch: PASS'
 config:
   meta:
     name: aero_surface

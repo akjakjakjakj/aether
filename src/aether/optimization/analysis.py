@@ -122,6 +122,41 @@ def audit_exploits(frame: pd.DataFrame, front: pd.DataFrame, space: DesignSpace,
         "n_still_warming": int(np.sum(rate > rate_limit)),
     }
 
+    # -- Fidelity 1 only: what the drag surface could not cover for the front designs ---------
+    top_col = "diag__aero_mach_top_of_table"
+    if top_col in front.columns and front[top_col].notna().any():
+        above = front["diag__aero_heat_fraction_above_cfd_mach"].to_numpy(dtype=float)
+        top = front[top_col].to_numpy(dtype=float)
+        paid = frame[~frame["cache_hit"]]
+        hull_rejected = paid["status"].astype(str).str.startswith("aero surface extrapolation")
+        report["cfd_surface"] = {
+            "heat_fraction_above_top_cfd_mach_min": float(np.nanmin(above)),
+            "heat_fraction_above_top_cfd_mach_max": float(np.nanmax(above)),
+            "top_cfd_mach_min": float(np.nanmin(top)), "top_cfd_mach_max": float(np.nanmax(top)),
+            "n_front_with_truncated_mach_top": int(np.sum(top < np.nanmax(top) - 1e-9)),
+            "cd_at_peak_heating_min": float(front["diag__aero_cd_at_peak_heating"].min()),
+            "cd_at_peak_heating_max": float(front["diag__aero_cd_at_peak_heating"].max()),
+            "n_candidates_rejected_outside_hull": int(hull_rejected.sum()),
+            "fraction_of_paid_candidates_rejected_outside_hull": float(hull_rejected.mean()),
+            "rejected_outside_hull_by_method": {
+                str(m): int(n) for m, n in paid[hull_rejected].groupby("method").size().items()},
+        }
+    # Every shape variable, active or frozen: where does the front sit in its box? (A frozen
+    # variable cannot be "parked" by the optimiser, but the reader still needs to see that the
+    # whole front inherits its frozen value - e.g. the shoulder ratio.)
+    report["shape_variables_on_front"] = {}
+    for var in space.variables:
+        col = f"x__{var.name}"
+        if var.name in ("bluntness_ratio", "shoulder_ratio", "cone_half_angle_deg") \
+                and col in front.columns:
+            vals = front[col].to_numpy(dtype=float)
+            report["shape_variables_on_front"][var.name] = {
+                "active": var.name in space.active, "lower": var.lower, "upper": var.upper,
+                "front_min": float(vals.min()), "front_max": float(vals.max()),
+                "front_median": float(np.median(vals)),
+                "n_within_1pct_of_lower": int(np.sum(vals <= var.lower + tol * var.span)),
+                "n_within_1pct_of_upper": int(np.sum(vals >= var.upper - tol * var.span))}
+
     evaluated = frame[(frame["status"] == "OK")].drop_duplicates("candidate_id")
     counterfactual: dict[str, Any] = {}
     for col in margin_cols:

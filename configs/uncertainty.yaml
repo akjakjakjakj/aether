@@ -246,13 +246,14 @@ inputs:
     units: "-"
     distribution: {family: normal, mean: 0.0, std: 1.0}
     apply: {type: set, path: vehicle.aero.uncertainty.z_gp}
-    requires: {aero_model: cfd_surface_v1}
+    requires: {aero_model: cfd_surface_v2}
     when_unavailable: {aero_model: skip}
     source: >
-      Measured at surface build time and stored in data/aero/cfd_surface_v1/surface.json:
+      Measured at surface build time and stored in data/aero/cfd_surface_v2/surface.json:
       the GP predictive standard deviation of C_D,fore at this shape, WIDENED by the
-      k-fold cross-validation z-score spread (the stored `sigma_inflation`, 1.65) because
-      cross-validation showed the raw GP to be overconfident. T1 in the sense that it is
+      k-fold cross-validation z-score spread (the stored `sigma_inflation` - read from
+      that file, not repeated here) because cross-validation showed the raw GP to be
+      overconfident. T1 in the sense that it is
       this project's own measurement on its own data, reproducible from the persisted
       surface.
     tier: T1
@@ -267,7 +268,7 @@ inputs:
     distribution: {family: normal, mean: 0.0, std: 1.0}
     apply: {type: set, path: vehicle.aero.uncertainty.z_discretisation}
     requires:
-      aero_model: cfd_surface_v1       # checked FIRST: at Fidelity 0 this term is moot
+      aero_model: cfd_surface_v2       # checked FIRST: at Fidelity 0 this term is moot
       discretisation_band: coarse      # and only THEN is the missing GCI a refusal
     when_unavailable:
       aero_model: skip
@@ -280,19 +281,22 @@ inputs:
       exists.
     tier: T1
     notes: >
-      THIS IS THE REFUSAL. M2's GCI table is empty today (gate G4 is IN_PROGRESS), so a
-      run that selects the CFD drag surface will STOP here rather than quietly propagate
-      one fewer C_D term. A-CFD-9 says so in as many words: "Until M2 has a three-level
-      GCI the band is unavailable, and sampling it raises rather than returning zero."
-      A-CFD-9 also records that a SPHERE's GCI is not a capsule's - so even once this
-      does run, the term is a transfer, not a measurement of the surface itself.
+      THIS WAS THE REFUSAL, and still is if the file goes away: while M2's GCI table was
+      empty (gate G4 IN_PROGRESS) a run that selected the CFD drag surface STOPPED here
+      rather than quietly propagate one fewer C_D term (A-CFD-9). Since run
+      M2-20260920T123901Z the table exists (G4 PASS, NR-25) and the hook returns the
+      coarse-level band from it - plus the file's LABELLED iterative columns (residual
+      limit-cycle half-amplitude), under their own names; what is sampled is the file's
+      combined discretisation + iterative value. Nothing is typed: delete gci.csv and this
+      input refuses again. A-CFD-9 also records that a SPHERE's GCI is not a capsule's -
+      so the term is a transfer, not a measurement of the surface itself.
 
   cd_perfect_gas_model_form:
     kind: epistemic
     units: "-"
     distribution: {family: uniform, low: -1.0, high: 1.0}
     apply: {type: set, path: vehicle.aero.uncertainty.u_model_form}
-    requires: {aero_model: cfd_surface_v1}
+    requires: {aero_model: cfd_surface_v2}
     when_unavailable: {aero_model: skip}
     source: >
       ENGINEERING JUDGMENT, declared as such by the model it belongs to. A-CFD-12 carries
@@ -310,7 +314,7 @@ inputs:
     units: "-"
     distribution: {family: uniform, low: -1.0, high: 1.0}
     apply: {type: set, path: vehicle.aero.uncertainty.u_base}
-    requires: {aero_model: cfd_surface_v1}
+    requires: {aero_model: cfd_surface_v2}
     when_unavailable: {aero_model: skip}
     source: >
       NASA TN D-4800 (Miller, 1968; NTRS 19680026196) fig. 11(b), opened and read for M3:

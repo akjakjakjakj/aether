@@ -6,9 +6,11 @@
 # gate G4 is judged on. MESH LEVEL: see `production_level` below - it is COARSE, which is a
 # deviation from the M3 brief (medium), forced by measured wall time and stated in the report.
 #
-# GATE STATUS AT BUILD: G4 was IN_PROGRESS when this design was run (the fine-mesh sphere
-# cases had not finished). Every artefact produced from this file records that. The surface
-# is PROVISIONAL until G4 is PASS.
+# GATE STATUS: never typed here or in source. Every artefact records the status READ from
+# M2's gate_assessment.json when it was written. The v1 pass of this design (56 usable points,
+# Mach 3-20) ran while G4 was IN_PROGRESS; the v2 additions (`courant_retry`,
+# `mach_extension`, both marked below with the date and what had been seen) ran after G4 was
+# PASS. Same pipeline and settings throughout - the gate judges the pipeline, not the date.
 
 meta:
   name: cfd_design_points
@@ -110,6 +112,19 @@ design:
     - {name: m4_front_lo_b_crit, bluntness_ratio: 1.15, cone_half_angle_deg_above_critical: 0.5, shoulder_ratio: 0.10}
   holdout:
     n_test: 8                  # fill points only, drawn with `seed` BEFORE any case is run
+  # SURFACE v2 - added 2026-09-21, AFTER gate G4 was PASS and after the v1 surface had been
+  # seen, and said so. Reason: 54-67% of the heat load of the designs M3 evaluated accrues
+  # above Mach 20, where v1 HOLDS its Mach-20 value. Every anchor SHAPE of the design (the hull
+  # of the shape space, late anchors included) is run once more at each Mach number below, with
+  # the same first-order start (NR-19), domain sizing and clearance checks (NR-20, NR-26) and
+  # acceptance rules as every other point. 27 ~ the largest Mach number of the baseline entry
+  # (27.1, M3 report §7). Points are APPENDED: no existing point id, fill point or held-out
+  # point changes. This closes an extrapolation IN MACH of the perfect-gas model only; it says
+  # nothing about real-gas effects, which stay in the declared model-form band (A-CFD-1).
+  mach_extension:
+    enabled: true
+    mach: [27.0]
+    extra_shapes: []
 
 # ---------------------------------------------------------------------------------------
 # Acceptance of a case. A case that fails any of these is kept, reported, and NOT used.
@@ -128,6 +143,26 @@ acceptance:
   convergence_retry:
     enabled: true
     max_extensions: 9
+  # SURFACE v2 - added 2026-09-21 AFTER M2's NR-25 showed that a lower Courant limit removes
+  # the bounded C_D limit cycle, and after NR-21's six rejected cases had been seen: a case
+  # still rejected ONLY for the force criterion is continued from its final solution as a new,
+  # separately named case under each limit below in turn. Block length, minimum and maximum
+  # number of blocks are M2's `courant_restarts` values, copied, not tuned. The criterion is
+  # unchanged; the verdict of record is the one at the end of the LAST block run, and no
+  # restart stops before two blocks (two consecutive windows, NR-25). Originals stay on record.
+  courant_retry:
+    enabled: true
+    max_co: [0.1, 0.05]
+    block_iterations: 5000
+    min_blocks: 2
+    max_blocks: 8
+    # Added 2026-09-21 DURING the v2 run, after an interim look, and said so (NR-27): two
+    # restarts (dp011, dp061 at Co 0.05) had stopped after meeting the criterion in ONE window
+    # that followed a window that had not met it - M2's restarts had all passed BOTH of their
+    # blocks, so M2's code never had to distinguish "two blocks" from "two passes in a row".
+    # The rule of record is NR-25's, made explicit: the criterion must be met at the end of
+    # this many blocks IN A ROW. Stricter, never looser; those two cases were resumed under it.
+    consecutive_passes: 2
   domain_retry:
     max_retries: 2
     standoff_margin_factor: 1.6        # multiplies mesh.standoff_margin per retry

@@ -945,3 +945,212 @@ says it must. A gate that this case passed would be worthless.
 
 **Evidence.** `results/M2/M2-20260920T123901Z/pipeline_demo.csv`, `capsuledemo_M6_x2*/`,
 `negative_cases.csv`, `driver_demo_20260921_0057_crash.log`; `tests/test_cfd_validation_gate.py`.
+
+---
+
+### NR-27 — The Courant lever recovered four of NR-21's six cases, not six; and a one-window pass nearly let two drifting cases into the surface
+
+**What was tried.** NR-25's lever on NR-21's six rejected capsule cases (`dp001`, `dp011`,
+`dp032`, `dp043`, `dp053`, `dp061`): each continued from its final solution as a NEW, separately
+named case at max Courant 0.1, then 0.05 (`<point>_coarse_Co0p1`, `_Co0p05`), blocks of 5000
+iterations, at least two blocks, at most eight, criterion unchanged
+(`acceptance.courant_retry` in `configs/cfd_design_points.yaml`; M2's block numbers, copied).
+The originals are untouched and stay in `attempts_coarse.csv`.
+
+**What happened.**
+
+| case | Co 0.1 (8 blocks) | Co 0.05 | verdict |
+|---|---|---|---|
+| dp001 (Mach 20, hull corner R_n/D 0.25, 20°, R_c/D 0.02) | p2p 0.43% → 0.10%, never inside | 0.077% → 0.069%, both blocks pass | **USABLE** |
+| dp032 (Mach 18.4 fill) | 0.099%, 0.098%: both blocks pass | – | **USABLE** |
+| dp043 (Mach 14.5 fill) | pass, miss (0.101%), pass, pass | – | **USABLE** |
+| dp053 (Mach 9.9 fill) | passes only in block 8 | blocks 2 and 3 pass | **USABLE** (see caveat) |
+| dp011 (Mach 20 anchor, R_n/D 0.8, 52.5°) | never | passes block 5 ONLY, of 8 | REJECTED |
+| dp061 (Mach 20 late anchor, R_n/D 1.15, 68.1°) | never (drift 0.2–0.3%) | passes block 3 ONLY, of 8 | REJECTED |
+
+Four recovered, **one of the two Mach-20 hull corners among them**; `dp001` alone takes the share
+of geometrically valid shapes inside the CFD hull from 92.0% (v1) to 99.8% (v2)
+(`optimization/hull_coverage.py`, 20 000 seeded samples). Two did not recover, and both are
+Mach-20 anchors at wide cone angles.
+
+**The catch.** The first v2 pass reported **all six** as USABLE. M2's restart code stops as soon
+as the criterion is met after at least two blocks, and every M2 restart had passed *both* of its
+blocks, so the code never had to tell "two blocks" from "two passes in a row". Here `dp011` and
+`dp061` met the criterion in exactly one window that followed windows which had not. Their block
+means show why: `dp061`'s window-mean C_D alternates 1.3646 ↔ 1.3707 from block to block
+(0.45%), and between Co 0.1 and Co 0.05 its "converged" value moved by 0.37%. That is not a
+limit cycle being damped; it is a slow oscillation longer than the 2000-iteration window, caught
+in a quiet phase. Accepting it would have been accepting noise as convergence — exactly the
+metric-gaming the criterion exists to stop, committed by the pipeline rather than an optimiser.
+
+**What changed.** `restart_case(..., consecutive_passes=n)` (default 1, so every M2 case is
+bit-for-bit unaffected) and `courant_retry.consecutive_passes: 2`: a restart stops early only
+after meeting the criterion at the end of two blocks IN A ROW, and a restart whose last two
+blocks did not both pass is REJECTED whatever its final window says. The two cases were resumed
+under that rule, ran to eight blocks and failed it. **Disclosed:** this rule was written during
+the v2 run after an interim look. It is stricter, never looser; it removed two points that the
+looser reading would have put into the surface.
+
+**Caveat that the rule does not remove.** The declared criterion judges one 2000-iteration
+window, so it is blind to any oscillation slower than that. `dp053_coarse_Co0p05` passes two
+blocks in a row while its block means read 1.4913, 1.4957, 1.4912 (0.30% apart). A diagnostic
+over all 71 USABLE coarse cases (`diagnostic_window_mean_agreement_coarse.csv`: last window's
+mean vs the window before it) gives a median difference of 0.011% and a maximum of 0.22%; four
+cases exceed the 0.1% band (`dp005`, `dp006`, `dp053`, `dp064`). Those cases are accepted by the
+unchanged M2 criterion and are in the surface; changing the criterion now would be changing the
+gate after the fact, so it was NOT changed. The honest reading: per-case iterative scatter is up
+to about 0.2%, not the 0.1% the criterion's name suggests — still a third of the coarse
+discretisation band (0.63%) and small against the GP's cross-validated error (1.3% of mean C_D).
+
+**Evidence.** `results/M3/M3-DP-20260920T1610Z/attempts_coarse.csv` (`courant_pass` rows),
+`cases/*_Co0p*/restart_blocks.json`, `driver_coarse_v2.log` (first pass, six USABLE) vs
+`driver_coarse_v2_consecutive.log`, `v1_tables/` (the v1 tables, frozen);
+`tests/test_aero_surface.py::test_a_courant_restart_must_pass_in_consecutive_blocks`.
+
+---
+
+### NR-28 — Mach 27: nine of fourteen anchors; the slender cones die when the limiter takes over, and no permitted lever fixes it
+
+**Why it was tried.** v1 held its Mach-20 value above Mach 20, where 54–67% of the heat load of
+the designs M3 evaluated accrues. Every anchor shape was run once more at Mach 27 (the largest
+Mach number of the baseline entry is 27.1) with the unchanged pipeline: first-order start
+(NR-19), capsule domain sizing and both clearance checks (NR-20, NR-26), patience pass, Courant
+pass, same acceptance rules. Points were appended (`dp062`–`dp075`); no existing point id, fill
+point or held-out point changed (`test_mach_extension_never_renumbers_or_redraws_the_v1_design`).
+
+**What happened.** 9 of 14 USABLE (`dp064`–`066`, `069`–`074`). Five failed and stay on record:
+
+* `dp062`, `dp063` (R_n/D 0.25, 20° cone — the slender corner of the box): **SOLVER_FAILED** in
+  all three domain attempts, a floating-point exception in `sqrt` 28–85 iterations after the
+  first-order start hands over to van Leer. Isolation in spec §36 order
+  (`results/M3/mach27-startup-exp/`, not design points): first-order start 6000 iterations
+  instead of 1500 (step 4) — dies 85 iterations after the hand-over; max Courant 0.1 throughout
+  (step 6) — dies after 69; both together — dies after 47. The first-order solution itself is
+  stable to 6000 iterations. So the path to the steady state is not the problem: the declared
+  second-order reconstruction cannot hold this flow at Mach 27 (kinetic energy is 99.5% of total
+  energy; an attached, thin shock layer along a long cone). The remaining §36 lever is step 5,
+  the discretisation itself — and changing the limiter changes the scheme gate G4 validated, so
+  it was **not** done. The same shape at Mach 20 (`dp001`) runs, and needed Co 0.05 to converge.
+* `dp067`, `dp068` (R_n/D 0.8, 52.5–55.7°) and `dp075` (R_n/D 1.15, 68.1°): ran, never met the
+  force criterion in two consecutive blocks at Co 0.2, 0.1 or 0.05. They are the Mach-27 twins
+  of NR-27's `dp011` and `dp061`: the same shapes fail at both Mach numbers.
+
+**Consequence, and how it is handled.** Between Mach 20 and 27 the hull is spanned by nine
+anchors instead of fourteen. A shape is NOT rejected for that: `cd_model` keeps the whole core
+range (Mach 3–20, anchors and fill, exactly as v1) and then stops the shape's table at the last
+extension node still inside the hull, holding the value there — per shape, recorded in the
+provenance (`mach_range`, `mach_top_truncated_by_hull`) and in `aero_mach_top_of_table` on every
+candidate. Blunt shapes, including the baseline capsule and the whole M4 front region, reach
+Mach 27; a slender R_n/D 0.3, 22° shape stops at Mach 20.8.
+
+**What it bought, measured.** Heat-load share flown above the surface's top node, for the six
+designs of the M3 comparison: **53.7–66.5% under v1 → 0.0–2.9% under v2.** C_D,fore changes by at
+most 0.74% between Mach 20 and 27 among the named in-hull shapes (baseline +0.007%, M4-front
+shape +0.10%, 60° cone −0.74%): Mach-number independence holds to that level in this gas model,
+so v1's hold had cost less than 1% in C_D. 
+
+**What it did NOT buy.** This closes an *extrapolation in Mach number of the perfect-gas
+model*. It does nothing about the *model-form* error: a calorically perfect γ = 1.4 gas is the
+wrong gas at Mach 20 and equally wrong at Mach 27. Real-gas effects are what the declared,
+unvalidated ±5% band on C_D,fore is for, and it stays exactly as it was (A-CFD-1, A-CFD-12).
+
+**Evidence.** `results/M3/M3-DP-20260920T1610Z/design_points_coarse.csv`, `attempts_coarse.csv`,
+`cases/dp06*`, `cases/dp07*`; `results/M3/mach27-startup-exp/` (`run_exp.py`, three logs);
+`reports/milestones/M3_coupled_model.md` §3, §7, §10;
+`tests/test_aero_surface.py::test_mach_extension_truncates_per_shape_instead_of_rejecting`.
+
+---
+
+### NR-29 — The freeze rule hid the sharp-shoulder lever: "negligible" in the sub-box, 7% of peak flux at the front
+
+**Context.** M4 re-run at Fidelity 1 (`M4-DOE-20260920T204844Z`, `M4-OPT-20260920T205252Z`):
+drag from `cfd_surface_v2`, heating with the velocity-gradient effective nose radius. The
+corrected nose model made the shoulder ratio R_c/D a heating lever: a SHARPER corner gives a
+larger effective radius and a lower stagnation flux. The previous round had flagged this as the
+next metric-gaming surface ("watch the lower bound").
+
+**What happened.** The optimiser never touched it. The screening rule, declared beforehand and
+applied as written, froze `shoulder_ratio` at its reference 0.10: its largest total-order index
+upper bound was 0.0048 (threshold 0.01). All 78 front designs therefore carry R_c/D = 0.10, the
+BLUNT end of the box, and the front does not pile onto the minimum shoulder ratio.
+
+**Why that is not reassurance.** Probes on the three selected front designs
+(`scripts/run_m4_audit_probes.py`, `results/M4/M4-OPT-20260920T205252Z/audit_probes.csv`; canonical
+evaluator, never candidates) show that moving R_c/D from 0.10 to 0.02 lowers peak flux by
+**16.6–19.9 kW/m² (about 7%)** and the bondline peak by **3.1–3.9 K** — a third of the whole
+front's flux span (48.8 kW/m²), and far more than the 1.45% the one-at-a-time sweep shows at the
+reference capsule, because the front sits at R_b/R_n ≈ 0.42 where the corner term is strongest.
+A Sobol' index is a share of output VARIANCE over the sub-box; diameter alone carries 0.90 of
+the peak-flux variance there, so a lever worth 7% at the front rounds to zero. The freeze rule
+answers "which variables explain the spread of the box", not "which variables would an
+optimiser exploit at the optimum". Those are different questions and M4 had been treating them
+as one.
+
+**Why the lever is an exploit and not a finding.** The heating model is stagnation-point only
+(A-HEAT-4). It sees the benefit of a sharp corner (stagnation velocity gradient) and is blind to
+its cost (corner heating, which is where real capsules see their peak and are damaged). Had the
+variable been active, the front would be expected to sit on the 0.02 bound, and the bound — a
+box edge, not a sourced minimum corner radius — would have set the shoulder.
+
+**What was done.** Nothing was changed in the model or the rule: there is no sourced corner-heating
+correlation in the project, and re-running the screening with a rule chosen after seeing this
+would be tuning. The freeze stays, **labelled as a FENCE that happens to stand in the right
+place**, the probes are reported next to the front (M4 report §11 (vi)), and M5/M6/M7 inherit the
+frozen shoulder through the screening. If a later study frees `shoulder_ratio`, it must first
+add a corner-heating model or a sourced minimum R_c/D, or expect the bound to be the answer.
+
+**Evidence.** `results/M4/M4-DOE-20260920T204844Z/screening.json`, `summary.json` (§3 OAT, §5
+Sobol'); `results/M4/M4-OPT-20260920T205252Z/audit_probes.csv|.json`, `summary.json` →
+`audit.shape_variables_on_front`, `audit.probes`.
+
+---
+
+### NR-30 — At Fidelity 1 the front is still a flight-path-angle curve drawn at a fenced geometry; one fence is now the CFD hull, standing where the old bluntness cap stood
+
+**What the audit found on the 78-design combined front** (`summary.json` → `audit`):
+
+* **Mass closure, unchanged from NR-13.** 50 of 78 designs are within 1% of
+  `heatshield_mass_fraction = 1.0`; every front diameter lies in 3.355–3.376 m. The joint knee is
+  a 3.37 m, 350 kg vehicle whose forebody TPS weighs 346 kg — ballistic coefficient about
+  29 kg/m². Remove the constraint and all 6 designs of the resulting front violate it (worst
+  margin −0.79). The limit is a logical necessity, not a mass budget, and there is still no
+  sourced budget: FENCE, labelled, not moved.
+* **CFD hull.** 28 of 78 designs sit on the hull boundary in +bluntness (a 1%-of-range step stays
+  a valid forebody inside the box and leaves the hull); front R_n/D = 1.150–1.199. The hull ends
+  at R_n/D = 1.2 for R_c/D = 0.10 because that is where the anchors were put — and they were put
+  there (NR-22) because the Fidelity-0 front sat on the old 1.2 bluntness cap (NR-15). The cap
+  was removed from the config as "a fence, not a model"; it has come back as the edge of where
+  CFD was run. What it withholds is small: labelled GP extrapolations up to the geometric
+  limit (R_n/D ≈ 1.22–1.26) are worth −1.4 to −2.6 kW/m² (≈ 1%) and −0.3 to −0.4 K, because the
+  corrected nose model has nearly saturated there. 1.2 is also the verified Apollo proportion
+  (NASA/TM-2005-213457), i.e. the edge of flown experience, so the fence is kept and labelled.
+  Buying CFD anchors beyond it is M6's kind of question, not a fix to make here. Over the whole
+  run 103 of 21 000 paid candidates (0.5%) were hull rejections; they stay in the log.
+* **Cone half-angle** sits within 1% of its 70° box bound on 64 of 78 designs. It now does act on
+  drag, but that is not why it is there: at R_n/D ≈ 1.2 and R_c/D = 0.10 the forebody only exists
+  above ≈ 68.6°, so the variable lives in a ~1.4° window between geometric validity and the box.
+* **> 86 km.** Every front design accrues more than 5% of its heat load in the flagged
+  atmosphere region, up to 20.9% (NR-14 unchanged; slightly worse than Fidelity 0's 19.6%).
+* **Above the CFD Mach range:** 0.0–2.4% of heat load, no front design with a truncated top node.
+  This one is closed (NR-28).
+
+**What that leaves.** Diameter is set by the mass fence, bluntness by the hull/validity, cone
+angle by validity and the box, shoulder by the freeze (NR-29). **The only variable that trades
+the two objectives along the front is the entry flight-path angle** (−1.50° to −3.56°, the first
+a box bound, the second the 12 g limit). The Fidelity-1 front is a burn-versus-bake curve in
+flight-path angle at a geometry chosen by fences. Capsule SHAPE, which Fidelity 1 was built to
+let matter, moves C_D at peak heating across the front by 0.1% (1.363–1.364).
+
+**Consequence for H1.** Supported within the model, by the same mechanism as M1: peak-flux-only
+optimum 2.295×10⁵ W/m² / 418.4 K; joint knee 2.510×10⁵ W/m² / 403.5 K (−14.9 K for
++21.5 kW/m²); bondline-only end 2.783×10⁵ W/m² / 391.7 K. It is a statement about entry
+steepness at a fixed, fenced geometry. It is NOT evidence that joint optimisation finds a better
+capsule shape, and the report says so.
+
+**What was NOT done.** No constraint was added, moved or retuned after seeing these results, and
+the hypervolume reference point was checked against the DOE and left where it was BEFORE any
+optimiser ran (`M4-DOE-20260920T204844Z/hv_reference_check.json`).
+
+**Evidence.** `results/M4/M4-OPT-20260920T205252Z/summary.json`, `candidates.csv|.parquet`,
+`audit_probes.csv`; `reports/milestones/M4_pareto_optimisation.md` §10–§11a; Fidelity-0
+counterpart archived as `reports/milestones/M4_pareto_optimisation_fidelity0.md`.

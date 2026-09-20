@@ -1,0 +1,59 @@
+{
+  "aero_model": "cfd_surface_v2",
+  "surface_training_hash": "b63b68a40321f38b",
+  "sub_box_volume_fraction_of_shape_box": 0.11818181818181817,
+  "sub_box_volume_fraction_of_evaluable_region": 0.25544540836878454,
+  "full_box": {
+    "n_samples": 20000,
+    "seed": 20260920,
+    "bounds": {
+      "bluntness_ratio": [
+        0.25,
+        1.35
+      ],
+      "cone_half_angle_deg": [
+        20.0,
+        70.0
+      ],
+      "shoulder_ratio": [
+        0.02,
+        0.1
+      ]
+    },
+    "fraction_of_box_valid_forebody": 0.46365,
+    "fraction_of_box_inside_hull": 0.5967,
+    "fraction_of_box_valid_and_inside_hull": 0.46265,
+    "fraction_of_valid_shapes_inside_hull": 0.9978432006901757,
+    "standard_error_of_box_fractions": 0.003525655807789524,
+    "note": "shape box only (bluntness, cone half-angle, shoulder ratio); diameter, afterbody and entry variables do not enter the drag surface. 'valid forebody' uses the CFD design's neutral afterbody, so a full capsule can still be invalid for afterbody reasons."
+  },
+  "sobol_sub_box": {
+    "n_samples": 4096,
+    "seed": 20260920,
+    "bounds": {
+      "bluntness_ratio": [
+        0.25,
+        0.9
+      ],
+      "cone_half_angle_deg": [
+        60.0,
+        70.0
+      ],
+      "shoulder_ratio": [
+        0.02,
+        0.1
+      ]
+    },
+    "fraction_of_box_valid_forebody": 1.0,
+    "fraction_of_box_inside_hull": 1.0,
+    "fraction_of_box_valid_and_inside_hull": 1.0,
+    "fraction_of_valid_shapes_inside_hull": 1.0,
+    "standard_error_of_box_fractions": 0.0,
+    "note": "shape box only (bluntness, cone half-angle, shoulder ratio); diameter, afterbody and entry variables do not enter the drag surface. 'valid forebody' uses the CFD design's neutral afterbody, so a full capsule can still be invalid for afterbody reasons.",
+    "preflight": {
+      "n_vertices": 8,
+      "n_interior": 4096,
+      "all_valid_and_inside_hull": true
+    }
+  }
+}

@@ -5,11 +5,16 @@
 # which are mission givens, the screening thresholds that freeze a variable, the
 # hypervolume reference point, the evaluation budgets and the seeds.
 #
-# FIDELITY. `base_overrides.vehicle.aero.model` selects the aerodynamic model. `constant`
-# is Fidelity 0 (constant C_D, ASSUMPTIONS A-TRAJ-2): the capsule SHAPE has no aerodynamic
-# consequence, only the diameter acts, through the reference area. Swapping in the M3 CFD
-# response surface is: register the model in src/aether/aerodynamics, change this one
-# line, re-run `make doe` and `make optimize`. Nothing else changes.
+# FIDELITY. `base_overrides.vehicle.aero.model` selects the aerodynamic model. Since
+# 2026-09-21 it is `cfd_surface_v2` - FIDELITY 1: C_D(Mach, forebody shape) from the
+# CFD-derived response surface (reports/milestones/M3_coupled_model.md), built and served
+# with gate G4 = PASS (both READ from files; no `allow_provisional` anywhere in this config).
+# `constant` is Fidelity 0 (constant C_D, ASSUMPTIONS A-TRAJ-2), under which the capsule SHAPE
+# has no aerodynamic consequence; the Fidelity-0 M4 results are archived
+# (reports/milestones/M4_pareto_optimisation_fidelity0.md) and VOID for this model.
+# Consequence of Fidelity 1: a forebody shape outside the convex hull of the CFD cases is a
+# REJECTED candidate (A-AERO-1). `make doe` measures how much of the shape box that leaves
+# and refuses to start if the Saltelli sub-box is not wholly inside the hull.
 
 meta:
   name: m4_design_space
@@ -19,7 +24,7 @@ meta:
 base_overrides:
   vehicle:
     aero:
-      model: constant
+      model: cfd_surface_v2
     geometry:
       # Stagnation heating takes the EFFECTIVE nose radius, not the cap radius
       # (ASSUMPTIONS A-GEO-3, docs/theory/effective_nose_radius.md). Changed from

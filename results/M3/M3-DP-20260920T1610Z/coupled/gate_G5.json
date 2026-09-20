@@ -10,24 +10,26 @@
   },
   "all_checks_met": true,
   "fingerprints": [
-    "c05015c9da0f11b3",
-    "c05015c9da0f11b3",
-    "c05015c9da0f11b3"
+    "beb2fee560940620",
+    "beb2fee560940620",
+    "beb2fee560940620"
   ],
   "missing_provenance": [],
   "missing_diagnostics": [],
   "provenance_example": {
-    "aero_model": "cfd_surface_v1",
-    "surface_training_hash": "fb657af4a92b40c7",
+    "aero_model": "cfd_surface_v2",
+    "surface_training_hash": "b63b68a40321f38b",
     "surface_source_run": "M3-DP-20260920T1610Z",
-    "surface_n_train": 56,
-    "gate_G4_status_at_build": "IN_PROGRESS",
-    "gate_G4_status_at_evaluation": "IN_PROGRESS",
+    "surface_n_train": 69,
+    "gate_G4_status_at_build": "PASS",
+    "gate_G4_status_at_evaluation": "PASS",
     "mesh_level": "coarse",
-    "gp_sigma_inflation": 1.6536632469386736,
-    "discretisation_band_available": false,
-    "discretisation_rel_band": null,
-    "discretisation_source": null,
+    "gp_sigma_inflation": 1.2071893414200146,
+    "discretisation_band_available": true,
+    "discretisation_rel_band": 0.0062752438788633,
+    "discretisation_rel_band_sampled": 0.0064241284658916,
+    "discretisation_iterative_half_p2p_rel": 0.0002423503978724,
+    "discretisation_source": "results/M2/M2-20260920T123901Z/gci.csv",
     "shape": {
       "bluntness_ratio": 0.5,
       "cone_half_angle_deg": 25.0,
@@ -36,18 +38,21 @@
     "shape_extrapolated": false,
     "mach_range": [
       3.0,
-      20.0
+      27.0
     ],
+    "surface_mach_max": 27.0,
+    "mach_top_truncated_by_hull": false,
     "uncertainty_draw": {
       "z_gp": 0.0,
       "z_discretisation": 0.0,
       "u_model_form": 0.0,
       "u_base": 0.0
     },
-    "provisional": true,
+    "provisional": false,
     "test_low_mach_scale": 1.0
   },
   "repeats": 3,
-  "status": "LIMITED",
-  "status_reason": "determinism and provenance checks met, but the drag surface is PROVISIONAL (G4 IN_PROGRESS at build, coarse mesh) - see report"
+  "status": "PASS",
+  "status_reason": "determinism and provenance checks met on a surface built and evaluated with gate G4 PASS. G5 is a SOFTWARE gate (spec \u00a719): it says the coupled evaluator is deterministic and labels its aerodynamics, not that the drag is right. Surface limits - coarse mesh, perfect gas, alpha = 0, assumed base drag - are in the report.",
+  "surface_provisional": false
 }

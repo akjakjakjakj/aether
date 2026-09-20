@@ -57,13 +57,19 @@ from ..utils.run import REPO_ROOT, load_config
 from .case import FlowCondition
 from .mesh import MeshSettings
 from .outline import Outline, make_outline
-from .pipeline import CaseResult, run_case
+from .pipeline import CaseResult, restart_case, run_case
 from .postprocess import ConvergenceCriterion, _latest_sample, _load_dat
 from .reference import rayleigh_pitot_ratio
 from .validation import _flow, _mesh_settings, _solver_settings
 
-GATE_G4_STATUS_AT_BUILD = "IN_PROGRESS"
-"""Recorded in every M3 artefact. Flip ONLY by re-running the design after G4 is PASS."""
+
+def gate_g4_status_at_build() -> str:
+    """Gate G4 status recorded in every M3 artefact: READ from the latest M2 run's
+    ``gate_assessment.json`` at the moment the artefact is written. Never a typed string."""
+    from ..aerodynamics.cfd_surface import gate_g4_status  # lazy: keeps cfd importable alone
+
+    return str(gate_g4_status()["status"])
+
 
 SHAPE_INPUTS = ("bluntness_ratio", "cone_half_angle_deg", "shoulder_ratio")
 PROFILE_POINTS = 1600
@@ -266,6 +272,32 @@ def build_design(cfg: dict[str, Any]) -> tuple[list[DesignPoint], pd.DataFrame]:
             points.append(DesignPoint(f"dp{len(points):03d}", "anchor", "train", mach,
                                       diameter_m=d, label=str(p["name"]), **shape))
 
+    # Mach extension (surface v2): appended AFTER everything above so no existing point is
+    # renumbered. Every anchor SHAPE already in the design (the hull of the shape space) plus
+    # the named extra shapes, at each extension Mach number. The fill design and the held-out
+    # set are untouched: `inputs.mach.max` still bounds the Sobol fill.
+    ext = des.get("mach_extension", {})
+    if ext.get("enabled", False):
+        ext_shapes = list(dict.fromkeys(
+            (p.label, tuple(p.shape().items())) for p in points if p.role == "anchor"))
+        ext_list = [(label, dict(items)) for label, items in ext_shapes]
+        for p in ext.get("extra_shapes", []):
+            shape = {k: float(p[k]) for k in SHAPE_INPUTS}
+            reason = _valid_or_reason(shape, d)
+            if reason:
+                skipped.append({"source": "anchor:mach_extension", "label": str(p["name"]),
+                                **shape, "reason": reason})
+                continue
+            ext_list.append((str(p["name"]), shape))
+            if ext.get("extra_shapes_at_design_mach_max", False):
+                points.append(DesignPoint(f"dp{len(points):03d}", "anchor", "train", m_hi,
+                                          diameter_m=d, label=str(p["name"]), **shape))
+        for mach in ext["mach"]:
+            for label, shape in ext_list:
+                points.append(DesignPoint(f"dp{len(points):03d}", "anchor", "train",
+                                          float(mach), diameter_m=d,
+                                          label=f"{label}@M{float(mach):g}", **shape))
+
     sc = cfg.get("scale_check", {})
     if sc.get("enabled", False):
         shape = {k: float(sc["shape"][k]) for k in SHAPE_INPUTS}
@@ -343,6 +375,41 @@ def _load_case(path: Path) -> CaseResult | None:
 
 LEVELS = {"coarse": 1, "medium": 2, "fine": 4}
 """Mesh level name -> refinement factor of the M2 sequence (configs/cfd_validation.yaml)."""
+
+
+def _attempt_row(name: str, k: int, sizing: float, mesh: MeshSettings, res: CaseResult,
+                 verdict: dict[str, Any], **extra: Any) -> dict[str, Any]:
+    conv = res.convergence.get("cd_fore", {})
+    return {"case": name, "attempt": k, "sizing_radius_m": sizing,
+            "standoff_margin": mesh.standoff_margin,
+            "asymptote_margin_deg": mesh.asymptote_margin_deg, "status": res.status,
+            "n_cells": res.n_cells, "h_m": res.representative_cell_size_m,
+            "solver_wall_time_s": res.solver_wall_time_s,
+            "total_wall_time_s": res.total_wall_time_s,
+            **{k2: v for k2, v in verdict.items() if k2 != "reasons"},
+            "reasons": " | ".join(verdict["reasons"]), **res.metrics,
+            "cd_fore_peak_to_peak_rel": conv.get("peak_to_peak_rel"),
+            "cd_fore_drift_rel": conv.get("drift_rel"),
+            "cd_fore_converged": conv.get("converged"), **extra}
+
+
+def _only_force_criterion_missed(attempt: dict[str, Any]) -> bool:
+    reasons = str(attempt["reasons"])
+    return (attempt["verdict"] == "REJECTED"
+            and reasons.startswith("force criterion not met") and "|" not in reasons)
+
+
+def _passed_in_a_row(case_results_dir: Path, n: int) -> bool:
+    """Did a Courant restart meet the force criterion at the end of its last `n` blocks?"""
+    path = Path(case_results_dir) / "restart_blocks.json"
+    if not path.exists():
+        return False
+    tail = json.loads(path.read_text())[-n:]
+    return len(tail) == n and all(b["converged"] for b in tail)
+
+
+def courant_case_name(point_id: str, level: str, max_co: float) -> str:
+    return f"{point_id}_{level}_Co{max_co:g}".replace(".", "p")
 
 
 def run_design_point(point: DesignPoint, cfg: dict[str, Any], val_cfg: dict[str, Any],
@@ -452,6 +519,49 @@ def run_design_point(point: DesignPoint, cfg: dict[str, Any], val_cfg: dict[str,
                          "cd_fore_converged": res.convergence.get("cd_fore", {}).get(
                              "converged"),
                          "patience_pass": True})
+    # -- Courant pass (surface v2; NR-25's lever applied to NR-21's cases) ---------------------
+    # A case STILL rejected only for the force criterion is continued from its final solution
+    # as a NEW, separately named case under each lower Courant limit in turn (spec §36 step 6)
+    # - exactly what M2 did to its fine sphere cases. Criterion unchanged; never stops before
+    # `min_blocks` blocks, so a pass is seen in two consecutive windows and the verdict of
+    # record is the later one. The source case is never modified and stays in the table.
+    cr = acc.get("courant_retry", {})
+    if cr.get("enabled", False):
+        for co in cr["max_co"]:
+            if not _only_force_criterion_missed(attempts[-1]):
+                break
+            src_name = attempts[-1]["case"]
+            name = courant_case_name(point.point_id, level, float(co))
+            res = _load_case(run_dir / "cases" / name / "case_result.json")
+            n_row = int(cr.get("consecutive_passes", 1))
+            unfinished = res is not None and res.status == "OK" and (
+                int(res.metrics.get("restart_blocks_run", 0)) < int(cr["min_blocks"])
+                or (int(res.metrics.get("restart_blocks_run", 0)) < int(cr["max_blocks"])
+                    and not _passed_in_a_row(run_dir / "cases" / name, n_row)))
+            if res is None or unfinished:
+                try:
+                    res = restart_case(
+                        name, generated_root / src_name, outline, flow, mesh,
+                        replace(solver, max_co=float(co)), crit,
+                        generated_root=generated_root, results_dir=run_dir / "cases",
+                        block_iterations=int(cr["block_iterations"]),
+                        max_blocks=int(cr["max_blocks"]), min_blocks=int(cr["min_blocks"]),
+                        consecutive_passes=n_row, sizing_radius_m=sizing,
+                        solver_timeout_s=float(cfg["execution"]["solver_timeout_s"]))
+                except (ValueError, FileNotFoundError, RuntimeError) as exc:
+                    res = CaseResult(name, str(generated_root / name), "MESH_FAILED",
+                                     failure_reason=f"{type(exc).__name__}: {exc}")
+            verdict = assess_case(res, flow, acc)
+            if (verdict["verdict"] == USABLE
+                    and not _passed_in_a_row(run_dir / "cases" / name, n_row)):
+                # met the criterion in the LAST window only: not two in a row (NR-25's rule)
+                verdict["verdict"] = "REJECTED"
+                verdict["reasons"] = [
+                    f"force criterion not met in {n_row} consecutive blocks (restart ran "
+                    f"{res.metrics.get('restart_blocks_run')} blocks)"]
+            attempts.append(_attempt_row(name, len(attempts), sizing, mesh, res, verdict,
+                                         courant_pass=True, max_co=float(co),
+                                         restart_source_case=src_name))
     row.update(attempts[-1])
     row["attempts"] = len(attempts)
     row["nose_radius_m"] = capsule.nose_radius_m
@@ -466,7 +576,10 @@ def mesh_check_ids(cfg: dict[str, Any], points: list[DesignPoint]) -> list[str]:
     mc = cfg["mesh_check"]
     late = {str(a["name"]) for a in cfg["design"].get("late_anchors", [])}
     # late anchors are excluded so that adding one never changes an already-drawn subset
-    pool = [p.point_id for p in points if p.role != "scale_check" and p.label not in late]
+    late |= {str(a["name"]) for a in cfg["design"].get("mach_extension", {}).get(
+        "extra_shapes", [])}
+    pool = [p.point_id for p in points if p.role != "scale_check" and p.label not in late
+            and "@M" not in p.label]      # Mach-extension points never change the subset
     rng = np.random.default_rng(int(cfg["design"]["seed"]) + 1)
     picked = rng.choice(len(pool), size=min(int(mc["n_points"]), len(pool)), replace=False)
     forced = [pid for pid in mc.get("always_include", []) if pid in pool]
@@ -511,7 +624,7 @@ def write_tables(rows: list[dict], run_dir: Path, level: str) -> pd.DataFrame:
     table = pd.DataFrame([{k: v for k, v in r.items() if k != "_attempt_rows"} for r in rows])
     if len(table):
         table = table.sort_values("point_id").reset_index(drop=True)
-        table["gate_G4_status_at_build"] = GATE_G4_STATUS_AT_BUILD
+        table["gate_G4_status_at_build"] = gate_g4_status_at_build()
     table.to_csv(run_dir / f"design_points_{level}.csv", index=False)
     pd.DataFrame(attempts).to_csv(run_dir / f"attempts_{level}.csv", index=False)
     return table

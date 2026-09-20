@@ -74,6 +74,15 @@ def main() -> int:
                    notes="M4 DOE / sensitivity / screening")
     snapshot_config(snapshot, out_dir, meta)
     store = CandidateStore(out_dir / "candidates.csv")
+    sub_space = space.with_bounds(doe["sobol"].get("sub_box") or {})
+    hull = f1_hull_preflight(space, sub_space, seed)     # raises BEFORE anything is spent
+    if hull is not None:
+        (out_dir / "f1_hull_coverage.json").write_text(json.dumps(hull, indent=2))
+        full = hull["full_box"]
+        print(f"  Fidelity-1 hull: {100 * full['fraction_of_box_valid_and_inside_hull']:.1f}% "
+              f"of the shape box is a valid forebody inside the CFD hull "
+              f"({100 * full['fraction_of_valid_shapes_inside_hull']:.1f}% of valid "
+              "shapes); Saltelli sub-box verified inside it", flush=True)
 
     print(f"AETHER M4 DOE  run={run_id}  git={meta.git_commit}"
           f"{' (dirty)' if meta.git_dirty else ''}  workers={workers}")
@@ -85,7 +94,6 @@ def main() -> int:
         lhs = run_lhs(space, store, n_samples=int(doe["lhs"]["n_samples"]), run_id=run_id,
                       seed=seed, executor=pool)
         print(f"  Latin Hypercube: {len(lhs)} evaluations", flush=True)
-        sub_space = space.with_bounds(doe["sobol"].get("sub_box") or {})
         sob = run_sobol(sub_space, store, n_base=int(doe["sobol"]["n_base"]), run_id=run_id,
                         seed=seed, executor=pool)
         print(f"  Saltelli design: {len(sob)} evaluations", flush=True)
@@ -93,6 +101,38 @@ def main() -> int:
     store.export_parquet()
     return analyse(space, sub_space, cfg, store.load(), swept, run_id, meta.git_commit,
                    meta.git_dirty, meta.config_hash, args.config, workers, wall_s, out_dir)
+
+
+def f1_hull_preflight(space, sub_space, seed: int) -> dict | None:
+    """At Fidelity 1 only: measure how much of the shape box the CFD hull leaves, and REFUSE
+    to start if the Saltelli sub-box is not inside it (a Saltelli design cannot tolerate one
+    rejected sample). None at Fidelity 0."""
+    aero = space.base_config["vehicle"].get("aero", {}) or {}
+    model = str(aero.get("model", "constant"))
+    if not model.startswith("cfd_surface"):
+        return None
+    from src.aether.aerodynamics.cfd_surface import SHAPE_INPUTS, load_surface, surface_dir
+    from src.aether.optimization.hull_coverage import check_box_inside_hull, coverage
+
+    directory = ROOT / aero["surface_dir"] if aero.get("surface_dir") else surface_dir(model)
+    surface = load_surface(directory)
+
+    def bounds(sp):
+        by_name = {v.name: v for v in sp.variables}
+        return {k: (by_name[k].lower, by_name[k].upper) for k in SHAPE_INPUTS}
+
+    full_b, sub_b = bounds(space), bounds(sub_space)
+    full = coverage(surface, full_b, seed=seed)
+    vol = float(np.prod([(sub_b[k][1] - sub_b[k][0]) / (full_b[k][1] - full_b[k][0])
+                         for k in SHAPE_INPUTS]))
+    return {"aero_model": model, "surface_training_hash": surface.meta["training_hash"],
+            "sub_box_volume_fraction_of_shape_box": vol,
+            "sub_box_volume_fraction_of_evaluable_region":
+                vol / full["fraction_of_box_valid_and_inside_hull"],
+            "full_box": full,
+            "sobol_sub_box": {**coverage(surface, bounds(sub_space), n_samples=4096, seed=seed),
+                              "preflight": check_box_inside_hull(surface, bounds(sub_space),
+                                                                 seed=seed)}}
 
 
 def reanalyse(run_id: str) -> int:
@@ -162,6 +202,8 @@ def analyse(space, sub_space, cfg, everything, swept, run_id, git_commit, git_di
         "sobol": sobol,
         "screening": screening,
         "limits": space.base_config["limits"],
+        "f1_hull": (json.loads((out_dir / "f1_hull_coverage.json").read_text())
+                    if (out_dir / "f1_hull_coverage.json").exists() else None),
     }
     with open(out_dir / "summary.json", "w") as fh:
         json.dump(summary, fh, indent=2, default=float)

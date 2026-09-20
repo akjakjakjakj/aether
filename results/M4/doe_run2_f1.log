@@ -1,0 +1,14 @@
+.venv/bin/python scripts/run_doe.py
+  Fidelity-1 hull: 46.3% of the shape box is a valid forebody inside the CFD hull (99.8% of valid shapes); Saltelli sub-box verified inside it
+AETHER M4 DOE  run=M4-DOE-20260920T204844Z  git=f5a55b6 (dirty)  workers=6
+  one-at-a-time: 150 evaluations
+  Latin Hypercube: 3000 evaluations
+  Saltelli design: 6144 evaluations
+
+per-evaluation wall time: median 0.150 s, 47.5 evaluations/s overall
+active after screening: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg']
+frozen:                 ['shoulder_ratio', 'aft_cone_angle_deg', 'fineness_ratio', 'entry_velocity_m_s', 'mass_kg', 'insulator_thickness_m']
+figures: ['M4_doe_sobol.png', 'M4_doe_oat.png', 'M4_doe_lhs.png']
+report -> /Users/akj/Projects/aether/reports/milestones/M4_pareto_optimisation.md
+results -> /Users/akj/Projects/aether/results/M4/M4-DOE-20260920T204844Z
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 =1 caffeinate -i    1149.33s user 8.51s system 577% cpu 3:20.45 total

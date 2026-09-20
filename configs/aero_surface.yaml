@@ -1,8 +1,15 @@
-# AETHER Milestone M3 - the CFD-derived drag response surface `cfd_surface_v1` and the
-# coupled-model gate G5. Declared before the surface was fitted.
+# AETHER Milestone M3 - the CFD-derived drag response surface and the coupled-model gate G5.
 #
-# GATE STATUS AT BUILD: G4 IN_PROGRESS. The surface is PROVISIONAL; no optimisation config
-# selects it (configs/design_space.yaml stays on `aero.model: constant`).
+# CURRENT SURFACE: `cfd_surface_v2` (data/aero/cfd_surface_v2/). `cfd_surface_v1` - 56 points,
+# Mach 3-20, built while gate G4 was IN_PROGRESS - stays on disk and registered for provenance
+# and is PROVISIONAL for ever by its own surface.json.
+#
+# GATE STATUS is never written in this file or in source: the builder READS M2's
+# gate_assessment.json at build time and stores what it read in surface.json; the evaluator
+# reads it again at evaluation time. Both PASS -> served with no opt-in. Anything else ->
+# refused unless a config sets `allow_provisional: true` (nothing in this file does).
+#
+# Everything below except the v2 notes was declared before the v1 surface was fitted.
 
 meta:
   name: aero_surface
@@ -45,6 +52,9 @@ coupled:
     cone_half_angle_deg: 25.0
     aft_cone_angle_deg: 20.0
     fineness_ratio: 0.875
+  # The Fidelity-0 M4 front (archived report M4_pareto_optimisation_fidelity0.md). Kept as
+  # the comparison set ON PURPOSE: these are the designs the constant-C_D model chose, which is
+  # what a constant-vs-surface comparison should be made on. The Fidelity-1 front is M4's.
   m4_run: results/M4/M4-OPT-20260920T132037Z
   m4_front_n: 5                 # evenly spaced along the front, by peak heat flux
   determinism_repeats: 3

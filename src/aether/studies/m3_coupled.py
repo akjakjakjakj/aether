@@ -9,9 +9,11 @@ temperature and peak deceleration move when a constant C_D is replaced by the CF
 C_D(Mach, shape) - and does the capsule's SHAPE, which was aerodynamically inert at constant
 C_D, now matter?
 
-Everything goes through `evaluate_design`. The CFD-surface arm runs with
-`allow_provisional: true` because gate G4 was IN_PROGRESS at build time; every row written
-here carries the gate status the evaluator recorded.
+Everything goes through `evaluate_design`. The CFD-surface arm NEVER sets
+`allow_provisional`: if the surface is provisional (its own `surface.json` or M2's
+`gate_assessment.json` does not say PASS - both are READ, neither is typed here) the
+evaluator refuses and this study stops with that error. Every row written here carries the
+gate status the evaluator recorded.
 """
 
 from __future__ import annotations
@@ -25,11 +27,10 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from ..aerodynamics.cfd_surface import MODEL_NAME, SHAPE_INPUTS
+from ..aerodynamics.cfd_surface import MODEL_NAME, SHAPE_INPUTS, gate_g4_status, load_surface
 from ..evaluate import DesignEvaluation, evaluate_design
 from ..utils.run import REPO_ROOT, load_config
 
-GATE_G4_STATUS_AT_BUILD = "IN_PROGRESS"
 METRICS = ("peak_heat_flux_w_m2", "peak_bondline_temperature_k", "max_g",
            "integrated_external_heat_j_m2", "peak_surface_temperature_k",
            "max_dynamic_pressure_pa", "entry_duration_s")
@@ -65,8 +66,7 @@ def with_aero(cfg: dict[str, Any], arm: str, **aero: Any) -> dict[str, Any]:
     if arm == "constant":
         out["vehicle"]["aero"] = {"model": "constant"}
     else:
-        out["vehicle"]["aero"] = {"model": MODEL_NAME, "allow_provisional": True,
-                                  "on_extrapolation": "flag", **aero}
+        out["vehicle"]["aero"] = {"model": MODEL_NAME, "on_extrapolation": "flag", **aero}
     return out
 
 
@@ -115,6 +115,15 @@ REQUIRED_DIAGNOSTICS = ("aero_shape_extrapolated", "aero_heat_fraction_below_cfd
                         "aero_time_fraction_above_cfd_mach")
 
 
+def _surface_of(cfg: dict[str, Any]):
+    """The surface a config's `vehicle.aero` block points at (default: the current one)."""
+    directory = cfg["vehicle"]["aero"].get("surface_dir")
+    if not directory:
+        return load_surface()
+    path = Path(directory)
+    return load_surface(path if path.is_absolute() else REPO_ROOT / path)
+
+
 def gate_g5(cfg_surface: dict[str, Any], repeats: int) -> dict[str, Any]:
     evals = [evaluate_design(copy.deepcopy(cfg_surface)) for _ in range(repeats)]
     prints = [fingerprint(e) for e in evals]
@@ -127,17 +136,35 @@ def gate_g5(cfg_surface: dict[str, Any], repeats: int) -> dict[str, Any]:
         "fidelity_is_1": all(e.fidelity == 1 for e in evals),
         "provenance_complete": not missing_prov,
         "extrapolation_flags_recorded": not missing_diag,
-        "gate_status_recorded": prov.get("gate_G4_status_at_build") == GATE_G4_STATUS_AT_BUILD,
+        # what the evaluator recorded must be what the two FILES say, read independently here
+        "gate_status_recorded": (
+            prov.get("gate_G4_status_at_build")
+            == _surface_of(cfg_surface).meta["gate_G4_status_at_build"]
+            and prov.get("gate_G4_status_at_evaluation") == gate_g4_status()["status"]),
     }
+    ok = all(checks.values())
+    provisional = bool(prov.get("provisional", True))
+    mesh_level = str(prov.get("mesh_level"))
+    if not ok:
+        status, reason = "FAIL", "one or more checks failed"
+    elif provisional:
+        status, reason = "LIMITED", (
+            "determinism and provenance checks met, but the drag surface is PROVISIONAL (G4 "
+            f"{prov.get('gate_G4_status_at_build')} at build, "
+            f"{prov.get('gate_G4_status_at_evaluation')} now) - see report")
+    else:
+        status, reason = "PASS", (
+            "determinism and provenance checks met on a surface built and evaluated with gate "
+            f"G4 PASS. G5 is a SOFTWARE gate (spec §19): it says the coupled evaluator is "
+            f"deterministic and labels its aerodynamics, not that the drag is right. Surface "
+            f"limits - {mesh_level} mesh, perfect gas, alpha = 0, assumed base drag - are "
+            "in the report.")
     return {"gate": "G5", "checks": checks, "all_checks_met": all(checks.values()),
             "fingerprints": prints, "missing_provenance": missing_prov,
             "missing_diagnostics": missing_diag, "provenance_example": prov,
             "repeats": repeats,
             # G5 can be no better than the gate it stands on.
-            "status": "LIMITED" if all(checks.values()) else "FAIL",
-            "status_reason": ("determinism and provenance checks met, but the drag surface is "
-                              "PROVISIONAL (G4 IN_PROGRESS at build, coarse mesh) - see report")
-            if all(checks.values()) else "one or more checks failed"}
+            "status": status, "status_reason": reason, "surface_provisional": provisional}
 
 
 # ---------------------------------------------------------------------------------------
@@ -168,10 +195,18 @@ def _m4_front_designs(run: Path, n: int) -> list[tuple[str, dict[str, Any]]]:
     return out
 
 
-MACH_BANDS = ((0.0, 1.0), (1.0, 3.0), (3.0, 6.0), (6.0, 10.0), (10.0, 20.0), (20.0, 99.0))
+MACH_EDGES = (0.0, 1.0, 3.0, 6.0, 10.0, 20.0, 99.0)
 
 
-def mach_band_table(ev: DesignEvaluation, label: str) -> pd.DataFrame:
+def mach_bands(surface_mach_max: float | None = None) -> tuple[tuple[float, float], ...]:
+    """Reporting bands in Mach; the surface's top CFD Mach number is always an edge, so the
+    share of heat load ABOVE the surface is a row of the table, not an estimate."""
+    edges = sorted({*MACH_EDGES, *([float(surface_mach_max)] if surface_mach_max else [])})
+    return tuple(zip(edges[:-1], edges[1:], strict=True))
+
+
+def mach_band_table(ev: DesignEvaluation, label: str,
+                    surface_mach_max: float | None = None) -> pd.DataFrame:
     """Where in Mach the entry actually happens: share of heat load and of flight time per
     Mach band, plus the Mach number at peak heating and at peak deceleration. This is the
     evidence for the CFD Mach range and for holding the boundary values outside it."""
@@ -179,7 +214,7 @@ def mach_band_table(ev: DesignEvaluation, label: str) -> pd.DataFrame:
     t, mach = traj.time_s, traj.mach
     load = float(np.trapezoid(q, t))
     rows = []
-    for lo, hi in MACH_BANDS:
+    for lo, hi in mach_bands(surface_mach_max):
         mask = (mach >= lo) & (mach < hi)
         rows.append({"design": label, "mach_lo": lo, "mach_hi": hi,
                      "heat_load_fraction": float(np.trapezoid(np.where(mask, q, 0.0), t) / load),
@@ -215,7 +250,7 @@ def run_study(cfg: dict[str, Any], run_dir: Path, progress=print,
             ev = evaluate_design(with_aero(dcfg, arm))
             rows.append(_row(label, arm, ev))
             if arm == "constant" and ev.trajectory is not None:
-                bands.append(mach_band_table(ev, label))
+                bands.append(mach_band_table(ev, label, load_surface().mach_max))
         if inclusive_surface_dir is not None:
             rows.append(_row(label, "surface_inclusive", evaluate_design(with_aero(
                 dcfg, "surface", surface_dir=str(inclusive_surface_dir)))))
@@ -344,7 +379,10 @@ def summarise(comparison: pd.DataFrame, shape: pd.DataFrame, sens: pd.DataFrame,
                                             - nominal["peak_bondline_temperature_k"]),
             "max_g_rel_change": _rel(nominal["max_g"], r["max_g"]),
         })
-    return {"gate_G4_status_at_build": GATE_G4_STATUS_AT_BUILD,
+    return {"gate_G4_status_at_build": gate["provenance_example"].get(
+                "gate_G4_status_at_build"),
+            "gate_G4_status_at_evaluation": gate["provenance_example"].get(
+                "gate_G4_status_at_evaluation"),
             "gate_G5": {k: gate[k] for k in ("status", "status_reason", "checks",
                                              "all_checks_met")},
             "surface_training_hash": gate["provenance_example"].get("surface_training_hash"),

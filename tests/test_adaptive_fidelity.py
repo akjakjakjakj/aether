@@ -92,7 +92,7 @@ def _base_surface(bias: float = 0.0) -> CfdDragSurface:
             rows.append({"point_id": f"dp{k:03d}", "role": "anchor", "split": "train",
                          "mach": mach, **shape, "cd_fore": true_cd(mach, shape) + bias * b})
             k += 1
-    meta = {"model": "cfd_surface_v1", "gate_G4_status_at_build": "IN_PROGRESS", "seed": 0,
+    meta = {"model": "cfd_surface_v2", "gate_G4_status_at_build": "IN_PROGRESS", "seed": 0,
             "mesh_level": "coarse", "input_ranges": RANGES, "sigma_inflation": 1.0,
             "model_form_rel_halfband": 0.05, "base_drag": {}}
     surface = CfdDragSurface(pd.DataFrame(rows), meta)
@@ -147,7 +147,7 @@ def _policy(**overrides):
     return policy
 
 
-AERO = {"model": "cfd_surface_v1", "allow_provisional": True, "on_extrapolation": "reject"}
+AERO = {"model": "cfd_surface_v2", "allow_provisional": True, "on_extrapolation": "reject"}
 
 
 def _rig(tmp_path, strategy, *, cfd_budget=4, budget=60, backend=None, base=None, policy=None,
@@ -619,7 +619,7 @@ def test_real_evaluator_sees_a_refit(tmp_path):
     from src.aether.optimization.adaptive import dry_run_truth
 
     if not (SURFACE_DIR / "surface.json").exists():
-        pytest.skip("no cfd_surface_v1 on disk")
+        pytest.skip("no cfd_surface_v2 on disk")
     base = load_surface(SURFACE_DIR)
     space, hv = _space_and_hv()
     cases = CfdCaseStore(tmp_path / "cases.csv", AnalyticF1Backend(dry_run_truth(base, 0.08)), 1)

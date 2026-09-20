@@ -1,0 +1,104 @@
+_meta:
+  run_id: M3-DP-20260920T1610Z
+  config_hash: 8ce5cc3a6e47
+  git_commit: 8802cb7
+  git_dirty: true
+  created_utc: '2026-09-20T15:13:53+00:00'
+  aether_version: 0.1.0
+  notes: M3 CFD design points; OpenFOAM v2512; gate_G4_status_at_build=IN_PROGRESS
+config:
+  meta:
+    name: cfd_design_points
+    milestone: M3
+    description: Seeded space-filling design over (Mach, forebody shape) for C_D,fore.
+  inherit:
+    cfd_validation_config: configs/cfd_validation.yaml
+  production_level: coarse
+  mesh_check:
+    level: medium
+    n_points: 6
+    always_include:
+    - dp015
+    - dp017
+  execution:
+    max_concurrent_cases: 4
+    threads_per_case: 1
+    solver_timeout_s: 10800
+  startup:
+    first_order_iterations_per_refinement_factor: 1500
+  domain_sizing:
+    angle_lo_deg: 40.0
+    angle_hi_deg: 70.0
+    max_body_radius_factor: 2.0
+    detached_above_deg: 55.0
+    cone_shock_margin_deg: 5.0
+  inputs:
+    mach:
+      min: 3.0
+      max: 20.0
+      sampling: log
+    bluntness_ratio:
+      min: 0.25
+      max: 1.35
+    cone_half_angle_deg:
+      min: 20.0
+      max: 70.0
+    shoulder_ratio:
+      min: 0.02
+      max: 0.1
+  fixed:
+    diameter_m: 1.2
+  scale_check:
+    enabled: true
+    diameter_m: 3.0
+    mach: 6.0
+    shape:
+      bluntness_ratio: 0.5
+      cone_half_angle_deg: 25.0
+      shoulder_ratio: 0.1
+    max_rel_difference: 0.002
+  design:
+    seed: 20260920
+    n_fill: 34
+    max_fill_draws: 512
+    anchors:
+      box_vertices: true
+      validity_boundary:
+        margin_deg: 0.5
+        points:
+        - bluntness_ratio: 0.8
+          shoulder_ratio: 0.02
+        - bluntness_ratio: 0.8
+          shoulder_ratio: 0.1
+        - bluntness_ratio: 1.2
+          shoulder_ratio: 0.1
+      explicit:
+      - name: baseline
+        bluntness_ratio: 0.5
+        cone_half_angle_deg: 25.0
+        shoulder_ratio: 0.1
+      - name: blunt_lo_angle_a
+        bluntness_ratio: 0.5
+        cone_half_angle_deg: 20.0
+        shoulder_ratio: 0.02
+      - name: blunt_lo_angle_b
+        bluntness_ratio: 0.5
+        cone_half_angle_deg: 20.0
+        shoulder_ratio: 0.1
+    holdout:
+      n_test: 8
+  acceptance:
+    require_force_converged: true
+    min_outlet_mach: 1.0
+    min_upstream_clearance_fraction: 0.25
+    max_outer_outlet_mach_deficit_rel: 0.01
+    outer_outlet_fraction: 0.05
+    stagnation_pressure_check_rel: 0.01
+    domain_retry:
+      max_retries: 2
+      standoff_margin_factor: 1.6
+      asymptote_margin_add_deg: 4.0
+  gci_hook:
+    m2_run_glob: results/M2/M2-*/gci.csv
+    quantity: cd_fore
+    column: gci_medium

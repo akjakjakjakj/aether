@@ -4,7 +4,7 @@
     run_m3_coupled.py --dp-run M3-DP-...          # study + figures + report
     run_m3_coupled.py --dp-run M3-DP-... --report-only
 
-Needs data/aero/cfd_surface_v1/ (`make aero-surface`). About a minute; no OpenFOAM.
+Needs data/aero/cfd_surface_v2/ (`make aero-surface`). About a minute; no OpenFOAM.
 """
 
 from __future__ import annotations
@@ -15,6 +15,7 @@ import json
 import pandas as pd
 
 from aether.aerodynamics import plots
+from aether.aerodynamics.cfd_surface import gate_g4_status
 from aether.studies import m3_coupled, m3_report
 from aether.utils.run import REPO_ROOT, RunMeta, config_hash, load_config, snapshot_config
 
@@ -34,7 +35,8 @@ def main() -> int:
     run_dir = dp_dir / "coupled"
     if not args.report_only:
         meta = RunMeta(run_id=f"{args.dp_run}/coupled", config_hash=config_hash(cfg),
-                       notes="M3 coupled gate G5; gate_G4_status_at_build=IN_PROGRESS")
+                       notes="M3 coupled gate G5; gate G4 read at launch: "
+                             f"{gate_g4_status()['status']}")
         snapshot_config(cfg, run_dir, meta)
         inclusive = dp_dir / f"surface_{level}_inclusive"
         m3_coupled.run_study(cfg, run_dir, progress=lambda m: print(m, flush=True),

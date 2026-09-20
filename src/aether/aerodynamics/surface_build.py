@@ -1,4 +1,5 @@
-"""Build, validate and persist `cfd_surface_v1` from a CFD design-point run (spec §25).
+"""Build, validate and persist the current CFD drag surface (`cfd_surface_v2`; v1 is kept
+on disk, never rebuilt) from a CFD design-point run (spec §25).
 
 Two questions, kept apart (as in `surrogate/validation.py`): how ACCURATE is the surface on
 CFD cases it never saw, and how HONEST is its error bar. Both are answered twice:
@@ -37,8 +38,13 @@ from .cfd_surface import (
     gate_g4_status,
 )
 
-GATE_G4_STATUS_AT_BUILD = "IN_PROGRESS"
 USABLE = "USABLE"
+
+
+def gate_at_build() -> dict[str, Any]:
+    """Gate G4 as M2's `gate_assessment.json` states it NOW - i.e. at build time, since this
+    is only called while building. READ, never typed (the v1 build carried a typed label)."""
+    return gate_g4_status()
 
 
 def usable_points(table: pd.DataFrame) -> pd.DataFrame:
@@ -51,7 +57,7 @@ def bounded_unconverged_points(table: pd.DataFrame, max_p2p_rel: float) -> pd.Da
     """Cases that ran cleanly and passed every acceptance rule EXCEPT the force-convergence
     criterion, and whose C_D,fore stayed inside a `max_p2p_rel` band over the final window.
 
-    They are NOT usable by the declared rules and never enter `cfd_surface_v1`. They feed
+    They are NOT usable by the declared rules and never enter the production surface. They feed
     only the clearly labelled INCLUSIVE sensitivity surface, which exists to answer one
     question: how different would the answer be in the corner of the shape space that the
     strict rules removed?"""
@@ -87,15 +93,21 @@ def build_inclusive(run_dir: Path, cfg: dict[str, Any], surface_cfg: dict[str, A
 
 def _meta(cfg: dict[str, Any], run_id: str, level: str, surface_cfg: dict[str, Any]) -> dict:
     inp = cfg["inputs"]
+    gate = gate_at_build()
+    ext = cfg["design"].get("mach_extension", {})
+    mach_hi = max([float(inp["mach"]["max"]),
+                   *(float(m) for m in (ext.get("mach", []) if ext.get("enabled") else []))])
     return {
         "model": MODEL_NAME,
-        "gate_G4_status_at_build": GATE_G4_STATUS_AT_BUILD,
-        "gate_G4_status_read_at_build": gate_g4_status(),
-        "provisional": True,
+        "gate_G4_status_at_build": gate["status"],
+        "gate_G4_status_read_at_build": gate,
+        "provisional": gate["status"] != "PASS",
         "source_run": run_id,
         "mesh_level": level,
         "seed": int(cfg["design"]["seed"]),
-        "input_ranges": {"mach": [inp["mach"]["min"], inp["mach"]["max"]],
+        "mach_core_max": float(inp["mach"]["max"]),   # anchors AND fill up to here; above it
+                                                      # only the Mach-extension anchors
+        "input_ranges": {"mach": [inp["mach"]["min"], mach_hi],
                          **{k: [inp[k]["min"], inp[k]["max"]] for k in SHAPE_INPUTS}},
         "gas_model": "calorically perfect, gamma = 1.4, inviscid, alpha = 0 (A-CFD-1..3)",
         "model_form_rel_halfband": float(surface_cfg["model_form_rel_halfband"]),
@@ -161,6 +173,8 @@ def mach_independence_table(surface: CfdDragSurface, shapes: dict[str, dict[str,
     """How much C_D,fore still changes over the top of the CFD Mach range, per shape.
     This is the measured basis for HOLDING the top value above the range."""
     rows = []
+    if surface.mach_max > 20.0:      # the Mach-extension node: what holding Mach 20 had cost
+        mach_pairs = (*mach_pairs, (20.0, float(surface.mach_max)))
     for name, shape in shapes.items():
         for lo, hi in mach_pairs:
             if lo < surface.mach_min or hi > surface.mach_max:
@@ -227,9 +241,21 @@ def build(run_dir: Path, cfg: dict[str, Any], surface_cfg: dict[str, Any], level
     base = base_fraction_table(surface, shapes)
     base.to_csv(run_dir / f"base_drag_fraction_{level}.csv", index=False)
 
-    z_std = _metrics_block(folds)["all"].get("z_std", float("nan"))
+    # The Mach-extension points are near-copies of their Mach-20 twins (Mach-number
+    # independence), so they are EASY to predict and pull the pooled z-score spread down. The
+    # inflation is therefore the LARGER of the pooled spread and the spread over the core
+    # Mach range alone - a rule tightened for v2 after seeing that effect, in the
+    # conservative direction only.
+    core_max = float(surface.meta.get("mach_core_max") or surface.mach_max)
+    core_block = _metrics_block(folds[folds["mach"] <= core_max])
+    z_all = _metrics_block(folds)["all"].get("z_std", float("nan"))
+    z_core = core_block["all"].get("z_std", float("nan"))
+    z_std = float(np.nanmax([z_all, z_core])) if np.isfinite([z_all, z_core]).any() \
+        else float("nan")
     surface.meta["sigma_inflation"] = float(max(1.0, z_std)) if np.isfinite(z_std) else 1.0
-    surface.meta["sigma_inflation_basis"] = "k-fold z-score std over all usable points"
+    surface.meta["sigma_inflation_basis"] = (
+        "max of the k-fold z-score std over all usable points "
+        f"({z_all:.3f}) and over the core Mach range only ({z_core:.3f})")
     surface.save(run_dir / f"surface_{level}")
     if save_to is not None:
         surface.save(save_to)
@@ -238,9 +264,9 @@ def build(run_dir: Path, cfg: dict[str, Any], surface_cfg: dict[str, Any], level
     verdicts = table[table["role"] != "scale_check"]["verdict"].value_counts().to_dict()
     summary = {
         "model": MODEL_NAME, "run_id": run_dir.name, "mesh_level": level,
-        "gate_G4_status_at_build": GATE_G4_STATUS_AT_BUILD,
-        "gate_G4_status_read_at_build": gate_g4_status(),
-        "provisional": True,
+        "gate_G4_status_at_build": surface.meta["gate_G4_status_at_build"],
+        "gate_G4_status_read_at_build": surface.meta["gate_G4_status_read_at_build"],
+        "provisional": bool(surface.meta["provisional"]),
         "n_design_points": int((table["role"] != "scale_check").sum()),
         "verdicts": verdicts, "n_usable": int(len(rows)),
         "training_hash": surface.meta["training_hash"],
@@ -250,6 +276,8 @@ def build(run_dir: Path, cfg: dict[str, Any], surface_cfg: dict[str, Any], level
         "inclusive_sensitivity_surface": inclusive,
         "holdout": holdout,
         "k_fold": {"k": int(surface_cfg["k_folds"]), **_metrics_block(folds)},
+        "k_fold_core_mach_only": core_block,
+        "sigma_inflation_basis": surface.meta["sigma_inflation_basis"],
         "mesh_check": ({"n": int(len(mesh)),
                         "finer_level": surface_cfg["mesh_check_level"],
                         "max_abs_rel_change": float(mesh["rel_change"].abs().max()),
@@ -258,6 +286,8 @@ def build(run_dir: Path, cfg: dict[str, Any], surface_cfg: dict[str, Any], level
         "discretisation_band_hook": discretisation_band(level),
         "model_form_rel_halfband_declared": float(surface_cfg["model_form_rel_halfband"]),
         "cd_fore_range": [float(rows["cd_fore"].min()), float(rows["cd_fore"].max())],
+        "mach_range": [surface.mach_min, surface.mach_max],
+        "mach_core_max": surface.meta.get("mach_core_max"),
         "saved_to": str(save_to.relative_to(REPO_ROOT)) if save_to is not None else None,
     }
     (run_dir / f"surface_summary_{level}.json").write_text(

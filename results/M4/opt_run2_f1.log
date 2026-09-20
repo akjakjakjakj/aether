@@ -1,0 +1,33 @@
+.venv/bin/python scripts/run_optimize.py 
+AETHER M4 optimise  run=M4-OPT-20260920T205252Z  doe=M4-DOE-20260920T204844Z  git=f5a55b6 (dirty)  workers=6
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg']
+  lhs_search     seed  11: spent 1000 of 1000, 0 cache hits, 12 s
+  lhs_search     seed  23: spent 1000 of 1000, 0 cache hits, 11 s
+  lhs_search     seed  37: spent 1000 of 1000, 0 cache hits, 11 s
+  lhs_search     seed  41: spent 1000 of 1000, 0 cache hits, 11 s
+  lhs_search     seed  59: spent 1000 of 1000, 0 cache hits, 11 s
+  lhs_search     seed  67: spent 1000 of 1000, 0 cache hits, 11 s
+  lhs_search     seed  73: spent 1000 of 1000, 0 cache hits, 12 s
+  nsga2          seed  11: spent 1000 of 1000, 0 cache hits, 25 s
+  nsga2          seed  23: spent 1000 of 1000, 0 cache hits, 27 s
+  nsga2          seed  37: spent 1000 of 1000, 0 cache hits, 27 s
+  nsga2          seed  41: spent 1000 of 1000, 0 cache hits, 28 s
+  nsga2          seed  59: spent 1000 of 1000, 0 cache hits, 30 s
+  nsga2          seed  67: spent 1000 of 1000, 0 cache hits, 29 s
+  nsga2          seed  73: spent 1000 of 1000, 0 cache hits, 29 s
+  scalarised_de  seed  11: spent 1000 of 1000, 1 cache hits, 22 s
+  scalarised_de  seed  23: spent 1000 of 1000, 2 cache hits, 21 s
+  scalarised_de  seed  37: spent 1000 of 1000, 0 cache hits, 23 s
+  scalarised_de  seed  41: spent 1000 of 1000, 1 cache hits, 31 s
+  scalarised_de  seed  59: spent 1000 of 1000, 0 cache hits, 23 s
+  scalarised_de  seed  67: spent 1000 of 1000, 1 cache hits, 21 s
+  scalarised_de  seed  73: spent 1000 of 1000, 1 cache hits, 24 s
+
+  lhs_search     HV = 0.2874 +/- 0.0214 [0.2560, 0.3194]
+  nsga2          HV = 0.3467 +/- 0.0055 [0.3386, 0.3512]
+  scalarised_de  HV = 0.2997 +/- 0.0150 [0.2797, 0.3193]
+combined front: 78 designs
+figures: ['M4_pareto_front.png', 'M4_hypervolume.png', 'M4_front_variables.png']
+report -> /Users/akj/Projects/aether/reports/milestones/M4_pareto_optimisation.md
+results -> /Users/akj/Projects/aether/results/M4/M4-OPT-20260920T205252Z
+OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 =1 caffeinate -i    2331.93s user 17.09s system 529% cpu 7:23.29 total

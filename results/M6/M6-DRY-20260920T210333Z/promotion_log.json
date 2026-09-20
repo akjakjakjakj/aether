@@ -1,0 +1,4040 @@
+{
+ "decisions": [
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 5,
+   "candidate_id": "C-d853b4d62045",
+   "outside_hull": false,
+   "novelty": 0.17745076018373948,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 8,
+   "promoted": true,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.24919761238954563,
+   "objective_uncertainty": 0.001976703327537521,
+   "cost": 0.125,
+   "score": 1.536335166376876,
+   "matters": true,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "promising, and the cheap model is untrusted here"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 5,
+   "candidate_id": "C-60a8af75e821",
+   "outside_hull": false,
+   "novelty": 0.24808709840127674,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 8,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0021321178731322776,
+   "cost": 0.125,
+   "score": 0.5441058936566139,
+   "matters": false,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 6,
+   "candidate_id": "C-4c22b5c2947b",
+   "outside_hull": false,
+   "novelty": 0.15948968639804642,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0011375071861495778,
+   "cost": 0.14285714285714285,
+   "score": 0.4854467878789075,
+   "matters": false,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 6,
+   "candidate_id": "C-33103e8e007d",
+   "outside_hull": false,
+   "novelty": 0.14819623673793894,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0011026226424930563,
+   "cost": 0.14285714285714285,
+   "score": 0.4776900164892113,
+   "matters": false,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 6,
+   "candidate_id": "C-d4f10e64e6dc",
+   "outside_hull": false,
+   "novelty": 0.014206361636162578,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.375,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 9.777697687422902e-05,
+   "objective_uncertainty": 0.000446990899087063,
+   "cost": 0.14285714285714285,
+   "score": 0.3732755123129903,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 6,
+   "candidate_id": "C-6276127dd213",
+   "outside_hull": false,
+   "novelty": 0.07855334557102285,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0009231348685020957,
+   "cost": 0.14285714285714285,
+   "score": 0.23657265723327622,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 7,
+   "candidate_id": "C-6ab2c435c727",
+   "outside_hull": false,
+   "novelty": 0.07022924879120951,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.2575835215781937,
+   "objective_uncertainty": 0.0008273517736256397,
+   "cost": 0.14285714285714285,
+   "score": 1.204036513223409,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 7,
+   "candidate_id": "C-43ee362bb384",
+   "outside_hull": false,
+   "novelty": 0.17071186963662197,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0011697702537147303,
+   "cost": 0.14285714285714285,
+   "score": 0.4870599412571651,
+   "matters": false,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 7,
+   "candidate_id": "C-daa8042582b2",
+   "outside_hull": false,
+   "novelty": 0.010060907048872315,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0004741756799553909,
+   "cost": 0.14285714285714285,
+   "score": -0.014183430601227495,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 7,
+   "candidate_id": "C-4a664859a971",
+   "outside_hull": false,
+   "novelty": 0.025196726379495715,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.00044576903720283667,
+   "cost": 0.14285714285714285,
+   "score": 0.03484896836322279,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 8,
+   "candidate_id": "C-cfdfc92feb39",
+   "outside_hull": false,
+   "novelty": 0.16172632039045487,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0010665178728082036,
+   "cost": 0.14285714285714285,
+   "score": 0.4818973222118388,
+   "matters": false,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 8,
+   "candidate_id": "C-7b36a3fc9a46",
+   "outside_hull": false,
+   "novelty": 1.1812519097211769e-05,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.921875,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.00045242527037373664,
+   "objective_uncertainty": 0.0003735515693835678,
+   "cost": 0.14285714285714285,
+   "score": 0.8691633821042644,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 8,
+   "candidate_id": "C-62e66fab610f",
+   "outside_hull": false,
+   "novelty": 0.07044323254596728,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0008026482888908726,
+   "cost": 0.14285714285714285,
+   "score": 0.20351461816919644,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 8,
+   "candidate_id": "C-a4d8cc38bec9",
+   "outside_hull": false,
+   "novelty": 0.07236788890925981,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0008541795305900823,
+   "cost": 0.14285714285714285,
+   "score": 0.21250670146513204,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 9,
+   "candidate_id": "C-eacbb1ba439b",
+   "outside_hull": false,
+   "novelty": 0.07168060397392781,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0008812884335376858,
+   "cost": 0.14285714285714285,
+   "score": 0.2115711968280722,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 9,
+   "candidate_id": "C-519cb789292c",
+   "outside_hull": false,
+   "novelty": 0.07045567966168581,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0008392021570944319,
+   "cost": 0.14285714285714285,
+   "score": 0.2053838019651029,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 9,
+   "candidate_id": "C-59dd3486ade8",
+   "outside_hull": false,
+   "novelty": 0.027779651966779173,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0031806205842296233,
+   "objective_uncertainty": 0.0005921782110114848,
+   "cost": 0.14285714285714285,
+   "score": 1.0507791790112666,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 9,
+   "candidate_id": "C-6ab2c435c727",
+   "outside_hull": false,
+   "novelty": 0.07022924879120951,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": false,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.002507191108465535,
+   "objective_uncertainty": 0.0008273517736256397,
+   "cost": 0.14285714285714285,
+   "score": 1.204036513223409,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 1,
+   "candidate_id": "C-8842bfdba2f9",
+   "outside_hull": false,
+   "novelty": 0.11880296282542101,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 8,
+   "promoted": true,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.02390299872672124,
+   "objective_uncertainty": 0.0028865113722987834,
+   "cost": 0.125,
+   "score": 1.477835444699676,
+   "matters": true,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "promising, and the cheap model is untrusted here"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 2,
+   "candidate_id": "C-a1f33230e5ad",
+   "outside_hull": false,
+   "novelty": 0.15972099132103157,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 7,
+   "promoted": true,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.1908329447201464,
+   "objective_uncertainty": 0.0021103162578852697,
+   "cost": 0.14285714285714285,
+   "score": 1.534087241465692,
+   "matters": true,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "promising, and the cheap model is untrusted here"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 3,
+   "candidate_id": "C-2194289423f7",
+   "outside_hull": false,
+   "novelty": 0.1570751998668793,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 6,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0014109034618778882,
+   "cost": 0.16666666666666666,
+   "score": 0.4872118397605611,
+   "matters": false,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 4,
+   "candidate_id": "C-15a22e6faf9f",
+   "outside_hull": false,
+   "novelty": 0.11309374187638166,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 6,
+   "promoted": true,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.20754389589078423,
+   "objective_uncertainty": 0.0017109794224027253,
+   "cost": 0.16666666666666666,
+   "score": 1.379194777374742,
+   "matters": true,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "promising, and the cheap model is untrusted here"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 4,
+   "candidate_id": "C-70dba29e16ce",
+   "outside_hull": false,
+   "novelty": 0.002426349638498225,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 6,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0005664836850555188,
+   "cost": 0.16666666666666666,
+   "score": -0.046921316952229966,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 4,
+   "candidate_id": "C-fe465e1f3d3c",
+   "outside_hull": false,
+   "novelty": 0.15115095443438,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 6,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.001326160127799958,
+   "cost": 0.16666666666666666,
+   "score": 0.4829746730566646,
+   "matters": false,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 4,
+   "candidate_id": "C-2a6be34fb856",
+   "outside_hull": false,
+   "novelty": 0.19504061829330607,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 6,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0022565063843158484,
+   "cost": 0.16666666666666666,
+   "score": 0.529491985882459,
+   "matters": false,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 5,
+   "candidate_id": "C-b11d3edc8d30",
+   "outside_hull": false,
+   "novelty": 0.029005365653366835,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.015633070080057668,
+   "objective_uncertainty": 0.0009133657479766799,
+   "cost": 0.2,
+   "score": 1.0423528395767234,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 5,
+   "candidate_id": "C-1c7cb8d2ced3",
+   "outside_hull": false,
+   "novelty": 0.0008242238097174139,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.001201552083197228,
+   "objective_uncertainty": 0.0004472224842911876,
+   "cost": 0.2,
+   "score": 0.9251085369136175,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 5,
+   "candidate_id": "C-4557f53dc652",
+   "outside_hull": false,
+   "novelty": 0.014250115165394905,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0006771700838294481,
+   "cost": 0.2,
+   "score": -0.018641111923877907,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 5,
+   "candidate_id": "C-c514ae854319",
+   "outside_hull": false,
+   "novelty": 0.1885916648036621,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.001951577502745716,
+   "cost": 0.2,
+   "score": 0.4975788751372858,
+   "matters": false,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 6,
+   "candidate_id": "C-357ff890a369",
+   "outside_hull": false,
+   "novelty": 0.04260279842112143,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.2686540168093525,
+   "objective_uncertainty": 0.0015981009405496849,
+   "cost": 0.2,
+   "score": 1.1219143750978888,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 6,
+   "candidate_id": "C-7e97a44b41d9",
+   "outside_hull": false,
+   "novelty": 0.009755067028573667,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.001187812941751465,
+   "cost": 0.2,
+   "score": -0.008092462817181206,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 6,
+   "candidate_id": "C-2742e7694374",
+   "outside_hull": false,
+   "novelty": 0.01764017734686276,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0007065993942296789,
+   "cost": 0.2,
+   "score": -0.005869439132306864,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 6,
+   "candidate_id": "C-d5e5e41ec2ec",
+   "outside_hull": false,
+   "novelty": 0.0008065909361613876,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.00043565552202151636,
+   "cost": 0.2,
+   "score": -0.07552858744505289,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 7,
+   "candidate_id": "C-dd3b2c6fc66e",
+   "outside_hull": false,
+   "novelty": 0.1429673203387954,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": true,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.011612193212371795,
+   "objective_uncertainty": 0.0013647801529472203,
+   "cost": 0.2,
+   "score": 1.4447967421100123,
+   "matters": true,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "promising, and the cheap model is untrusted here"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 7,
+   "candidate_id": "C-2d010db80ca9",
+   "outside_hull": false,
+   "novelty": 0.2030915307773126,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0018572385015789838,
+   "cost": 0.2,
+   "score": 0.4928619250789492,
+   "matters": false,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 7,
+   "candidate_id": "C-6118ecc08ece",
+   "outside_hull": false,
+   "novelty": 0.04892507524383056,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0009083461190014797,
+   "cost": 0.2,
+   "score": 0.10850089009617583,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 7,
+   "candidate_id": "C-357ff890a369",
+   "outside_hull": false,
+   "novelty": 0.04260279842112143,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 5,
+   "promoted": false,
+   "p_nondominated": 0.984375,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0005437187361421302,
+   "objective_uncertainty": 0.0015981009405496849,
+   "cost": 0.2,
+   "score": 1.1062893750978888,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 8,
+   "candidate_id": "C-95018cc47a00",
+   "outside_hull": false,
+   "novelty": 0.04477905033450521,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 4,
+   "promoted": false,
+   "p_nondominated": 0.96875,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.00043648325097965946,
+   "objective_uncertainty": 0.001561638591194514,
+   "cost": 0.25,
+   "score": 1.071095430674743,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 8,
+   "candidate_id": "C-d919452132be",
+   "outside_hull": false,
+   "novelty": 0.0687156640533833,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 4,
+   "promoted": false,
+   "p_nondominated": 0.703125,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 3.772970103281623e-05,
+   "objective_uncertainty": 0.0013923237100972874,
+   "cost": 0.25,
+   "score": 0.8767933990161421,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 8,
+   "candidate_id": "C-bc9464f00d06",
+   "outside_hull": false,
+   "novelty": 0.05543067617438293,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 4,
+   "promoted": false,
+   "p_nondominated": 0.0,
+   "p_feasible": 0.0,
+   "expected_hv_gain": 0.0,
+   "objective_uncertainty": 0.0006089376996893381,
+   "cost": 0.25,
+   "score": 0.09021580556574335,
+   "matters": false,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "clearly poor: P(non-dominated) below the gate, stays at F0"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 8,
+   "candidate_id": "C-efa14c6d66ab",
+   "outside_hull": false,
+   "novelty": 0.057815725390526096,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 4,
+   "promoted": false,
+   "p_nondominated": 0.3125,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 3.1083025384851665e-05,
+   "objective_uncertainty": 0.0010555368234539397,
+   "cost": 0.25,
+   "score": 0.432995925807784,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 9,
+   "candidate_id": "C-d765d795b2bf",
+   "outside_hull": false,
+   "novelty": 0.0687156640533833,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 4,
+   "promoted": false,
+   "p_nondominated": 0.65625,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 5.353553799079119e-06,
+   "objective_uncertainty": 0.0013929960797215424,
+   "cost": 0.25,
+   "score": 0.8299520174973548,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 9,
+   "candidate_id": "C-1ee30873b548",
+   "outside_hull": false,
+   "novelty": 0.04852531652970042,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 4,
+   "promoted": false,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.005020300316747538,
+   "objective_uncertainty": 0.0014620818523599088,
+   "cost": 0.25,
+   "score": 1.1098551477169967,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 9,
+   "candidate_id": "C-692216234cb1",
+   "outside_hull": false,
+   "novelty": 0.08301325744290282,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 4,
+   "promoted": true,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.0011463062830418909,
+   "objective_uncertainty": 0.0015151956436043612,
+   "cost": 0.25,
+   "score": 1.2274706403232274,
+   "matters": true,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "promising, and the cheap model is untrusted here"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 9,
+   "candidate_id": "C-c64b0dc066e4",
+   "outside_hull": false,
+   "novelty": 0.053626746301404106,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 4,
+   "promoted": false,
+   "p_nondominated": 0.71875,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 1.8297239401908472e-06,
+   "objective_uncertainty": 0.0010586515547622022,
+   "cost": 0.25,
+   "score": 0.8254383987427905,
+   "matters": true,
+   "untrusted": false,
+   "affordable": true,
+   "reason": "surface already confident here and the shape is not novel"
+  }
+ ],
+ "promotions": [
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 5,
+   "strategy": "adaptive",
+   "trigger": "adaptive policy",
+   "candidate_id": "C-d853b4d62045",
+   "scores": {
+    "p_nondominated": 1.0,
+    "expected_hv_gain": 0.24919761238954563,
+    "objective_uncertainty": 0.001976703327537521,
+    "novelty": 0.17745076018373948,
+    "cost": 0.125,
+    "score": 1.536335166376876,
+    "outside_hull": false,
+    "agent_requested_fidelity": 0
+   },
+   "cfd": [
+    {
+     "key": "M20_b0.47057_c60.5628_s0.1",
+     "point_id": "af0a23e02bf0",
+     "mach": 20.0,
+     "bluntness_ratio": 0.47057,
+     "cone_half_angle_deg": 60.5628,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3467078317990826,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 384699.31803775317,
+    "peak_bondline_temperature_k": 405.82271809991516
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 383186.407758762,
+    "peak_bondline_temperature_k": 405.66665749344804
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 1,
+   "strategy": "adaptive",
+   "trigger": "adaptive policy",
+   "candidate_id": "C-8842bfdba2f9",
+   "scores": {
+    "p_nondominated": 1.0,
+    "expected_hv_gain": 0.02390299872672124,
+    "objective_uncertainty": 0.0028865113722987834,
+    "novelty": 0.11880296282542101,
+    "cost": 0.125,
+    "score": 1.477835444699676,
+    "outside_hull": false,
+    "agent_requested_fidelity": 0
+   },
+   "cfd": [
+    {
+     "key": "M20_b0.373886_c26.557_s0.1",
+     "point_id": "afb843aff66d",
+     "mach": 20.0,
+     "bluntness_ratio": 0.373886,
+     "cone_half_angle_deg": 26.557,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 0.6703180959763209,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 808165.148301859,
+    "peak_bondline_temperature_k": 444.70363556211936
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 789908.3776467328,
+    "peak_bondline_temperature_k": 443.7541115919726
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 2,
+   "strategy": "adaptive",
+   "trigger": "adaptive policy",
+   "candidate_id": "C-a1f33230e5ad",
+   "scores": {
+    "p_nondominated": 1.0,
+    "expected_hv_gain": 0.1908329447201464,
+    "objective_uncertainty": 0.0021103162578852697,
+    "novelty": 0.15972099132103157,
+    "cost": 0.14285714285714285,
+    "score": 1.534087241465692,
+    "outside_hull": false,
+    "agent_requested_fidelity": 0
+   },
+   "cfd": [
+    {
+     "key": "M20_b0.603119_c60.9257_s0.1",
+     "point_id": "af405875dd30",
+     "mach": 20.0,
+     "bluntness_ratio": 0.603119,
+     "cone_half_angle_deg": 60.9257,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.346788555859253,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 1,
+   "surface_version_after": 2,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 445726.7604427901,
+    "peak_bondline_temperature_k": 415.16466200707487
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 444139.6704288577,
+    "peak_bondline_temperature_k": 415.01853686666544
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 4,
+   "strategy": "adaptive",
+   "trigger": "adaptive policy",
+   "candidate_id": "C-15a22e6faf9f",
+   "scores": {
+    "p_nondominated": 1.0,
+    "expected_hv_gain": 0.20754389589078423,
+    "objective_uncertainty": 0.0017109794224027253,
+    "novelty": 0.11309374187638166,
+    "cost": 0.16666666666666666,
+    "score": 1.379194777374742,
+    "outside_hull": false,
+    "agent_requested_fidelity": 0
+   },
+   "cfd": [
+    {
+     "key": "M20_b0.429454_c68.3393_s0.1",
+     "point_id": "af3635d29221",
+     "mach": 20.0,
+     "bluntness_ratio": 0.429454,
+     "cone_half_angle_deg": 68.3393,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3671976522585114,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 2,
+   "surface_version_after": 3,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 361030.14509590267,
+    "peak_bondline_temperature_k": 413.61408114182666
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 363220.77348407765,
+    "peak_bondline_temperature_k": 413.821067525241
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 7,
+   "strategy": "adaptive",
+   "trigger": "adaptive policy",
+   "candidate_id": "C-dd3b2c6fc66e",
+   "scores": {
+    "p_nondominated": 1.0,
+    "expected_hv_gain": 0.011612193212371795,
+    "objective_uncertainty": 0.0013647801529472203,
+    "novelty": 0.1429673203387954,
+    "cost": 0.2,
+    "score": 1.4447967421100123,
+    "outside_hull": false,
+    "agent_requested_fidelity": 0
+   },
+   "cfd": [
+    {
+     "key": "M20_b0.751831_c63.2508_s0.1",
+     "point_id": "af5e63766e64",
+     "mach": 20.0,
+     "bluntness_ratio": 0.751831,
+     "cone_half_angle_deg": 63.2508,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3616979531868167,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 3,
+   "surface_version_after": 4,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 322325.6780579819,
+    "peak_bondline_temperature_k": 401.83110981898244
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 322562.1081308905,
+    "peak_bondline_temperature_k": 401.8596120920577
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 9,
+   "strategy": "adaptive",
+   "trigger": "adaptive policy",
+   "candidate_id": "C-692216234cb1",
+   "scores": {
+    "p_nondominated": 1.0,
+    "expected_hv_gain": 0.0011463062830418909,
+    "objective_uncertainty": 0.0015151956436043612,
+    "novelty": 0.08301325744290282,
+    "cost": 0.25,
+    "score": 1.2274706403232274,
+    "outside_hull": false,
+    "agent_requested_fidelity": 0
+   },
+   "cfd": [
+    {
+     "key": "M20_b0.645038_c68.6481_s0.1",
+     "point_id": "af0cf2452f74",
+     "mach": 20.0,
+     "bluntness_ratio": 0.645038,
+     "cone_half_angle_deg": 68.6481,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.374798670944785,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 4,
+   "surface_version_after": 5,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 307776.5195157033,
+    "peak_bondline_temperature_k": 406.5521744156104
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 308453.7709150598,
+    "peak_bondline_temperature_k": 406.6290319505302
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 1,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-ff048ac256dc",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.472438_c65.0716_s0.1",
+     "point_id": "afc4edef3c83",
+     "mach": 20.0,
+     "bluntness_ratio": 0.472438,
+     "cone_half_angle_deg": 65.0716,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.367103669468971,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 470477.80177713267,
+    "peak_bondline_temperature_k": 379.6854234118231
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 470293.5063349696,
+    "peak_bondline_temperature_k": 379.6780175872707
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 2,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-db9fda0ae6f1",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.31445_c34.5399_s0.1",
+     "point_id": "afb7995bae70",
+     "mach": 20.0,
+     "bluntness_ratio": 0.31445,
+     "cone_half_angle_deg": 34.5399,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 0.7144804694977348,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 1,
+   "surface_version_after": 2,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 2949499.407101871,
+    "peak_bondline_temperature_k": 531.1229007484264
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 2881565.0422863113,
+    "peak_bondline_temperature_k": 530.1260858006076
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 3,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-21c48cdd2ec1",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.450425_c23.4545_s0.1",
+     "point_id": "afa9eabe11cb",
+     "mach": 20.0,
+     "bluntness_ratio": 0.450425,
+     "cone_half_angle_deg": 23.4545,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 0.8164286366649286,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 2,
+   "surface_version_after": 3,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 525012.3867334061,
+    "peak_bondline_temperature_k": 410.11615436919976
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 513212.98305094335,
+    "peak_bondline_temperature_k": 409.21698961305276
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 4,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-5bfdc6e815c3",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M12_b0.31241_c36.8381_s0.1",
+     "point_id": "af9fae57cac0",
+     "mach": 12.0,
+     "bluntness_ratio": 0.31241,
+     "cone_half_angle_deg": 36.8381,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 0.7862220404252228,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 3,
+   "surface_version_after": 4,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 2696423.345736412,
+    "peak_bondline_temperature_k": 510.7001307143205
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 2692878.0803240016,
+    "peak_bondline_temperature_k": 510.17108422606293
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 5,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-d1b9c4b3aabf",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.477851_c61.323_s0.1",
+     "point_id": "af6c6c033848",
+     "mach": 20.0,
+     "bluntness_ratio": 0.477851,
+     "cone_half_angle_deg": 61.323,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3520528304103367,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 4,
+   "surface_version_after": 5,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 398536.03910513554,
+    "peak_bondline_temperature_k": 397.26809418683854
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 395587.9283288704,
+    "peak_bondline_temperature_k": 396.9909203383637
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 6,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-8433574cec3d",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.352158_c61.1216_s0.1",
+     "point_id": "af4a4f28e4e0",
+     "mach": 20.0,
+     "bluntness_ratio": 0.352158,
+     "cone_half_angle_deg": 61.1216,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3605283231565124,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 5,
+   "surface_version_after": 6,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 470932.72298825847,
+    "peak_bondline_temperature_k": 400.0709294304817
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 470340.1243515252,
+    "peak_bondline_temperature_k": 400.01760348306544
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 7,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-69510a1c7c2c",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M12_b0.477742_c63.1184_s0.1",
+     "point_id": "af67220a7f32",
+     "mach": 12.0,
+     "bluntness_ratio": 0.477742,
+     "cone_half_angle_deg": 63.1184,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.357412787079307,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 6,
+   "surface_version_after": 7,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 360216.5222861879,
+    "peak_bondline_temperature_k": 411.0258679151608
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 360382.11061080056,
+    "peak_bondline_temperature_k": 410.97321532247014
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 8,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-096d54dea5f6",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.486966_c68.0078_s0.1",
+     "point_id": "afff24b1b71e",
+     "mach": 20.0,
+     "bluntness_ratio": 0.486966,
+     "cone_half_angle_deg": 68.0078,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.369523832974756,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 7,
+   "surface_version_after": 8,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 354538.6035836306,
+    "peak_bondline_temperature_k": 408.9936548349698
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 354816.7250286688,
+    "peak_bondline_temperature_k": 409.01376825472687
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 1,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-9bc448a8f2d4",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.264105_c61.4164_s0.1",
+     "point_id": "af202afa6f11",
+     "mach": 20.0,
+     "bluntness_ratio": 0.264105,
+     "cone_half_angle_deg": 61.4164,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3682217490587196,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 427537.63680559624,
+    "peak_bondline_temperature_k": 376.94360223440117
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 426039.3390148332,
+    "peak_bondline_temperature_k": 376.8605833219139
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 2,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-a527df1dcffb",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.797665_c57.2677_s0.1",
+     "point_id": "afd33300c151",
+     "mach": 20.0,
+     "bluntness_ratio": 0.797665,
+     "cone_half_angle_deg": 57.2677,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3412092642608122,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 1,
+   "surface_version_after": 2,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 1204685.667799648,
+    "peak_bondline_temperature_k": 434.3390750951903
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 1197437.591251072,
+    "peak_bondline_temperature_k": 434.1646869113455
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 3,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-6b7ac5757fc2",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.797074_c68.3738_s0.1",
+     "point_id": "af1d16ae69cb",
+     "mach": 20.0,
+     "bluntness_ratio": 0.797074,
+     "cone_half_angle_deg": 68.3738,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3722022061180368,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 2,
+   "surface_version_after": 3,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 340578.6227586533,
+    "peak_bondline_temperature_k": 383.6672700866963
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 342245.5446619464,
+    "peak_bondline_temperature_k": 383.7823617166029
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 4,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-70dba29e16ce",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.605788_c60.9257_s0.1",
+     "point_id": "af6adadb9110",
+     "mach": 20.0,
+     "bluntness_ratio": 0.605788,
+     "cone_half_angle_deg": 60.9257,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3468413546505527,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 3,
+   "surface_version_after": 4,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 442107.1572472591,
+    "peak_bondline_temperature_k": 414.83551740708737
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 443345.33511318354,
+    "peak_bondline_temperature_k": 414.9390807476248
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 5,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-cd0387c95827",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M12_b0.603118_c60.6293_s0.1",
+     "point_id": "afeb47e1c72b",
+     "mach": 12.0,
+     "bluntness_ratio": 0.603118,
+     "cone_half_angle_deg": 60.6293,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.341598181676768,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 4,
+   "surface_version_after": 5,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 430910.8751584881,
+    "peak_bondline_temperature_k": 423.8788373968053
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 431137.56245521334,
+    "peak_bondline_temperature_k": 423.83380932381107
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 6,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-781f39082e10",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.43037_c68.3396_s0.1",
+     "point_id": "affd5c76d93d",
+     "mach": 20.0,
+     "bluntness_ratio": 0.43037,
+     "cone_half_angle_deg": 68.3396,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3672312947630587,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 5,
+   "surface_version_after": 6,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 403499.2273683435,
+    "peak_bondline_temperature_k": 398.85152531765897
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 403783.7428949189,
+    "peak_bondline_temperature_k": 398.86987322821545
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 7,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-c7c7adb606a8",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.432899_c69.4463_s0.1",
+     "point_id": "afe696cb2bbd",
+     "mach": 20.0,
+     "bluntness_ratio": 0.432899,
+     "cone_half_angle_deg": 69.4463,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.367350878422088,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 6,
+   "surface_version_after": 7,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 371364.75903319364,
+    "peak_bondline_temperature_k": 410.28888364443384
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 371615.01601418457,
+    "peak_bondline_temperature_k": 410.32257415147404
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 8,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-ae527c8a9261",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M12_b0.430354_c68.7078_s0.1",
+     "point_id": "afd2d4eb5a41",
+     "mach": 12.0,
+     "bluntness_ratio": 0.430354,
+     "cone_half_angle_deg": 68.7078,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.360711003828597,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 7,
+   "surface_version_after": 8,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 344240.09577804,
+    "peak_bondline_temperature_k": 423.8124376498055
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 344121.10039111093,
+    "peak_bondline_temperature_k": 423.8447731933026
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 11,
+   "batch": 5,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-d853b4d62045",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.47057_c60.5628_s0.1",
+     "point_id": "af0a23e02bf0",
+     "mach": 20.0,
+     "bluntness_ratio": 0.47057,
+     "cone_half_angle_deg": 60.5628,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3467078317990826,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 384699.31803775317,
+    "peak_bondline_temperature_k": 405.82271809991516
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 383186.407758762,
+    "peak_bondline_temperature_k": 405.66665749344804
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 11,
+   "batch": 7,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-6ab2c435c727",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.54135_c59.1559_s0.1",
+     "point_id": "af8c82b434a6",
+     "mach": 20.0,
+     "bluntness_ratio": 0.54135,
+     "cone_half_angle_deg": 59.1559,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3298296276802954,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 1,
+   "surface_version_after": 2,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 351029.58327605494,
+    "peak_bondline_temperature_k": 405.0511612418925
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 350381.13136536727,
+    "peak_bondline_temperature_k": 404.97948051809607
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 11,
+   "batch": 8,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-7b36a3fc9a46",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M12_b0.47057_c60.5622_s0.1",
+     "point_id": "afeef270531f",
+     "mach": 12.0,
+     "bluntness_ratio": 0.47057,
+     "cone_half_angle_deg": 60.5622,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3439410471060638,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 2,
+   "surface_version_after": 3,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 385093.3873289659,
+    "peak_bondline_temperature_k": 404.97314696544095
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 385153.9653372162,
+    "peak_bondline_temperature_k": 404.96511668480076
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 11,
+   "batch": 9,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-59dd3486ade8",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.498147_c61.1612_s0.1",
+     "point_id": "aff31323b21c",
+     "mach": 20.0,
+     "bluntness_ratio": 0.498147,
+     "cone_half_angle_deg": 61.1612,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3498807614302093,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 3,
+   "surface_version_after": 4,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 371923.9441349576,
+    "peak_bondline_temperature_k": 404.46965752481856
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 372056.7731049447,
+    "peak_bondline_temperature_k": 404.46776991256456
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 23,
+   "batch": 1,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-8842bfdba2f9",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.373886_c26.557_s0.1",
+     "point_id": "afb843aff66d",
+     "mach": 20.0,
+     "bluntness_ratio": 0.373886,
+     "cone_half_angle_deg": 26.557,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 0.6703180959763209,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 808165.148301859,
+    "peak_bondline_temperature_k": 444.70363556211936
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 789908.3776467328,
+    "peak_bondline_temperature_k": 443.7541115919726
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 23,
+   "batch": 2,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-a1f33230e5ad",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.603119_c60.9257_s0.1",
+     "point_id": "af405875dd30",
+     "mach": 20.0,
+     "bluntness_ratio": 0.603119,
+     "cone_half_angle_deg": 60.9257,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.346788555859253,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 1,
+   "surface_version_after": 2,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 445726.7604427901,
+    "peak_bondline_temperature_k": 415.16466200707487
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 444139.6704288577,
+    "peak_bondline_temperature_k": 415.01853686666544
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 23,
+   "batch": 4,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-15a22e6faf9f",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.429454_c68.3393_s0.1",
+     "point_id": "af3635d29221",
+     "mach": 20.0,
+     "bluntness_ratio": 0.429454,
+     "cone_half_angle_deg": 68.3393,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3671976522585114,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 2,
+   "surface_version_after": 3,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 361030.14509590267,
+    "peak_bondline_temperature_k": 413.61408114182666
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 363220.77348407765,
+    "peak_bondline_temperature_k": 413.821067525241
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 23,
+   "batch": 5,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-b11d3edc8d30",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.429454_c69.7896_s0.1",
+     "point_id": "afead828dedc",
+     "mach": 20.0,
+     "bluntness_ratio": 0.429454,
+     "cone_half_angle_deg": 69.7896,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3673071809673822,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 3,
+   "surface_version_after": 4,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 374171.4529833851,
+    "peak_bondline_temperature_k": 410.6452979611151
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 374454.8712410441,
+    "peak_bondline_temperature_k": 410.68560839501714
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 23,
+   "batch": 5,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-1c7cb8d2ced3",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M12_b0.430354_c68.3444_s0.1",
+     "point_id": "aff94fa98940",
+     "mach": 12.0,
+     "bluntness_ratio": 0.430354,
+     "cone_half_angle_deg": 68.3444,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3609017039340934,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 3,
+   "surface_version_after": 4,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 361859.9152046597,
+    "peak_bondline_temperature_k": 413.4029421607343
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 361835.9543994017,
+    "peak_bondline_temperature_k": 413.4070642036179
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 23,
+   "batch": 6,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-357ff890a369",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.594502_c69.64_s0.1",
+     "point_id": "af337573bdf3",
+     "mach": 20.0,
+     "bluntness_ratio": 0.594502,
+     "cone_half_angle_deg": 69.64,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3739913021678987,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 4,
+   "surface_version_after": 5,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 318027.6644471917,
+    "peak_bondline_temperature_k": 403.8418862641947
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 318909.4311161018,
+    "peak_bondline_temperature_k": 403.93244872806343
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 23,
+   "batch": 7,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-dd3b2c6fc66e",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.751831_c63.2508_s0.1",
+     "point_id": "af5e63766e64",
+     "mach": 20.0,
+     "bluntness_ratio": 0.751831,
+     "cone_half_angle_deg": 63.2508,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3616979531868167,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 5,
+   "surface_version_after": 6,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 322768.03327350644,
+    "peak_bondline_temperature_k": 401.88812266049587
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 322552.1421087009,
+    "peak_bondline_temperature_k": 401.86457127213396
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 23,
+   "batch": 8,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-d919452132be",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M12_b0.629309_c68.6481_s0.1",
+     "point_id": "af5ded13c94c",
+     "mach": 12.0,
+     "bluntness_ratio": 0.629309,
+     "cone_half_angle_deg": 68.6481,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3712857876304791,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 6,
+   "surface_version_after": 7,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 322293.84592404263,
+    "peak_bondline_temperature_k": 402.23490563020385
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 322300.1616259928,
+    "peak_bondline_temperature_k": 402.246134884015
+   }
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "batch": 0,
+   "strategy": "upfront",
+   "trigger": "upfront space-filling",
+   "candidate_id": "upfront-design",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M23.3226_b0.436163_c64.7162_s0.0331293",
+     "point_id": "afc952924115",
+     "mach": 23.3226,
+     "bluntness_ratio": 0.436163,
+     "cone_half_angle_deg": 64.7162,
+     "shoulder_ratio": 0.0331293,
+     "usable": true,
+     "cd_fore": 1.4665907132213711,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M4.82007_b0.284918_c29.4741_s0.072545",
+     "point_id": "aff461e8fe08",
+     "mach": 4.82007,
+     "bluntness_ratio": 0.284918,
+     "cone_half_angle_deg": 29.4741,
+     "shoulder_ratio": 0.072545,
+     "usable": true,
+     "cd_fore": 0.5915117075127824,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M7.26172_b0.470205_c38.0131_s0.0228468",
+     "point_id": "af0f59246033",
+     "mach": 7.26172,
+     "bluntness_ratio": 0.470205,
+     "cone_half_angle_deg": 38.0131,
+     "shoulder_ratio": 0.0228468,
+     "usable": true,
+     "cd_fore": 0.9627507382223035,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M3.31796_b0.554156_c69.3952_s0.0917493",
+     "point_id": "af7a3c2f4eb5",
+     "mach": 3.31796,
+     "bluntness_ratio": 0.554156,
+     "cone_half_angle_deg": 69.3952,
+     "shoulder_ratio": 0.0917493,
+     "usable": true,
+     "cd_fore": 1.3079763865417933,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M15.4808_b0.320033_c46.6187_s0.0635099",
+     "point_id": "aff3dde62a14",
+     "mach": 15.4808,
+     "bluntness_ratio": 0.320033,
+     "cone_half_angle_deg": 46.6187,
+     "shoulder_ratio": 0.0635099,
+     "usable": true,
+     "cd_fore": 1.0742485294035582,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M5.32115_b0.371221_c58.8471_s0.0825733",
+     "point_id": "af12acd3be4c",
+     "mach": 5.32115,
+     "bluntness_ratio": 0.371221,
+     "cone_half_angle_deg": 58.8471,
+     "shoulder_ratio": 0.0825733,
+     "usable": true,
+     "cd_fore": 1.338253257091986,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M24.8397_b0.57098_c54.823_s0.0720682",
+     "point_id": "af2a515cf952",
+     "mach": 24.8397,
+     "bluntness_ratio": 0.57098,
+     "cone_half_angle_deg": 54.823,
+     "shoulder_ratio": 0.0720682,
+     "usable": true,
+     "cd_fore": 1.291586181924967,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M20.2284_b1.10281_c67.4715_s0.0679316",
+     "point_id": "af91580377d6",
+     "mach": 20.2284,
+     "bluntness_ratio": 1.10281,
+     "cone_half_angle_deg": 67.4715,
+     "shoulder_ratio": 0.0679316,
+     "usable": true,
+     "cd_fore": 1.4365399402793686,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 8,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "n/a",
+    "feasible": false,
+    "peak_heat_flux_w_m2": NaN,
+    "peak_bondline_temperature_k": NaN
+   },
+   "after": null
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "batch": 0,
+   "strategy": "upfront",
+   "trigger": "upfront space-filling",
+   "candidate_id": "upfront-design",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M3.03482_b0.964062_c62.3075_s0.0223072",
+     "point_id": "af44b38c2ca2",
+     "mach": 3.03482,
+     "bluntness_ratio": 0.964062,
+     "cone_half_angle_deg": 62.3075,
+     "shoulder_ratio": 0.0223072,
+     "usable": true,
+     "cd_fore": 1.393138815128167,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M6.44977_b0.51531_c39.1978_s0.062188",
+     "point_id": "af7a02504bbd",
+     "mach": 6.44977,
+     "bluntness_ratio": 0.51531,
+     "cone_half_angle_deg": 39.1978,
+     "shoulder_ratio": 0.062188,
+     "usable": true,
+     "cd_fore": 1.0326871824245942,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M20.2216_b0.341389_c67.3286_s0.0428424",
+     "point_id": "af4e07713a1c",
+     "mach": 20.2216,
+     "bluntness_ratio": 0.341389,
+     "cone_half_angle_deg": 67.3286,
+     "shoulder_ratio": 0.0428424,
+     "usable": true,
+     "cd_fore": 1.4612141147649054,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M4.22698_b0.555695_c47.138_s0.0348553",
+     "point_id": "affad12c7d57",
+     "mach": 4.22698,
+     "bluntness_ratio": 0.555695,
+     "cone_half_angle_deg": 47.138,
+     "shoulder_ratio": 0.0348553,
+     "usable": true,
+     "cd_fore": 1.1789854170139271,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M11.6018_b0.403742_c49.5558_s0.0755907",
+     "point_id": "af274e6113c2",
+     "mach": 11.6018,
+     "bluntness_ratio": 0.403742,
+     "cone_half_angle_deg": 49.5558,
+     "shoulder_ratio": 0.0755907,
+     "usable": true,
+     "cd_fore": 1.165497674130826,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M7.09004_b0.738362_c66.8656_s0.0873277",
+     "point_id": "af93d5c0e46a",
+     "mach": 7.09004,
+     "bluntness_ratio": 0.738362,
+     "cone_half_angle_deg": 66.8656,
+     "shoulder_ratio": 0.0873277,
+     "usable": true,
+     "cd_fore": 1.370738211219928,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M21.1033_b0.633996_c44.9846_s0.0279431",
+     "point_id": "af29f9b58f2c",
+     "mach": 21.1033,
+     "bluntness_ratio": 0.633996,
+     "cone_half_angle_deg": 44.9846,
+     "shoulder_ratio": 0.0279431,
+     "usable": true,
+     "cd_fore": 1.2002767581476093,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M3.77956_b0.298303_c21.4245_s0.0599951",
+     "point_id": "afc08a6efa22",
+     "mach": 3.77956,
+     "bluntness_ratio": 0.298303,
+     "cone_half_angle_deg": 21.4245,
+     "shoulder_ratio": 0.0599951,
+     "usable": true,
+     "cd_fore": 0.49916018433336956,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 8,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "n/a",
+    "feasible": false,
+    "peak_heat_flux_w_m2": NaN,
+    "peak_bondline_temperature_k": NaN
+   },
+   "after": null
+  }
+ ],
+ "probes": [
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 5,
+   "candidate_id": "C-d853b4d62045",
+   "outside_hull": false,
+   "surface_version": 0,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 387708.6931853206,
+     "peak_bondline_temperature_k": 406.11720797737934
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 381721.6829309325,
+     "peak_bondline_temperature_k": 405.5241969791181
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 5,
+   "candidate_id": "C-60a8af75e821",
+   "outside_hull": false,
+   "surface_version": 0,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 449419.9270335088,
+     "peak_bondline_temperature_k": 417.6351417801109
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 441955.1318097398,
+     "peak_bondline_temperature_k": 416.99550641817126
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 6,
+   "candidate_id": "C-4c22b5c2947b",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 373109.289664519,
+     "peak_bondline_temperature_k": 404.6683208423991
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 370621.83134507376,
+     "peak_bondline_temperature_k": 404.32706868655424
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 6,
+   "candidate_id": "C-33103e8e007d",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 314755.1384364426,
+     "peak_bondline_temperature_k": 392.0465269924583
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 312095.7747905007,
+     "peak_bondline_temperature_k": 391.7157401997104
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 6,
+   "candidate_id": "C-d4f10e64e6dc",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 384553.66116690065,
+     "peak_bondline_temperature_k": 405.76835802217863
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 383755.10423272464,
+     "peak_bondline_temperature_k": 405.6342607524525
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 6,
+   "candidate_id": "C-6276127dd213",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 426534.5562617916,
+     "peak_bondline_temperature_k": 409.08504422734126
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 423808.83594801294,
+     "peak_bondline_temperature_k": 408.8081037667906
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 7,
+   "candidate_id": "C-6ab2c435c727",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 351815.0105938313,
+     "peak_bondline_temperature_k": 405.1681060783482
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 350239.55389043665,
+     "peak_bondline_temperature_k": 404.9199005462605
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 7,
+   "candidate_id": "C-43ee362bb384",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 372529.80053022323,
+     "peak_bondline_temperature_k": 404.6344174416655
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 369986.89968998934,
+     "peak_bondline_temperature_k": 404.2834863655511
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 7,
+   "candidate_id": "C-daa8042582b2",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 386847.8311976565,
+     "peak_bondline_temperature_k": 406.079866165109
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 386043.7746505744,
+     "peak_bondline_temperature_k": 405.9376134611224
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 7,
+   "candidate_id": "C-4a664859a971",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 388946.37858905195,
+     "peak_bondline_temperature_k": 406.2067422742443
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 387947.1635950858,
+     "peak_bondline_temperature_k": 406.0730115630834
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 8,
+   "candidate_id": "C-cfdfc92feb39",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 374521.2943250881,
+     "peak_bondline_temperature_k": 404.85593810763737
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 372140.86787674815,
+     "peak_bondline_temperature_k": 404.5359827457949
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 8,
+   "candidate_id": "C-7b36a3fc9a46",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 385386.7520150755,
+     "peak_bondline_temperature_k": 405.0320408262758
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 384736.9302267094,
+     "peak_bondline_temperature_k": 404.91997535546074
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 8,
+   "candidate_id": "C-62e66fab610f",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 343701.68893501087,
+     "peak_bondline_temperature_k": 405.8601143575023
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 342159.4001025796,
+     "peak_bondline_temperature_k": 405.61931987083506
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 8,
+   "candidate_id": "C-a4d8cc38bec9",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 400556.71926344396,
+     "peak_bondline_temperature_k": 404.7288741220803
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 398530.6061097833,
+     "peak_bondline_temperature_k": 404.47262026290326
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 9,
+   "candidate_id": "C-eacbb1ba439b",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 322938.9695980927,
+     "peak_bondline_temperature_k": 412.09623104437225
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 321440.6008728582,
+     "peak_bondline_temperature_k": 411.83184451431094
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 9,
+   "candidate_id": "C-519cb789292c",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 344068.328554111,
+     "peak_bondline_temperature_k": 406.87344089067506
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 342497.7525375224,
+     "peak_bondline_temperature_k": 406.62168024354673
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 9,
+   "candidate_id": "C-59dd3486ade8",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 372499.8832387202,
+     "peak_bondline_temperature_k": 404.57630407329094
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 371390.9436391203,
+     "peak_bondline_temperature_k": 404.3986506099875
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 9,
+   "candidate_id": "C-6ab2c435c727",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 351815.0105938313,
+     "peak_bondline_temperature_k": 405.1681060783482
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 350239.55389043665,
+     "peak_bondline_temperature_k": 404.9199005462605
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 1,
+   "candidate_id": "C-8842bfdba2f9",
+   "outside_hull": false,
+   "surface_version": 0,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 815446.568191367,
+     "peak_bondline_temperature_k": 445.1485189084053
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 801072.3716399776,
+     "peak_bondline_temperature_k": 444.2825654967157
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 2,
+   "candidate_id": "C-a1f33230e5ad",
+   "outside_hull": false,
+   "surface_version": 1,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 449180.55505277973,
+     "peak_bondline_temperature_k": 415.47726025414363
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 442402.66994508926,
+     "peak_bondline_temperature_k": 414.84416537677805
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 3,
+   "candidate_id": "C-2194289423f7",
+   "outside_hull": false,
+   "surface_version": 2,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 460944.145126804,
+     "peak_bondline_temperature_k": 422.620123922088
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 457658.45477245783,
+     "peak_bondline_temperature_k": 422.1968528835246
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 4,
+   "candidate_id": "C-15a22e6faf9f",
+   "outside_hull": false,
+   "surface_version": 2,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 363355.29741221404,
+     "peak_bondline_temperature_k": 413.8736446616177
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 358765.5338969032,
+     "peak_bondline_temperature_k": 413.36035083489685
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 4,
+   "candidate_id": "C-70dba29e16ce",
+   "outside_hull": false,
+   "surface_version": 2,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 443753.33055294055,
+     "peak_bondline_temperature_k": 415.04730235499534
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 443050.74659765814,
+     "peak_bondline_temperature_k": 414.8773572494787
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 4,
+   "candidate_id": "C-fe465e1f3d3c",
+   "outside_hull": false,
+   "surface_version": 2,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 463774.6281243025,
+     "peak_bondline_temperature_k": 417.3397194251643
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 460562.5045624334,
+     "peak_bondline_temperature_k": 416.9418713868243
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 4,
+   "candidate_id": "C-2a6be34fb856",
+   "outside_hull": false,
+   "surface_version": 2,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 450848.63494998723,
+     "peak_bondline_temperature_k": 418.54646711109586
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 443840.019585772,
+     "peak_bondline_temperature_k": 417.8695151958011
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 5,
+   "candidate_id": "C-b11d3edc8d30",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 375105.94775823766,
+     "peak_bondline_temperature_k": 410.7900414938883
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 373281.5078350915,
+     "peak_bondline_temperature_k": 410.51603176949527
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 5,
+   "candidate_id": "C-1c7cb8d2ced3",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 362102.43756786163,
+     "peak_bondline_temperature_k": 413.4794031348177
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 361616.72025284247,
+     "peak_bondline_temperature_k": 413.3452363895303
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 5,
+   "candidate_id": "C-4557f53dc652",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 363559.847996358,
+     "peak_bondline_temperature_k": 413.90226072795315
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 362597.58161676844,
+     "peak_bondline_temperature_k": 413.6991097028043
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 5,
+   "candidate_id": "C-c514ae854319",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 404951.1635711005,
+     "peak_bondline_temperature_k": 412.1801590195919
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 399327.44352745946,
+     "peak_bondline_temperature_k": 411.59468576876816
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 6,
+   "candidate_id": "C-357ff890a369",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 320084.3878581767,
+     "peak_bondline_temperature_k": 404.06767733743646
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 315815.3749943478,
+     "peak_bondline_temperature_k": 403.58824705527155
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 6,
+   "candidate_id": "C-7e97a44b41d9",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 324295.6140178446,
+     "peak_bondline_temperature_k": 408.8871978499929
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 321076.8398673442,
+     "peak_bondline_temperature_k": 408.53085396746746
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 6,
+   "candidate_id": "C-2742e7694374",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 360569.7960354971,
+     "peak_bondline_temperature_k": 413.25975448162893
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 359430.81183463114,
+     "peak_bondline_temperature_k": 413.04777466336003
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 6,
+   "candidate_id": "C-d5e5e41ec2ec",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 363829.6654153887,
+     "peak_bondline_temperature_k": 413.9389409687449
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 363349.1874642234,
+     "peak_bondline_temperature_k": 413.8082443121384
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 7,
+   "candidate_id": "C-dd3b2c6fc66e",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 323954.7558450926,
+     "peak_bondline_temperature_k": 402.04453108804796
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 320714.2214023886,
+     "peak_bondline_temperature_k": 401.6350970421638
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 7,
+   "candidate_id": "C-2d010db80ca9",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 281818.76766941516,
+     "peak_bondline_temperature_k": 402.9503893380163
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 277982.85200580745,
+     "peak_bondline_temperature_k": 402.3932177875426
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 7,
+   "candidate_id": "C-6118ecc08ece",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 312565.5231043923,
+     "peak_bondline_temperature_k": 407.25140992196765
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 310949.9263805667,
+     "peak_bondline_temperature_k": 406.9789060862672
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 7,
+   "candidate_id": "C-357ff890a369",
+   "outside_hull": false,
+   "surface_version": 3,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 320084.3878581767,
+     "peak_bondline_temperature_k": 404.06767733743646
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 315815.3749943478,
+     "peak_bondline_temperature_k": 403.58824705527155
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 8,
+   "candidate_id": "C-95018cc47a00",
+   "outside_hull": false,
+   "surface_version": 4,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 320103.75360317563,
+     "peak_bondline_temperature_k": 404.0836064697194
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 316176.6607658561,
+     "peak_bondline_temperature_k": 403.6151148923611
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 8,
+   "candidate_id": "C-d919452132be",
+   "outside_hull": false,
+   "surface_version": 4,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 323449.46782744414,
+     "peak_bondline_temperature_k": 402.3776970642993
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 319876.72629234847,
+     "peak_bondline_temperature_k": 401.9599999512701
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 8,
+   "candidate_id": "C-bc9464f00d06",
+   "outside_hull": false,
+   "surface_version": 4,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 310224.8070447578,
+     "peak_bondline_temperature_k": 400.063058994657
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": false,
+     "peak_heat_flux_w_m2": 309322.4261380202,
+     "peak_bondline_temperature_k": 399.8803776847502
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 8,
+   "candidate_id": "C-efa14c6d66ab",
+   "outside_hull": false,
+   "surface_version": 4,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 319932.28147253237,
+     "peak_bondline_temperature_k": 404.1140947132114
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 317493.2950461329,
+     "peak_bondline_temperature_k": 403.7974336661752
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 9,
+   "candidate_id": "C-d765d795b2bf",
+   "outside_hull": false,
+   "surface_version": 4,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 323446.98410479707,
+     "peak_bondline_temperature_k": 402.37796631305656
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 319874.7455366328,
+     "peak_bondline_temperature_k": 401.9600674891401
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 9,
+   "candidate_id": "C-1ee30873b548",
+   "outside_hull": false,
+   "surface_version": 4,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 324253.1190684317,
+     "peak_bondline_temperature_k": 401.5253317966732
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 320400.71005531383,
+     "peak_bondline_temperature_k": 401.0867072409652
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 9,
+   "candidate_id": "C-692216234cb1",
+   "outside_hull": false,
+   "surface_version": 4,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 309559.08115157875,
+     "peak_bondline_temperature_k": 406.7778362048731
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 306046.8503829592,
+     "peak_bondline_temperature_k": 406.3232775117918
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 9,
+   "candidate_id": "C-c64b0dc066e4",
+   "outside_hull": false,
+   "surface_version": 4,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 320365.5568280925,
+     "peak_bondline_temperature_k": 403.9137335897566
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 317841.0777466113,
+     "peak_bondline_temperature_k": 403.59613812332793
+    }
+   }
+  }
+ ],
+ "skipped_upfront": [
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 0,
+   "bluntness_ratio": 0.7907054675742984,
+   "cone_half_angle_deg": 48.195771807804704,
+   "shoulder_ratio": 0.041447488591074944,
+   "reason": "cone_half_angle_deg (48.196 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-43.882 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 1,
+   "bluntness_ratio": 1.1542062724009157,
+   "cone_half_angle_deg": 21.057162089273334,
+   "shoulder_ratio": 0.09796057961881162,
+   "reason": "cone_half_angle_deg (21.057 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-1819.197 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 3,
+   "bluntness_ratio": 0.8211411457508803,
+   "cone_half_angle_deg": 42.22231742925942,
+   "shoulder_ratio": 0.06745483994483947,
+   "reason": "cone_half_angle_deg (42.222 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-166.080 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 5,
+   "bluntness_ratio": 0.9701392794959248,
+   "cone_half_angle_deg": 52.36444517970085,
+   "shoulder_ratio": 0.026870518326759338,
+   "reason": "cone_half_angle_deg (52.364 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-95.182 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 6,
+   "bluntness_ratio": 0.6566781123168767,
+   "cone_half_angle_deg": 33.31731881946325,
+   "shoulder_ratio": 0.08203932397067547,
+   "reason": "cone_half_angle_deg (33.317 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-113.611 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 7,
+   "bluntness_ratio": 1.2860491641797127,
+   "cone_half_angle_deg": 60.8402475528419,
+   "shoulder_ratio": 0.05855237923562527,
+   "reason": "cone_half_angle_deg (60.840 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-104.882 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 9,
+   "bluntness_ratio": 0.9225893488153816,
+   "cone_half_angle_deg": 59.269486581906676,
+   "shoulder_ratio": 0.07648997306823731,
+   "reason": "cone_half_angle_deg (59.269 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-6.311 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 10,
+   "bluntness_ratio": 0.6871076468378305,
+   "cone_half_angle_deg": 27.925946591421962,
+   "shoulder_ratio": 0.05241988711059094,
+   "reason": "cone_half_angle_deg (27.926 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-256.278 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 11,
+   "bluntness_ratio": 1.1180167846381663,
+   "cone_half_angle_deg": 57.037533381953835,
+   "shoulder_ratio": 0.08825055025517942,
+   "reason": "cone_half_angle_deg (57.038 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-115.586 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 13,
+   "bluntness_ratio": 1.2530816196464003,
+   "cone_half_angle_deg": 40.668269135057926,
+   "shoulder_ratio": 0.04758001647889614,
+   "reason": "cone_half_angle_deg (40.668 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-645.198 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 15,
+   "bluntness_ratio": 1.074810999352485,
+   "cone_half_angle_deg": 25.75926462188363,
+   "shoulder_ratio": 0.037153031229972835,
+   "reason": "cone_half_angle_deg (25.759 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-1173.030 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 17,
+   "bluntness_ratio": 1.021537845209241,
+   "cone_half_angle_deg": 36.37026397511363,
+   "shoulder_ratio": 0.05684143863618374,
+   "reason": "cone_half_angle_deg (36.370 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-543.598 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 19,
+   "bluntness_ratio": 1.2341800438240171,
+   "cone_half_angle_deg": 27.713549584150314,
+   "shoulder_ratio": 0.028523933291435242,
+   "reason": "cone_half_angle_deg (27.714 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-1361.180 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 20,
+   "bluntness_ratio": 0.704402602929622,
+   "cone_half_angle_deg": 39.96512352488935,
+   "shoulder_ratio": 0.03147597223520279,
+   "reason": "cone_half_angle_deg (39.965 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-67.629 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 1,
+   "bluntness_ratio": 0.7306917253881693,
+   "cone_half_angle_deg": 25.256701353937387,
+   "shoulder_ratio": 0.09049002259969711,
+   "reason": "cone_half_angle_deg (25.257 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-431.118 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 2,
+   "bluntness_ratio": 1.2997571484185757,
+   "cone_half_angle_deg": 51.297079380601645,
+   "shoulder_ratio": 0.05060924805700779,
+   "reason": "cone_half_angle_deg (51.297 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-318.904 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 4,
+   "bluntness_ratio": 1.1983488437719645,
+   "cone_half_angle_deg": 29.403818752616644,
+   "shoulder_ratio": 0.07497439429163932,
+   "reason": "cone_half_angle_deg (29.404 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-1178.873 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 6,
+   "bluntness_ratio": 0.8637305770069361,
+   "cone_half_angle_deg": 34.16413327679038,
+   "shoulder_ratio": 0.08296150036156177,
+   "reason": "cone_half_angle_deg (34.164 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-404.892 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 8,
+   "bluntness_ratio": 1.2564023203216494,
+   "cone_half_angle_deg": 36.62905993871391,
+   "shoulder_ratio": 0.04720774963498116,
+   "reason": "cone_half_angle_deg (36.629 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-835.460 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 10,
+   "bluntness_ratio": 1.0420943940058351,
+   "cone_half_angle_deg": 28.890512911602855,
+   "shoulder_ratio": 0.035470729246735576,
+   "reason": "cone_half_angle_deg (28.891 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-906.425 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 12,
+   "bluntness_ratio": 0.8716696245595813,
+   "cone_half_angle_deg": 57.03349190764129,
+   "shoulder_ratio": 0.09987488552927971,
+   "reason": "cone_half_angle_deg (57.033 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-15.446 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 14,
+   "bluntness_ratio": 1.087049802672118,
+   "cone_half_angle_deg": 58.52270352654159,
+   "shoulder_ratio": 0.0678229147940874,
+   "reason": "cone_half_angle_deg (58.523 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-73.488 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  }
+ ]
+}

@@ -1,0 +1,113 @@
+{
+  "doe_run_id": "M4-DOE-20260920T204844Z",
+  "thresholds": {
+    "total_index": 0.01,
+    "validity_index": 0.03
+  },
+  "variables": {
+    "diameter_m": {
+      "role": "design",
+      "reference": 1.2,
+      "max_total_index_upper": 1.043111574238745,
+      "max_total_index_output": "heatshield_mass_fraction",
+      "validity_index_upper": 0.024969217926431992,
+      "decision": "active",
+      "reason": "total-order index on heatshield_mass_fraction is not below 0.01"
+    },
+    "bluntness_ratio": {
+      "role": "design",
+      "reference": 0.5,
+      "max_total_index_upper": 0.08164996514884605,
+      "max_total_index_output": "peak_heat_flux_w_m2",
+      "validity_index_upper": 0.5667407933257067,
+      "decision": "active",
+      "reason": "total-order index on peak_heat_flux_w_m2 is not below 0.01"
+    },
+    "shoulder_ratio": {
+      "role": "design",
+      "reference": 0.1,
+      "max_total_index_upper": 0.0047589451233594655,
+      "max_total_index_output": "heatshield_mass_fraction",
+      "validity_index_upper": 0.02346745420466204,
+      "decision": "frozen",
+      "reason": "total-order upper bound < 0.01 on every output and validity index upper bound < 0.03"
+    },
+    "cone_half_angle_deg": {
+      "role": "design",
+      "reference": 25.0,
+      "max_total_index_upper": 0.000609146470789186,
+      "max_total_index_output": "heatshield_mass_fraction",
+      "validity_index_upper": 0.16652935081814643,
+      "decision": "active",
+      "reason": "moves no objective or constraint, but decides which geometries are valid"
+    },
+    "aft_cone_angle_deg": {
+      "role": "design",
+      "reference": 20.0,
+      "max_total_index_upper": 0.0,
+      "max_total_index_output": "peak_heat_flux_w_m2",
+      "validity_index_upper": 0.023402613257134514,
+      "decision": "frozen",
+      "reason": "total-order upper bound < 0.01 on every output and validity index upper bound < 0.03"
+    },
+    "fineness_ratio": {
+      "role": "design",
+      "reference": 0.875,
+      "max_total_index_upper": 0.0,
+      "max_total_index_output": "peak_heat_flux_w_m2",
+      "validity_index_upper": 0.02031676531434029,
+      "decision": "frozen",
+      "reason": "total-order upper bound < 0.01 on every output and validity index upper bound < 0.03"
+    },
+    "flight_path_angle_deg": {
+      "role": "design",
+      "reference": -3.0,
+      "max_total_index_upper": 1.0742294671555486,
+      "max_total_index_output": "max_g",
+      "validity_index_upper": 0.021461659159356977,
+      "decision": "active",
+      "reason": "total-order index on max_g is not below 0.01"
+    },
+    "entry_velocity_m_s": {
+      "role": "given",
+      "reference": 7400.0,
+      "max_total_index_upper": 0.014162571138960607,
+      "max_total_index_output": "peak_bondline_temperature_k",
+      "validity_index_upper": 0.020630887354073663,
+      "decision": "frozen",
+      "reason": "mission given, not a design choice"
+    },
+    "mass_kg": {
+      "role": "given",
+      "reference": 350.0,
+      "max_total_index_upper": 0.09748941941314623,
+      "max_total_index_output": "heatshield_mass_fraction",
+      "validity_index_upper": 0.020358349987345304,
+      "decision": "frozen",
+      "reason": "mission given, not a design choice"
+    },
+    "insulator_thickness_m": {
+      "role": "deferred",
+      "reference": 0.015,
+      "max_total_index_upper": 0.4366428977693342,
+      "max_total_index_output": "peak_bondline_temperature_k",
+      "validity_index_upper": 0.022161849392047024,
+      "decision": "frozen",
+      "reason": "deferred design variable (A-OPT-2)"
+    }
+  },
+  "active": [
+    "diameter_m",
+    "bluntness_ratio",
+    "cone_half_angle_deg",
+    "flight_path_angle_deg"
+  ],
+  "frozen": [
+    "shoulder_ratio",
+    "aft_cone_angle_deg",
+    "fineness_ratio",
+    "entry_velocity_m_s",
+    "mass_kg",
+    "insulator_thickness_m"
+  ]
+}

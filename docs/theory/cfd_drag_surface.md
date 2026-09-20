@@ -64,3 +64,23 @@ See `src/aether/aerodynamics/base_drag.py`. The forebody-only CFD cannot compute
 NR-06). The honest statement of what is known is an interval on the base-pressure ratio with
 an exact lower end (vacuum) and a sourced upper end, multiplied by a factor 2/(gamma M^2) that
 makes the whole term small at the Mach numbers where the heating happens.
+
+## Addendum 2026-09-21 — `cfd_surface_v2`: what changed after the numbers, and why that is said out loud
+
+Everything above was decided before v1's numbers existed. v2 was designed AFTER them, which is
+the weaker position, so each change is listed with what had been seen:
+
+* **A Mach-27 node at every anchor shape.** Seen: 54–67% of heat load accrues above Mach 20 on
+  a held value. The node removes an extrapolation *in Mach number of the perfect-gas model*
+  (measured cost of v1's hold: ≤ 0.74% in C_D). It does not touch the *model-form* error — the
+  gas is as wrong at Mach 27 as at Mach 20 — so the ±5% band is unchanged.
+* **Per-shape top Mach.** Seen: 5 of 14 Mach-27 anchors failed (NR-28). Rejecting shapes for
+  that would make v2 cover less than v1; instead the core range behaves exactly as v1 and a
+  shape's table stops at its last in-hull extension node (A-CFD-16).
+* **Courant pass with two passes in a row.** Seen: NR-25's cure in M2, then two drifting
+  cases slipping through a one-window pass (NR-27).
+* **Sigma inflation = max(pooled, core-Mach-only).** Seen: the Mach-27 points are near-copies
+  of their Mach-20 twins and flatter the pooled z-score spread.
+* **The gate status is read from M2's `gate_assessment.json`, never typed** (A-AERO-3).
+
+v1 stays on disk, registered and provisional; `results/M3/<run>/v1_tables/` holds its tables.

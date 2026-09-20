@@ -1,18 +1,19 @@
 {
-  "model": "cfd_surface_v1",
-  "gate_G4_status_at_build": "IN_PROGRESS",
+  "model": "cfd_surface_v2",
+  "gate_G4_status_at_build": "PASS",
   "gate_G4_status_read_at_build": {
-    "status": "IN_PROGRESS",
+    "status": "PASS",
     "source": "results/M2/M2-20260920T123901Z/gate_assessment.json"
   },
-  "provisional": true,
+  "provisional": false,
   "source_run": "M3-DP-20260920T1610Z",
   "mesh_level": "coarse",
   "seed": 20260920,
+  "mach_core_max": 20.0,
   "input_ranges": {
     "mach": [
       3.0,
-      20.0
+      27.0
     ],
     "bluntness_ratio": [
       0.25,
@@ -43,13 +44,13 @@
   },
   "variant": "INCLUSIVE-SENSITIVITY: contains cases that FAILED the convergence rule",
   "kernel_theta": [
-    1.6162999974994983,
-    1.6381167836833734,
-    0.1469199811521003,
-    -0.13097108277150427,
-    2.291771310128422,
-    -10.813667244383229
+    2.4169579094658036,
+    1.8632606619133376,
+    0.2524502345704043,
+    -0.24381975144612353,
+    2.992624762820461,
+    -23.025850929940457
   ],
-  "training_hash": "0c3b8ce4027ce018",
-  "n_train": 62
+  "training_hash": "f08d4de8bf166111",
+  "n_train": 74
 }

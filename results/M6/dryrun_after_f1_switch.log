@@ -1,0 +1,27 @@
+.venv/bin/python scripts/run_adaptive_fidelity.py --config configs/adaptive_fidelity_dryrun.yaml --fake-f1
+AETHER M6 adaptive fidelity  run=M6-DRY-20260920T210333Z  mode=dry-run  F1=FAKE:surface x declared perturbation  mesh=coarse
+git=f5a55b6 (dirty)  source hash=0fa1868345ef52b5  gate G4: built PASS, now PASS  allow_provisional=True
+arms=['adaptive', 'random', 'greedy', 'upfront', 'f0_only']
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg'] (DECLARED in the smoke config, not screened)
+  f0_only      seed  23: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (69 points), 43 s
+  f0_only      seed  11: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (69 points), 43 s
+  upfront      seed  11: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (77 points), 46 s
+  upfront      seed  23: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (77 points), 47 s
+  greedy       seed  11: 200/200 evaluations (6 re-evaluations, 0 probes), 4/8 CFD calls, surface v4 (73 points), 54 s
+  greedy       seed  23: 200/200 evaluations (11 re-evaluations, 0 probes), 8/8 CFD calls, surface v7 (77 points), 60 s
+  random       seed  23: 200/200 evaluations (20 re-evaluations, 0 probes), 8/8 CFD calls, surface v8 (77 points), 61 s
+  random       seed  11: 200/200 evaluations (19 re-evaluations, 0 probes), 8/8 CFD calls, surface v8 (77 points), 61 s
+  adaptive     seed  11: 200/200 evaluations (1 re-evaluations, 36 probes), 1/8 CFD calls, surface v1 (70 points), 66 s
+  adaptive     seed  23: 200/200 evaluations (11 re-evaluations, 54 probes), 5/8 CFD calls, surface v5 (74 points), 70 s
+
+  adaptive     truth HV 0.2824  belief 0.2823  CFD calls 3.0  (n = 2)
+  random       truth HV 0.2868  belief 0.2868  CFD calls 8.0  (n = 2)
+  greedy       truth HV 0.2835  belief 0.2833  CFD calls 6.0  (n = 2)
+  upfront      truth HV 0.2811  belief 0.2796  CFD calls 8.0  (n = 2)
+  f0_only      truth HV 0.2792  belief 0.2789  CFD calls 0.0  (n = 2)
+H2 @ 95%: NOT_SUPPORTED - 'adaptive' reached the target in 1 seeds (needs 3); no arm reached it
+DRY RUN - the 'CFD' in this run is a FORMULA (fake analytic Fidelity 1). Nothing here is a result.
+figures: ['M6_hv_vs_cfd_calls.png', 'M6_cfd_spend_map.png', 'M6_surface_error_vs_truth.png']
+report -> /Users/akj/Projects/aether/results/M6/M6-DRY-20260920T210333Z/M6_adaptive_fidelity.md
+results -> /Users/akj/Projects/aether/results/M6/M6-DRY-20260920T210333Z
+OMP_NUM_THREADS=1 make adaptive-dry-run  351.03s user 4.01s system 297% cpu 1:59.50 total

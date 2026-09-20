@@ -1,0 +1,39 @@
+{
+  "run_id": "M4-OPT-20260920T205252Z",
+  "note": "PROBES, not candidates; see the script docstring",
+  "designs": {
+    "bondline_only": {
+      "sharpest_valid_shoulder_ratio": 0.02,
+      "sharp_shoulder_peak_flux_delta_w_m2": -19881.852916046075,
+      "sharp_shoulder_bondline_delta_k": -3.063431036980603,
+      "sharp_shoulder_feasible": false,
+      "bluntest_evaluable_bluntness_ratio": 1.254438594439309,
+      "bluntest_is_gp_extrapolation": true,
+      "bluntest_peak_flux_delta_w_m2": -2591.587233861792,
+      "bluntest_bondline_delta_k": -0.3629984748015431,
+      "n_bluntness_probes_invalid_geometry": 0
+    },
+    "joint_knee": {
+      "sharpest_valid_shoulder_ratio": 0.02,
+      "sharp_shoulder_peak_flux_delta_w_m2": -18072.686756341718,
+      "sharp_shoulder_bondline_delta_k": -3.468922467329719,
+      "sharp_shoulder_feasible": true,
+      "bluntest_evaluable_bluntness_ratio": 1.2582831480378713,
+      "bluntest_is_gp_extrapolation": true,
+      "bluntest_peak_flux_delta_w_m2": -2310.5087189337355,
+      "bluntest_bondline_delta_k": -0.4116705402049661,
+      "n_bluntness_probes_invalid_geometry": 0
+    },
+    "peak_flux_only": {
+      "sharpest_valid_shoulder_ratio": 0.02,
+      "sharp_shoulder_peak_flux_delta_w_m2": -16606.042826525983,
+      "sharp_shoulder_bondline_delta_k": -3.907506404802291,
+      "sharp_shoulder_feasible": true,
+      "bluntest_evaluable_bluntness_ratio": 1.2215638959766089,
+      "bluntest_is_gp_extrapolation": true,
+      "bluntest_peak_flux_delta_w_m2": -1432.7765724961064,
+      "bluntest_bondline_delta_k": -0.32562472000773823,
+      "n_bluntness_probes_invalid_geometry": 1
+    }
+  }
+}

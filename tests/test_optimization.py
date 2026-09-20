@@ -90,7 +90,12 @@ def test_invalid_geometry_is_an_infeasible_result_not_an_exception(loaded):
 def test_full_geometry_path_reproduces_the_legacy_two_parameter_result(loaded):
     """Same nose radius, diameter and constant Cd => identical physics (Fidelity 0)."""
     space, _ = loaded
-    full = evaluate_design(space.config_for({v.name: v.reference for v in space.variables}))
+    cfg = space.config_for({v.name: v.reference for v in space.variables})
+    # The design space selects the CFD drag surface (Fidelity 1) since 2026-09-21; THIS test
+    # is about the geometry path, so it pins the drag model the legacy config uses.
+    assert cfg["vehicle"]["aero"]["model"] == "cfd_surface_v2"
+    cfg["vehicle"]["aero"] = {"model": "constant"}
+    full = evaluate_design(cfg)
     legacy = evaluate_design(load_config(REPO_ROOT / "configs" / "baseline.yaml"))
     assert full.fidelity == 0
     for name in ("peak_heat_flux_w_m2", "peak_bondline_temperature_k", "max_g"):
@@ -237,7 +242,9 @@ def test_every_optimiser_spends_exactly_its_budget(method, loaded, small_space, 
     assert evaluator.used == 37
     assert int((~frame["cache_hit"]).sum()) == 37
     assert frame.loc[~frame["cache_hit"], "candidate_id"].is_unique
-    assert set(frame["fidelity"]) == {0}
+    # 1 = evaluated with the CFD drag surface the design space selects; 0 = a row with no
+    # physics run (invalid geometry / outside the CFD hull). Nothing else may appear.
+    assert set(frame["fidelity"]) <= {0, 1} and 1 in set(frame["fidelity"])
 
 
 def test_nsga2_offspring_carry_parent_ids_that_exist(loaded, small_space, tmp_path):

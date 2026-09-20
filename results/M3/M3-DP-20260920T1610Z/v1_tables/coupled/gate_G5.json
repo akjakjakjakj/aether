@@ -1,0 +1,53 @@
+{
+  "gate": "G5",
+  "checks": {
+    "deterministic": true,
+    "design_id_stable": true,
+    "fidelity_is_1": true,
+    "provenance_complete": true,
+    "extrapolation_flags_recorded": true,
+    "gate_status_recorded": true
+  },
+  "all_checks_met": true,
+  "fingerprints": [
+    "c05015c9da0f11b3",
+    "c05015c9da0f11b3",
+    "c05015c9da0f11b3"
+  ],
+  "missing_provenance": [],
+  "missing_diagnostics": [],
+  "provenance_example": {
+    "aero_model": "cfd_surface_v1",
+    "surface_training_hash": "fb657af4a92b40c7",
+    "surface_source_run": "M3-DP-20260920T1610Z",
+    "surface_n_train": 56,
+    "gate_G4_status_at_build": "IN_PROGRESS",
+    "gate_G4_status_at_evaluation": "IN_PROGRESS",
+    "mesh_level": "coarse",
+    "gp_sigma_inflation": 1.6536632469386736,
+    "discretisation_band_available": false,
+    "discretisation_rel_band": null,
+    "discretisation_source": null,
+    "shape": {
+      "bluntness_ratio": 0.5,
+      "cone_half_angle_deg": 25.0,
+      "shoulder_ratio": 0.1
+    },
+    "shape_extrapolated": false,
+    "mach_range": [
+      3.0,
+      20.0
+    ],
+    "uncertainty_draw": {
+      "z_gp": 0.0,
+      "z_discretisation": 0.0,
+      "u_model_form": 0.0,
+      "u_base": 0.0
+    },
+    "provisional": true,
+    "test_low_mach_scale": 1.0
+  },
+  "repeats": 3,
+  "status": "LIMITED",
+  "status_reason": "determinism and provenance checks met, but the drag surface is PROVISIONAL (G4 IN_PROGRESS at build, coarse mesh) - see report"
+}

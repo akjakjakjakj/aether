@@ -26,7 +26,10 @@ def test_design_is_deterministic_and_every_point_is_a_valid_capsule(cfg):
     for p in a:
         capsule = dp.forebody_capsule(diameter_m=p.diameter_m, **p.shape())
         capsule.validate()
-        assert cfg["inputs"]["mach"]["min"] <= p.mach <= cfg["inputs"]["mach"]["max"]
+        top = max([cfg["inputs"]["mach"]["max"], *cfg["design"]["mach_extension"]["mach"]])
+        assert cfg["inputs"]["mach"]["min"] <= p.mach <= top
+        if p.role == "fill":      # the Sobol fill never leaves the core Mach range
+            assert p.mach <= cfg["inputs"]["mach"]["max"]
     # invalid draws are logged with a reason, never silently dropped
     assert len(skipped_a) > 0 and skipped_a["reason"].str.len().min() > 0
 
@@ -40,7 +43,7 @@ def test_holdout_is_drawn_from_fill_points_only(cfg):
 
 def test_anchors_span_both_ends_of_the_mach_range(cfg):
     points, _ = dp.build_design(cfg)
-    anchors = [p for p in points if p.role == "anchor"]
+    anchors = [p for p in points if p.role == "anchor" and "@M" not in p.label]
     machs = {p.mach for p in anchors}
     assert machs == {cfg["inputs"]["mach"]["min"], cfg["inputs"]["mach"]["max"]}
     labels = {p.label for p in anchors}

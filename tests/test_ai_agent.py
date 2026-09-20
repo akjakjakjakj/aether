@@ -281,7 +281,12 @@ def test_promotion_policy_requests_but_is_never_granted_without_a_second_fidelit
     assert len(log.fidelity_decisions) == len(log.proposals) > 0
     assert policy.n_granted == 0 and all(d["granted_fidelity"] == 0
                                          for d in log.fidelity_decisions)
-    assert (frame["fidelity"] == 0).all()
+    # `fidelity` in the log is the AERODYNAMIC fidelity of the evaluator (1 since the design
+    # space selects the CFD drag surface; 0 on rows with no physics run). "Never granted" means
+    # nothing was evaluated ABOVE the base evaluator's fidelity.
+    _, cfg = load_design_space(CONFIG)
+    base = 0 if cfg["base_overrides"]["vehicle"]["aero"]["model"] == "constant" else 1
+    assert (frame["fidelity"] <= base).all()
 
 
 def test_promotion_policy_promotes_what_matters_and_stops_at_its_cost_cap():

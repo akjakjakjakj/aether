@@ -247,13 +247,32 @@ def test_a_t3_input_must_say_it_is_judgment_in_its_own_source_line(model):
         UncertaintyModel.from_config(bad, cfg)
 
 
-def test_fidelity0_skips_the_cfd_terms_and_says_which(model):
+CFD_TERMS = ("cd_surrogate_gp", "cd_discretisation", "cd_perfect_gas_model_form",
+             "cd_base_drag")
+
+
+def _fidelity0_base(design_space):
+    base = copy.deepcopy(design_space.base_config)
+    base["vehicle"]["aero"] = {"model": "constant"}
+    return base
+
+
+def test_fidelity0_skips_the_cfd_terms_and_says_which(design_space):
+    model, _ = UncertaintyModel.load(UQ_CONFIG, _fidelity0_base(design_space))
     skipped = dict(model.skipped)
-    for name in ("cd_surrogate_gp", "cd_discretisation", "cd_perfect_gas_model_form",
-                 "cd_base_drag"):
+    for name in CFD_TERMS:
         assert name in skipped
-        assert "cfd_surface_v1" in skipped[name]
+        assert "cfd_surface_v2" in skipped[name]
     assert "cd_fidelity0_judgment" in model.names
+
+
+def test_fidelity1_carries_all_four_cfd_terms_and_drops_the_fidelity0_band(model, design_space):
+    """The design space selects `cfd_surface_v2` since 2026-09-21 and M2's GCI exists, so none
+    of the four sourced C_D terms may be skipped - and the unsourced Fidelity-0 band must be."""
+    assert design_space.base_config["vehicle"]["aero"]["model"] == "cfd_surface_v2"
+    for name in CFD_TERMS:
+        assert name in model.names
+    assert "cd_fidelity0_judgment" in dict(model.skipped)
 
 
 def test_the_run_refuses_when_the_gci_term_is_unavailable(design_space, monkeypatch):
@@ -269,7 +288,7 @@ def test_the_run_refuses_when_the_gci_term_is_unavailable(design_space, monkeypa
                                                 "source": None, "mesh_level": level})
     study = load_config(UQ_CONFIG)
     base = copy.deepcopy(design_space.base_config)
-    base["vehicle"]["aero"] = {"model": "cfd_surface_v1", "allow_provisional": True}
+    base["vehicle"]["aero"] = {"model": "cfd_surface_v2", "allow_provisional": True}
     with pytest.raises(InputUnavailable) as excinfo:
         UncertaintyModel.from_config(study, base)
     message = str(excinfo.value)
@@ -283,7 +302,7 @@ def test_refusal_names_the_requirement_not_just_the_input(design_space):
     # make the Fidelity-1-only requirement a refusal too, and check it fires FIRST
     study["inputs"]["cd_base_drag"]["when_unavailable"] = {"aero_model": "refuse"}
     with pytest.raises(InputUnavailable, match="aero_model"):
-        UncertaintyModel.from_config(study, design_space.base_config)
+        UncertaintyModel.from_config(study, _fidelity0_base(design_space))
 
 
 # =======================================================================================
