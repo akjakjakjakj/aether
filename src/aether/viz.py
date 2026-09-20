@@ -63,6 +63,16 @@ def _save(fig, out_dir: Path, stem: str, caption: str) -> Path:
     return png
 
 
+def save_figure(fig, out_dir: Path, stem: str, caption: str) -> Path:
+    """Public entry point for the house figure standard (spec §34).
+
+    Exists so that code outside this module - the M8 coupon analysis scripts, which are
+    not part of the `aether` package - can produce figures that obey the same rules
+    without reaching for a private name or re-implementing the caption placement.
+    """
+    return _save(fig, Path(out_dir), stem, caption)
+
+
 def plot_m1_figures(study, out_dir: Path) -> list[Path]:
     """All Milestone-1 figures. Returns the paths written."""
     out_dir = Path(out_dir)
@@ -231,6 +241,155 @@ def plot_baseline(evaluation, out_dir: Path) -> list[Path]:
                   f"max {p.max_g:.1f} g, feasible={p.feasible}")]
 
 
+def plot_tpi_figures(study, verdict, out_dir: Path) -> list[Path]:
+    """Figures for the section-44 Thermal Penetration Index study.
+
+    The job of these four is to let a reader reject the verdict. Two of them are built
+    so that a *useful* TPI would look obviously different: a scatter that would show
+    scatter, and a residual plot that would show structure.
+    """
+    from .studies.tpi_study import rank_regression_r2
+
+    out_dir = Path(out_dir)
+    written: list[Path] = []
+    tag = "AETHER TPI study · Fidelity 0 · trajectory × geometry grid"
+    tpi = study.reference.values_k_m_s
+    bond = study.metrics["peak_bondline_temperature_k"]
+    q_int = study.metrics["integrated_external_heat_j_m2"]
+    diam = np.array([e.design_vector["diameter_m"] for e in study.sweep.evaluations])
+    rho = study.correlations(study.reference)["peak_bondline_temperature_k"]
+
+    # -- T1: is TPI just bondline temperature? ----------------------------------------
+    fig, ax = plt.subplots(figsize=(5.8, 4.1))
+    sc = ax.scatter(bond, tpi, c=diam, cmap="cividis", s=30, edgecolor="white",
+                    linewidth=0.4)
+    cb = fig.colorbar(sc, ax=ax)
+    cb.set_label("capsule diameter  $D$  [m]")
+    cb.outline.set_edgecolor(MUTED)
+    ax.set_xlabel("peak bondline temperature  $T_{bond,max}$  [K]")
+    ax.set_ylabel("TPI  [K m s]")
+    ax.set_title(f"TPI against the metric it would have to beat\n"
+                 f"Spearman $\\rho$ = {rho:+.4f} over {len(tpi)} designs")
+    written.append(_save(fig, out_dir, "TPI_vs_bondline",
+                         f"{tag}. Reference configuration: {study.reference.label}. "
+                         f"A metric carrying independent information would scatter; a "
+                         f"tight monotone curve means it restates the x-axis."))
+
+    # -- T2: where in the stack does the index come from? -----------------------------
+    fig, (axp, axw) = plt.subplots(1, 2, figsize=(8.0, 3.8))
+    order = np.argsort(tpi)
+    picks = [(order[0], "lowest TPI", DEEP, "-"),
+             (order[len(order) // 2], "median TPI", ACCENT, "--"),
+             (order[-1], "highest TPI", HOT, ":")]
+    for idx, lbl, colour, style in picks:
+        ev = study.sweep.evaluations[idx]
+        from .scoring import thermal_penetration_index
+        out = thermal_penetration_index(ev.tps, study.reference.config)
+        axp.plot(out.depth_m * 1e3, out.exceedance_profile_k_s, style, color=colour,
+                 lw=1.6, label=f"{lbl}: {ev.design_id}")
+    axp.set_xlabel("depth into TPS  [mm]")
+    axp.set_ylabel("$\\int \\max(T - T_{ref},0)\\,dt$  [K s]")
+    axp.set_title("Unweighted exceedance profile")
+    axp.legend(fontsize=7)
+
+    depths = study.reference.config.depth_limit_m or 0.015
+    xs = np.linspace(0.0, depths, 200)
+    from .scoring import TPIConfig, weight_profile
+    for weighting, params, colour, style in (
+        ("uniform", {}, INK, "-"),
+        ("linear_depth", {}, DEEP, "--"),
+        ("exponential_depth", {"decay": 4.0}, ACCENT, "-."),
+        ("bondline_gaussian", {"sigma_m": 0.003}, HOT, ":"),
+    ):
+        cfg = TPIConfig(t_reference_k=study.reference.config.t_reference_k,
+                        weighting=weighting, weight_params=params)
+        w = weight_profile(xs, depths, cfg)
+        w = w / (np.trapezoid(w, xs) / depths)
+        axw.plot(xs * 1e3, w, style, color=colour, lw=1.5, label=weighting)
+    axw.set_xlabel("depth into TPS  [mm]")
+    axw.set_ylabel("normalised weight  $w(x)$  [-]")
+    axw.set_title("Weighting families (depth-average = 1)")
+    axw.legend(fontsize=7)
+    fig.tight_layout()
+    written.append(_save(fig, out_dir, "TPI_weighting_and_profile",
+                         f"{tag}. Left: which depths actually contribute to the index. "
+                         f"Right: the four candidate weightings, each normalised so a "
+                         f"uniform field scores identically under all of them."))
+
+    # -- T3: the redundancy residual --------------------------------------------------
+    from scipy.stats import rankdata
+    y = rankdata(tpi)
+    design = np.column_stack([np.ones_like(y), rankdata(bond), rankdata(q_int)])
+    coef, *_ = np.linalg.lstsq(design, y, rcond=None)
+    predicted = design @ coef
+    r2 = rank_regression_r2(tpi, [bond, q_int])
+
+    fig, ax = plt.subplots(figsize=(5.8, 4.0))
+    ax.axhline(0.0, color=MUTED, lw=0.9)
+    ax.scatter(predicted, y - predicted, s=30, color=DEEP, edgecolor="white",
+               linewidth=0.4)
+    ax.set_xlabel("TPI rank predicted from (peak bondline T, integrated heat)  [-]")
+    ax.set_ylabel("residual: actual TPI rank − predicted rank  [-]")
+    ax.set_title(f"What TPI knows that the existing metrics do not\n"
+                 f"rank $R^2$ = {r2:.4f}  (max residual "
+                 f"{np.max(np.abs(y - predicted)):.1f} of {len(y)} ranks)")
+    written.append(_save(fig, out_dir, "TPI_rank_residual",
+                         f"{tag}. Structure or spread here would be TPI's independent "
+                         f"content. A flat band at zero means there is none."))
+
+    # -- T4: does the verdict survive T_ref and weighting? ----------------------------
+    #
+    # Plotted as the UNEXPLAINED fraction 1 - R^2, on a log axis. Every configuration
+    # lands above R^2 = 0.99, so a linear [0, 1] axis would show sixteen bars of
+    # identical length and hide the one thing the figure is for: how the residual
+    # information varies with T_ref and weighting. The log axis is a deliberate choice
+    # to make small differences visible, and it is labelled as such rather than left for
+    # the reader to infer.
+    def _short(cfg) -> str:
+        params = ", ".join(f"{k}={v:g}" for k, v in sorted(cfg.weight_params.items()))
+        return (f"{cfg.weighting}{f' ({params})' if params else ''}  ·  "
+                f"$T_{{ref}}$={cfg.t_reference_k:.0f} K")
+
+    labels = [_short(v.config) for v in study.variants]
+    r2s = np.array([study.redundancy_r2(v) for v in study.variants])
+    rhos = np.array([study.correlations(v)["peak_bondline_temperature_k"]
+                     for v in study.variants])
+    unexplained = np.clip(1.0 - r2s, 1e-6, None)
+    threshold = 1.0 - study.thresholds["redundancy_r2_threshold"]
+    order = np.argsort(unexplained)
+
+    fig, ax = plt.subplots(figsize=(7.6, max(3.4, 0.30 * len(labels) + 1.8)))
+    ypos = np.arange(len(labels))
+    ax.barh(ypos, unexplained[order], color=DEEP, height=0.6,
+            label="$1-R^2$: TPI's ordering NOT carried by the existing metrics")
+    ax.axvline(threshold, color=INK, ls="--", lw=1.1,
+               label=f"discard threshold ($R^2$ = "
+                     f"{study.thresholds['redundancy_r2_threshold']:.2f})")
+    for i, j in enumerate(order):
+        ax.annotate(f"$R^2$={r2s[j]:.4f}   $\\rho$={rhos[j]:+.4f}",
+                    (unexplained[j], i), xytext=(6, 0), textcoords="offset points",
+                    va="center", fontsize=6.5, color=MUTED)
+    ax.set_xscale("log")
+    ax.set_yticks(ypos)
+    ax.set_yticklabels([labels[j] for j in order], fontsize=7)
+    ax.set_xlabel("unexplained fraction of TPI's design ordering,  $1-R^2$  [-]  "
+                  "(log scale — lower is MORE redundant)")
+    ax.set_xlim(min(unexplained.min(), threshold) / 3.0, threshold * 6.0)
+    ax.set_title(f"Sensitivity of the verdict to $T_{{ref}}$ and weighting "
+                 f"({verdict.decision}: {int(np.sum(unexplained <= threshold))} of "
+                 f"{len(labels)} configurations redundant)")
+    ax.legend(fontsize=7, loc="lower right", bbox_to_anchor=(1.0, 1.02), ncol=1,
+              framealpha=0.0)
+    fig.tight_layout()
+    written.append(_save(fig, out_dir, "TPI_sensitivity",
+                         f"{tag}. Every bar is one declared TPI configuration from "
+                         f"configs/tpi_study.yaml. Bars LEFT of the dashed line are "
+                         f"redundant by the pre-declared criterion. Note the axis: all "
+                         f"sixteen sit above R^2 = 0.99, so the log scale is what makes "
+                         f"their differences visible at all."))
+    return written
+
+
 def plot_joint_figures(sweep, comparison, out_dir: Path) -> list[Path]:
     """Figures for the (trajectory x geometry) sweep and the H1 optimiser comparison."""
     out_dir = Path(out_dir)
@@ -302,3 +461,33 @@ def plot_joint_figures(sweep, comparison, out_dir: Path) -> list[Path]:
                              f"{tag}. The peak-flux-only optimum sits "
                              f"{comparison.bondline_saving_k:.0f} K hotter at the bondline."))
     return written
+
+
+def plot_capsule_family(geometries, labels, out_dir: Path) -> list[Path]:
+    """Phase F: outlines of several valid CapsuleGeometry instances, one figure.
+
+    `geometries` and `labels` must be the same length (4-5 recommended - enough to
+    show the design space's extremes without becoming illegible).
+    """
+    out_dir = Path(out_dir)
+    fig, ax = plt.subplots(figsize=(8.4, 4.4))
+    palette = [INK, HOT, DEEP, ACCENT, MUTED]
+
+    for i, (geom, label) in enumerate(zip(geometries, labels, strict=True)):
+        geom.validate()
+        x, r = geom.profile(400)
+        colour = palette[i % len(palette)]
+        ax.plot(x, r, color=colour, lw=1.6, label=label)
+        ax.plot(x, -r, color=colour, lw=1.6)  # mirror below the axis: full silhouette
+
+    ax.axhline(0.0, color=GRID, lw=0.8, zorder=0)
+    ax.set_xlabel("axial position from nose tip  $x$  [m]")
+    ax.set_ylabel("radius  $r$  [m]")
+    ax.set_title("Capsule geometry family across the parametric bounds")
+    ax.set_aspect("equal", adjustable="datalim")
+    ax.legend(fontsize=7.5, loc="center left", bbox_to_anchor=(1.02, 0.5),
+              frameon=False)
+    fig.tight_layout()
+    return [_save(fig, out_dir, "M3_capsule_family",
+                  "AETHER Phase F · sphere-cone-torus-cone-flat-base capsules, "
+                  "each independently valid under configs/geometry_bounds.yaml.")]

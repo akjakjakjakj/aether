@@ -1,0 +1,57 @@
+# Thermal Penetration Index study - spec section 44.
+#
+# Every choice that changes a TPI number lives here, not in source: the exceedance datum
+# T_ref, the depth weighting family and its parameters, the depth the integral runs over,
+# and the thresholds the verdict is decided against.
+#
+# The thresholds are DECLARED IN ADVANCE. They were written before the study was run and
+# must not be moved to change a verdict; moving them is a decision that belongs in
+# docs/negative_results.md with a reason, not a quiet edit.
+
+meta:
+  name: tpi_study
+  description: >
+    Does a weighted depth-time temperature-exceedance integral order capsule designs
+    differently from peak bondline temperature and integrated heat load?
+  base_config: configs/baseline.yaml
+
+grid:
+  # The SAME 2-D grid M1b used. Reusing it is deliberate: TPI is being tested on the
+  # existing design space, not on one chosen to flatter it. A one-parameter sweep would
+  # force |rho| = 1 tautologically - see studies/tpi_study.py.
+  flight_path_angle_deg:
+    min: -8.0
+    max: -1.5
+    n: 14
+  diameter_m:
+    min: 1.2      # baseline diameter
+    max: 3.0      # A-LIM-3: arbitrary bound, active at both optima, flagged open
+    n: 10
+
+tpi:
+  reference:
+    t_reference_k: 400.0        # same datum as the M4 bondline-exposure metric
+    weighting: uniform          # the null hypothesis of the weighting question
+    weight_params: {}
+    normalise_weights: true
+    depth_limit_m: 0.015        # the insulator only; the aluminium structure is not TPS
+
+  # Sensitivity axes. The verdict must be reported for every one of these, not just the
+  # reference, or "TPI is redundant" would be a statement about one arbitrary setting.
+  sensitivity:
+    t_reference_k: [350.0, 400.0, 450.0, 500.0]
+    weighting:
+      - name: uniform
+        params: {}
+      - name: linear_depth
+        params: {}
+      - name: exponential_depth
+        params: {decay: 4.0}
+      - name: bondline_gaussian
+        params: {sigma_m: 0.003}
+
+verdict:
+  # TPI is DISCARDED if its ordering of designs is essentially reconstructible from the
+  # metrics the project already reports.
+  redundancy_r2_threshold: 0.98    # rank-space R^2 on (peak bondline T, integrated heat)
+  redundancy_rho_threshold: 0.99   # |Spearman| against peak bondline temperature alone

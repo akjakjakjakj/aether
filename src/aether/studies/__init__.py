@@ -6,6 +6,16 @@ from .joint_sweep import (
     pareto_front,
     run_joint_sweep,
 )
+from .tpi_study import (
+    TPIStudy,
+    TPIVariant,
+    TPIVerdict,
+    decide,
+    evaluate_tpi_over_sweep,
+    rank_regression_r2,
+    run_tpi_study,
+    study_table,
+)
 
 __all__ = [
     "BurnVsBakeStudy",
@@ -16,4 +26,12 @@ __all__ = [
     "compare_optimisers",
     "pareto_front",
     "run_joint_sweep",
+    "TPIStudy",
+    "TPIVariant",
+    "TPIVerdict",
+    "decide",
+    "evaluate_tpi_over_sweep",
+    "rank_regression_r2",
+    "run_tpi_study",
+    "study_table",
 ]

@@ -1,0 +1,367 @@
+{
+  "run_id": "TPI-20260920T124732Z",
+  "git_commit": "046e0a1",
+  "git_dirty": true,
+  "config_hash": "bbdd1b294619",
+  "n_designs": 140,
+  "n_feasible": 21,
+  "grid_shape": [
+    14,
+    10
+  ],
+  "reference_config": {
+    "t_reference_k": 400.0,
+    "weighting": "uniform",
+    "weight_params": {},
+    "normalise_weights": true,
+    "depth_limit_m": 0.015
+  },
+  "reference_label": "uniform \u00b7 Tref=400K \u00b7 x<=15mm",
+  "thresholds": {
+    "redundancy_r2_threshold": 0.98,
+    "redundancy_rho_threshold": 0.99
+  },
+  "tpi_range_k_m_s": [
+    587.0760596832997,
+    3647.9510851529685
+  ],
+  "tpi_peak_exceedance_depth_range_m": [
+    6.25e-05,
+    6.25e-05
+  ],
+  "correlations_all": {
+    "peak_heat_flux_w_m2": 0.3376353020926724,
+    "integrated_external_heat_j_m2": 0.8446218101506637,
+    "peak_bondline_temperature_k": 0.9991865474186001,
+    "bondline_exposure_metric_k_s": 0.9954022422384777
+  },
+  "correlations_feasible": {
+    "peak_heat_flux_w_m2": 0.41818181818181815,
+    "integrated_external_heat_j_m2": 0.7909090909090909,
+    "peak_bondline_temperature_k": 0.996103896103896,
+    "bondline_exposure_metric_k_s": 0.996103896103896
+  },
+  "redundancy_r2_all": 0.9993721496842584,
+  "redundancy_r2_feasible": 0.9945982652918154,
+  "disagreement_all": {
+    "n": 140,
+    "kendall_tau": 0.981294964028777,
+    "discordant_pairs": 91,
+    "total_pairs": 9730,
+    "discordant_fraction": 0.00935251798561151
+  },
+  "disagreement_feasible": {
+    "n": 21,
+    "kendall_tau": 0.9714285714285715,
+    "discordant_pairs": 3,
+    "total_pairs": 210,
+    "discordant_fraction": 0.014285714285714285
+  },
+  "tautology_check": {
+    "n_lines": 10,
+    "line_length": 14,
+    "min_abs_rho": 1.0,
+    "n_saturated": 10,
+    "grid_rho": 0.9991865474186001
+  },
+  "exceedance_shape": {
+    "available": true,
+    "n_designs_with_any_exceedance": 140,
+    "outer_fraction_of_domain": 0.2,
+    "outer_share_min": 0.2763521046050726,
+    "outer_share_max": 0.4063805928167437,
+    "outer_share_if_uniform": 0.2,
+    "min_pairwise_cosine_similarity": 0.9366382918065023,
+    "mean_pairwise_cosine_similarity": 0.9891269290106034
+  },
+  "variants": [
+    {
+      "label": "uniform \u00b7 Tref=350K \u00b7 x<=15mm",
+      "t_reference_k": 350.0,
+      "weighting": "uniform",
+      "weight_params": {},
+      "tpi_min_k_m_s": 886.9922791907218,
+      "tpi_max_k_m_s": 4753.732426276158,
+      "rho_bondline": 0.9999037851785442,
+      "rho_integrated_heat": 0.8237563140976581,
+      "rho_peak_flux": 0.30188274911985313,
+      "redundancy_r2": 0.9998515105263615,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "linear_depth \u00b7 Tref=350K \u00b7 x<=15mm",
+      "t_reference_k": 350.0,
+      "weighting": "linear_depth",
+      "weight_params": {},
+      "tpi_min_k_m_s": 679.5041592151722,
+      "tpi_max_k_m_s": 4171.342344550629,
+      "rho_bondline": 0.9998119437580637,
+      "rho_integrated_heat": 0.8209617108744616,
+      "rho_peak_flux": 0.2971944632743654,
+      "redundancy_r2": 0.999755500534773,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "exponential_depth \u00b7 Tref=350K \u00b7 decay=4 \u00b7 x<=15mm",
+      "t_reference_k": 350.0,
+      "weighting": "exponential_depth",
+      "weight_params": {
+        "decay": 4.0
+      },
+      "tpi_min_k_m_s": 566.0108668207336,
+      "tpi_max_k_m_s": 3826.974727460216,
+      "rho_bondline": 0.9997113555356325,
+      "rho_integrated_heat": 0.8186962891692727,
+      "rho_peak_flux": 0.29359952767269476,
+      "redundancy_r2": 0.9996586590501455,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "bondline_gaussian \u00b7 Tref=350K \u00b7 sigma_m=0.003 \u00b7 x<=15mm",
+      "t_reference_k": 350.0,
+      "weighting": "bondline_gaussian",
+      "weight_params": {
+        "sigma_m": 0.003
+      },
+      "tpi_min_k_m_s": 482.6942416563121,
+      "tpi_max_k_m_s": 3580.503366437058,
+      "rho_bondline": 0.9995101790907701,
+      "rho_integrated_heat": 0.8146508932671493,
+      "rho_peak_flux": 0.28681200935907813,
+      "redundancy_r2": 0.9995164379246404,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "uniform \u00b7 Tref=400K \u00b7 x<=15mm",
+      "t_reference_k": 400.0,
+      "weighting": "uniform",
+      "weight_params": {},
+      "tpi_min_k_m_s": 587.0760596832997,
+      "tpi_max_k_m_s": 3647.9510851529685,
+      "rho_bondline": 0.9991865474186001,
+      "rho_integrated_heat": 0.8446218101506637,
+      "rho_peak_flux": 0.3376353020926724,
+      "redundancy_r2": 0.9993721496842584,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "linear_depth \u00b7 Tref=400K \u00b7 x<=15mm",
+      "t_reference_k": 400.0,
+      "weighting": "linear_depth",
+      "weight_params": {},
+      "tpi_min_k_m_s": 345.7818515894277,
+      "tpi_max_k_m_s": 3082.35881713421,
+      "rho_bondline": 0.9992521484332293,
+      "rho_integrated_heat": 0.8438520915790165,
+      "rho_peak_flux": 0.33635826900789406,
+      "redundancy_r2": 0.9994126453752328,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "exponential_depth \u00b7 Tref=400K \u00b7 decay=4 \u00b7 x<=15mm",
+      "t_reference_k": 400.0,
+      "weighting": "exponential_depth",
+      "weight_params": {
+        "decay": 4.0
+      },
+      "tpi_min_k_m_s": 212.5936547168651,
+      "tpi_max_k_m_s": 2753.8031443480213,
+      "rho_bondline": 0.9994052174673637,
+      "rho_integrated_heat": 0.8411580765782513,
+      "rho_peak_flux": 0.331827425597516,
+      "redundancy_r2": 0.9994410495824607,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "bondline_gaussian \u00b7 Tref=400K \u00b7 sigma_m=0.003 \u00b7 x<=15mm",
+      "t_reference_k": 400.0,
+      "weighting": "bondline_gaussian",
+      "weight_params": {
+        "sigma_m": 0.003
+      },
+      "tpi_min_k_m_s": 112.07154618742175,
+      "tpi_max_k_m_s": 2515.7639649541397,
+      "rho_bondline": 0.9995014322888196,
+      "rho_integrated_heat": 0.8397017340534868,
+      "rho_peak_flux": 0.3293608274474646,
+      "redundancy_r2": 0.99950348321864,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "uniform \u00b7 Tref=450K \u00b7 x<=15mm",
+      "t_reference_k": 450.0,
+      "weighting": "uniform",
+      "weight_params": {},
+      "tpi_min_k_m_s": 472.9711285763946,
+      "tpi_max_k_m_s": 2610.757207036024,
+      "rho_bondline": 0.9967680566792767,
+      "rho_integrated_heat": 0.8653867179812382,
+      "rho_peak_flux": 0.3750628676390195,
+      "redundancy_r2": 0.9987523931788115,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "linear_depth \u00b7 Tref=450K \u00b7 x<=15mm",
+      "t_reference_k": 450.0,
+      "weighting": "linear_depth",
+      "weight_params": {},
+      "tpi_min_k_m_s": 255.76143775816593,
+      "tpi_max_k_m_s": 2026.9066792886545,
+      "rho_bondline": 0.9957578010539898,
+      "rho_integrated_heat": 0.8710109116354335,
+      "rho_peak_flux": 0.38555902997966374,
+      "redundancy_r2": 0.9985324613370457,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "exponential_depth \u00b7 Tref=450K \u00b7 decay=4 \u00b7 x<=15mm",
+      "t_reference_k": 450.0,
+      "weighting": "exponential_depth",
+      "weight_params": {
+        "decay": 4.0
+      },
+      "tpi_min_k_m_s": 147.25216353426953,
+      "tpi_max_k_m_s": 1711.025306471393,
+      "rho_bondline": 0.9953816885701167,
+      "rho_integrated_heat": 0.8727384050206644,
+      "rho_peak_flux": 0.3885460628457721,
+      "redundancy_r2": 0.998404401247095,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "bondline_gaussian \u00b7 Tref=450K \u00b7 sigma_m=0.003 \u00b7 x<=15mm",
+      "t_reference_k": 450.0,
+      "weighting": "bondline_gaussian",
+      "weight_params": {
+        "sigma_m": 0.003
+      },
+      "tpi_min_k_m_s": 60.89046655773704,
+      "tpi_max_k_m_s": 1476.3845502957947,
+      "rho_bondline": 0.9938772386346244,
+      "rho_integrated_heat": 0.8796308849576875,
+      "rho_peak_flux": 0.4014563425247644,
+      "redundancy_r2": 0.9981524243671036,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "uniform \u00b7 Tref=500K \u00b7 x<=15mm",
+      "t_reference_k": 500.0,
+      "weighting": "uniform",
+      "weight_params": {},
+      "tpi_min_k_m_s": 389.4588517310715,
+      "tpi_max_k_m_s": 1983.6159263548866,
+      "rho_bondline": 0.9933742975224685,
+      "rho_integrated_heat": 0.8824211147799087,
+      "rho_peak_flux": 0.4078108941418294,
+      "redundancy_r2": 0.9983483221624146,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "linear_depth \u00b7 Tref=500K \u00b7 x<=15mm",
+      "t_reference_k": 500.0,
+      "weighting": "linear_depth",
+      "weight_params": {},
+      "tpi_min_k_m_s": 195.09121476320198,
+      "tpi_max_k_m_s": 1286.1094290335343,
+      "rho_bondline": 0.9908945791694914,
+      "rho_integrated_heat": 0.8915265356104175,
+      "rho_peak_flux": 0.42575933174433106,
+      "redundancy_r2": 0.9980959845617648,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "exponential_depth \u00b7 Tref=500K \u00b7 decay=4 \u00b7 x<=15mm",
+      "t_reference_k": 500.0,
+      "weighting": "exponential_depth",
+      "weight_params": {
+        "decay": 4.0
+      },
+      "tpi_min_k_m_s": 107.12328810506644,
+      "tpi_max_k_m_s": 906.9853314636294,
+      "rho_bondline": 0.9891933261901119,
+      "rho_integrated_heat": 0.8970676346460825,
+      "rho_peak_flux": 0.4367759288010322,
+      "redundancy_r2": 0.9980339161983981,
+      "best_design_id": "J-g-03.50-d3.00"
+    },
+    {
+      "label": "bondline_gaussian \u00b7 Tref=500K \u00b7 sigma_m=0.003 \u00b7 x<=15mm",
+      "t_reference_k": 500.0,
+      "weighting": "bondline_gaussian",
+      "weight_params": {
+        "sigma_m": 0.003
+      },
+      "tpi_min_k_m_s": 34.33065248462772,
+      "tpi_max_k_m_s": 622.1022238951898,
+      "rho_bondline": 0.9836216133476201,
+      "rho_integrated_heat": 0.9115392184732459,
+      "rho_peak_flux": 0.46647569482408,
+      "redundancy_r2": 0.9976982768626156,
+      "best_design_id": "J-g-03.50-d3.00"
+    }
+  ],
+  "selection": {
+    "tpi": {
+      "design_id": "J-g-03.50-d3.00",
+      "gamma_deg": -3.5,
+      "diameter_m": 3.0,
+      "peak_heat_flux_w_m2": 442680.393720505,
+      "integrated_external_heat_j_m2": 26513594.18503234,
+      "peak_bondline_temperature_k": 411.61745443411655
+    },
+    "peak_bondline_temperature_k": {
+      "design_id": "J-g-03.50-d3.00",
+      "gamma_deg": -3.5,
+      "diameter_m": 3.0,
+      "peak_heat_flux_w_m2": 442680.393720505,
+      "integrated_external_heat_j_m2": 26513594.18503234,
+      "peak_bondline_temperature_k": 411.61745443411655
+    },
+    "peak_heat_flux_w_m2": {
+      "design_id": "J-g-01.50-d3.00",
+      "gamma_deg": -1.5,
+      "diameter_m": 3.0,
+      "peak_heat_flux_w_m2": 370148.8163686962,
+      "integrated_external_heat_j_m2": 32112143.69941569,
+      "peak_bondline_temperature_k": 444.1089707904443
+    },
+    "integrated_external_heat_j_m2": {
+      "design_id": "J-g-03.50-d3.00",
+      "gamma_deg": -3.5,
+      "diameter_m": 3.0,
+      "peak_heat_flux_w_m2": 442680.393720505,
+      "integrated_external_heat_j_m2": 26513594.18503234,
+      "peak_bondline_temperature_k": 411.61745443411655
+    }
+  },
+  "verdict": {
+    "decision": "DISCARD",
+    "reasons": [
+      "TPI's ranking is 99.94% reconstructible from peak bondline temperature and integrated heat load (rank R^2 = 0.9994 >= 0.98), so it restates information the project already reports.",
+      "TPI and peak bondline temperature are ordered almost identically over the 2-D grid (Spearman rho = +0.9992, |rho| >= 0.99).",
+      "A TPI-minimising optimiser selects the same design as a bondline-minimising one, so adopting TPI would not have changed any design decision in this study."
+    ],
+    "reference_r2": 0.9993721496842584,
+    "reference_rho_bondline": 0.9991865474186001,
+    "unanimous": true,
+    "selects_a_different_design": false,
+    "variant_r2": {
+      "uniform \u00b7 Tref=350K \u00b7 x<=15mm": 0.9998515105263615,
+      "linear_depth \u00b7 Tref=350K \u00b7 x<=15mm": 0.999755500534773,
+      "exponential_depth \u00b7 Tref=350K \u00b7 decay=4 \u00b7 x<=15mm": 0.9996586590501455,
+      "bondline_gaussian \u00b7 Tref=350K \u00b7 sigma_m=0.003 \u00b7 x<=15mm": 0.9995164379246404,
+      "uniform \u00b7 Tref=400K \u00b7 x<=15mm": 0.9993721496842584,
+      "linear_depth \u00b7 Tref=400K \u00b7 x<=15mm": 0.9994126453752328,
+      "exponential_depth \u00b7 Tref=400K \u00b7 decay=4 \u00b7 x<=15mm": 0.9994410495824607,
+      "bondline_gaussian \u00b7 Tref=400K \u00b7 sigma_m=0.003 \u00b7 x<=15mm": 0.99950348321864,
+      "uniform \u00b7 Tref=450K \u00b7 x<=15mm": 0.9987523931788115,
+      "linear_depth \u00b7 Tref=450K \u00b7 x<=15mm": 0.9985324613370457,
+      "exponential_depth \u00b7 Tref=450K \u00b7 decay=4 \u00b7 x<=15mm": 0.998404401247095,
+      "bondline_gaussian \u00b7 Tref=450K \u00b7 sigma_m=0.003 \u00b7 x<=15mm": 0.9981524243671036,
+      "uniform \u00b7 Tref=500K \u00b7 x<=15mm": 0.9983483221624146,
+      "linear_depth \u00b7 Tref=500K \u00b7 x<=15mm": 0.9980959845617648,
+      "exponential_depth \u00b7 Tref=500K \u00b7 decay=4 \u00b7 x<=15mm": 0.9980339161983981,
+      "bondline_gaussian \u00b7 Tref=500K \u00b7 sigma_m=0.003 \u00b7 x<=15mm": 0.9976982768626156
+    }
+  }
+}
