@@ -1,0 +1,27 @@
+{
+  "generated_by": "experiments/thermal_coupon/cad/make_coupon_holder.py",
+  "parameters_mm": {
+    "coupon_x_mm": 60.0,
+    "coupon_y_mm": 60.0,
+    "coupon_z_mm": 10.0,
+    "clearance_mm": 0.4,
+    "rail_mm": 6.0,
+    "frame_height_mm": 18.0,
+    "pad_mm": 6.0,
+    "pad_height_mm": 3.0,
+    "leg_mm": 10.0,
+    "leg_height_mm": 20.0,
+    "wire_gap_mm": 14.0
+  },
+  "derived_mm": {
+    "opening_x": 60.8,
+    "opening_y": 60.8,
+    "outer_x": 72.8,
+    "outer_y": 72.8
+  },
+  "solid_volume_mm3": 35777.6,
+  "supported_area_fraction": 0.04,
+  "n_boxes": 13,
+  "n_triangles": 156,
+  "note": "Deterministic output: no timestamps, fixed decimal formatting."
+}

@@ -1,0 +1,91 @@
+# AETHER M8 metadata sidecar TEMPLATE - contains NO DATA.
+#
+# Copy to <run_id>.meta.yaml beside <run_id>.csv and fill in every field. Fields left as
+# `null` are unknown, and an unknown here is an open question, not a default - the same
+# rule the simulation's configs follow (spec section 9).
+#
+# The full field-by-field explanation is in data_schema.md. Read it once before the
+# first run; the comments here are reminders, not the specification.
+
+schema_version: 1
+
+run_id: null                 # e.g. CAL-2. Unique. Referenced from the notebook.
+run_type: null               # calibration_cooldown | calibration_step | contact_resistance
+                             # | flux_calibration | blind_validation | repeat | aborted
+synthetic: false             # true ONLY for generated data. Never set this by hand.
+utc_start: null              # ISO 8601 with offset, e.g. 2026-09-21T14:03:00+00:00
+operator: null
+supervisor: null             # protocol.md requires one for every energised run
+notes: null                  # ventilation, anything unusual, anything future-you needs
+
+coupon:
+  material: null             # filament, grade and manufacturer, as printed on the spool
+  datasheet_tg_or_hdt_degc: null   # from THE DATASHEET. The ceiling derives from this.
+  print:
+    layer_height_mm: null
+    infill_percent: 100      # solid. A gyroid coupon is not a slab.
+    nozzle_degc: null
+    bed_degc: null
+    orientation: null        # e.g. "flat on bed, layer lines parallel to the isotherms"
+  thickness_m: null                  # MEASURED with calipers, not nominal
+  thickness_uncertainty_m: null
+  measured_dimensions_m: [null, null, null]
+  measured_mass_kg: null
+  density_kg_m3: null                # mass / volume. MEASURED. Never fitted.
+  density_uncertainty_kg_m3: null
+
+heater:
+  type: null                 # film | silicone_pad | metal_block_cartridge | lamp
+  heated_area_m2: null       # MEASURED contact area, not the heater's nameplate area
+  flux_source: null          # calorimetric_slug | electrical_power
+  flux_efficiency: null      # protocol.md section 6, if flux_source is electrical_power
+  flux_uncertainty_w_m2: null
+  contact_resistance_m2k_w: null              # protocol.md section 7
+  contact_resistance_uncertainty_m2k_w: null
+  clamp_note: null           # how it was clamped; whether it has been disturbed since
+
+# One entry per t_ch*_degc column present in the CSV. A channel with no entry here will
+# be REFUSED by the loader - a temperature without a depth cannot be compared to a model.
+sensors:
+  - channel: t_ch1_degc
+    type: null               # type_k_thermocouple | ntc_thermistor (+ part designation)
+    depth_m: null            # MEASURED on the sectioned spare coupon, not nominal
+    depth_uncertainty_m: null
+    temperature_uncertainty_k: null   # residual scatter at the fixed points, section 5.3
+    calibration:
+      method: two_point_ice_boil
+      ice_point_reading_degc: null
+      boil_point_reading_degc: null
+      boil_point_reference_degc: null # NOT 100 unless at 1 atm. Say where it came from.
+      boil_point_reference_source: null
+      gain: null
+      offset_k: null
+  - channel: t_ch2_degc
+    type: null
+    depth_m: null
+    depth_uncertainty_m: null
+    temperature_uncertainty_k: null
+    calibration: null
+  - channel: t_ch3_degc
+    type: null
+    depth_m: null
+    depth_uncertainty_m: null
+    temperature_uncertainty_k: null
+    calibration: null
+  - channel: t_ch4_degc
+    type: null
+    depth_m: null
+    depth_uncertainty_m: null
+    temperature_uncertainty_k: null
+    calibration: null
+
+sampling:
+  rate_hz: null              # >= 1 Hz; the surface responds in seconds
+  logger: null
+
+ambient:
+  t_ambient_k: null          # nominal; the CSV's t_ambient_degc column wins if present
+  ventilation: null          # window open | extractor | still room - this changes h
+
+initial:
+  t_initial_k: null          # required only for a DECLARED CASE file (no measurements)
