@@ -1,0 +1,1211 @@
+{
+ "decisions": [
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 4,
+   "candidate_id": "C-a70535ea48f5",
+   "outside_hull": false,
+   "novelty": 0.08064795754160074,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 6,
+   "promoted": true,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.2474064874660332,
+   "objective_uncertainty": 0.0029635942682676997,
+   "cost": 0.16666666666666666,
+   "score": 1.333672905218721,
+   "matters": true,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "promising, and the cheap model is untrusted here"
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 1,
+   "candidate_id": "C-8842bfdba2f9",
+   "outside_hull": false,
+   "novelty": 0.11880296282542101,
+   "agent_requested_fidelity": 0,
+   "calls_needed": 1,
+   "cfd_remaining": 6,
+   "promoted": true,
+   "p_nondominated": 1.0,
+   "p_feasible": 1.0,
+   "expected_hv_gain": 0.02401234221268528,
+   "objective_uncertainty": 0.005276800621122846,
+   "cost": 0.16666666666666666,
+   "score": 1.5765165738075455,
+   "matters": true,
+   "untrusted": true,
+   "affordable": true,
+   "reason": "promising, and the cheap model is untrusted here"
+  }
+ ],
+ "promotions": [
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 4,
+   "strategy": "adaptive",
+   "trigger": "adaptive policy",
+   "candidate_id": "C-a70535ea48f5",
+   "scores": {
+    "p_nondominated": 1.0,
+    "expected_hv_gain": 0.2474064874660332,
+    "objective_uncertainty": 0.0029635942682676997,
+    "novelty": 0.08064795754160074,
+    "cost": 0.16666666666666666,
+    "score": 1.333672905218721,
+    "outside_hull": false,
+    "agent_requested_fidelity": 0
+   },
+   "cfd": [
+    {
+     "key": "M20_b0.477742_c66.5093_s0.1",
+     "point_id": "af2fb141fb01",
+     "mach": 20.0,
+     "bluntness_ratio": 0.477742,
+     "cone_half_angle_deg": 66.5093,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3767149205322555,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 361714.99334695766,
+    "peak_bondline_temperature_k": 406.6121864727139
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 361950.4572851295,
+    "peak_bondline_temperature_k": 406.6301896569418
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 1,
+   "strategy": "adaptive",
+   "trigger": "adaptive policy",
+   "candidate_id": "C-8842bfdba2f9",
+   "scores": {
+    "p_nondominated": 1.0,
+    "expected_hv_gain": 0.02401234221268528,
+    "objective_uncertainty": 0.005276800621122846,
+    "novelty": 0.11880296282542101,
+    "cost": 0.16666666666666666,
+    "score": 1.5765165738075455,
+    "outside_hull": false,
+    "agent_requested_fidelity": 0
+   },
+   "cfd": [
+    {
+     "key": "M20_b0.373886_c26.557_s0.1",
+     "point_id": "afb843aff66d",
+     "mach": 20.0,
+     "bluntness_ratio": 0.373886,
+     "cone_half_angle_deg": 26.557,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 0.6697025558918859,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 807897.5541104501,
+    "peak_bondline_temperature_k": 444.6843059072118
+   },
+   "after": {
+    "status": "aero surface extrapolation: surrogate 'cd_fore': 47 of 48 query points lie outside the convex hull of its 57 training points; refusing to extrapolate (pass on_extrapolation='flag' to get a flagged guess)",
+    "feasible": false,
+    "peak_heat_flux_w_m2": NaN,
+    "peak_bondline_temperature_k": NaN
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 1,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-ff048ac256dc",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.472438_c65.0716_s0.1",
+     "point_id": "afc4edef3c83",
+     "mach": 20.0,
+     "bluntness_ratio": 0.472438,
+     "cone_half_angle_deg": 65.0716,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3727337683081762,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 469322.9601763445,
+    "peak_bondline_temperature_k": 379.6444127820164
+   },
+   "after": {
+    "status": "aero surface extrapolation: surrogate 'cd_fore': 47 of 48 query points lie outside the convex hull of its 58 training points; refusing to extrapolate (pass on_extrapolation='flag' to get a flagged guess)",
+    "feasible": false,
+    "peak_heat_flux_w_m2": NaN,
+    "peak_bondline_temperature_k": NaN
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 1,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-c971592b53d8",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.391636_c43.3537_s0.1",
+     "point_id": "af39020334b4",
+     "mach": 20.0,
+     "bluntness_ratio": 0.391636,
+     "cone_half_angle_deg": 43.3537,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 0.9956662841881467,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 447135.8380241811,
+    "peak_bondline_temperature_k": 380.5907935386515
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 440313.5692086737,
+    "peak_bondline_temperature_k": 380.38938636702494
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 2,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-50b2b164ae3d",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.813621_c60.7279_s0.1",
+     "point_id": "af3f7006f75b",
+     "mach": 20.0,
+     "bluntness_ratio": 0.813621,
+     "cone_half_angle_deg": 60.7279,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3602883303533342,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 1,
+   "surface_version_after": 2,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 313542.10935737006,
+    "peak_bondline_temperature_k": 386.1830155188348
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 312006.1964300638,
+    "peak_bondline_temperature_k": 386.0375087511509
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 3,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-38cfa9b2ba78",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.470479_c41.2478_s0.1",
+     "point_id": "af0a9084086f",
+     "mach": 20.0,
+     "bluntness_ratio": 0.470479,
+     "cone_half_angle_deg": 41.2478,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.0117761043294091,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 2,
+   "surface_version_after": 3,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 3203708.7395062167,
+    "peak_bondline_temperature_k": 482.15010024954717
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 3209715.5673777414,
+    "peak_bondline_temperature_k": 482.1402129708423
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 3,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-062245edf718",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.292095_c33.7207_s0.1",
+     "point_id": "af8a386fa000",
+     "mach": 20.0,
+     "bluntness_ratio": 0.292095,
+     "cone_half_angle_deg": 33.7207,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 0.6802687909569767,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 2,
+   "surface_version_after": 3,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 2063817.6523804194,
+    "peak_bondline_temperature_k": 502.3990329549326
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 2029313.4813583056,
+    "peak_bondline_temperature_k": 501.48955837225003
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 4,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-e115f5aa317f",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.401464_c66.5182_s0.1",
+     "point_id": "af55d9fa9287",
+     "mach": 20.0,
+     "bluntness_ratio": 0.401464,
+     "cone_half_angle_deg": 66.5182,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3722410502211981,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 3,
+   "surface_version_after": 4,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 609712.7201510996,
+    "peak_bondline_temperature_k": 408.20937158223495
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 610091.28559911,
+    "peak_bondline_temperature_k": 408.22085086656404
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 1,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-9bc448a8f2d4",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.264105_c61.4164_s0.1",
+     "point_id": "af202afa6f11",
+     "mach": 20.0,
+     "bluntness_ratio": 0.264105,
+     "cone_half_angle_deg": 61.4164,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3647488763137243,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 427648.2782374705,
+    "peak_bondline_temperature_k": 376.9701806812438
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 426188.1483239753,
+    "peak_bondline_temperature_k": 376.885099972838
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 1,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-c038234b4b0e",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.59853_c57.308_s0.1",
+     "point_id": "afcee55f4e17",
+     "mach": 20.0,
+     "bluntness_ratio": 0.59853,
+     "cone_half_angle_deg": 57.308,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3103785355520758,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 320875.9165806017,
+    "peak_bondline_temperature_k": 384.5567196868419
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 318978.16975770367,
+    "peak_bondline_temperature_k": 384.35336458850276
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 2,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-6cff943bef62",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M12_b0.58993_c59.1255_s0.1",
+     "point_id": "afc99867a42e",
+     "mach": 12.0,
+     "bluntness_ratio": 0.58993,
+     "cone_half_angle_deg": 59.1255,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3276622929971016,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 1,
+   "surface_version_after": 2,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 672779.2108742802,
+    "peak_bondline_temperature_k": 389.6973559457599
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 672874.2043741358,
+    "peak_bondline_temperature_k": 389.71104831605345
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 3,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-a90f32e8af88",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.797074_c68.5073_s0.1",
+     "point_id": "af9b830d10f0",
+     "mach": 20.0,
+     "bluntness_ratio": 0.797074,
+     "cone_half_angle_deg": 68.5073,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3857851194333883,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 2,
+   "surface_version_after": 3,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 1229870.73703291,
+    "peak_bondline_temperature_k": 435.35459517981946
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 1231404.3332083996,
+    "peak_bondline_temperature_k": 435.3928774115917
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 3,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-330970f36027",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M12_b0.59853_c57.308_s0.1",
+     "point_id": "afacd157919d",
+     "mach": 12.0,
+     "bluntness_ratio": 0.59853,
+     "cone_half_angle_deg": 57.308,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.308487686164868,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 2,
+   "surface_version_after": 3,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 277988.30364376155,
+    "peak_bondline_temperature_k": 379.2883866596142
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 277988.3041746299,
+    "peak_bondline_temperature_k": 379.26432352409654
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 23,
+   "batch": 4,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-a34bb5d7af08",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.411113_c58.7592_s0.1",
+     "point_id": "afbe98e10fcd",
+     "mach": 20.0,
+     "bluntness_ratio": 0.411113,
+     "cone_half_angle_deg": 58.7592,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3307921823397815,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 3,
+   "surface_version_after": 4,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 1763674.8844727185,
+    "peak_bondline_temperature_k": 451.46107716299696
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 1764995.4665952679,
+    "peak_bondline_temperature_k": 451.4753199734036
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 11,
+   "batch": 4,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-a70535ea48f5",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.477742_c66.5093_s0.1",
+     "point_id": "af2fb141fb01",
+     "mach": 20.0,
+     "bluntness_ratio": 0.477742,
+     "cone_half_angle_deg": 66.5093,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.3767149205322555,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 361714.99334695766,
+    "peak_bondline_temperature_k": 406.6121864727139
+   },
+   "after": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 361950.4572851295,
+    "peak_bondline_temperature_k": 406.6301896569418
+   }
+  },
+  {
+   "arm": "greedy",
+   "seed": 23,
+   "batch": 1,
+   "strategy": "greedy",
+   "trigger": "greedy",
+   "candidate_id": "C-8842bfdba2f9",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.373886_c26.557_s0.1",
+     "point_id": "afb843aff66d",
+     "mach": 20.0,
+     "bluntness_ratio": 0.373886,
+     "cone_half_angle_deg": 26.557,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 0.6697025558918859,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": true,
+    "peak_heat_flux_w_m2": 807897.5541104501,
+    "peak_bondline_temperature_k": 444.6843059072118
+   },
+   "after": {
+    "status": "aero surface extrapolation: surrogate 'cd_fore': 47 of 48 query points lie outside the convex hull of its 57 training points; refusing to extrapolate (pass on_extrapolation='flag' to get a flagged guess)",
+    "feasible": false,
+    "peak_heat_flux_w_m2": NaN,
+    "peak_bondline_temperature_k": NaN
+   }
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "batch": 0,
+   "strategy": "upfront",
+   "trigger": "upfront space-filling",
+   "candidate_id": "upfront-design",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M17.625_b0.436163_c64.7162_s0.0331293",
+     "point_id": "af30feafe303",
+     "mach": 17.625,
+     "bluntness_ratio": 0.436163,
+     "cone_half_angle_deg": 64.7162,
+     "shoulder_ratio": 0.0331293,
+     "usable": true,
+     "cd_fore": 1.4731900500329647,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M4.5178_b0.284918_c29.4741_s0.072545",
+     "point_id": "afdba1442150",
+     "mach": 4.5178,
+     "bluntness_ratio": 0.284918,
+     "cone_half_angle_deg": 29.4741,
+     "shoulder_ratio": 0.072545,
+     "usable": true,
+     "cd_fore": 0.5985210848251182,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M6.4358_b0.470205_c38.0131_s0.0228468",
+     "point_id": "af6c3ca20fb9",
+     "mach": 6.4358,
+     "bluntness_ratio": 0.470205,
+     "cone_half_angle_deg": 38.0131,
+     "shoulder_ratio": 0.0228468,
+     "usable": true,
+     "cd_fore": 0.9601642000685903,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M3.27262_b0.554156_c69.3952_s0.0917493",
+     "point_id": "af4124ac1d5c",
+     "mach": 3.27262,
+     "bluntness_ratio": 0.554156,
+     "cone_half_angle_deg": 69.3952,
+     "shoulder_ratio": 0.0917493,
+     "usable": true,
+     "cd_fore": 1.305578645694513,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M12.3724_b0.320033_c46.6187_s0.0635099",
+     "point_id": "af8b63687a21",
+     "mach": 12.3724,
+     "bluntness_ratio": 0.320033,
+     "cone_half_angle_deg": 46.6187,
+     "shoulder_ratio": 0.0635099,
+     "usable": true,
+     "cd_fore": 1.0791474853445202,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M4.92053_b0.371221_c58.8471_s0.0825733",
+     "point_id": "af568562a2f2",
+     "mach": 4.92053,
+     "bluntness_ratio": 0.371221,
+     "cone_half_angle_deg": 58.8471,
+     "shoulder_ratio": 0.0825733,
+     "usable": true,
+     "cd_fore": 1.3313240502165797,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 6,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "n/a",
+    "feasible": false,
+    "peak_heat_flux_w_m2": NaN,
+    "peak_bondline_temperature_k": NaN
+   },
+   "after": null
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "batch": 0,
+   "strategy": "upfront",
+   "trigger": "upfront space-filling",
+   "candidate_id": "upfront-design",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M3.03004_b0.964062_c62.3075_s0.0223072",
+     "point_id": "af8be45b1853",
+     "mach": 3.03004,
+     "bluntness_ratio": 0.964062,
+     "cone_half_angle_deg": 62.3075,
+     "shoulder_ratio": 0.0223072,
+     "usable": true,
+     "cd_fore": 1.3970522405764707,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M5.80953_b0.51531_c39.1978_s0.062188",
+     "point_id": "af138766fb5f",
+     "mach": 5.80953,
+     "bluntness_ratio": 0.51531,
+     "cone_half_angle_deg": 39.1978,
+     "shoulder_ratio": 0.062188,
+     "usable": true,
+     "cd_fore": 1.0314016943810091,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M15.5822_b0.341389_c67.3286_s0.0428424",
+     "point_id": "afc6e06c810e",
+     "mach": 15.5822,
+     "bluntness_ratio": 0.341389,
+     "cone_half_angle_deg": 67.3286,
+     "shoulder_ratio": 0.0428424,
+     "usable": true,
+     "cd_fore": 1.4620986211183566,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M4.03359_b0.555695_c47.138_s0.0348553",
+     "point_id": "af2f01829df7",
+     "mach": 4.03359,
+     "bluntness_ratio": 0.555695,
+     "cone_half_angle_deg": 47.138,
+     "shoulder_ratio": 0.0348553,
+     "usable": true,
+     "cd_fore": 1.1810555857702383,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M9.64484_b0.403742_c49.5558_s0.0755907",
+     "point_id": "af3704ceb774",
+     "mach": 9.64484,
+     "bluntness_ratio": 0.403742,
+     "cone_half_angle_deg": 49.5558,
+     "shoulder_ratio": 0.0755907,
+     "usable": true,
+     "cd_fore": 1.1691981212389284,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    },
+    {
+     "key": "M6.30421_b0.738362_c66.8656_s0.0873277",
+     "point_id": "afdf6b9c18ac",
+     "mach": 6.30421,
+     "bluntness_ratio": 0.738362,
+     "cone_half_angle_deg": 66.8656,
+     "shoulder_ratio": 0.0873277,
+     "usable": true,
+     "cd_fore": 1.3662191196078284,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 0.0,
+     "backend": "FAKE:surface x declared perturbation",
+     "source": "run"
+    }
+   ],
+   "n_usable": 6,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "n/a",
+    "feasible": false,
+    "peak_heat_flux_w_m2": NaN,
+    "peak_bondline_temperature_k": NaN
+   },
+   "after": null
+  }
+ ],
+ "probes": [
+  {
+   "arm": "adaptive",
+   "seed": 11,
+   "batch": 4,
+   "candidate_id": "C-a70535ea48f5",
+   "outside_hull": false,
+   "surface_version": 0,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 366200.95319830463,
+     "peak_bondline_temperature_k": 407.06969445032996
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 357381.6757413287,
+     "peak_bondline_temperature_k": 406.18061616984966
+    }
+   }
+  },
+  {
+   "arm": "adaptive",
+   "seed": 23,
+   "batch": 1,
+   "candidate_id": "C-8842bfdba2f9",
+   "outside_hull": false,
+   "surface_version": 0,
+   "results": {
+    "-1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 820996.0092553864,
+     "peak_bondline_temperature_k": 445.4916311079517
+    },
+    "1.0": {
+     "status": "OK",
+     "feasible": true,
+     "peak_heat_flux_w_m2": 795402.7943901183,
+     "peak_bondline_temperature_k": 443.90859092161486
+    }
+   }
+  }
+ ],
+ "skipped_upfront": [
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 0,
+   "bluntness_ratio": 0.7907054675742984,
+   "cone_half_angle_deg": 48.195771807804704,
+   "shoulder_ratio": 0.041447488591074944,
+   "reason": "cone_half_angle_deg (48.196 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-43.882 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 1,
+   "bluntness_ratio": 1.1542062724009157,
+   "cone_half_angle_deg": 21.057162089273334,
+   "shoulder_ratio": 0.09796057961881162,
+   "reason": "cone_half_angle_deg (21.057 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-1819.197 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 3,
+   "bluntness_ratio": 0.8211411457508803,
+   "cone_half_angle_deg": 42.22231742925942,
+   "shoulder_ratio": 0.06745483994483947,
+   "reason": "cone_half_angle_deg (42.222 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-166.080 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 5,
+   "bluntness_ratio": 0.9701392794959248,
+   "cone_half_angle_deg": 52.36444517970085,
+   "shoulder_ratio": 0.026870518326759338,
+   "reason": "cone_half_angle_deg (52.364 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-95.182 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 6,
+   "bluntness_ratio": 0.6566781123168767,
+   "cone_half_angle_deg": 33.31731881946325,
+   "shoulder_ratio": 0.08203932397067547,
+   "reason": "cone_half_angle_deg (33.317 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-113.611 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 7,
+   "bluntness_ratio": 1.2860491641797127,
+   "cone_half_angle_deg": 60.8402475528419,
+   "shoulder_ratio": 0.05855237923562527,
+   "reason": "cone_half_angle_deg (60.840 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-104.882 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 9,
+   "bluntness_ratio": 0.9225893488153816,
+   "cone_half_angle_deg": 59.269486581906676,
+   "shoulder_ratio": 0.07648997306823731,
+   "reason": "cone_half_angle_deg (59.269 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-6.311 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 10,
+   "bluntness_ratio": 0.6871076468378305,
+   "cone_half_angle_deg": 27.925946591421962,
+   "shoulder_ratio": 0.05241988711059094,
+   "reason": "cone_half_angle_deg (27.926 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-256.278 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 11,
+   "bluntness_ratio": 1.1180167846381663,
+   "cone_half_angle_deg": 57.037533381953835,
+   "shoulder_ratio": 0.08825055025517942,
+   "reason": "cone_half_angle_deg (57.038 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-115.586 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 13,
+   "bluntness_ratio": 1.2530816196464003,
+   "cone_half_angle_deg": 40.668269135057926,
+   "shoulder_ratio": 0.04758001647889614,
+   "reason": "cone_half_angle_deg (40.668 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-645.198 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 11,
+   "draw": 15,
+   "bluntness_ratio": 1.074810999352485,
+   "cone_half_angle_deg": 25.75926462188363,
+   "shoulder_ratio": 0.037153031229972835,
+   "reason": "cone_half_angle_deg (25.759 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-1173.030 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 1,
+   "bluntness_ratio": 0.7306917253881693,
+   "cone_half_angle_deg": 25.256701353937387,
+   "shoulder_ratio": 0.09049002259969711,
+   "reason": "cone_half_angle_deg (25.257 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-431.118 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 2,
+   "bluntness_ratio": 1.2997571484185757,
+   "cone_half_angle_deg": 51.297079380601645,
+   "shoulder_ratio": 0.05060924805700779,
+   "reason": "cone_half_angle_deg (51.297 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-318.904 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 4,
+   "bluntness_ratio": 1.1983488437719645,
+   "cone_half_angle_deg": 29.403818752616644,
+   "shoulder_ratio": 0.07497439429163932,
+   "reason": "cone_half_angle_deg (29.404 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-1178.873 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 6,
+   "bluntness_ratio": 0.8637305770069361,
+   "cone_half_angle_deg": 34.16413327679038,
+   "shoulder_ratio": 0.08296150036156177,
+   "reason": "cone_half_angle_deg (34.164 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-404.892 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 8,
+   "bluntness_ratio": 1.2564023203216494,
+   "cone_half_angle_deg": 36.62905993871391,
+   "shoulder_ratio": 0.04720774963498116,
+   "reason": "cone_half_angle_deg (36.629 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-835.460 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  },
+  {
+   "arm": "upfront",
+   "seed": 23,
+   "draw": 10,
+   "bluntness_ratio": 1.0420943940058351,
+   "cone_half_angle_deg": 28.890512911602855,
+   "shoulder_ratio": 0.035470729246735576,
+   "reason": "cone_half_angle_deg (28.891 deg) is too small for this nose_radius_m / diameter_m / shoulder_radius_m combination: the fore cone would need a negative length (-906.425 mm) - the nose sphere and the shoulder torus overlap. Increase cone_half_angle_deg, decrease nose_radius_m, or increase diameter_m."
+  }
+ ]
+}

@@ -1,0 +1,50 @@
+{
+ "greedy|11": {
+  "arm": "greedy",
+  "seed": 11,
+  "wall_s": 8.733737333008321,
+  "evaluations_used": 40,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 2,
+  "cfd_calls": 0,
+  "n_repeat_requests": 0,
+  "surface_version": 0,
+  "surface_history": [
+   {
+    "arm": "greedy",
+    "seed": 11,
+    "version": 0,
+    "n_train": 56,
+    "training_hash": "fb657af4a92b40c7",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-SMOKE-20260920T175847Z/surfaces/greedy/seed_11/v000"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "f0_only|11": {
+  "arm": "f0_only",
+  "seed": 11,
+  "wall_s": 9.86652233300265,
+  "evaluations_used": 40,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 0,
+  "cfd_calls": 0,
+  "n_repeat_requests": 0,
+  "surface_version": 0,
+  "surface_history": [
+   {
+    "arm": "f0_only",
+    "seed": 11,
+    "version": 0,
+    "n_train": 56,
+    "training_hash": "fb657af4a92b40c7",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-SMOKE-20260920T175847Z/surfaces/f0_only/seed_11/v000"
+   }
+  ],
+  "llm_calls": 0
+ }
+}

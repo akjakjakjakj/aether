@@ -1,0 +1,46 @@
+# AETHER M6 - SMOKE / DRY-RUN overlay. NOT the study. Nothing produced with this file is a
+# result, and the runner never publishes it to reports/ (it writes into its own run directory,
+# with a banner).
+#
+# What it is for:
+#   make adaptive-smoke     ONE seed, TWO real OpenFOAM promotions, run one at a time: confirms
+#                           that a promotion goes through M3's design-point runner, that the
+#                           surface refits, and that the candidate is re-evaluated.
+#   make adaptive-dry-run   the whole pipeline (all five arms, scoring, figures, report) with a
+#                           FAKE analytic F1 - no OpenFOAM - on the development seed.
+#
+# `inherit` is deep-merged with `overrides`; everything not listed here is the study's.
+
+inherit: configs/adaptive_fidelity.yaml
+
+overrides:
+  adaptive_fidelity:
+    mode: smoke
+    allow_provisional: true          # smoke only: gate G4 is not PASS. Labels every artefact.
+    # Another work-stream (M7) was editing src/aether/uncertainty while M6 was being built. M6
+    # never imports it - the guard verifies that at every check - so smoke/dry runs leave it
+    # out of the source hash. NOT accepted in `mode: study`.
+    source_guard_exclude: [uncertainty]
+    # The M4 DOE screening on disk was made on the constant-C_D model, so in `mode: study` the
+    # runner refuses it. A smoke run declares its active variables instead, and says so.
+    active_variables: [diameter_m, bluntness_ratio, cone_half_angle_deg, flight_path_angle_deg]
+    seeds: [11]                      # the development seed; never a study seed
+    budget_evaluations: 40
+    cfd_budget_calls: 2
+    curve_step: 10
+    workers: 2
+    f1:
+      max_concurrent_cases: 1        # the M2 fine-mesh benchmark is still running
+    arms:
+      adaptive: {enabled: false}
+      greedy: {enabled: false}       # promotes only believed-FEASIBLE designs, and this problem
+      upfront: {enabled: false}      # shows none in its first ~60 evaluations: the first smoke
+      ai_adaptive: {enabled: false}  # attempt (M6-SMOKE-20260920T175847Z) spent 0 CFD calls.
+      random: {population_size: 10}  # promotes any submitted design that has physics: the
+      f0_only: {population_size: 10} # shortest path to two real F1 calls, seeded
+    reference:
+      seeds: [101]
+      budget_evaluations: 60
+      population_size: 20
+    holdout:
+      cases_per_arm: 0

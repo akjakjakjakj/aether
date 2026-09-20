@@ -118,7 +118,39 @@ CAP_RADIUS = "cap_radius"
 VELOCITY_GRADIENT = "velocity_gradient"
 """Corrected model: R_eff from the measured stagnation velocity gradient (A-GEO-3a)."""
 
-MODELS = (CAP_RADIUS, VELOCITY_GRADIENT)
+VELOCITY_GRADIENT_ZOBY = "velocity_gradient_zoby"
+"""The OTHER primary's side of the same quantity - the M7 model-form alternative.
+
+This is not a second dataset. Zoby & Sullivan (NASA TM X-1067) publish faired CURVES, not
+a table, and this project has never transcribed them. What it has is Ellison's own
+published statement of how far the two disagree (TN D-5121 p. 5, verbatim):
+
+    "The data of the present investigation agree with the results of Zoby and Sullivan
+     (ref. 6) within 10 percent for K = 0 and K = 0.707; however, for K = 0.417 and
+     R = 0, the disagreement is about 20 percent."
+
+so this model is `velocity_gradient` displaced by exactly that, as a K-dependent
+multiplier on R_eff. Its SIGN is not assumed either: at the flat face Ellison's table
+gives R_eff = 3.155 R_b, while Zoby & Sullivan's figures digitise to 3.40-3.50 R_b
+(sourcing report item 8, T2, +7.8% to +10.9%) - i.e. the other primary's R_eff is LARGER,
+hence its heating LOWER, which is why Ellison is described as the conservative source.
+
+Three things about it are NOT the sources' (A-UQ-NOSE-1):
+  * "within 10 percent" is an upper BOUND in the source and is used here as the value;
+  * the 20% is stated only at (K = 0.417, R = 0) and is applied here at every corner
+    ratio, which widens the band where the source is silent - conservative in width;
+  * the shape between the three stated K values is this project's interpolation
+    (PCHIP, as for the table itself), anchored at 0 at K = 1 where the two agree
+    identically by Zoby & Sullivan's own eq. (5).
+
+It exists so that the dominant heating uncertainty can be propagated as a discrete
+MODEL-FORM switch between two sources, which is what it is, rather than as Gaussian
+noise, which it is not. Nothing selects it by default.
+"""
+
+MODELS = (CAP_RADIUS, VELOCITY_GRADIENT, VELOCITY_GRADIENT_ZOBY)
+
+VELOCITY_GRADIENT_MODELS = (VELOCITY_GRADIENT, VELOCITY_GRADIENT_ZOBY)
 
 # NASA TN D-5121 (Ellison 1969) TABLE I, alpha = 0 rows, plus the exact hemisphere row.
 # Values are R_B/R_eff. Rows are K = R_b/R_n, columns are R = R_c/R_b.
@@ -130,6 +162,12 @@ _RB_OVER_REFF = (
     (0.738, 0.772, 0.817),   # K = 0.707                       | Ellison Table I
     (1.000, 1.000, 1.000),   # K = 1      hemisphere           | exact, by eq. (5)
 )
+
+# Ellison's own published disagreement with Zoby & Sullivan, as a fractional shift to
+# apply to R_eff. See VELOCITY_GRADIENT_ZOBY for the verbatim source sentence, the
+# evidence for the sign, and the three ways this is wider than what the source states.
+_ZOBY_K_NODES = (0.0, 0.417, 0.707, 1.0)
+_ZOBY_SHIFT = (0.10, 0.20, 0.10, 0.0)   # TN D-5121 p. 5; the K = 1 anchor is exact
 
 MAX_CORNER_RATIO = 0.4
 """Largest R_c/R_b measured (Ellison). Zoby & Sullivan stop at 0.30."""
@@ -153,6 +191,26 @@ def _interpolators() -> tuple[PchipInterpolator, ...]:
         PchipInterpolator(np.asarray(_K_NODES, dtype=float), table[:, j], extrapolate=False)
         for j in range(table.shape[1])
     )
+
+
+@lru_cache(maxsize=1)
+def _zoby_shift_interpolator() -> PchipInterpolator:
+    return PchipInterpolator(np.asarray(_ZOBY_K_NODES, dtype=float),
+                             np.asarray(_ZOBY_SHIFT, dtype=float), extrapolate=False)
+
+
+def zoby_sullivan_shift(k_body_over_nose: float) -> float:
+    """Fractional shift on R_eff from Ellison's data to Zoby & Sullivan's, at this K.
+
+    Positive means Zoby & Sullivan's effective radius is LARGER, i.e. their heating is
+    lower and Ellison is the conservative source. Zero at K = 1, where the two agree
+    identically. `k_body_over_nose` must lie in [0, 1]; outside it there is no second
+    source to disagree with and callers fall back to R_eff = R_n before reaching here.
+    """
+    k = float(k_body_over_nose)
+    if not 0.0 <= k <= 1.0:
+        raise ValueError(f"k_body_over_nose must be in [0, 1]; got {k}")
+    return float(_zoby_shift_interpolator()(k))
 
 
 def rb_over_reff(k_body_over_nose: float, corner_ratio: float) -> float:
@@ -261,6 +319,14 @@ def effective_nose_radius_report(
         )
 
     r_eff = body_radius_m / rb_over_reff(k, corner_ratio)
+    if model == VELOCITY_GRADIENT_ZOBY:
+        shift = zoby_sullivan_shift(k)
+        r_eff *= 1.0 + shift
+        notes.append(
+            f"MODEL-FORM ALTERNATIVE: R_eff raised {shift * 100:.1f}% off Ellison's table "
+            "towards Zoby & Sullivan (NASA TM X-1067), using Ellison's own published "
+            "disagreement (TN D-5121 p. 5). Not a second measurement - see A-UQ-NOSE-1"
+        )
     return EffectiveNoseRadiusReport(
         model=model, effective_nose_radius_m=float(r_eff),
         nose_radius_m=float(nose_radius_m), body_radius_m=float(body_radius_m),

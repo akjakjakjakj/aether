@@ -1,0 +1,26 @@
+# AETHER M6 - DRY-RUN overlay: the whole pipeline (arms i-v, pooled-truth scoring, hold-out,
+# figures, report) with a FAKE analytic Fidelity 1 and no OpenFOAM, on the development seed.
+# `scripts/run_adaptive_fidelity.py` REQUIRES `--fake-f1` with this file and never publishes
+# its output. Nothing it produces is a result: the "CFD" is a formula.
+
+inherit: configs/adaptive_fidelity.yaml
+
+overrides:
+  adaptive_fidelity:
+    mode: dry-run
+    allow_provisional: true
+    # Another work-stream (M7) was editing src/aether/uncertainty while M6 was being built. M6
+    # never imports it - the guard verifies that at every check - so smoke/dry runs leave it
+    # out of the source hash. NOT accepted in `mode: study`.
+    source_guard_exclude: [uncertainty]
+    active_variables: [diameter_m, bluntness_ratio, cone_half_angle_deg, flight_path_angle_deg]
+    seeds: [11, 23]                  # development seeds; never study seeds
+    budget_evaluations: 200          # the study's, so the policy sees the study's batch count
+    cfd_budget_calls: 8
+    workers: 3
+    arms:
+      ai_adaptive: {enabled: false}
+    reference:
+      seeds: [101]
+      budget_evaluations: 200
+      population_size: 20

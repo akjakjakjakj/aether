@@ -410,6 +410,11 @@ class CapsuleGeometry:
         `'velocity_gradient'`
             R_eff from NASA TN D-5121 table I via `.stagnation_gradient`, continuous with
             the hemisphere limit and saturating at the flat face.
+        `'velocity_gradient_zoby'`
+            The same, displaced by Ellison's own published disagreement with the other
+            primary (NASA TM X-1067). It exists ONLY as the alternative state of the M7
+            model-form switch on this quantity - see `stagnation_gradient` and
+            ASSUMPTIONS A-UQ-NOSE-1 - and nothing selects it by default.
 
         Derivation and worked numbers: `docs/theory/effective_nose_radius.md`.
         """

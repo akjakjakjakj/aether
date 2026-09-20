@@ -1,0 +1,493 @@
+{
+  "run_id": "M6-SMOKE-20260920T175847Z",
+  "mode": "smoke",
+  "banner": "SMOKE TEST (v2512) - plumbing check only. No number in this document is a result, and none may be quoted.",
+  "gate": {
+    "gate_G4_status_at_build": "IN_PROGRESS",
+    "gate_G4_status_now": "IN_PROGRESS",
+    "gate_source": "results/M2/M2-20260920T123901Z/gate_assessment.json",
+    "allow_provisional": true,
+    "provisional": true
+  },
+  "mesh_level": "coarse",
+  "git_commit": "e0b40c0",
+  "git_dirty": true,
+  "config_hash": "675cebdbabd0",
+  "source_hash": "0c224987dbcdc70b",
+  "source_guard_exclude": [
+    "uncertainty"
+  ],
+  "doe_run_id": null,
+  "active_source": "DECLARED in the smoke config, not screened",
+  "workers": 2,
+  "fake_f1": false,
+  "reused_cfd_from": [],
+  "replayed_llm_from": null,
+  "wall_s": 18.452919874995132,
+  "objectives": [
+    "peak_heat_flux_w_m2",
+    "peak_bondline_temperature_k"
+  ],
+  "active": [
+    "diameter_m",
+    "bluntness_ratio",
+    "cone_half_angle_deg",
+    "flight_path_angle_deg"
+  ],
+  "hypervolume": {
+    "reference_point": {
+      "peak_heat_flux_w_m2": 2500000.0,
+      "peak_bondline_temperature_k": 450.0
+    },
+    "ideal_point": {
+      "peak_heat_flux_w_m2": 0.0,
+      "peak_bondline_temperature_k": 300.0
+    }
+  },
+  "arms": {
+    "greedy": {
+      "seeds": [
+        11
+      ],
+      "n_seeds": 1,
+      "per_seed": {
+        "hv_truth": [
+          0.0
+        ],
+        "hv_belief": [
+          0.0
+        ],
+        "hv_truth_oracle": [
+          0.0
+        ],
+        "optimism_gap": [
+          0.0
+        ],
+        "selection_regret": [
+          0.0
+        ],
+        "n_recommended": [
+          0.0
+        ],
+        "n_false_claims": [
+          0.0
+        ],
+        "evaluations_used": [
+          40.0
+        ],
+        "reevaluations": [
+          0.0
+        ],
+        "probes": [
+          0.0
+        ],
+        "cache_hits": [
+          0.0
+        ],
+        "cfd_budget": [
+          2.0
+        ],
+        "cfd_calls": [
+          0.0
+        ],
+        "cfd_failed": [
+          0.0
+        ],
+        "cfd_repeat_requests_free": [
+          0.0
+        ],
+        "cfd_wall_s": [
+          0.0
+        ],
+        "surface_versions": [
+          0.0
+        ],
+        "hull_lost": [
+          0.0
+        ],
+        "hull_lost_share_of_budget": [
+          0.0
+        ],
+        "hull_lost_truly_feasible": [
+          0.0
+        ],
+        "hull_lost_on_reference_front": [
+          0.0
+        ]
+      },
+      "hv_truth_mean": 0.0,
+      "hv_belief_mean": 0.0,
+      "hv_truth_oracle_mean": 0.0,
+      "optimism_gap_mean": 0.0,
+      "selection_regret_mean": 0.0,
+      "n_recommended_mean": 0.0,
+      "n_false_claims_mean": 0.0,
+      "evaluations_used_mean": 40.0,
+      "reevaluations_mean": 0.0,
+      "probes_mean": 0.0,
+      "cache_hits_mean": 0.0,
+      "cfd_budget_mean": 2.0,
+      "cfd_calls_mean": 0.0,
+      "cfd_failed_mean": 0.0,
+      "cfd_repeat_requests_free_mean": 0.0,
+      "cfd_wall_s_mean": 0.0,
+      "surface_versions_mean": 0.0,
+      "hull_lost_mean": 0.0,
+      "hull_lost_share_of_budget_mean": 0.0,
+      "hull_lost_truly_feasible_mean": 0.0,
+      "hull_lost_on_reference_front_mean": 0.0,
+      "hv_truth_std": NaN,
+      "hv_truth_min": 0.0,
+      "hv_truth_max": 0.0,
+      "truth_sigma_cd_at_recommended_mach_max": NaN,
+      "surface_rmse_vs_truth_mean": 0.0
+    },
+    "f0_only": {
+      "seeds": [
+        11
+      ],
+      "n_seeds": 1,
+      "per_seed": {
+        "hv_truth": [
+          0.0
+        ],
+        "hv_belief": [
+          0.0
+        ],
+        "hv_truth_oracle": [
+          0.0
+        ],
+        "optimism_gap": [
+          0.0
+        ],
+        "selection_regret": [
+          0.0
+        ],
+        "n_recommended": [
+          0.0
+        ],
+        "n_false_claims": [
+          0.0
+        ],
+        "evaluations_used": [
+          40.0
+        ],
+        "reevaluations": [
+          0.0
+        ],
+        "probes": [
+          0.0
+        ],
+        "cache_hits": [
+          0.0
+        ],
+        "cfd_budget": [
+          0.0
+        ],
+        "cfd_calls": [
+          0.0
+        ],
+        "cfd_failed": [
+          0.0
+        ],
+        "cfd_repeat_requests_free": [
+          0.0
+        ],
+        "cfd_wall_s": [
+          0.0
+        ],
+        "surface_versions": [
+          0.0
+        ],
+        "hull_lost": [
+          0.0
+        ],
+        "hull_lost_share_of_budget": [
+          0.0
+        ],
+        "hull_lost_truly_feasible": [
+          0.0
+        ],
+        "hull_lost_on_reference_front": [
+          0.0
+        ]
+      },
+      "hv_truth_mean": 0.0,
+      "hv_belief_mean": 0.0,
+      "hv_truth_oracle_mean": 0.0,
+      "optimism_gap_mean": 0.0,
+      "selection_regret_mean": 0.0,
+      "n_recommended_mean": 0.0,
+      "n_false_claims_mean": 0.0,
+      "evaluations_used_mean": 40.0,
+      "reevaluations_mean": 0.0,
+      "probes_mean": 0.0,
+      "cache_hits_mean": 0.0,
+      "cfd_budget_mean": 0.0,
+      "cfd_calls_mean": 0.0,
+      "cfd_failed_mean": 0.0,
+      "cfd_repeat_requests_free_mean": 0.0,
+      "cfd_wall_s_mean": 0.0,
+      "surface_versions_mean": 0.0,
+      "hull_lost_mean": 0.0,
+      "hull_lost_share_of_budget_mean": 0.0,
+      "hull_lost_truly_feasible_mean": 0.0,
+      "hull_lost_on_reference_front_mean": 0.0,
+      "hv_truth_std": NaN,
+      "hv_truth_min": 0.0,
+      "hv_truth_max": 0.0,
+      "truth_sigma_cd_at_recommended_mach_max": NaN,
+      "surface_rmse_vs_truth_mean": 0.0
+    }
+  },
+  "arm_settings": {
+    "greedy": {
+      "strategy": "greedy",
+      "search": "nsga2",
+      "population_size": 10,
+      "enabled": true
+    },
+    "f0_only": {
+      "strategy": "none",
+      "search": "nsga2",
+      "population_size": 10,
+      "cfd_budget": 0,
+      "enabled": true
+    }
+  },
+  "budget_evaluations": 40,
+  "cfd_budget_calls": 2,
+  "seeds": [
+    11
+  ],
+  "checkpoints": [
+    10,
+    20,
+    30,
+    40
+  ],
+  "policy_declared": {
+    "weights": {
+      "value": 1.0,
+      "uncertainty": 0.5,
+      "novelty": 0.5,
+      "agent_request": 0.25,
+      "cost": 0.5
+    },
+    "scales": {
+      "uncertainty": 0.01,
+      "novelty": 0.15
+    },
+    "gates": {
+      "min_p_nondominated": 0.2,
+      "min_objective_uncertainty": 0.002,
+      "min_novelty": 0.08
+    },
+    "min_score": 0.6,
+    "max_promotions_per_batch": 2,
+    "max_front_reevaluations": 8,
+    "min_training_separation": 0.02,
+    "spend_by_fraction": 0.8,
+    "prescreen": {
+      "max_candidates": 4,
+      "max_outside_hull": 2,
+      "max_epsilon_to_front": 0.05,
+      "max_constraint_violation": 0.05,
+      "recent_hull_rejected": 20
+    },
+    "exploration": {
+      "after_idle_batches": 3,
+      "max_calls": 2
+    },
+    "mach_rule": {
+      "nodes": [
+        20.0,
+        12.0,
+        6.0,
+        3.0
+      ],
+      "weights": [
+        0.55,
+        0.4,
+        0.037,
+        0.011
+      ]
+    },
+    "upfront": {
+      "max_draws": 512
+    }
+  },
+  "criteria_declared": {
+    "subject": "adaptive",
+    "comparators": [
+      "random",
+      "greedy",
+      "upfront"
+    ],
+    "no_cfd_arm": "f0_only",
+    "target_fraction_of_reference_hv": 0.95,
+    "sensitivity_fractions": [
+      0.9,
+      0.98
+    ],
+    "min_seeds_reaching": 3,
+    "alpha": 0.05
+  },
+  "h2": {
+    "0.95": {
+      "fraction": 0.95,
+      "target_hv": 0.17535032767403982,
+      "reach": {
+        "greedy": [
+          {
+            "reached": false,
+            "cfd_calls": null,
+            "n_evaluations": null
+          }
+        ],
+        "f0_only": [
+          {
+            "reached": false,
+            "cfd_calls": null,
+            "n_evaluations": null
+          }
+        ]
+      },
+      "subject": "adaptive",
+      "n_seeds_reaching": {
+        "greedy": 0,
+        "f0_only": 0
+      },
+      "median_calls_censored": {
+        "greedy": 3.0,
+        "f0_only": 3.0
+      },
+      "censored_at": 3,
+      "verdict": "subject arm was not run",
+      "status": "NOT_RUN"
+    },
+    "0.9": {
+      "fraction": 0.9,
+      "target_hv": 0.1661213630596167,
+      "reach": {
+        "greedy": [
+          {
+            "reached": false,
+            "cfd_calls": null,
+            "n_evaluations": null
+          }
+        ],
+        "f0_only": [
+          {
+            "reached": false,
+            "cfd_calls": null,
+            "n_evaluations": null
+          }
+        ]
+      },
+      "subject": "adaptive",
+      "n_seeds_reaching": {
+        "greedy": 0,
+        "f0_only": 0
+      },
+      "median_calls_censored": {
+        "greedy": 3.0,
+        "f0_only": 3.0
+      },
+      "censored_at": 3,
+      "verdict": "subject arm was not run",
+      "status": "NOT_RUN"
+    },
+    "0.98": {
+      "fraction": 0.98,
+      "target_hv": 0.18088770644269372,
+      "reach": {
+        "greedy": [
+          {
+            "reached": false,
+            "cfd_calls": null,
+            "n_evaluations": null
+          }
+        ],
+        "f0_only": [
+          {
+            "reached": false,
+            "cfd_calls": null,
+            "n_evaluations": null
+          }
+        ]
+      },
+      "subject": "adaptive",
+      "n_seeds_reaching": {
+        "greedy": 0,
+        "f0_only": 0
+      },
+      "median_calls_censored": {
+        "greedy": 3.0,
+        "f0_only": 3.0
+      },
+      "censored_at": 3,
+      "verdict": "subject arm was not run",
+      "status": "NOT_RUN"
+    }
+  },
+  "final_hv_comparison": {},
+  "truth": {
+    "n_train": 56,
+    "n_base": 56,
+    "n_promotion_points": 0,
+    "training_hash": "fb657af4a92b40c7",
+    "base_training_hash": "fb657af4a92b40c7",
+    "hv_reference": 0.18457929228846298,
+    "hv_union_of_arms": 0.0,
+    "hv_reference_search_alone": 0.18457929228846298,
+    "n_reference_front": 1,
+    "n_distinct_designs_scored": 40,
+    "reference_search": {
+      "seeds": [
+        101
+      ],
+      "budget_evaluations": 60,
+      "population_size": 20
+    }
+  },
+  "cfd": {
+    "backend": "openfoam",
+    "fingerprint": "openfoam:coarse:024287bd9015:b5d620c4e269",
+    "max_concurrent": 1,
+    "peak_concurrency_observed": 0,
+    "n_cases_run": 0,
+    "n_calls_charged": 0,
+    "n_cases_in_store": 0,
+    "n_cases_usable": 0,
+    "n_cases_imported": 0,
+    "case_wall_s_sum": 0.0,
+    "case_wall_s_median": null
+  },
+  "holdout": [],
+  "surface_error": [
+    {
+      "arm": "greedy",
+      "seed": 11,
+      "n_probe_points": 4,
+      "n_train": 56,
+      "cd_fore_rmse_vs_truth": 0.0,
+      "cd_fore_max_abs_vs_truth": 0.0,
+      "share_outside_own_hull": 0.0
+    },
+    {
+      "arm": "f0_only",
+      "seed": 11,
+      "n_probe_points": 4,
+      "n_train": 56,
+      "cd_fore_rmse_vs_truth": 0.0,
+      "cd_fore_max_abs_vs_truth": 0.0,
+      "share_outside_own_hull": 0.0
+    }
+  ],
+  "llm_calls_total": 0,
+  "wall_s_by_arm_seed": {
+    "greedy|11": 8.733737333008321,
+    "f0_only|11": 9.86652233300265
+  }
+}

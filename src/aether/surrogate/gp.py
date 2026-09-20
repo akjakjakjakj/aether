@@ -33,6 +33,8 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 from sklearn.gaussian_process.kernels import ConstantKernel, Matern, WhiteKernel
 
 TRANSFORMS = ("identity", "log10")
+HULL_TOLERANCE = 1e-9
+"""Unit-cube distance by which a query may lie outside a hull facet and still count as inside."""
 
 
 class ExtrapolationError(ValueError):
@@ -64,7 +66,13 @@ class TrainingHull:
         x_unit = np.atleast_2d(np.asarray(x_unit, dtype=float))
         if self._tri is None:
             return np.zeros(len(x_unit), dtype=bool)
-        return self._tri.find_simplex(x_unit) >= 0
+        # Explicit tolerance (NR-23). A design variable frozen AT a box edge reaches this
+        # check as 1 + 2e-16 after a ratio -> length -> ratio round trip, i.e. exactly ON a
+        # hull facet. With Qhull's default tolerance, whether such a point counts as inside
+        # depended on the triangulation - so adding one training point could turn evaluable
+        # designs into "extrapolations". 1e-9 of a unit-cube edge is physically nothing and
+        # makes membership of boundary points independent of the triangulation.
+        return self._tri.find_simplex(x_unit, tol=HULL_TOLERANCE) >= 0
 
 
 @dataclass(frozen=True)

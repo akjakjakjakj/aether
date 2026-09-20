@@ -1,0 +1,23 @@
+AETHER M6 adaptive fidelity  run=M6-DRY-20260920T174426Z  mode=dry-run  F1=FAKE:surface x declared perturbation  mesh=coarse
+git=e0b40c0 (dirty)  source hash=f7be929003108fcc  gate G4: built IN_PROGRESS, now IN_PROGRESS  allow_provisional=True
+arms=['adaptive', 'random', 'greedy', 'upfront', 'f0_only']
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg'] (DECLARED in the smoke config, not screened)
+  f0_only      seed  23: 100/100 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (56 points), 36 s
+  f0_only      seed  11: 100/100 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (56 points), 38 s
+  upfront      seed  11: 100/100 evaluations (0 re-evaluations, 0 probes), 6/6 CFD calls, surface v1 (62 points), 39 s
+  upfront      seed  23: 100/100 evaluations (0 re-evaluations, 0 probes), 6/6 CFD calls, surface v1 (62 points), 40 s
+  greedy       seed  23: 100/100 evaluations (1 re-evaluations, 0 probes), 1/6 CFD calls, surface v1 (57 points), 41 s
+  greedy       seed  11: 100/100 evaluations (1 re-evaluations, 0 probes), 1/6 CFD calls, surface v1 (57 points), 42 s
+  adaptive     seed  11: 100/100 evaluations (1 re-evaluations, 2 probes), 1/6 CFD calls, surface v1 (57 points), 44 s
+  adaptive     seed  23: 100/100 evaluations (1 re-evaluations, 2 probes), 1/6 CFD calls, surface v1 (57 points), 46 s
+  random       seed  23: 100/100 evaluations (7 re-evaluations, 0 probes), 6/6 CFD calls, surface v4 (62 points), 48 s
+  random       seed  11: 100/100 evaluations (6 re-evaluations, 0 probes), 6/6 CFD calls, surface v4 (62 points), 49 s
+Traceback (most recent call last):
+  File "/Users/akj/Projects/aether/scripts/run_adaptive_fidelity.py", line 290, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/akj/Projects/aether/scripts/run_adaptive_fidelity.py", line 245, in main
+    guard.check("after scoring")
+  File "/Users/akj/Projects/aether/src/aether/optimization/guards.py", line 99, in check
+    raise SourceChanged(message)
+src.aether.optimization.guards.SourceChanged: ABORTED after scoring: aether changed while the study was running (hash f7be929003108fcc at launch, c8cd1a183274ecab now). Worker processes may already hold either version, so this run's candidates are not one experiment. Do not analyse this directory. See NR-18.

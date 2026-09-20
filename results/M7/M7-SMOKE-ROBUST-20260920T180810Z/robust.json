@@ -1,0 +1,157 @@
+{
+  "run_id": "M7-SMOKE-ROBUST-20260920T180810Z",
+  "git_commit": "e0b40c0",
+  "git_dirty": true,
+  "source_hash": "9a8003c4da016403",
+  "workers": 6,
+  "wall_s": 58.700205333007034,
+  "smoke": true,
+  "settings": {
+    "objective_percentile": 95.0,
+    "quantile_estimator": "empirical",
+    "chance_constraints": {
+      "max_g": 0.05,
+      "peak_bondline_temperature_k": 0.05,
+      "heatshield_mass_fraction": 0.05,
+      "any": 0.05
+    },
+    "inner_samples": 8,
+    "inner_seed": 20260923,
+    "population_size": 8,
+    "budget_evaluations": 960,
+    "seeds": [
+      37
+    ],
+    "probability_resolution": 0.125,
+    "effective_chance_rule": {
+      "max_g": "at most 0 of 8 inner draws may violate (alpha 0.05, i.e. ZERO violations - alpha is below the inner sample's resolution of 0.125)",
+      "peak_bondline_temperature_k": "at most 0 of 8 inner draws may violate (alpha 0.05, i.e. ZERO violations - alpha is below the inner sample's resolution of 0.125)",
+      "heatshield_mass_fraction": "at most 0 of 8 inner draws may violate (alpha 0.05, i.e. ZERO violations - alpha is below the inner sample's resolution of 0.125)",
+      "any": "at most 0 of 8 inner draws may violate (alpha 0.05, i.e. ZERO violations - alpha is below the inner sample's resolution of 0.125)"
+    }
+  },
+  "runs": [
+    {
+      "generations": 15,
+      "stopped_because": "budget spent",
+      "budget_used": 960,
+      "cache_hits": 0,
+      "inner_samples": 8,
+      "seed": 37,
+      "front_size": 4
+    }
+  ],
+  "n_candidates": 120,
+  "front_size": 4,
+  "verification": {
+    "n_designs": 3,
+    "n_inner": 8,
+    "n_full": 24,
+    "full_seed": 20260924,
+    "objectives": {
+      "peak_heat_flux_w_m2": {
+        "n_compared": 3,
+        "mean_relative_bias": -0.015126344468732155,
+        "max_abs_relative_error": 0.01536128008396514,
+        "spearman_rank_correlation": 1.0,
+        "full_span": 113830.18784213671,
+        "mean_abs_error_over_full_span": 0.07899012314368051
+      },
+      "peak_bondline_temperature_k": {
+        "n_compared": 3,
+        "mean_relative_bias": -0.006858992234347682,
+        "max_abs_relative_error": 0.007383822270410486,
+        "spearman_rank_correlation": 1.0,
+        "full_span": 4.953794185867821,
+        "mean_abs_error_over_full_span": 0.6158291255048771
+      }
+    },
+    "probabilities": {
+      "max_g": {
+        "alpha": 0.05,
+        "max_abs_difference": 0.0,
+        "mean_abs_difference": 0.0,
+        "n_verdict_disagreements": 0,
+        "full_wilson_of_worst": 0.13797620467498017
+      },
+      "peak_bondline_temperature_k": {
+        "alpha": 0.05,
+        "max_abs_difference": 0.041666666666666664,
+        "mean_abs_difference": 0.027777777777777776,
+        "n_verdict_disagreements": 0,
+        "full_wilson_of_worst": 0.13797620467498017
+      },
+      "heatshield_mass_fraction": {
+        "alpha": 0.05,
+        "max_abs_difference": 0.0,
+        "mean_abs_difference": 0.0,
+        "n_verdict_disagreements": 0,
+        "full_wilson_of_worst": 0.13797620467498017
+      },
+      "any": {
+        "alpha": 0.05,
+        "max_abs_difference": 0.041666666666666664,
+        "mean_abs_difference": 0.027777777777777776,
+        "n_verdict_disagreements": 0,
+        "full_wilson_of_worst": 0.13797620467498017
+      }
+    },
+    "tolerances": {
+      "max_abs_relative_bias": 0.05,
+      "min_rank_correlation": 0.8,
+      "max_abs_probability_difference": 0.05
+    },
+    "verdict": {
+      "passed": true,
+      "failures": [],
+      "statement": "the common-random-number shortcut reproduced full Monte Carlo within every declared tolerance on this subset"
+    },
+    "per_design": [
+      {
+        "label": "C-31af5c3e786e",
+        "shortcut__peak_heat_flux_w_m2": 546906.3947558104,
+        "shortcut__peak_bondline_temperature_k": 443.69919094981753,
+        "full__peak_heat_flux_w_m2": 555217.5050629666,
+        "full__peak_bondline_temperature_k": 446.8143485255576,
+        "shortcut_p__max_g": 0.0,
+        "shortcut_p__peak_bondline_temperature_k": 0.0,
+        "shortcut_p__heatshield_mass_fraction": 0.0,
+        "shortcut_p__any": 0.0,
+        "full_p__max_g": 0.0,
+        "full_p__peak_bondline_temperature_k": 0.041666666666666664,
+        "full_p__heatshield_mass_fraction": 0.0,
+        "full_p__any": 0.041666666666666664
+      },
+      {
+        "label": "C-e69fc681ab86",
+        "shortcut__peak_heat_flux_w_m2": 548863.1117490368,
+        "shortcut__peak_bondline_temperature_k": 442.0098516681402,
+        "full__peak_heat_flux_w_m2": 557248.9541069906,
+        "full__peak_bondline_temperature_k": 445.2978518636973,
+        "shortcut_p__max_g": 0.0,
+        "shortcut_p__peak_bondline_temperature_k": 0.0,
+        "shortcut_p__heatshield_mass_fraction": 0.0,
+        "shortcut_p__any": 0.0,
+        "full_p__max_g": 0.0,
+        "full_p__peak_bondline_temperature_k": 0.041666666666666664,
+        "full_p__heatshield_mass_fraction": 0.0,
+        "full_p__any": 0.041666666666666664
+      },
+      {
+        "label": "C-50536d5f7d8a",
+        "shortcut__peak_heat_flux_w_m2": 658770.2639048573,
+        "shortcut__peak_bondline_temperature_k": 439.11163988674457,
+        "full__peak_heat_flux_w_m2": 669047.6929051033,
+        "full__peak_bondline_temperature_k": 441.86055433968977,
+        "shortcut_p__max_g": 0.0,
+        "shortcut_p__peak_bondline_temperature_k": 0.0,
+        "shortcut_p__heatshield_mass_fraction": 0.0,
+        "shortcut_p__any": 0.0,
+        "full_p__max_g": 0.0,
+        "full_p__peak_bondline_temperature_k": 0.0,
+        "full_p__heatshield_mass_fraction": 0.0,
+        "full_p__any": 0.0
+      }
+    ]
+  }
+}

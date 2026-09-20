@@ -166,3 +166,56 @@ from the persisted logs only. The runner takes its active variables only from th
 `screening.json`, refuses to start if that screening was made on a different design space, and
 hashes `src/aether` at launch: if the source changes mid-study it logs what was paid for,
 writes `ABORTED.md` and stops (NR-18).
+
+## M6 in one paragraph
+
+Adaptive fidelity adds a second budget, not a second evaluator. `optimization/adaptive.py`
+holds the pieces: `TwoFidelityEvaluator` is `BudgetedEvaluator` for a drag surface that can
+change during a run (a design is charged once per surface VERSION it is evaluated under;
+probes are counted separately); `CfdLedger` charges CFD calls per (arm, seed) — failed cases
+cost, a repeat within the arm is free; `CfdCaseStore` runs each distinct case once, at most
+three serial solvers side by side; `ArmSurface` keeps versioned copies of `cfd_surface_v1`,
+one directory per refit, so workers never read a half-written surface and every belief is
+traceable to its training set; `OpenFoamF1Backend` is M3's `run_design_point`, unchanged, and
+`AnalyticF1Backend` a fake with a known truth for tests and labelled dry runs.
+`PromotionController` hooks in after every batch of ANY optimiser (NSGA-II here, and the M5 LLM
+agent through the `decide_batch` hook it already had), so the five arms differ only in who is
+promoted. `optimization/adaptive_analysis.py` scores every arm on pooled truth and documents
+the metric-gaming routes it closes; `adaptive_study.py` orchestrates; `adaptive_report.py`
+emits only computed sentences. `optimization/guards.py` now holds the source-hash and
+stale-screening guards for BOTH `run_ai_ablation.py` and `run_adaptive_fidelity.py`.
+`optimization/fidelity.py` stays as M5's plumbing-only hook so M5 replays are unchanged.
+
+
+## M7 in one paragraph
+
+Uncertainty is a coordinate of the design space, not a layer beside it. `uncertainty/`
+declares the inputs (`inputs.py` + `configs/uncertainty.yaml`, each with a source line, a
+tier and an aleatory/epistemic label; an unavailable input REFUSES rather than vanishing),
+addresses every distribution by inverse CDF (`distributions.py`) so one unit-cube point
+drives them all, and builds the sample designs in `sampling.py` — `nested` (E epistemic
+branches × A aleatory draws under common random numbers) keeps the two kinds of
+not-knowing separable to the outputs, `mixed` pools them. The trick that keeps spec §19
+and M4's meter intact is `space.py`: `make_uncertain_space` appends ONE synthetic
+`_uq_draw` variable to the `DesignSpace`, so the vector `(design…, draw index)` becomes an
+ordinary design whose `config_for` applies that draw's perturbations. Nothing in
+`budget.py`, `persistence.py` or `evaluate.py` changed — each (design, draw) pair gets its
+own candidate ID, is charged one evaluation, is logged, and a re-proposed design under
+common random numbers is a free, visible cache hit. `evaluate.py` gained three hooks that
+are all **identity by default and regression-tested to be bit-identical**: an optional
+`atmosphere:` block (an altitude-dependent density multiplier, applied isothermally by
+`atmosphere/perturbed.py` so `p = ρRT` still holds), and a `heating:` block carrying a
+Sutton–Graves coefficient scale and a >86 km flux multiplier. The effective-nose-radius
+model-form alternative lives where K lives — `geometry/stagnation_gradient.py` gained
+`velocity_gradient_zoby`, Ellison's table displaced by Ellison's own published
+disagreement with Zoby & Sullivan. `propagate.py` reduces a sample to combined statistics,
+per-branch statistics, a p-box band and violation probabilities with Wilson intervals;
+`statistics.py` holds the interval maths (zero events is never zero probability);
+`attribution.py` runs Sobol' over the uncertain inputs with M4's mean-centred estimator
+(NR-16); `robust.py` runs NSGA-II on percentile objectives with chance constraints through
+the same `BudgetedEvaluator`, and then re-scores a subset of its own front under full
+independent Monte Carlo to measure the shortcut rather than assert it; `comparison.py`
+builds §39 by re-evaluating every row's design vector under one source hash and quoting
+the source run's stored value beside it; `driver.py` is the shared orchestration both
+scripts are thin wrappers over; `guards.py` adds M4-front staleness to the shared
+`optimization/guards.py`. `report.py` emits only computed sentences.

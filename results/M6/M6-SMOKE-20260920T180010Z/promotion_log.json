@@ -1,0 +1,95 @@
+{
+ "decisions": [],
+ "promotions": [
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 1,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-be5bd778ba83",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.47496_c47.6865_s0.1",
+     "point_id": "afd26daa0e5e",
+     "mach": 20.0,
+     "bluntness_ratio": 0.47496,
+     "cone_half_angle_deg": 47.6865,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 1.092594619775442,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 71.76564578998659,
+     "backend": "openfoam",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 0,
+   "surface_version_after": 1,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 302612.40476853127,
+    "peak_bondline_temperature_k": 379.1277093322037
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 302198.3556050769,
+    "peak_bondline_temperature_k": 379.0892604818565
+   }
+  },
+  {
+   "arm": "random",
+   "seed": 11,
+   "batch": 2,
+   "strategy": "random",
+   "trigger": "random",
+   "candidate_id": "C-43b7da9aabf8",
+   "scores": {},
+   "cfd": [
+    {
+     "key": "M20_b0.389829_c43.3537_s0.1",
+     "point_id": "af08b15542fa",
+     "mach": 20.0,
+     "bluntness_ratio": 0.389829,
+     "cone_half_angle_deg": 43.3537,
+     "shoulder_ratio": 0.1,
+     "usable": true,
+     "cd_fore": 0.9567314008277884,
+     "verdict": "USABLE",
+     "reasons": "",
+     "attempts": 1,
+     "wall_time_s": 135.3082791659981,
+     "backend": "openfoam",
+     "source": "run"
+    }
+   ],
+   "n_usable": 1,
+   "surface_version_before": 1,
+   "surface_version_after": 2,
+   "refitted": true,
+   "evaluation_budget_exhausted_during_reevaluation": false,
+   "before": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 419624.8096396905,
+    "peak_bondline_temperature_k": 389.71133741332187
+   },
+   "after": {
+    "status": "OK",
+    "feasible": false,
+    "peak_heat_flux_w_m2": 421607.678080776,
+    "peak_bondline_temperature_k": 389.805242973236
+   }
+  }
+ ],
+ "probes": [],
+ "skipped_upfront": []
+}

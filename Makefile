@@ -96,6 +96,69 @@ ablation-replay:
 ablation-report:
 	$(PY) scripts/run_ai_ablation.py --report-only $(RUN_ID)
 
+# Milestone M7 (configs/uncertainty.yaml). Both use the latest `doe` run's active
+# variables and REFUSE if that screening is void for the current design space.
+#   make uncertainty                 propagation + Sobol' attribution + the §39 table.
+#                                    Picks up the latest `make robust` run if there is
+#                                    one. ~15 min on six workers.
+#   make robust                      robust NSGA-II with chance constraints, plus the
+#                                    verification of its common-random-number shortcut
+#                                    against full Monte Carlo. HOURS - background it.
+#   make m7                          robust, then uncertainty, in the order the report
+#                                    needs (the §39 table's robust row comes from the
+#                                    robust run).
+#   make uncertainty-smoke           tiny N: proves the chain runs. Writes its report and
+#                                    figures INTO ITS OWN RUN DIRECTORY and publishes
+#                                    nothing. No number it produces is a result.
+#   make uncertainty-time            measure and print the per-evaluation cost only.
+#   make uncertainty-report RUN_ID=  rebuild figures and the report from a finished run.
+.PHONY: uncertainty robust m7 uncertainty-smoke uncertainty-time uncertainty-report
+uncertainty:
+	$(PY) scripts/run_uncertainty.py $(if $(DOE_RUN),--doe-run $(DOE_RUN),) \
+		$(if $(ROBUST_RUN),--robust-run $(ROBUST_RUN),)
+
+robust:
+	$(PY) scripts/run_robust_optimize.py $(if $(DOE_RUN),--doe-run $(DOE_RUN),)
+
+m7: robust uncertainty
+
+uncertainty-smoke:
+	$(PY) scripts/run_robust_optimize.py --smoke
+	$(PY) scripts/run_uncertainty.py --smoke
+
+uncertainty-time:
+	$(PY) scripts/run_uncertainty.py --time-only
+
+uncertainty-report:
+	$(PY) scripts/run_uncertainty.py --report-only $(RUN_ID)
+
+# Milestone M6 (configs/adaptive_fidelity.yaml): adaptive-fidelity optimisation, H2.
+#   make adaptive                        THE STUDY. HOURS (4-5 h, 3 serial OpenFOAM cases side
+#                                        by side) - run it in the background. REFUSES unless gate
+#                                        G4 is PASS, the design space selects cfd_surface_v1 and
+#                                        the latest DOE screening was made on it. The LLM arm
+#                                        makes live `claude -p` calls (hard-capped at 30);
+#                                        SKIP_LLM=1 drops it. REUSE_CFD="M6-AF-..." reuses the
+#                                        finished CFD cases of an aborted run.
+#   make adaptive-report RUN_ID=M6-...   rebuild figures and report only
+#   make adaptive-smoke                  1 seed, 2 REAL CFD promotions, one at a time (~10 min).
+#                                        Not a result; never published to reports/.
+#   make adaptive-dry-run                whole pipeline with a FAKE analytic F1, no OpenFOAM
+.PHONY: adaptive adaptive-report adaptive-smoke adaptive-dry-run
+adaptive:
+	$(PY) scripts/run_adaptive_fidelity.py $(if $(DOE_RUN),--doe-run $(DOE_RUN),) \
+		$(if $(SKIP_LLM),--skip-llm-arms,) $(if $(REUSE_CFD),--reuse-cfd $(REUSE_CFD),)
+
+adaptive-report:
+	$(PY) scripts/run_adaptive_fidelity.py --report-only $(RUN_ID)
+
+adaptive-smoke:
+	$(PY) scripts/run_adaptive_fidelity.py --config configs/adaptive_fidelity_smoke.yaml \
+		$(if $(REUSE_CFD),--reuse-cfd $(REUSE_CFD),)
+
+adaptive-dry-run:
+	$(PY) scripts/run_adaptive_fidelity.py --config configs/adaptive_fidelity_dryrun.yaml --fake-f1
+
 clean:
 	rm -rf results/* reports/figures/* .pytest_cache .ruff_cache
 	find . -name __pycache__ -type d -exec rm -rf {} +

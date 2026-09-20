@@ -5,6 +5,11 @@ from .exponential import (
     ExponentialFit,
     fit_exponential_to_us76,
 )
+from .perturbed import (
+    DensityMultiplierProfile,
+    PerturbedAtmosphere,
+    build_atmosphere,
+)
 from .us76 import AtmosphereState, USStandardAtmosphere1976
 
 
@@ -25,8 +30,11 @@ class AtmosphereModel(Protocol):
 __all__ = [
     "AtmosphereModel",
     "AtmosphereState",
+    "DensityMultiplierProfile",
     "ExponentialAtmosphere",
     "ExponentialFit",
+    "PerturbedAtmosphere",
     "USStandardAtmosphere1976",
+    "build_atmosphere",
     "fit_exponential_to_us76",
 ]

@@ -1,0 +1,27 @@
+AETHER M6 adaptive fidelity  run=M6-DRY-20260920T175147Z  mode=dry-run  F1=FAKE:surface x declared perturbation  mesh=coarse
+git=e0b40c0 (dirty)  source hash=b41c56b6bea6b97a  gate G4: built IN_PROGRESS, now IN_PROGRESS  allow_provisional=True
+arms=['adaptive', 'random', 'greedy', 'upfront', 'f0_only']
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg'] (DECLARED in the smoke config, not screened)
+  f0_only      seed  23: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (56 points), 110 s
+  f0_only      seed  11: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (56 points), 113 s
+  upfront      seed  11: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (64 points), 115 s
+  upfront      seed  23: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (64 points), 116 s
+  greedy       seed  11: 200/200 evaluations (9 re-evaluations, 0 probes), 6/8 CFD calls, surface v5 (62 points), 147 s
+  random       seed  23: 200/200 evaluations (20 re-evaluations, 0 probes), 8/8 CFD calls, surface v8 (64 points), 162 s
+  greedy       seed  23: 200/200 evaluations (19 re-evaluations, 0 probes), 8/8 CFD calls, surface v7 (64 points), 163 s
+  random       seed  11: 200/200 evaluations (11 re-evaluations, 0 probes), 8/8 CFD calls, surface v8 (64 points), 164 s
+  adaptive     seed  11: 200/200 evaluations (2 re-evaluations, 40 probes), 2/8 CFD calls, surface v2 (58 points), 182 s
+  adaptive     seed  23: 200/200 evaluations (3 re-evaluations, 46 probes), 3/8 CFD calls, surface v3 (59 points), 184 s
+/Users/akj/Projects/aether/src/aether/optimization/adaptive_plots.py:128: UserWarning: You passed an edgecolor/edgecolors ('white') for an unfilled marker ('x').  Matplotlib is ignoring the edgecolor in favor of the facecolor.  This behavior may change in the future.
+  ax.scatter(i + jitter, mine["cd_fore_rmse_vs_truth"], s=28, marker=style["marker"],
+
+  adaptive     truth HV 0.3101  belief 0.3097  CFD calls 2.5  (n = 2)
+  random       truth HV 0.2971  belief 0.2966  CFD calls 8.0  (n = 2)
+  greedy       truth HV 0.3056  belief 0.3055  CFD calls 7.0  (n = 2)
+  upfront      truth HV 0.3247  belief 0.3235  CFD calls 8.0  (n = 2)
+  f0_only      truth HV 0.3046  belief 0.3046  CFD calls 0.0  (n = 2)
+H2 @ 95%: NOT_SUPPORTED - 'adaptive' reached the target in 1 seeds (needs 3); no arm reached it
+DRY RUN - the 'CFD' in this run is a FORMULA (fake analytic Fidelity 1). Nothing here is a result.
+figures: ['M6_hv_vs_cfd_calls.png', 'M6_cfd_spend_map.png', 'M6_surface_error_vs_truth.png']
+report -> /Users/akj/Projects/aether/results/M6/M6-DRY-20260920T175147Z/M6_adaptive_fidelity.md
+results -> /Users/akj/Projects/aether/results/M6/M6-DRY-20260920T175147Z

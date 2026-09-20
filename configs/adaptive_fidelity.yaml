@@ -1,0 +1,233 @@
+# AETHER M6 - adaptive-fidelity optimisation (spec section 26, hypothesis H2).
+#
+# Everything the study decides is decided HERE, before the study is run: what F0 and F1 are,
+# the promotion policy's weights and gates, the comparators, both budgets, the seeds, how
+# every arm is scored, and what will count as "H2 supported". STATUS AT WRITING (2026-09-20):
+# the harness is built and smoke-tested; THE STUDY HAS NOT BEEN RUN. No number in any report
+# comes from this file yet.
+#
+# The design space, objectives and hypervolume reference/ideal points are NOT repeated: they
+# are read from `meta.design_space` (M4's file, A-OPT-4), so M6 is measured with M4's ruler.
+# The active variables are whatever the latest M4 DOE's screening.json left active, and the
+# runner REFUSES to start if that screening was made on a different model (NR-18 guard) or
+# on anything other than the CFD drag surface.
+#
+# FIDELITIES (A-AF-1)
+#   F0  evaluate_design with the arm's CURRENT GP drag surface (`cfd_surface_v1`), ~0.2 s.
+#   F1  a real OpenFOAM case for the candidate's forebody shape, through M3's design-point
+#       runner UNCHANGED (configs/cfd_design_points.yaml: shock-clearance check, first-order
+#       start, M2's force-convergence criterion, domain retry, patience pass), on the SAME
+#       MESH LEVEL as the surface it extends. Usable case -> added to the arm's training set,
+#       surface refitted, candidate re-evaluated. A case that fails the criterion is kept,
+#       logged, COSTS A CALL, and yields no training point.
+
+meta:
+  name: m6_adaptive_fidelity
+  milestone: M6
+  design_space: configs/design_space.yaml
+  design_points_config: configs/cfd_design_points.yaml
+
+adaptive_fidelity:
+  mode: study                      # 'study' publishes to reports/; anything else never does
+
+  # ---------------------------------------------------------------------------------------
+  # Gate (spec section 17). The F1 path refuses to run unless the drag surface was built
+  # under G4 = PASS AND G4 reads PASS now. `allow_provisional: true` is for smoke tests only;
+  # the runner rejects it in `mode: study`.
+  # ---------------------------------------------------------------------------------------
+  allow_provisional: false
+  require_aero_model: cfd_surface_v1      # the design space (and its DOE) must select this
+
+  initial_surface:
+    directory: data/aero/cfd_surface_v1   # every arm, every seed starts from THIS surface,
+                                          # rebuilt bit-for-bit (pinned kernel). Its M3 CFD
+                                          # points are sunk cost and charged to nobody.
+  f1:
+    mesh_level: from_surface              # new cases are run on the surface's own mesh level
+    max_concurrent_cases: 3               # serial solvers side by side (NR-08: no MPI)
+
+  # ---------------------------------------------------------------------------------------
+  # STUDY SIZE, and what it costs.
+  #   CFD calls  = 4 CFD-using arms x 5 seeds x 8 calls            = 160
+  #              + ai_adaptive      2 seeds x 8 calls              =  16   (if LLM arms run)
+  #              + hold-out cases   1 per arm                       =   6
+  #   Wall time at 3 serial cases side by side, COARSE mesh, from M3's measured case times
+  #   (results/M3/M3-DP-20260920T1610Z, 4 side by side with the M2 benchmark also running):
+  #     median 214 s per completed case          ->  166 cases: ~3.3 h   (182 cases: ~3.6 h)
+  #     304 s mean per ATTEMPT (retries, patience) -> 166 cases: ~4.7 h   (182 cases: ~5.1 h)
+  #   F0 evaluations (26 arm-seeds x 200 + 2 x 1000 reference + truth re-scoring, ~0.25 s
+  #   each on 3 workers) add roughly 15 minutes and overlap the CFD. LLM latency (2 seeds x
+  #   9 rounds) overlaps the CFD too. Cases requested by two arms are run once.
+  #   => plan for 4-5 h. `--skip-llm-arms` removes 16 calls (~25 min).
+  #   IF THE SURFACE IS REBUILT ON THE MEDIUM MESH these numbers are ~8x larger (M3: median
+  #   1630 s per medium case): cut `seeds` / `cfd_budget_calls` first, and say so.
+  #
+  #   STATISTICAL POWER. 5 seeds per arm: the exact one-sided rank test can reach p = 1/252 =
+  #   0.004, so it CAN reject - but only when the two samples barely overlap, and CFD-call
+  #   counts are small integers with many ties. A "no measured difference" from this study is
+  #   weak evidence of equivalence. 8 calls per arm is also coarse: one hull extension costs
+  #   2 of them. With 4 seeds the smallest p would be 1/70; with 3 seeds 1/20 = 0.05, i.e. the
+  #   test could never reject at alpha = 0.05 - which is why seeds were kept at 5 and the
+  #   per-arm CFD budget, not the seed count, was cut to fit the machine time.
+  # ---------------------------------------------------------------------------------------
+  seeds: [37, 41, 59, 67, 73]       # M5's five. Seed 11 is the development/smoke seed and is
+                                    # never a study seed.
+  budget_evaluations: 200           # F0 evaluations per (arm, seed); identical for every arm.
+                                    # Re-evaluations after a refit are charged to it.
+  cfd_budget_calls: 8               # F1 calls per (arm, seed); identical for every CFD arm
+  curve_step: 10
+  workers: 3                        # F0 process pool (the CFD solvers need the other cores)
+  max_parallel_arm_seeds: 32        # threads; they mostly wait for CFD
+
+  # ---------------------------------------------------------------------------------------
+  # ARMS. The search is the SAME for arms i-v (M4's NSGA-II, population scaled to the budget
+  # as M5's `nsga2_pop20`), and every arm starts each seed from the same surface and the
+  # same seeded initial population - so arms differ only in who gets CFD, and seed-wise
+  # comparisons are paired. Arms i-iii and ai_adaptive share ONE promotion mechanism (Mach
+  # rule, charging, refit, charged re-evaluation); only the choice of candidate differs.
+  # ---------------------------------------------------------------------------------------
+  arms:
+    adaptive:                       # (i)   the section-26 policy below
+      strategy: adaptive
+      search: nsga2
+      population_size: 20
+      enabled: true
+    random:                         # (ii)  a uniformly random submitted design, even schedule
+      strategy: random
+      search: nsga2
+      population_size: 20
+      enabled: true
+    greedy:                         # (iii) the believed-front member with the largest
+      strategy: greedy              #       exclusive hypervolume contribution, even schedule
+      search: nsga2
+      population_size: 20
+      enabled: true
+    upfront:                        # (iv)  whole CFD budget on a seeded space-filling design
+      strategy: upfront             #       BEFORE the search (what M3 did), then F0 only
+      search: nsga2
+      population_size: 20
+      enabled: true
+    f0_only:                        # (v)   no new CFD at all
+      strategy: none
+      search: nsga2
+      population_size: 20
+      cfd_budget: 0
+      enabled: true
+    ai_adaptive:                    # spec section 46 "AI + adaptive fidelity". The LLM agent
+      strategy: adaptive            # of M5 is the search; its `requested_fidelity` is ONE
+      search: ai_agent              # INPUT of the same policy, capped by the same CFD budget.
+      enabled: true                 # EXPLORATORY: 2 seeds, a different search from arms i-v,
+      seeds: [37, 41]               # excluded from the H2 criterion. Needs live LLM calls
+      n_initial_per_variable: 5     # (`claude -p`, no API key) - `--skip-llm-arms` drops it.
+      rounds: 9
+      max_proposals_per_call: 30
+      tables: {front: 12, near_feasible: 8, recent: 20, failures: 8}
+
+  llm:                              # as M5 (configs/ai_ablation.yaml)
+    model: claude-sonnet-5
+    max_llm_calls: 12               # HARD cap per (arm, seed)
+    max_llm_calls_study: 30         # HARD cap for the whole run
+    timeout_s: 1500
+    concurrency: 2
+
+  # ---------------------------------------------------------------------------------------
+  # THE PROMOTION POLICY (spec section 26). Scores, per shortlisted candidate:
+  #   value        P(feasible AND non-dominated vs the arm's believed front) under the
+  #                surface's error bar, pushed through evaluate_design at z_gp = -1, +1
+  #   uncertainty  objective half-range over z_gp = -1..+1, normalised by the HV rectangle
+  #   novelty      unit-shape-space distance to the nearest CFD training shape; 1 outside hull
+  #   cost         calls needed / CFD calls remaining
+  # score = w.value*value + w.uncertainty*min(unc/scale,1) + w.novelty*min(nov/scale,1)
+  #         + w.agent_request*[agent asked for fidelity 1] - w.cost*cost
+  # PROMOTE iff (value >= gate OR agent asked) AND (outside hull OR unc >= gate OR
+  # nov >= gate) AND affordable AND score >= min_score.
+  #
+  # HOW THE NUMBERS WERE SET. A priori, from M3's measurements, before any M6 run: the
+  # uncertainty scale and gate are the order of magnitude of what +-1 sigma of the M3 surface
+  # does to the objectives inside the hull (M3 report section 10: z_gp = +-2 moves the
+  # bondline by ~0.4 K of a 150 K axis and max g by ~0.8%); the novelty scale is a few times
+  # the typical spacing of M3's 56 training shapes. They were then CHECKED, not tuned, in dry
+  # runs on the development seeds (11, 23) against the PROVISIONAL surface with a FAKE analytic
+  # F1 (results/M6/_dev/, no study seed, no real CFD): the probed in-hull objective
+  # uncertainty had median 0.0012 and maximum 0.0053, so the 0.002 gate separates the upper
+  # quartile, and all three verdicts ("clearly poor", "already confident", "promote")
+  # occurred. No number was changed after those runs. They must not be changed after the
+  # study has been seen.
+  # ---------------------------------------------------------------------------------------
+  policy:
+    weights: {value: 1.0, uncertainty: 0.5, novelty: 0.5, agent_request: 0.25, cost: 0.5}
+    scales: {uncertainty: 0.01, novelty: 0.15}
+    gates:
+      min_p_nondominated: 0.20          # below this a candidate is "clearly poor": stays F0
+      min_objective_uncertainty: 0.002  # normalised objective units
+      min_novelty: 0.08                 # unit shape space
+    min_score: 0.60
+    max_promotions_per_batch: 2
+    max_front_reevaluations: 8          # believed-front members refreshed after a refit
+    min_training_separation: 0.02       # unit 4-D; a CFD case this close to a training point
+                                        # teaches nothing and makes the GP overconfident (NR-22)
+    spend_by_fraction: 0.8              # scheduled comparators spread their budget evenly
+                                        # over the first 80% of the planned batches
+    prescreen:                          # who gets probed (probes are capped, A-AF-5)
+      max_candidates: 4                 # per batch
+      max_outside_hull: 2               # of those
+      max_epsilon_to_front: 0.05        # normalised distance to the believed front
+      max_constraint_violation: 0.05    # normalised margin deficit
+      recent_hull_rejected: 20
+    exploration:                        # section 26: "unless needed for exploration"
+      after_idle_batches: 3
+      max_calls: 2
+    mach_rule:
+      # Inside the hull a promotion is ONE case, at the node where weight x sigma is largest.
+      # Weights are the baseline capsule's heat-load share by Mach band (M3 report section 7:
+      # >=20: 55%, 10-20: 40%, 6-10: 3.7%, 3-6: 1.1%), assigned to the node that represents
+      # the band. Outside the hull a promotion is TWO cases: Mach max and Mach min of the
+      # surface - the only way a new shape enters the 4-D hull the evaluator checks.
+      nodes: [20.0, 12.0, 6.0, 3.0]
+      weights: [0.55, 0.40, 0.037, 0.011]
+    upfront:
+      max_draws: 512
+
+  # ---------------------------------------------------------------------------------------
+  # SCORING - on pooled truth, never on an arm's own surface (src/.../adaptive_analysis.py).
+  # ---------------------------------------------------------------------------------------
+  reference:                        # a large-budget NSGA-II ON THE TRUTH SURFACE, so the
+    seeds: [101, 103]               # reference front does not depend on the arms' coverage
+    budget_evaluations: 1000
+    population_size: 40
+  holdout:
+    cases_per_arm: 1                # CFD cases NO surface is fitted to: measures how wrong
+                                    # "truth" is where each arm makes its claims. Charged to
+                                    # nobody; adds ~6 cases of machine time.
+  analysis:
+    max_probe_shapes: 40
+
+  # ---------------------------------------------------------------------------------------
+  # PRE-DECLARED SUCCESS CRITERION FOR H2. Written before any arm ran.
+  #   reference     hypervolume, under POOLED TRUTH, of every truly feasible design of every
+  #                 arm and seed plus the reference search.
+  #   an arm's HV   truth hypervolume of its RECOMMENDED set (the designs it believes are
+  #                 feasible and non-dominated); false claims are dropped.
+  #   target        `target_fraction_of_reference_hv` of the reference.
+  #   an arm's cost CFD calls it had been charged when its HV first reached the target (on
+  #                 the curve, every `curve_step` evaluations); never reaching it within the
+  #                 200 evaluations is censored at cfd_budget + 1.
+  #   "H2 SUPPORTED" iff ALL of:
+  #       - the no-CFD arm does NOT reach the target in >= min_seeds_reaching seeds
+  #         (otherwise CFD calls cannot be saved: verdict NOT_TESTABLE at this target);
+  #       - `adaptive` reaches it in >= min_seeds_reaching seeds;
+  #       - its median (censored) cost is below that of the BEST non-adaptive CFD arm
+  #         (lowest median, then lowest mean), AND the exact one-sided permutation rank
+  #         test against that arm gives p < alpha.
+  #   "CONTRADICTED" is the mirror image; anything else is "NO_MEASURED_DIFFERENCE" or
+  #   "NOT_SUPPORTED" (adaptive did not reach the target). The sensitivity fractions are
+  #   reported beside the primary one and are NOT the criterion.
+  # ---------------------------------------------------------------------------------------
+  success_criteria:
+    subject: adaptive
+    comparators: [random, greedy, upfront]
+    no_cfd_arm: f0_only
+    target_fraction_of_reference_hv: 0.95
+    sensitivity_fractions: [0.90, 0.98]
+    min_seeds_reaching: 3
+    alpha: 0.05

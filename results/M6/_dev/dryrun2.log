@@ -1,0 +1,43 @@
+AETHER M6 adaptive fidelity  run=M6-DRY-20260920T174923Z  mode=dry-run  F1=FAKE:surface x declared perturbation  mesh=coarse
+git=e0b40c0 (dirty)  source hash=1eb2c049403a3564  gate G4: built IN_PROGRESS, now IN_PROGRESS  allow_provisional=True
+arms=['adaptive', 'random', 'greedy', 'upfront', 'f0_only']
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg'] (DECLARED in the smoke config, not screened)
+  f0_only      seed  23: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (56 points), 78 s
+  f0_only      seed  11: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (56 points), 81 s
+  upfront      seed  11: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (64 points), 82 s
+  upfront      seed  23: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (64 points), 83 s
+  greedy       seed  11: 200/200 evaluations (9 re-evaluations, 0 probes), 6/8 CFD calls, surface v5 (62 points), 102 s
+  random       seed  23: 200/200 evaluations (20 re-evaluations, 0 probes), 8/8 CFD calls, surface v8 (64 points), 109 s
+Traceback (most recent call last):
+  File "/Users/akj/Projects/aether/scripts/run_adaptive_fidelity.py", line 290, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/akj/Projects/aether/scripts/run_adaptive_fidelity.py", line 241, in main
+    counters = run_arms(ctx, arms)
+               ^^^^^^^^^^^^^^^^^^^
+  File "/Users/akj/Projects/aether/src/aether/optimization/adaptive_study.py", line 152, in run_arms
+    done = [f.result() for f in futures]
+            ^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/akj/Projects/aether/src/aether/optimization/adaptive_study.py", line 126, in run_arm_seed
+    run_nsga2(evaluator, settings, ctx.objectives, ctx.hv_cfg)
+  File "/Users/akj/Projects/aether/src/aether/optimization/optimizers.py", line 93, in run_nsga2
+    rows = _unit_evaluate(evaluator, pop.get("X"), generation=generation,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/akj/Projects/aether/src/aether/optimization/optimizers.py", line 45, in _unit_evaluate
+    return evaluator.evaluate(evaluator.space.from_unit(np.clip(unit_x, 0.0, 1.0)), **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/akj/Projects/aether/src/aether/optimization/adaptive.py", line 614, in evaluate
+    self.store.append(rows)
+  File "/Users/akj/Projects/aether/src/aether/optimization/guards.py", line 114, in append
+    self.after_append("after a batch was logged")
+  File "/Users/akj/Projects/aether/src/aether/optimization/guards.py", line 99, in check
+    raise SourceChanged(message)
+src.aether.optimization.guards.SourceChanged: ABORTED after a batch was logged: aether changed while the study was running (hash 1eb2c049403a3564 at launch, 244f08b7394011a8 now). Worker processes may already hold either version, so this run's candidates are not one experiment. Do not analyse this directory. See NR-18.

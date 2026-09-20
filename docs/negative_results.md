@@ -781,3 +781,65 @@ mistake into a visible flag instead of a quietly extrapolated number.
 
 **Evidence.** `results/M3/M3-DP-20260920T1610Z/coupled/constant_vs_surface.csv`
 (`aero_shape_extrapolated`), `configs/cfd_design_points.yaml` → `design.late_anchors`.
+
+---
+
+### NR-23 — Buying one CFD point made evaluable designs "extrapolations": the hull guard depended on the triangulation
+
+**What happened.** First M6 dry run (fake analytic F1, development seed, `results/M6/M6-DRY-20260920T174426Z`,
+aborted by the source guard and not analysed beyond this). After an arm absorbed ONE new training
+point, 6 of its next 20 designs came back `aero surface extrapolation: 47 of 48 query points lie
+outside the convex hull` — while the arm that bought nothing had 0 such rejections in 100
+evaluations. A convex hull cannot shrink when a point is added.
+
+**Isolation.** The rejected designs all had `shoulder_ratio` frozen at its reference 0.10, which
+is also the top of the surface's input range. `DesignSpace` writes the ratio as a length
+(0.10 × D) and `shape_of` divides it back: 0.10000000000000002, i.e. a unit coordinate of
+1 + 2.2e-16 — exactly ON a hull facet. `TrainingHull.contains` called `Delaunay.find_simplex` with
+Qhull's default tolerance, under which a point 2e-16 outside a facet is inside for one
+triangulation and outside for another. Same 48 query points, same design: 48/48 inside the
+56-point hull, 1/48 inside the 57-point hull; 48/48 inside both with an explicit tolerance of
+1e-12 or larger.
+
+**Why it matters.** This is M3's extrapolation guard (A-AERO-1), not M6 code: whether a design with
+a variable at a box edge was evaluable under `cfd_surface_v1` was decided by triangulation luck.
+In M6 it would have been a metric-gaming route in reverse — promotion PUNISHED by phantom hull
+rejections — and would have biased the study against every arm that buys CFD.
+
+**Fix.** `TrainingHull.contains` passes an explicit `tol = 1e-9` (unit-cube edge lengths;
+`surrogate/gp.py: HULL_TOLERANCE`). Physically nothing; makes membership of boundary points
+independent of the triangulation. Regression test:
+`test_hull_membership_of_a_boundary_design_does_not_depend_on_the_triangulation`. M3's persisted
+surface and its hash are untouched (the hull is rebuilt from the training table on load); a
+design that M3/G5 reported as inside stays inside.
+
+**Evidence.** `results/M6/M6-DRY-20260920T174426Z/candidates.csv` (`hull_rejected`,
+`surface_version`), `surfaces/adaptive/seed_11/v000|v001`.
+
+---
+
+### NR-24 — The source guard aborted two M6 development runs, correctly, because of someone else's edits
+
+**What happened.** While M6 was being built, a second work-stream (M7) was editing
+`src/aether/uncertainty/` and, early on, `evaluate.py`. The NR-18 source guard — now shared by the
+M5 and M6 runners (`optimization/guards.py`) — aborted two M6 dry runs (`M6-DRY-20260920T174426Z` after scoring, `M6-DRY-20260920T174923Z`
+mid-run) with `ABORTED.md`. Neither was analysed, except that the first exposed NR-23.
+
+**What it showed.** (1) The guard works on a runner it was not written for. (2) A whole-tree hash
+makes it impossible to smoke-test one milestone while another is being written. (3) A 4-hour CFD
+study that the guard kills at hour 3 would lose three hours of solver time.
+
+**What changed.** (1) `SourceGuard(exclude=…)`: top-level sub-packages can be left out of the hash,
+and `check()` then also refuses to continue if any excluded sub-package has been IMPORTED into the
+process — the exclusion cannot hide a real dependency. Used by the smoke and dry-run overlays for
+`uncertainty` only; **rejected in `mode: study`**, which is guarded on the whole tree. (2) CFD cases
+are written to `cfd_cases.csv` as they finish, and `--reuse-cfd RUN_ID` / `make adaptive
+REUSE_CFD=…` lets a re-launched study reuse them (same backend, mesh level and CFD configs only;
+every arm is still charged). **The study should be launched when no other work-stream is editing
+`src/aether`.**
+
+**Also recorded.** The first real smoke test (`M6-SMOKE-20260920T175847Z`) spent 0 of its 2 CFD
+calls: it used the greedy arm, which promotes only believed-feasible designs, and this problem
+shows none in its first ~60 evaluations. Not a bug — greedy cannot act before something is
+feasible — but a smoke test that exercises nothing is not a smoke test; the overlay now uses the
+random arm.

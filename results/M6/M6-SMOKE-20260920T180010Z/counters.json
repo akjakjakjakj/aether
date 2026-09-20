@@ -1,0 +1,66 @@
+{
+ "random|11": {
+  "arm": "random",
+  "seed": 11,
+  "wall_s": 214.51431962501374,
+  "evaluations_used": 40,
+  "n_probes": 0,
+  "n_reevaluations": 2,
+  "n_cache_hits": 0,
+  "cfd_budget": 2,
+  "cfd_calls": 2,
+  "n_repeat_requests": 0,
+  "surface_version": 2,
+  "surface_history": [
+   {
+    "arm": "random",
+    "seed": 11,
+    "version": 0,
+    "n_train": 56,
+    "training_hash": "fb657af4a92b40c7",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-SMOKE-20260920T180010Z/surfaces/random/seed_11/v000"
+   },
+   {
+    "arm": "random",
+    "seed": 11,
+    "version": 1,
+    "n_train": 57,
+    "training_hash": "3b695769d0750b4f",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-SMOKE-20260920T180010Z/surfaces/random/seed_11/v001"
+   },
+   {
+    "arm": "random",
+    "seed": 11,
+    "version": 2,
+    "n_train": 58,
+    "training_hash": "38b9bca4b84e16a1",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-SMOKE-20260920T180010Z/surfaces/random/seed_11/v002"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "f0_only|11": {
+  "arm": "f0_only",
+  "seed": 11,
+  "wall_s": 6.46747091600264,
+  "evaluations_used": 40,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 0,
+  "cfd_calls": 0,
+  "n_repeat_requests": 0,
+  "surface_version": 0,
+  "surface_history": [
+   {
+    "arm": "f0_only",
+    "seed": 11,
+    "version": 0,
+    "n_train": 56,
+    "training_hash": "fb657af4a92b40c7",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-SMOKE-20260920T180010Z/surfaces/f0_only/seed_11/v000"
+   }
+  ],
+  "llm_calls": 0
+ }
+}

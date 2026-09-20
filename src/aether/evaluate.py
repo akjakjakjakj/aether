@@ -16,9 +16,9 @@ from typing import Any
 import numpy as np
 
 from .aerodynamics import build_cd_model
-from .atmosphere import USStandardAtmosphere1976
+from .atmosphere import build_atmosphere
 from .geometry import CAP_RADIUS, CapsuleGeometry
-from .heating import heat_flux_history
+from .heating import SUTTON_GRAVES_K_EARTH, heat_flux_history
 from .scoring import PerformanceVector, compute_metrics
 from .tps import Layer, TPSStack, solve_tps
 from .trajectory import EntryState, VehicleAero, integrate_entry
@@ -130,6 +130,38 @@ def _diagnostics(traj, q: np.ndarray, tps_res) -> dict[str, float]:
     }
 
 
+def _heating_terms(cfg: dict[str, Any] | None) -> tuple[float, float, float]:
+    """(Sutton-Graves coefficient, >86 km flux multiplier, threshold) from `heating:`.
+
+    Both perturbations default to identity, so a config without a `heating:` block - i.e.
+    every config written before M7 - produces exactly the pre-M7 heat-flux history.
+
+    `sutton_graves_coefficient_scale`
+        Multiplies the correlation constant. The primary's own average correlation error
+        for air is 3.3% (max 9.8%), so the project treats the correlation as +-4% AT BEST
+        and M7 samples this rather than assuming it away (A-HEAT-1, NR-12).
+    `high_altitude_flux_multiplier` / `high_altitude_threshold_m`
+        Multiplies the heat flux computed ABOVE the threshold only. NR-14 measured that
+        5-20% of a feasible design's integrated heat load - and therefore its bondline
+        temperature - accrues above 86 km, where the atmosphere is a log-interpolated
+        transcribed table (A-ATM-2, gate G1A' LIMITED) and where the flow is transitional
+        to rarefied, which a continuum stagnation-heating correlation does not describe.
+        This term is EPISTEMIC: it is a statement about how wrong the model may be there,
+        not about how the air varies. It multiplies the FLUX and not the density, so it
+        does not perturb drag in that band; the density-dispersion input does that, and
+        the two are separate questions (A-UQ-HI86-1).
+    """
+    cfg = cfg or {}
+    scale = float(cfg.get("sutton_graves_coefficient_scale", 1.0))
+    if not scale > 0.0:
+        raise ValueError("heating.sutton_graves_coefficient_scale must be positive")
+    multiplier = float(cfg.get("high_altitude_flux_multiplier", 1.0))
+    if not multiplier >= 0.0:
+        raise ValueError("heating.high_altitude_flux_multiplier must be non-negative")
+    threshold = float(cfg.get("high_altitude_threshold_m", _USSA76_EXACT_CEILING_M))
+    return SUTTON_GRAVES_K_EARTH * scale, multiplier, threshold
+
+
 def _build_stack(cfg: dict[str, Any]) -> TPSStack:
     layers = [
         Layer(
@@ -236,7 +268,7 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
         flight_path_angle_rad=np.radians(float(ent["flight_path_angle_deg"])),
     )
 
-    atm = USStandardAtmosphere1976(warn_above_86km=False)
+    atm = build_atmosphere(config.get("atmosphere"))
     traj = integrate_entry(
         initial, vehicle,
         terminal_altitude_m=float(num.get("terminal_altitude_m", 20_000.0)),
@@ -248,7 +280,10 @@ def evaluate_design(config: dict[str, Any], design_id: str | None = None) -> Des
         cd_model=cd_model,
     )
 
-    q = heat_flux_history(traj, effective_nose_radius)
+    sg_coefficient, hi_multiplier, hi_threshold = _heating_terms(config.get("heating"))
+    q = heat_flux_history(traj, effective_nose_radius, sg_coefficient)
+    if hi_multiplier != 1.0:
+        q = np.where(traj.altitude_m > hi_threshold, q * hi_multiplier, q)
 
     # ---- post-entry soak-out --------------------------------------------------------
     # The bondline peak LAGS the heat pulse. Heat already inside the TPS keeps diffusing

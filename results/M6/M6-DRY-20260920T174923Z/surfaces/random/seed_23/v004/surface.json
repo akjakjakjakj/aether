@@ -1,0 +1,61 @@
+{
+  "model": "cfd_surface_v1",
+  "gate_G4_status_at_build": "IN_PROGRESS",
+  "gate_G4_status_read_at_build": {
+    "status": "IN_PROGRESS",
+    "source": "results/M2/M2-20260920T123901Z/gate_assessment.json"
+  },
+  "provisional": true,
+  "source_run": "M3-DP-20260920T1610Z",
+  "mesh_level": "coarse",
+  "seed": 20260920,
+  "input_ranges": {
+    "mach": [
+      3.0,
+      20.0
+    ],
+    "bluntness_ratio": [
+      0.25,
+      1.35
+    ],
+    "cone_half_angle_deg": [
+      20.0,
+      70.0
+    ],
+    "shoulder_ratio": [
+      0.02,
+      0.1
+    ]
+  },
+  "gas_model": "calorically perfect, gamma = 1.4, inviscid, alpha = 0 (A-CFD-1..3)",
+  "model_form_rel_halfband": 0.05,
+  "base_drag": {
+    "gamma": 1.4,
+    "mach_lo": 6.0,
+    "mach_hi": 10.0,
+    "beta_nominal_lo_mach": 0.5,
+    "beta_nominal_hi_mach": 1.0,
+    "beta_max_lo_mach": 1.0,
+    "beta_max_hi_mach": 3.0,
+    "beta_min": 0.0,
+    "base_area_ratio": 1.0,
+    "source_of_band": "exact vacuum limit; NASA TN D-4800 fig. 11(b) read by eye for beta_max"
+  },
+  "sigma_inflation": 1.6536632469386736,
+  "sigma_inflation_basis": "k-fold z-score std over all usable points",
+  "adaptive_arm": "random",
+  "adaptive_seed": 23,
+  "adaptive_version": 4,
+  "adaptive_base_hash": "fb657af4a92b40c7",
+  "n_promotion_points": 4,
+  "kernel_theta": [
+    1.999554585047035,
+    2.053886004425538,
+    0.15650353988452465,
+    0.01771671189899628,
+    2.4796827751626163,
+    -7.521062951560325
+  ],
+  "training_hash": "381fdadbbfd6cf26",
+  "n_train": 60
+}

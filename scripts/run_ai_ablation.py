@@ -37,7 +37,6 @@ import argparse
 import json
 import os
 import sys
-import threading
 import time
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from dataclasses import replace
@@ -56,7 +55,6 @@ sys.path.insert(0, str(ROOT))
 
 from src.aether.optimization import (  # noqa: E402
     BudgetedEvaluator,
-    CandidateStore,
     feasible_front,
     hypervolume_curve,
     load_candidates,
@@ -66,14 +64,11 @@ from src.aether.optimization import (  # noqa: E402
 )
 from src.aether.optimization.ablation import (  # noqa: E402
     LLM_KINDS,
-    SourceChanged,
     evaluate_success_criteria,
     gaming_audit,
     method_table,
     score_agent,
     score_prediction_log,
-    screening_is_current,
-    source_tree_hash,
     static_surrogate_validation,
 )
 from src.aether.optimization.ablation_plots import plot_ablation_figures  # noqa: E402
@@ -88,6 +83,13 @@ from src.aether.optimization.ai_agent import (  # noqa: E402
 from src.aether.optimization.bayes import run_bo_parego  # noqa: E402
 from src.aether.optimization.design_space import DesignSpace  # noqa: E402
 from src.aether.optimization.fidelity import PromotionPolicy  # noqa: E402
+from src.aether.optimization.guards import (  # noqa: E402
+    GuardedStore,
+    SourceGuard,
+    StaleScreening,
+    latest_run,
+    load_current_screening,
+)
 from src.aether.utils.run import (  # noqa: E402
     RunMeta,
     config_hash,
@@ -97,26 +99,11 @@ from src.aether.utils.run import (  # noqa: E402
 )
 
 
-class _LockedStore(CandidateStore):
-    """The LLM seeds run in threads; the append-only log gets one writer at a time."""
-
-    def __init__(self, csv_path):
-        super().__init__(csv_path)
-        self._lock = threading.Lock()
-        self.after_append = None     # set to the source-hash guard once the run has started
-
-    def append(self, rows):
-        with self._lock:
-            super().append(rows)     # what was paid for is logged first, THEN the guard
-        if self.after_append is not None:
-            self.after_append("after a batch was logged")
-
-
 def _latest(results: Path, pattern: str, marker: str) -> Path:
-    runs = sorted(p for p in results.glob(pattern) if (p / marker).exists())
-    if not runs:
-        raise SystemExit(f"no run matching {pattern} with a {marker} under {results}")
-    return runs[-1]
+    try:
+        return latest_run(results, pattern, marker)
+    except FileNotFoundError as exc:
+        raise SystemExit(str(exc)) from exc
 
 
 def _m4_reference(m4_results: Path, objectives, hv_cfg, budget: int, seeds) -> dict:
@@ -247,16 +234,11 @@ def main() -> int:
         study = load_config(ROOT / abl_cfg["meta"]["design_space"])
         doe_dir = (ROOT / "results" / "M4" / args.doe_run if args.doe_run
                    else _latest(ROOT / "results" / "M4", "M4-DOE-*", "screening.json"))
-        screening = json.loads((doe_dir / "screening.json").read_text())
         full_space = DesignSpace.from_config(study, ROOT)
-        doe_snapshot = yaml.safe_load((doe_dir / "config_snapshot.yaml").read_text())["config"]
-        stale = screening_is_current(doe_snapshot, study, full_space.base_config)
-        if stale:
-            raise SystemExit(
-                f"REFUSING TO RUN: the screening of DOE run {doe_dir.name} is void for the "
-                "current design space:\n  - " + "\n  - ".join(stale) + "\nThe active-variable "
-                "list is a property of the model it was screened on. Re-run `make doe` (and "
-                "`make optimize`) first, or pin a current DOE run with DOE_RUN=...")
+        try:
+            screening = load_current_screening(doe_dir, study, full_space.base_config)
+        except StaleScreening as exc:
+            raise SystemExit(str(exc)) from exc
         # the ONLY source of the active-variable list: whatever the screening activated
         space = full_space.with_active(screening["active"])
     objectives = tuple(study["objectives"])
@@ -279,7 +261,7 @@ def main() -> int:
                        notes=(f"M5 replay of {args.replay}" if args.replay
                               else "M5 AI ablation, live LLM calls"))
         snapshot_config(snapshot, out_dir, meta)
-        store = _LockedStore(out_dir / "candidates.csv")
+        store = GuardedStore(out_dir / "candidates.csv")
         workers = int(args.workers or abl["workers"])
         llm = abl["llm"]
         study_calls = CallBudget(int(llm["max_llm_calls_study"]))
@@ -288,20 +270,9 @@ def main() -> int:
               f"  git={meta.git_commit}{' (dirty)' if meta.git_dirty else ''}  "
               f"workers={workers}\nactive variables: {list(space.active)}", flush=True)
 
-        source_hash = source_tree_hash(ROOT / "src" / "aether")
+        guard = SourceGuard(ROOT / "src" / "aether", out_dir)
+        source_hash, check_source = guard.hash_at_launch, guard.check
         print(f"evaluator source hash at launch: {source_hash}", flush=True)
-
-        def check_source(where: str) -> None:
-            now = source_tree_hash(ROOT / "src" / "aether")
-            if now == source_hash:
-                return
-            message = (f"ABORTED {where}: src/aether changed while the study was running "
-                       f"(hash {source_hash} at launch, {now} now). Worker processes may "
-                       "already hold either version, so this run's candidates are not one "
-                       "experiment. Do not analyse this directory. See NR-18.")
-            (out_dir / "ABORTED.md").write_text("# ABORTED RUN - DO NOT ANALYSE\n\n"
-                                                + message + "\n")
-            raise SourceChanged(message)
 
         store.after_append = check_source   # every batch, so a 45-minute LLM seed is covered
 

@@ -22,10 +22,8 @@ Five seeds per method is a small sample, so no normality is assumed anywhere:
 
 from __future__ import annotations
 
-import hashlib
 import math
 from itertools import combinations, product
-from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -38,45 +36,14 @@ from ..surrogate.validation import holdout_validation, regression_metrics
 from .analysis import feasible_front, hypervolume_curve
 from .budget import MARGIN_NAMES
 from .design_space import DesignSpace
+from .guards import (  # noqa: F401  (moved to guards.py at M6; old import path kept)
+    SourceChanged,
+    screening_is_current,
+    source_tree_hash,
+)
 from .pareto import normalise, spacing_metric
 
 LLM_KINDS = ("ai_agent", "ai_adaptive")
-
-
-class SourceChanged(RuntimeError):
-    """The evaluator's source tree changed while a study was running (NR-18)."""
-
-
-def source_tree_hash(package_dir: Path) -> str:
-    """SHA-256 over every .py file under `package_dir` (relative path + bytes, sorted).
-
-    A study's candidates are only comparable if one evaluator produced all of them. Worker
-    processes import the package when they are spawned, so an edit to the source during a
-    long run silently splits the candidate log between two physics models. The runner
-    records this hash at launch and refuses to continue when it changes.
-    """
-    digest = hashlib.sha256()
-    for path in sorted(Path(package_dir).rglob("*.py")):
-        digest.update(str(path.relative_to(package_dir)).encode())
-        digest.update(path.read_bytes())
-    return digest.hexdigest()[:16]
-
-
-def screening_is_current(doe_snapshot: dict[str, Any], study: dict[str, Any],
-                         base_config: dict[str, Any]) -> list[str]:
-    """Reasons the DOE screening no longer applies to today's design space ([] == current).
-
-    The active-variable list is only valid for the model and ranges it was screened on: a
-    physics default that makes a frozen variable matter voids it.
-    """
-    reasons = []
-    old = doe_snapshot["study"]
-    for key in ("variables", "base_overrides", "objectives"):
-        if old.get(key) != study.get(key):
-            reasons.append(f"`{key}` in the design-space config differs from the DOE run's")
-    if doe_snapshot["base"] != base_config:
-        reasons.append("the base evaluator config (after overrides) differs from the DOE run's")
-    return reasons
 
 
 # ---------------------------------------------------------------------------------------
