@@ -1,0 +1,24 @@
+# AETHER Phase F - baseline parametric capsule definition.
+#
+# A moderate sphere-cone-torus forebody: the fore cone has a real, non-negligible
+# length (not the near-zero-length pure-spherical-segment limiting case), the
+# shoulder is a normal rounded corner, and the afterbody converges to a smaller flat
+# base - the general case every one of CapsuleGeometry's segments actually exercises.
+# Loosely paired with the nose_radius_m/diameter_m already used as ENGINEERING
+# PLACEHOLDERS in configs/baseline.yaml's vehicle.geometry block (same order of
+# magnitude), extended with the shoulder/cone/length parameters that block does not
+# carry. Not derived from any flown vehicle - see ASSUMPTIONS.md A-GEO-7.
+
+meta:
+  name: baseline
+  description: >
+    Moderate sphere-cone-torus capsule forebody, general (non-degenerate) case of
+    every meridian segment in CapsuleGeometry.
+
+geometry:
+  nose_radius_m: 0.60
+  diameter_m: 1.20
+  shoulder_radius_m: 0.12
+  cone_half_angle_deg: 25.0
+  aft_cone_angle_deg: 20.0
+  length_m: 1.05

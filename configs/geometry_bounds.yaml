@@ -1,0 +1,42 @@
+# CapsuleGeometry validity bounds - ENGINEERING design-space choices, not pure math
+# constraints. Pure geometric feasibility (tangency, positive lengths, the shoulder
+# fitting inside the vehicle radius, etc.) is hard-coded in
+# CapsuleGeometry.validate() because it is geometry, not a judgment call.
+#
+# These ranges are ENGINEERING PLACEHOLDERS reflecting the order-of-magnitude design
+# space for a sub-scale-to-crewed blunt sphere-cone-torus Earth-entry capsule
+# (informed by the general shape of flown vehicles in this class - Apollo/Orion-like
+# near-pure-spherical forebodies through Viking/Pathfinder-like 70-degree sphere-cone
+# aeroshells) and are NOT sourced from a specific design standard. See ASSUMPTIONS.md
+# A-GEO-7. A null bound is SKIPPED by CapsuleGeometry._check_bounds, never treated as
+# satisfied - the same convention as `limits:` in configs/baseline.yaml.
+
+nose_radius_m:
+  min: 0.05
+  max: 5.0
+
+diameter_m:
+  min: 0.2
+  max: 6.0
+
+shoulder_radius_m:
+  min: 0.005
+  max: null  # upper bound is implied by shoulder_radius_m <= diameter_m/2 (geometric, always checked)
+
+cone_half_angle_deg:
+  min: 0.5   # strictly > 0 required by the geometry itself; this margin keeps the
+             # fore-cone construction well away from its own division-by-zero
+  max: 70.0  # beyond this the "cone" is closer to a disk than a forebody
+
+aft_cone_angle_deg:
+  min: 0.0   # 0 = cylindrical afterbody, explicitly allowed
+  max: 70.0
+
+length_m:
+  min: 0.2
+  max: 8.0
+
+# length_m / diameter_m, checked separately from the per-field bounds above.
+fineness_ratio:
+  min: 0.3
+  max: 3.0
