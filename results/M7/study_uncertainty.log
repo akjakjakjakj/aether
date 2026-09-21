@@ -1,0 +1,28 @@
+AETHER M7 uncertainty  run=M7-UQ-20260920T233048Z  git=79f9a9e (dirty)  workers=4
+evaluator source hash at launch: c0a44bb0c14acd88
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg']
+uncertain inputs: ['atmospheric_density', 'vehicle_mass', 'entry_flight_path_angle', 'effective_nose_radius_model', 'sutton_graves_coefficient', 'high_altitude_heating_model', 'tps_conductivity', 'tps_specific_heat', 'cd_surrogate_gp', 'cd_discretisation', 'cd_perfect_gas_model_form', 'cd_base_drag']
+  aleatory : ['atmospheric_density', 'vehicle_mass', 'entry_flight_path_angle']
+  epistemic: ['effective_nose_radius_model', 'sutton_graves_coefficient', 'high_altitude_heating_model', 'tps_conductivity', 'tps_specific_heat', 'cd_surrogate_gp', 'cd_discretisation', 'cd_perfect_gas_model_form', 'cd_base_drag']
+  SKIPPED cd_fidelity0_judgment: needs vehicle.aero.model == 'constant', but the base config uses 'cfd_surface_v2'
+measured 0.1880 s per evaluation (single process)
+projected: 21,168 evaluations, ~20.7 min at 17.0 eval/s
+  propagation: 4 designs x 3000 draws (946 s)
+  attribution: ['baseline', 'joint_knee'] (1462 s)
+
+  baseline           peak_heat_flux_w_m2            mean 1.868e+06  p95 1.952e+06  sd_a 2.015e+04 / sd_e 4.696e+04
+  baseline           peak_bondline_temperature_k    mean 503.4  p95 523.1  sd_a 1.584 / sd_e 13.95
+  baseline           P(any constraint violated): 100.00% [99.87, 100.00] at 95% confidence (3000 of 3000)
+  peak_flux_only     peak_heat_flux_w_m2            mean 2.195e+05  p95 2.352e+05  sd_a 2828 / sd_e 9705
+  peak_flux_only     peak_bondline_temperature_k    mean 415.1  p95 426.2  sd_a 1.313 / sd_e 7.679
+  peak_flux_only     P(any constraint violated): 34.40% [32.72, 36.12] at 95% confidence (1032 of 3000)
+  joint_knee         peak_heat_flux_w_m2            mean 2.4e+05  p95 2.571e+05  sd_a 2889 / sd_e 1.063e+04
+  joint_knee         peak_bondline_temperature_k    mean 400.8  p95 410.4  sd_a 1.01 / sd_e 6.521
+  joint_knee         P(any constraint violated): 29.60% [27.99, 31.26] at 95% confidence (888 of 3000)
+  bondline_only      peak_heat_flux_w_m2            mean 2.662e+05  p95 2.85e+05  sd_a 2996 / sd_e 1.179e+04
+  bondline_only      peak_bondline_temperature_k    mean 389.5  p95 398  sd_a 0.8056 / sd_e 5.7
+  bondline_only      P(any constraint violated): 46.60% [44.82, 48.39] at 95% confidence (1398 of 3000)
+
+figures: ['M7_input_inventory.png', 'M7_output_distributions.png', 'M7_pbox.png', 'M7_convergence.png', 'M7_attribution.png', 'M7_robust_vs_nominal.png', 'M7_shortcut_verification.png']
+report -> /Users/akj/Projects/aether/reports/milestones/M7_uncertainty_robust.md
+results -> /Users/akj/Projects/aether/results/M7/M7-UQ-20260920T233048Z

@@ -1,0 +1,351 @@
+{
+  "run_id": "M7-UQ-20260920T233048Z",
+  "source_hash": "c0a44bb0c14acd88",
+  "method": "paired per-draw differences under common random numbers; cluster bootstrap over epistemic branches, 4000 resamples, seed 20260926",
+  "pairs": [
+    {
+      "a": "joint_knee",
+      "b": "peak_flux_only",
+      "output": "peak_bondline_temperature_k",
+      "n_pairs": 3000,
+      "n_dropped_nonfinite": 0,
+      "delta_definition": "peak_bondline_temperature_k(joint_knee) - peak_bondline_temperature_k(peak_flux_only), same draw",
+      "mean": -14.308103841721291,
+      "sd": 1.4525669997239987,
+      "percentiles": {
+        "p1": -17.32608034733172,
+        "p5": -16.59080387403393,
+        "p50": -14.448009696603236,
+        "p95": -11.778929346737314,
+        "p99": -11.28436504951013
+      },
+      "min": -17.846429391991194,
+      "max": -10.799822283113997,
+      "n_draws_a_below_b": 3000,
+      "fraction_a_below_b": 1.0,
+      "mean_ci95_cluster_bootstrap": [
+        -14.876153293901288,
+        -13.760666079956321
+      ],
+      "epistemic_branches": {
+        "n": 24,
+        "branch_mean_min": -17.050313832475524,
+        "branch_mean_max": -11.414963161931999,
+        "n_branches_with_mean_below_zero": 24,
+        "largest_within_branch_sd": 0.397497461722394
+      },
+      "for_contrast": {
+        "sd_a": 6.4637420927792775,
+        "sd_b": 7.6318377901807,
+        "sd_of_difference_if_clouds_were_independent": 10.001245417326627,
+        "sd_of_difference_paired": 1.4525669997239987,
+        "correlation_between_designs": 0.9924437478527558,
+        "abs_mean_over_paired_sd": 9.850219538541054
+      }
+    },
+    {
+      "a": "joint_knee",
+      "b": "peak_flux_only",
+      "output": "peak_heat_flux_w_m2",
+      "n_pairs": 3000,
+      "n_dropped_nonfinite": 0,
+      "delta_definition": "peak_heat_flux_w_m2(joint_knee) - peak_heat_flux_w_m2(peak_flux_only), same draw",
+      "mean": 20516.601161565057,
+      "sd": 945.1827877081412,
+      "percentiles": {
+        "p1": 18733.183417000608,
+        "p5": 18995.87117524948,
+        "p50": 20584.75879071893,
+        "p95": 22021.261674471803,
+        "p99": 22332.05411232834
+      },
+      "min": 18403.249232062575,
+      "max": 22658.051588118164,
+      "n_draws_a_below_b": 0,
+      "fraction_a_below_b": 0.0,
+      "mean_ci95_cluster_bootstrap": [
+        20147.994816502374,
+        20865.786419998898
+      ],
+      "epistemic_branches": {
+        "n": 24,
+        "branch_mean_min": 18964.393748427286,
+        "branch_mean_max": 21932.606176814963,
+        "n_branches_with_mean_below_zero": 0,
+        "largest_within_branch_sd": 284.7303713634033
+      },
+      "for_contrast": {
+        "sd_a": 10798.53463404059,
+        "sd_b": 9911.29715745698,
+        "sd_of_difference_if_clouds_were_independent": 14657.495065187262,
+        "sd_of_difference_paired": 945.1827877081412,
+        "correlation_between_designs": 0.9995039584378388,
+        "abs_mean_over_paired_sd": 21.706490457060976
+      }
+    },
+    {
+      "a": "bondline_only",
+      "b": "peak_flux_only",
+      "output": "peak_bondline_temperature_k",
+      "n_pairs": 3000,
+      "n_dropped_nonfinite": 0,
+      "delta_definition": "peak_bondline_temperature_k(bondline_only) - peak_bondline_temperature_k(peak_flux_only), same draw",
+      "mean": -25.63969277388696,
+      "sd": 2.4368224182137896,
+      "percentiles": {
+        "p1": -30.6931187734761,
+        "p5": -29.429683415454136,
+        "p50": -25.888028634913553,
+        "p95": -21.473189373215263,
+        "p99": -20.59104905536448
+      },
+      "min": -31.554442852792704,
+      "max": -19.793099215452685,
+      "n_draws_a_below_b": 3000,
+      "fraction_a_below_b": 1.0,
+      "mean_ci95_cluster_bootstrap": [
+        -26.585517811177787,
+        -24.72765991431139
+      ],
+      "epistemic_branches": {
+        "n": 24,
+        "branch_mean_min": -30.204979720339463,
+        "branch_mean_max": -20.82874944664617,
+        "n_branches_with_mean_below_zero": 24,
+        "largest_within_branch_sd": 0.660988218971136
+      },
+      "for_contrast": {
+        "sd_a": 5.638189112650025,
+        "sd_b": 7.6318377901807,
+        "sd_of_difference_if_clouds_were_independent": 9.48863133047309,
+        "sd_of_difference_paired": 2.4368224182137896,
+        "correlation_between_designs": 0.9771847537042139,
+        "abs_mean_over_paired_sd": 10.52177318389949
+      }
+    },
+    {
+      "a": "bondline_only",
+      "b": "peak_flux_only",
+      "output": "peak_heat_flux_w_m2",
+      "n_pairs": 3000,
+      "n_dropped_nonfinite": 0,
+      "delta_definition": "peak_heat_flux_w_m2(bondline_only) - peak_heat_flux_w_m2(peak_flux_only), same draw",
+      "mean": 46667.22320959505,
+      "sd": 2103.858302754587,
+      "percentiles": {
+        "p1": 42739.6591206138,
+        "p5": 43294.79422490737,
+        "p50": 46894.3865076863,
+        "p95": 49991.94679810867,
+        "p99": 50573.62259395278
+      },
+      "min": 41939.411198208574,
+      "max": 51452.02118445613,
+      "n_draws_a_below_b": 0,
+      "fraction_a_below_b": 0.0,
+      "mean_ci95_cluster_bootstrap": [
+        45839.88643379823,
+        47446.4798892983
+      ],
+      "epistemic_branches": {
+        "n": 24,
+        "branch_mean_min": 43158.17073666672,
+        "branch_mean_max": 49870.228153063865,
+        "n_branches_with_mean_below_zero": 0,
+        "largest_within_branch_sd": 557.4057630604859
+      },
+      "for_contrast": {
+        "sd_a": 11918.88319378184,
+        "sd_b": 9911.29715745698,
+        "sd_of_difference_if_clouds_were_independent": 15501.405998503167,
+        "sd_of_difference_paired": 2103.858302754587,
+        "correlation_between_designs": 0.9983246731277657,
+        "abs_mean_over_paired_sd": 22.181733032349918
+      }
+    },
+    {
+      "a": "bondline_only",
+      "b": "joint_knee",
+      "output": "peak_bondline_temperature_k",
+      "n_pairs": 3000,
+      "n_dropped_nonfinite": 0,
+      "delta_definition": "peak_bondline_temperature_k(bondline_only) - peak_bondline_temperature_k(joint_knee), same draw",
+      "mean": -11.331588932165674,
+      "sd": 0.9923769858311,
+      "percentiles": {
+        "p1": -13.356383414137806,
+        "p5": -12.850763721603082,
+        "p50": -11.447860008298704,
+        "p95": -9.642366119729013,
+        "p99": -9.308705551823635
+      },
+      "min": -13.70801346080151,
+      "max": -8.993276932338688,
+      "n_draws_a_below_b": 3000,
+      "fraction_a_below_b": 1.0,
+      "mean_ci95_cluster_bootstrap": [
+        -11.722044255264295,
+        -10.95626102059788
+      ],
+      "epistemic_branches": {
+        "n": 24,
+        "branch_mean_min": -13.154665887863938,
+        "branch_mean_max": -9.413786284714174,
+        "n_branches_with_mean_below_zero": 24,
+        "largest_within_branch_sd": 0.2653815007456907
+      },
+      "for_contrast": {
+        "sd_a": 5.638189112650025,
+        "sd_b": 6.4637420927792775,
+        "sd_of_difference_if_clouds_were_independent": 8.577245380188906,
+        "sd_of_difference_paired": 0.9923769858311,
+        "correlation_between_designs": 0.995839150190755,
+        "abs_mean_over_paired_sd": 11.41863333587452
+      }
+    },
+    {
+      "a": "bondline_only",
+      "b": "joint_knee",
+      "output": "peak_heat_flux_w_m2",
+      "n_pairs": 3000,
+      "n_dropped_nonfinite": 0,
+      "delta_definition": "peak_heat_flux_w_m2(bondline_only) - peak_heat_flux_w_m2(joint_knee), same draw",
+      "mean": 26150.622048029993,
+      "sd": 1163.5329571777113,
+      "percentiles": {
+        "p1": 23986.5380709294,
+        "p5": 24282.01286792857,
+        "p50": 26294.55126527736,
+        "p95": 27971.503171655775,
+        "p99": 28284.090233175728
+      },
+      "min": 23536.161966146,
+      "max": 28793.969596337964,
+      "n_draws_a_below_b": 0,
+      "fraction_a_below_b": 0.0,
+      "mean_ci95_cluster_bootstrap": [
+        25689.919505652757,
+        26580.90878121446
+      ],
+      "epistemic_branches": {
+        "n": 24,
+        "branch_mean_min": 24193.77698823943,
+        "branch_mean_max": 27937.621976248898,
+        "n_branches_with_mean_below_zero": 0,
+        "largest_within_branch_sd": 289.05801678128216
+      },
+      "for_contrast": {
+        "sd_a": 11918.88319378184,
+        "sd_b": 10798.53463404059,
+        "sd_of_difference_if_clouds_were_independent": 16083.162836631025,
+        "sd_of_difference_paired": 1163.5329571777113,
+        "correlation_between_designs": 0.9996168489243359,
+        "abs_mean_over_paired_sd": 22.475188078437814
+      }
+    }
+  ],
+  "violation_drivers": {
+    "peak_flux_only": {
+      "heatshield_mass_fraction": {
+        "n_violating": 1032,
+        "n": 3000,
+        "largest_point_biserial_correlations": {
+          "vehicle_mass": -0.823474884740518,
+          "entry_flight_path_angle": -0.09260391201781071,
+          "atmospheric_density": -0.0005014403349000952
+        }
+      },
+      "max_g": {
+        "n_violating": 0,
+        "n": 3000
+      },
+      "heatshield_mass_fraction_values": {
+        "min": 0.9425408407341744,
+        "p50": 0.99178589116722,
+        "max": 1.0427288808779474
+      }
+    },
+    "joint_knee": {
+      "heatshield_mass_fraction": {
+        "n_violating": 888,
+        "n": 3000,
+        "largest_point_biserial_correlations": {
+          "vehicle_mass": -0.7906513305592718,
+          "entry_flight_path_angle": -0.07265714377667047,
+          "atmospheric_density": 0.01299135504059611
+        }
+      },
+      "max_g": {
+        "n_violating": 0,
+        "n": 3000
+      },
+      "heatshield_mass_fraction_values": {
+        "min": 0.94012854844827,
+        "p50": 0.9892475635413656,
+        "max": 1.040060172290559
+      }
+    },
+    "bondline_only": {
+      "heatshield_mass_fraction": {
+        "n_violating": 552,
+        "n": 3000,
+        "largest_point_biserial_correlations": {
+          "vehicle_mass": -0.6712566507618419,
+          "atmospheric_density": 0.08108163481258256,
+          "entry_flight_path_angle": -0.05331645625163713
+        }
+      },
+      "max_g": {
+        "n_violating": 1080,
+        "n": 3000,
+        "largest_point_biserial_correlations": {
+          "entry_flight_path_angle": -0.5801039721466634,
+          "atmospheric_density": -0.47015127072592366,
+          "cd_base_drag": 0.14616115920809591
+        }
+      },
+      "heatshield_mass_fraction_values": {
+        "min": 0.9334965330475083,
+        "p50": 0.982269044393744,
+        "max": 1.0327232021584056
+      }
+    }
+  },
+  "convergence_cluster_bootstrap_bondline": {
+    "note": "95% half-widths resampling whole epistemic branches (24), 4000 resamples, seed 20260927; the report table resamples rows",
+    "designs": {
+      "baseline": {
+        "mean": 503.4155274652543,
+        "mean_halfwidth_K": 5.34176551168801,
+        "mean_halfwidth_rel": 0.010611046382665855,
+        "p95": 523.145654141124,
+        "p95_halfwidth_K": 3.279489209327096,
+        "p95_halfwidth_rel": 0.006268788019870312
+      },
+      "peak_flux_only": {
+        "mean": 415.12339756903225,
+        "mean_halfwidth_K": 2.976346871116732,
+        "mean_halfwidth_rel": 0.007169788281138225,
+        "p95": 426.1863992437258,
+        "p95_halfwidth_K": 2.554076871839328,
+        "p95_halfwidth_rel": 0.005992863395855841
+      },
+      "joint_knee": {
+        "mean": 400.8152937273109,
+        "mean_halfwidth_K": 2.4721910799068496,
+        "mean_halfwidth_rel": 0.006167906061959727,
+        "p95": 410.4095191714826,
+        "p95_halfwidth_K": 1.813928631668773,
+        "p95_halfwidth_rel": 0.00441980155657855
+      },
+      "bondline_only": {
+        "mean": 389.4837047951451,
+        "mean_halfwidth_K": 2.2506345046892307,
+        "mean_halfwidth_rel": 0.005778507488196422,
+        "p95": 398.0414707709756,
+        "p95_halfwidth_K": 1.5108152948743907,
+        "p95_halfwidth_rel": 0.0037956228328371367
+      }
+    }
+  }
+}

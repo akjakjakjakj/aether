@@ -1,0 +1,22 @@
+AETHER M7 robust  run=M7-ROBUST-20260920T211216Z  git=bf4f9a3 (dirty)  workers=4
+evaluator source hash at launch: c0a44bb0c14acd88
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg']
+robust objectives: 95th percentile of ['peak_heat_flux_w_m2', 'peak_bondline_temperature_k']  (empirical estimator)
+inner sample: 32 draws, common random numbers, seed 20260923
+chance constraints (as the inner sample can actually express them):
+    P(max_g) <= 0.05  ->  at most 1 of 32 inner draws may violate (alpha 0.05)
+    P(peak_bondline_temperature_k) <= 0.05  ->  at most 1 of 32 inner draws may violate (alpha 0.05)
+    P(heatshield_mass_fraction) <= 0.05  ->  at most 1 of 32 inner draws may violate (alpha 0.05)
+    P(any) <= 0.05  ->  at most 1 of 32 inner draws may violate (alpha 0.05)
+projected: 98,000 evaluations, ~118.5 min at 13.8 eval/s
+  seed  37: 39 generations, 30,000 paid, 0 cache hits, front 33 (2033 s)
+  seed  41: 39 generations, 30,000 paid, 0 cache hits, front 41 (4009 s)
+  seed  59: 39 generations, 30,000 paid, 0 cache hits, front 38 (7470 s)
+  combined chance-feasible front: 46 designs
+
+  shortcut vs full MC  peak_heat_flux_w_m2            bias -1.61%  Spearman 1.000
+  shortcut vs full MC  peak_bondline_temperature_k    bias +0.32%  Spearman 1.000
+  verification verdict: PASSED
+
+results -> /Users/akj/Projects/aether/results/M7/M7-ROBUST-20260920T211216Z
+next: `make uncertainty` folds this run into the M7 report and the §39 table

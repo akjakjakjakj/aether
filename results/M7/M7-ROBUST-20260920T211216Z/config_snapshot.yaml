@@ -1,0 +1,922 @@
+_meta:
+  run_id: M7-ROBUST-20260920T211216Z
+  config_hash: 6c9f1cdfbe68
+  git_commit: bf4f9a3
+  git_dirty: true
+  created_utc: '2026-09-20T21:12:16+00:00'
+  aether_version: 0.1.0
+  notes: M7 robust optimisation
+config:
+  study:
+    meta:
+      name: m7_uncertainty
+      design_space: configs/design_space.yaml
+      base_config: configs/baseline.yaml
+      description: 'Monte-Carlo / Latin-Hypercube propagation of the declared input
+        uncertainty through the canonical evaluator, variance-based attribution, and
+        robust re-optimisation with chance constraints.
+
+        '
+    inputs:
+      atmospheric_density:
+        kind: aleatory
+        units: '-'
+        distribution:
+          family: normal
+          mean: 0.0
+          std: 1.0
+        apply:
+          type: density_profile
+          min_multiplier: 0.05
+          sigma_vs_altitude_km:
+            altitude_km:
+            - 0.0
+            - 40.0
+            - 55.0
+            - 75.0
+            - 90.0
+            - 100.0
+            - 110.0
+            - 120.0
+            - 150.0
+            sigma_relative:
+            - 0.036
+            - 0.047
+            - 0.042
+            - 0.057
+            - 0.15
+            - 0.18
+            - 0.21
+            - 0.185
+            - 0.185
+            tier:
+            - T1
+            - T1
+            - T1
+            - T1
+            - T3
+            - T3
+            - T3
+            - T3
+            - T3
+            row_source:
+            - 'Earth-GRAM User Guide, NASA/TM-20210022157 (White & Hoffman, 2021)
+              pp. 63-65: worked example, 3.61% at 0 km. Conditions: 22.0N 48.0E, Julian
+              Day 2458934.02, daily F10.7 = 148, mean F10.7 = 67, Ap = 16.'
+            - 'Same source, same worked example: 4.72% at 40 km.'
+            - 'GRAM-95, NASA-TM-4715 (Justus et al., 1995) Table 3.3 p. 21: OBSERVED
+              density perturbation 4.2% over the 45-65 km band, 10 Shuttle re-entries
+              (Findlay & Jasinski 1990). Table 3.1 p. 19 gives 3.3% observed over
+              22 re-entries; the larger of the two is used. Plotted here at the band
+              midpoint, 55 km.'
+            - 'GRAM-95, NASA-TM-4715 Table 3.3 p. 21: OBSERVED 5.7% over the 65-85
+              km band, same 10 re-entries (Table 3.1: 5.1% over 22). Plotted at the
+              band midpoint, 75 km.'
+            - 'ENGINEERING JUDGMENT built on a primary RANGE. U.S. Standard Atmosphere
+              Supplements 1966 (NTRS 19670028571) p. 28: Faire & Champion falling-sphere
+              measurements give a mean +15% above Standard at 90 km with individual
+              maxima +30%. Converting an observed range from 12 measurements into
+              a 1-sigma is the judgment; no source states a sigma above 86 km.'
+            - 'ENGINEERING JUDGMENT on the same primary range. 1966 Supplements p.
+              28: at 100 km, several percent below to +65% above Standard. Half-width
+              / 2 taken as a 1-sigma proxy.'
+            - 'ENGINEERING JUDGMENT on the same primary range. 1966 Supplements p.
+              28: at 110 km, -20% to +62% (Nov + Feb mean +36%, individually +13%
+              to +62%; July -15% to +5%).'
+            - 'ENGINEERING JUDGMENT on the same primary range. 1966 Supplements p.
+              5: at 120 km, January mid-latitude ~+50% above Standard, summer/low-latitude
+              ~-20% below.'
+            - 'ENGINEERING JUDGMENT: the 120 km value HELD to 150 km. Nothing was
+              sourced between 120 and 200 km. GRAM-99 (NASA/TM-1999-209630 section
+              2.9 p. 14) gives 3.0% at the equator to 8.0% at the poles, but states
+              it for altitudes >= 200 km and it is deliberately NOT extrapolated downwards.'
+        source: 'Mixed tier - see `row_source` above, row by row. The 0-85 km rows
+          are T1 standard deviations from NASA''s own GRAM validation against Shuttle
+          re-entry data. The >=90 km rows are ENGINEERING JUDGMENT: no document opened
+          in the sourcing pass states a 1-sigma density dispersion above 86 km, so
+          those rows convert primary OBSERVED RANGES (U.S. Standard Atmosphere Supplements
+          1966, falling-sphere data) into a 1-sigma proxy, which is this project''s
+          step and not any source''s. The input is tiered T3 overall because its weakest
+          row governs it.
+
+          '
+        tier: T3
+        notes: 'CROSS-CHECK, not a source for the numbers: the Stardust entry operations
+          analysis (Desai et al., AIAA 2006-6410, p. 5 / fig. 5) states that across
+          its entry profile "density variations between +-5% to +-25% are possible"
+          as a GRAM-95 3-sigma envelope, i.e. 1.7% to 8.3% at 1-sigma. That is consistent
+          with the rows below 86 km and MUCH SMALLER than the rows above it - unsurprising,
+          since an entry profile''s dispersion is dominated by where the dynamic pressure
+          is, but it is a real disagreement and it is stated rather than hidden. NRLMSISE-00''s
+          published model-vs-data standard deviations (Picone et al., JGR 107(A12)
+          2002, archive tables) independently indicate roughly 17-36% over 80-120
+          km, which corroborates the size of the upper rows; those digits came off
+          an OCR''d table and the conversion from log-density units was the reader''s,
+          so it is a T2 corroboration and not the source. SECOND-ORDER, STATED NOT
+          MODELLED: one z-score is drawn per trajectory, so the anomaly is perfectly
+          correlated in altitude (A-UQ-ATM-2). Real dispersion has a finite vertical
+          correlation length; perfect correlation is the conservative choice for trajectory-INTEGRATED
+          quantities, which is what the bondline responds to.
+
+          '
+      vehicle_mass:
+        kind: aleatory
+        units: '-'
+        distribution:
+          family: normal
+          mean: 1.0
+          std: 0.02
+        apply:
+          type: multiply
+          path: vehicle.mass_kg
+        source: 'ENGINEERING JUDGMENT. No source. 2% 1-sigma on as-built mass against
+          its design value is a plausible mass-properties allocation for a small entry
+          capsule, and nothing in this project supports a number. The nominal 350
+          kg is itself a placeholder (configs/baseline.yaml), so a sourced dispersion
+          about it would be false precision.
+
+          '
+        tier: T3
+        notes: 'This is the AS-BUILT knowledge of one vehicle''s mass, not the 250-450
+          kg MISSION range in configs/design_space.yaml. That range asks "what payload
+          is this?" and is a design-space axis (A-OPT-2); this asks "how well do we
+          know this vehicle?".
+
+          '
+      entry_flight_path_angle:
+        kind: aleatory
+        units: deg
+        distribution:
+          family: normal
+          mean: 0.0
+          std: 0.0333
+        apply:
+          type: offset
+          path: entry.flight_path_angle_deg
+        source: 'ENGINEERING JUDGMENT. No source. 0.1 deg at 3-sigma on delivered
+          entry flight-path angle stands in for de-orbit burn execution and navigation
+          error at the entry interface. The sourcing pass found entry RESULTS with
+          dispersions (Desai & Qualls'' Stardust reconstruction publishes a 3-sigma
+          of +-3.64 g on peak deceleration) but no published dispersion on the delivered
+          angle itself, which is what this input is.
+
+          '
+        tier: T3
+        notes: 'The M4 design space treats flight-path angle as a DESIGN variable
+          over [-8.0, -1.5] deg. This input is the error about whichever value the
+          design picked, and it is applied as an OFFSET for that reason.
+
+          '
+      effective_nose_radius_model:
+        kind: epistemic
+        units: '-'
+        distribution:
+          family: discrete
+          values:
+          - velocity_gradient
+          - velocity_gradient_zoby
+          probabilities:
+          - 0.5
+          - 0.5
+        apply:
+          type: select
+          path: vehicle.geometry.effective_nose_radius_model
+        source: 'NASA TN D-5121 (Ellison, 1969) p. 5, verbatim: "The data of the present
+          investigation agree with the results of Zoby and Sullivan (ref. 6) within
+          10 percent for K = 0 and K = 0.707; however, for K = 0.417 and R = 0, the
+          disagreement is about 20 percent." Both documents are primary and both were
+          opened (docs/validation/sourcing_report.md item 8). T1.
+
+          '
+        tier: T1
+        notes: 'THE DOMINANT HEATING UNCERTAINTY, and the reason M7 exists in the
+          form it does. R_eff enters Sutton-Graves as 1/sqrt(R_eff), so the sources''
+          own ~20% disagreement at K ~ 0.42 - exactly where the M4 front sits - is
+          about +-10% on heat flux, against the correlation constant''s own +-4%.
+          It is a DISCRETE switch and not a Gaussian because that is what the evidence
+          is: two reports, one of which is closer to right, and no continuum between
+          them. The 50/50 split is declared INDIFFERENCE between two primaries, not
+          a measured frequency; a reader who trusts Ellison more should re-run with
+          the probabilities changed here and the report will say so. See A-UQ-NOSE-1
+          for the three ways the alternative state is WIDER than what Ellison''s sentence
+          strictly licenses.
+
+          '
+      sutton_graves_coefficient:
+        kind: epistemic
+        units: '-'
+        distribution:
+          family: uniform
+          low: 0.96
+          high: 1.04
+        apply:
+          type: set
+          path: heating.sutton_graves_coefficient_scale
+        source: 'NASA TR R-376 (Sutton & Graves, 1971) Table II p. 39, read off a
+          300 dpi render: the correlation''s own fit error for air is 3.3% average,
+          9.8% maximum. ASSUMPTIONS A-HEAT-1 and docs/negative_results.md NR-12 declare
+          that this project therefore treats the correlation as +-4% AT BEST and propagates
+          that here. T1.
+
+          '
+        tier: T1
+        notes: '+-4% sits between the primary''s AVERAGE (3.3%) and MAXIMUM (9.8%)
+          fit errors and is the project''s declared reading, not a number printed
+          anywhere. A worst-case study should widen this to [0.902, 1.098] and say
+          it did. It is uniform, not normal: a fit-error bound is a band, and a band
+          is not a standard deviation. This covers the CONSTANT only. The model FORM
+          - catalycity, hot wall, radiation - is gate G2'', which is LIMITED and untouched,
+          and where catalycity alone is worth about a factor of two (A-HEAT-2..4).
+          Nothing here propagates that.
+
+          '
+      high_altitude_heating_model:
+        kind: epistemic
+        units: '-'
+        distribution:
+          family: uniform
+          low: 0.5
+          high: 1.5
+        apply:
+          type: set
+          path: heating.high_altitude_flux_multiplier
+        source: 'ENGINEERING JUDGMENT on the size; the NEED for the term is measured.
+          docs/negative_results.md NR-14 records that 5-20% of a feasible design''s
+          integrated heat load - and hence its bondline temperature - accrues above
+          86 km, where the atmosphere is a log-interpolated transcribed table (gate
+          G1A'', LIMITED above the five primary-checked rows) and where the flow is
+          transitional to rarefied, which a continuum stagnation-point correlation
+          does not describe. No source quantifies how wrong Sutton-Graves is there,
+          so the +-50% band is judgment.
+
+          '
+        tier: T3
+        notes: 'Multiplies the HEAT FLUX above 86 km only, not the density, so it
+          does not perturb drag in that band - the atmospheric_density input does
+          that, and the two are separate questions (A-UQ-HI86-1). DIRECTION: the physical
+          argument points DOWNWARD - continuum correlations over-predict as Knudsen
+          number rises and rarefied bridging functions reduce stagnation heating -
+          so a symmetric band is probably conservative on the high side. That argument
+          is UNSOURCED here and the band is left symmetric rather than skewed on an
+          unsupported mechanism.
+
+          '
+      tps_conductivity:
+        kind: epistemic
+        units: '-'
+        distribution:
+          family: uniform
+          low: 0.85
+          high: 1.15
+        apply:
+          type: multiply
+          path: tps.layers.0.conductivity_w_mk
+        source: 'ENGINEERING JUDGMENT. ASSUMPTIONS A-TPS-7 states that the stack''s
+          properties are engineering placeholders "of the right order for a low-density
+          insulator", not the properties of any qualified TPS material. So the uncertainty
+          here is not batch variability of a known material - it is not knowing which
+          material this is - and no source can be cited for a spread about a placeholder.
+
+          '
+        tier: T3
+        notes: 'EPISTEMIC, not aleatory, for that reason: the number does not change
+          between flights, it is simply unknown. The insulator only. The second layer
+          is aluminium-like structure whose conductivity (150 W/mK) is known to far
+          better than this and is not perturbed. A-TPS-2 additionally holds k temperature-INDEPENDENT,
+          and notes that a real insulator''s k rises with temperature, which would
+          raise bondline temperature in the long shallow case. That is a separate,
+          unmodelled model-form error; this input does not stand in for it.
+
+          '
+      tps_specific_heat:
+        kind: epistemic
+        units: '-'
+        distribution:
+          family: uniform
+          low: 0.9
+          high: 1.1
+        apply:
+          type: multiply
+          path: tps.layers.0.specific_heat_j_kgk
+        source: 'ENGINEERING JUDGMENT, for the same reason as tps_conductivity (A-TPS-7
+          placeholder properties). Narrower than the conductivity band because specific
+          heat varies less between low-density insulators than conductivity does -
+          which is itself a judgment.
+
+          '
+        tier: T3
+      cd_surrogate_gp:
+        kind: epistemic
+        units: '-'
+        distribution:
+          family: normal
+          mean: 0.0
+          std: 1.0
+        apply:
+          type: set
+          path: vehicle.aero.uncertainty.z_gp
+        requires:
+          aero_model: cfd_surface_v2
+        when_unavailable:
+          aero_model: skip
+        source: 'Measured at surface build time and stored in data/aero/cfd_surface_v2/surface.json:
+          the GP predictive standard deviation of C_D,fore at this shape, WIDENED
+          by the k-fold cross-validation z-score spread (the stored `sigma_inflation`
+          - read from that file, not repeated here) because cross-validation showed
+          the raw GP to be overconfident. T1 in the sense that it is this project''s
+          own measurement on its own data, reproducible from the persisted surface.
+
+          '
+        tier: T1
+        notes: 'ONE draw per trajectory, not per time step: the surface error is a
+          smooth function of Mach for one shape, not white noise (A-AERO-2). Skipped
+          at Fidelity 0, where there is no surrogate for it to be about.
+
+          '
+      cd_discretisation:
+        kind: epistemic
+        units: '-'
+        distribution:
+          family: normal
+          mean: 0.0
+          std: 1.0
+        apply:
+          type: set
+          path: vehicle.aero.uncertainty.z_discretisation
+        requires:
+          aero_model: cfd_surface_v2
+          discretisation_band: coarse
+        when_unavailable:
+          aero_model: skip
+          discretisation_band: refuse
+        source: 'results/M2/<run>/gci.csv, read at call time and never typed (aerodynamics.cfd_surface.discretisation_band).
+          For the coarse level the band is 1.25 x the Richardson error estimate of
+          the coarse mesh (Celik et al. 2008 safety factor). T1 as a measurement of
+          this project''s own mesh study - once that study exists.
+
+          '
+        tier: T1
+        notes: 'THIS WAS THE REFUSAL, and still is if the file goes away: while M2''s
+          GCI table was empty (gate G4 IN_PROGRESS) a run that selected the CFD drag
+          surface STOPPED here rather than quietly propagate one fewer C_D term (A-CFD-9).
+          Since run M2-20260920T123901Z the table exists (G4 PASS, NR-25) and the
+          hook returns the coarse-level band from it - plus the file''s LABELLED iterative
+          columns (residual limit-cycle half-amplitude), under their own names; what
+          is sampled is the file''s combined discretisation + iterative value. Nothing
+          is typed: delete gci.csv and this input refuses again. A-CFD-9 also records
+          that a SPHERE''s GCI is not a capsule''s - so the term is a transfer, not
+          a measurement of the surface itself.
+
+          '
+      cd_perfect_gas_model_form:
+        kind: epistemic
+        units: '-'
+        distribution:
+          family: uniform
+          low: -1.0
+          high: 1.0
+        apply:
+          type: set
+          path: vehicle.aero.uncertainty.u_model_form
+        requires:
+          aero_model: cfd_surface_v2
+        when_unavailable:
+          aero_model: skip
+        source: 'ENGINEERING JUDGMENT, declared as such by the model it belongs to.
+          A-CFD-12 carries a "+-5% model-form half-band that is NOT validated here"
+          for using calorically perfect air (gamma = 1.4, A-CFD-1) at shock-layer
+          conditions where it is wrong. The argument for it is from theory (stagnation
+          Cp ~ 1.84 at gamma = 1.4 against the Newtonian limit 2.0); no measurement
+          supports the 5%.
+
+          '
+        tier: T3
+        notes: 'The half-band itself lives in the surface''s metadata as `model_form_rel_halfband`;
+          this input only draws the POSITION within it, uniformly, because it is a
+          band.
+
+          '
+      cd_base_drag:
+        kind: epistemic
+        units: '-'
+        distribution:
+          family: uniform
+          low: -1.0
+          high: 1.0
+        apply:
+          type: set
+          path: vehicle.aero.uncertainty.u_base
+        requires:
+          aero_model: cfd_surface_v2
+        when_unavailable:
+          aero_model: skip
+        source: 'NASA TN D-4800 (Miller, 1968; NTRS 19680026196) fig. 11(b), opened
+          and read for M3: area-mean base-pressure ratio p_b/p_inf for blunted 9-deg
+          cones at Mach 10-20 lies between about 0.2 and about 3. Those end values
+          were READ OFF A LOG-SCALE GRAPH BY EYE and are good to perhaps +-30%, which
+          is why they set the WIDTH of a band and nothing else. The lower end, p_b
+          = 0, is the exact vacuum limit.
+
+          '
+        tier: T2
+        notes: 'Sampled UNIFORMLY, as src/aether/aerodynamics/base_drag.py instructs
+          in as many words: "a band is not a standard deviation". No flight-Reynolds-number
+          source was found (sourcing report item 4, unresolved gap); the Mars 2020
+          MEDLI2 backshell paper would close it and is paywalled.
+
+          '
+      cd_fidelity0_judgment:
+        kind: epistemic
+        units: '-'
+        distribution:
+          family: uniform
+          low: 0.9
+          high: 1.1
+        apply:
+          type: multiply
+          path: vehicle.cd
+        requires:
+          aero_model: constant
+        when_unavailable:
+          aero_model: skip
+        source: 'ENGINEERING JUDGMENT, and a deliberately POOR substitute. At Fidelity
+          0 the aerodynamics are a single constant C_D = 1.20, itself described in
+          configs/baseline.yaml as "order-of-magnitude correct" (A-TRAJ-2). There
+          is no surrogate, no mesh study, no base-pressure model and no perfect-gas
+          band to sample, so the four sourced Fidelity-1 C_D terms are replaced by
+          one unsourced +-10% band.
+
+          '
+        tier: T3
+        notes: 'A +-10% band on a constant is NOT equivalent to the four Fidelity-1
+          terms it stands in for, and the M7 report must say which branch a given
+          run took. Real C_D also falls through the transonic regime, which a constant
+          cannot represent at all (A-TRAJ-2); that is a model-form error this input
+          does not cover.
+
+          '
+    propagation:
+      workers: 6
+      seed: 20260921
+      mode: nested
+      epistemic_branches: 24
+      aleatory_samples: 125
+      percentiles:
+      - 5.0
+      - 50.0
+      - 95.0
+      - 99.0
+      confidence: 0.95
+      convergence:
+        output: peak_bondline_temperature_k
+        checkpoints:
+        - 100
+        - 250
+        - 500
+        - 1000
+        - 1500
+        - 2000
+        - 2500
+        - 3000
+        tolerance_relative: 0.01
+        bootstrap_samples: 400
+      outputs:
+      - peak_heat_flux_w_m2
+      - integrated_external_heat_j_m2
+      - peak_surface_temperature_k
+      - peak_bondline_temperature_k
+      - bondline_exposure_metric_k_s
+      - thermal_penetration_depth_m
+      - max_g
+      - max_dynamic_pressure_pa
+      - entry_duration_s
+      designs:
+      - label: baseline
+        source: design_space_reference
+      - label: peak_flux_only
+        source: m4_selected
+        key: peak_flux_only
+      - label: joint_knee
+        source: m4_selected
+        key: joint_knee
+      - label: bondline_only
+        source: m4_selected
+        key: bondline_only
+    attribution:
+      n_base: 256
+      n_bootstrap: 500
+      confidence: 0.95
+      seed: 20260922
+      designs:
+      - baseline
+      - joint_knee
+      outputs:
+      - peak_heat_flux_w_m2
+      - peak_bondline_temperature_k
+      - max_g
+    robust:
+      workers: 6
+      objective_percentile: 95.0
+      quantile_estimator: empirical
+      chance_constraints: &id001
+        max_g: 0.05
+        peak_bondline_temperature_k: 0.05
+        heatshield_mass_fraction: 0.05
+        any: 0.05
+      inner_samples: 32
+      inner_seed: 20260923
+      population_size: 24
+      budget_evaluations: 30000
+      seeds: &id002
+      - 37
+      - 41
+      - 59
+      verification: &id003
+        n_designs: 8
+        n_full_samples: 1000
+        full_seed: 20260924
+        tolerances:
+          max_abs_relative_bias: 0.05
+          min_rank_correlation: 0.8
+          max_abs_probability_difference: 0.05
+    comparison:
+      rows:
+      - label: Baseline
+        source: design_space_reference
+      - label: Peak-heat-only optimised
+        source: m4_selected
+        key: peak_flux_only
+      - label: Joint O1 optimised
+        source: m4_selected
+        key: joint_knee
+      - label: Robust O1 optimised
+        source: m7_robust
+        key: knee
+      columns:
+      - peak_heat_flux_w_m2
+      - integrated_external_heat_j_m2
+      - peak_surface_temperature_k
+      - peak_bondline_temperature_k
+      - thermal_penetration_depth_m
+      - tpi_k_m_s
+      - max_g
+      - max_dynamic_pressure_pa
+      - entry_duration_s
+      uncertainty_samples: 500
+      uncertainty_seed: 20260925
+      tpi:
+        t_reference_k: 400.0
+        weighting: uniform
+        weight_params: {}
+        normalise_weights: true
+        depth_limit_m: 0.015
+    sizing:
+      measured_seconds_per_evaluation: 0.115
+      workers: 6
+      parallel_efficiency: 0.8
+      budget_seconds: 7200
+  design_space:
+    meta:
+      name: m4_design_space
+      base_config: configs/baseline.yaml
+      geometry_bounds: configs/geometry_bounds.yaml
+    base_overrides:
+      vehicle:
+        aero:
+          model: cfd_surface_v2
+        geometry:
+          effective_nose_radius_model: velocity_gradient
+      limits:
+        max_bluntness_ratio: null
+        max_heatshield_mass_fraction: 1.0
+    variables:
+      diameter_m:
+        kind: direct
+        path: vehicle.geometry.diameter_m
+        units: m
+        role: design
+        bounds_ref: diameter_m
+        min: 0.8
+        max: 4.5
+        reference: 1.2
+      bluntness_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.nose_radius_m
+        units: '-'
+        role: design
+        min: 0.25
+        max: 1.35
+        reference: 0.5
+      shoulder_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.shoulder_radius_m
+        units: '-'
+        role: design
+        min: 0.02
+        max: 0.1
+        reference: 0.1
+      cone_half_angle_deg:
+        kind: direct
+        path: vehicle.geometry.cone_half_angle_deg
+        units: deg
+        role: design
+        bounds_ref: cone_half_angle_deg
+        min: 20.0
+        max: 70.0
+        reference: 25.0
+      aft_cone_angle_deg:
+        kind: direct
+        path: vehicle.geometry.aft_cone_angle_deg
+        units: deg
+        role: design
+        bounds_ref: aft_cone_angle_deg
+        min: 0.0
+        max: 35.0
+        reference: 20.0
+      fineness_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.length_m
+        units: '-'
+        role: design
+        bounds_ref: fineness_ratio
+        min: 0.5
+        max: 1.2
+        reference: 0.875
+      flight_path_angle_deg:
+        kind: direct
+        path: entry.flight_path_angle_deg
+        units: deg
+        role: design
+        min: -8.0
+        max: -1.5
+        reference: -3.0
+      entry_velocity_m_s:
+        kind: direct
+        path: entry.velocity_m_s
+        units: m/s
+        role: given
+        min: 7200.0
+        max: 7800.0
+        reference: 7400.0
+      mass_kg:
+        kind: direct
+        path: vehicle.mass_kg
+        units: kg
+        role: given
+        min: 250.0
+        max: 450.0
+        reference: 350.0
+      insulator_thickness_m:
+        kind: direct
+        path: tps.layers.0.thickness_m
+        units: m
+        role: deferred
+        min: 0.01
+        max: 0.03
+        reference: 0.015
+    objectives:
+    - peak_heat_flux_w_m2
+    - peak_bondline_temperature_k
+    reported_metrics:
+    - integrated_external_heat_j_m2
+    - peak_surface_temperature_k
+    - max_g
+    - entry_duration_s
+    doe:
+      seed: 20260920
+      workers: 6
+      oat:
+        points_per_variable: 15
+      lhs:
+        n_samples: 3000
+        given_data_bins: 20
+      sobol:
+        n_base: 512
+        n_bootstrap: 500
+        confidence: 0.95
+        sub_box:
+          bluntness_ratio:
+            min: 0.25
+            max: 0.9
+          cone_half_angle_deg:
+            min: 60.0
+            max: 70.0
+          aft_cone_angle_deg:
+            min: 0.0
+            max: 20.0
+          fineness_ratio:
+            min: 0.6
+            max: 1.2
+      screening:
+        total_index_threshold: 0.01
+        validity_index_threshold: 0.03
+        outputs:
+        - peak_heat_flux_w_m2
+        - peak_bondline_temperature_k
+        - max_g
+        - heatshield_mass_fraction
+    optimize:
+      workers: 6
+      budget_evaluations: 1000
+      seeds:
+      - 11
+      - 23
+      - 37
+      - 41
+      - 59
+      - 67
+      - 73
+      hypervolume:
+        reference_point:
+          peak_heat_flux_w_m2: 2500000.0
+          peak_bondline_temperature_k: 450.0
+        ideal_point:
+          peak_heat_flux_w_m2: 0.0
+          peak_bondline_temperature_k: 300.0
+      curve_checkpoints: 40
+      methods:
+        lhs_search:
+          enabled: true
+        nsga2:
+          enabled: true
+          population_size: 40
+        scalarised_de:
+          enabled: true
+          n_weights: 5
+          population_size: 20
+          mutation:
+          - 0.5
+          - 1.0
+          recombination: 0.7
+      exploit_audit:
+        bound_tolerance_fraction: 0.01
+        max_heat_load_fraction_above_86km: 0.05
+        max_bondline_end_rate_k_s: 0.0
+  base:
+    meta:
+      name: baseline
+      description: Nominal ballistic entry of a spherically-blunted capsule.
+    vehicle:
+      mass_kg: 350.0
+      cd: 1.2
+      cl: 0.0
+      bank_angle_deg: 0.0
+      geometry:
+        nose_radius_m: 0.6
+        diameter_m: 1.2
+        effective_nose_radius_model: velocity_gradient
+      aero:
+        model: cfd_surface_v2
+    entry:
+      altitude_m: 120000.0
+      velocity_m_s: 7400.0
+      flight_path_angle_deg: -3.0
+    tps:
+      emissivity: 0.85
+      t_initial_k: 300.0
+      t_radiation_sink_k: 4.0
+      bondline_after_layer: 0
+      t_bondline_reference_k: 400.0
+      t_penetration_threshold_k: 500.0
+      layers:
+      - name: insulator
+        thickness_m: 0.015
+        conductivity_w_mk: 0.3
+        density_kg_m3: 280.0
+        specific_heat_j_kgk: 1200.0
+        n_cells: 120
+      - name: structure
+        thickness_m: 0.01
+        conductivity_w_mk: 150.0
+        density_kg_m3: 2700.0
+        specific_heat_j_kgk: 900.0
+        n_cells: 20
+    limits:
+      max_g: 12.0
+      max_dynamic_pressure_pa: null
+      t_bondline_allowable_k: 450.0
+      t_surface_allowable_k: null
+      max_bluntness_ratio: null
+      max_heatshield_mass_fraction: 1.0
+    numerics:
+      terminal_altitude_m: 20000.0
+      max_time_s: 3000.0
+      rtol: 1.0e-09
+      atol: 1.0e-09
+      max_step_s: 0.5
+      soak_time_s: 1200.0
+      soak_samples: 400
+  screening:
+    doe_run_id: M4-DOE-20260920T204844Z
+    thresholds:
+      total_index: 0.01
+      validity_index: 0.03
+    variables:
+      diameter_m:
+        role: design
+        reference: 1.2
+        max_total_index_upper: 1.043111574238745
+        max_total_index_output: heatshield_mass_fraction
+        validity_index_upper: 0.024969217926431992
+        decision: active
+        reason: total-order index on heatshield_mass_fraction is not below 0.01
+      bluntness_ratio:
+        role: design
+        reference: 0.5
+        max_total_index_upper: 0.08164996514884605
+        max_total_index_output: peak_heat_flux_w_m2
+        validity_index_upper: 0.5667407933257067
+        decision: active
+        reason: total-order index on peak_heat_flux_w_m2 is not below 0.01
+      shoulder_ratio:
+        role: design
+        reference: 0.1
+        max_total_index_upper: 0.0047589451233594655
+        max_total_index_output: heatshield_mass_fraction
+        validity_index_upper: 0.02346745420466204
+        decision: frozen
+        reason: total-order upper bound < 0.01 on every output and validity index
+          upper bound < 0.03
+      cone_half_angle_deg:
+        role: design
+        reference: 25.0
+        max_total_index_upper: 0.000609146470789186
+        max_total_index_output: heatshield_mass_fraction
+        validity_index_upper: 0.16652935081814643
+        decision: active
+        reason: moves no objective or constraint, but decides which geometries are
+          valid
+      aft_cone_angle_deg:
+        role: design
+        reference: 20.0
+        max_total_index_upper: 0.0
+        max_total_index_output: peak_heat_flux_w_m2
+        validity_index_upper: 0.023402613257134514
+        decision: frozen
+        reason: total-order upper bound < 0.01 on every output and validity index
+          upper bound < 0.03
+      fineness_ratio:
+        role: design
+        reference: 0.875
+        max_total_index_upper: 0.0
+        max_total_index_output: peak_heat_flux_w_m2
+        validity_index_upper: 0.02031676531434029
+        decision: frozen
+        reason: total-order upper bound < 0.01 on every output and validity index
+          upper bound < 0.03
+      flight_path_angle_deg:
+        role: design
+        reference: -3.0
+        max_total_index_upper: 1.0742294671555486
+        max_total_index_output: max_g
+        validity_index_upper: 0.021461659159356977
+        decision: active
+        reason: total-order index on max_g is not below 0.01
+      entry_velocity_m_s:
+        role: given
+        reference: 7400.0
+        max_total_index_upper: 0.014162571138960607
+        max_total_index_output: peak_bondline_temperature_k
+        validity_index_upper: 0.020630887354073663
+        decision: frozen
+        reason: mission given, not a design choice
+      mass_kg:
+        role: given
+        reference: 350.0
+        max_total_index_upper: 0.09748941941314623
+        max_total_index_output: heatshield_mass_fraction
+        validity_index_upper: 0.020358349987345304
+        decision: frozen
+        reason: mission given, not a design choice
+      insulator_thickness_m:
+        role: deferred
+        reference: 0.015
+        max_total_index_upper: 0.4366428977693342
+        max_total_index_output: peak_bondline_temperature_k
+        validity_index_upper: 0.022161849392047024
+        decision: frozen
+        reason: deferred design variable (A-OPT-2)
+    active:
+    - diameter_m
+    - bluntness_ratio
+    - cone_half_angle_deg
+    - flight_path_angle_deg
+    frozen:
+    - shoulder_ratio
+    - aft_cone_angle_deg
+    - fineness_ratio
+    - entry_velocity_m_s
+    - mass_kg
+    - insulator_thickness_m
+  robust:
+    workers: 6
+    objective_percentile: 95.0
+    quantile_estimator: empirical
+    chance_constraints: *id001
+    inner_samples: 32
+    inner_seed: 20260923
+    population_size: 24
+    budget_evaluations: 30000
+    seeds: *id002
+    verification: *id003
+  smoke: false

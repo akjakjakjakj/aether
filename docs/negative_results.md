@@ -1233,3 +1233,95 @@ a short notes field), and report hypervolume with a constraint stand-off beside 
 **Evidence.** `results/M5/M5-ABL-20260920T211134Z/llm/ai_agent/seed_37/call_01..03`;
 `audit/extras.json` (`no_physics_by_seed_call`), `audit/hull_and_near_repeats.json`,
 `audit/fence_counterfactual.json`.
+
+
+### NR-33 — The nominal optima fail a constraint in 30–47% of draws, and the robust optimiser then spent its chance allowance to the last draw
+
+**What happened** (M7 study, `results/M7/M7-UQ-20260920T233048Z/summary.json`,
+`results/M7/M7-ROBUST-20260920T211216Z/`). Under the declared uncertainty the three M4 optima
+violate at least one constraint far more often than the 5% the robust problem allows:
+`peak_flux_only` 34.40% [32.72, 36.12], `joint_knee` 29.60% [27.99, 31.26], `bondline_only`
+46.60% [44.82, 48.39] (Wilson, n = 3000). None of it is thermal: the bondline constraint is
+violated in 0 of 3000 draws for each (below 0.13% at 95% confidence, not zero).
+
+**Why.** The designs sit 0.84%, 1.09% and 0.19% from their binding constraint at the nominal
+point, because that is where an optimiser leaves a design. The constraint crossed is
+`heatshield_mass_fraction <= 1` — NR-13's fence, "a logical necessity, not a mass budget" —
+and what crosses it is `vehicle_mass` (point-biserial correlation with violation -0.82, -0.79,
+-0.67), a +-2% 1-sigma dispersion tiered T3 engineering judgment about a 350 kg placeholder.
+`bondline_only` also violates `max_g` in 36.00% of draws, against a 12 g limit A-LIM-1b records
+as an open decision. So the fragility is a fact about this model's constraint set; it is not
+evidence that any of these designs overheats.
+
+**Then the robust search did the mirror-image thing.** All 46 designs of the combined robust
+front have `pviol__heatshield_mass_fraction` = 1/32 exactly: the rule allows at most 1 violating
+draw of the 32 fixed inner draws, and every front member uses that one draw. The optimiser
+learned the 32 worlds it was shown. The pre-declared verification measured what that was worth:
+on 1000 fresh draws the 8 checked designs read 1.3–3.3% on the mass fraction (compliant), but
+one, `C-22b67c409bf2` at the low-bondline end, reads P(any) = 5.7% — 2.6% of it `max_g`, which
+the inner sample had seen as zero.
+
+**What was done.** Nothing was re-tuned. The verification's three declared tolerances (|bias|
+<= 5%, Spearman >= 0.80, |dP| <= 0.05) were applied as written and it PASSED: -1.61% / +0.32%,
+1.000 / 1.000, 2.6%. A flipped feasibility verdict is not one of the three, so it does not fail
+the check — and it is reported beside the PASS rather than absorbed into it. The honest
+reading: the robust front is verified in its objectives and ranking; its chance-feasibility is
+verified to within the inner sample's 1/32 resolution, and its low-bondline end is marginal.
+
+**What it cost.** Robust knee vs joint knee at nominal: peak flux +7.8 kW/m^2 (+3.1%), bondline
+-0.46 K; P(any violation) 2.80% [1.68, 4.64] (n = 500) against 29.60%. Diameters shrink from
+3.355–3.370 m to 3.308–3.323 m. Also negative: common random numbers produced 0 cache hits in
+90,000 inner evaluations — the optimiser never re-proposed a design, so the anticipated free
+re-evaluations did not happen.
+
+**Lesson.** A chance constraint evaluated on a fixed inner sample has a resolution (here 1/32)
+and an optimiser will sit on it. Declare the verification before the run, include a
+fresh-draw re-score of the chance constraints and not only of the objectives, and report
+flipped verdicts as their own line.
+
+
+### NR-34 — The M7 report printed a projection as a measurement, understated its own sampling error tenfold, and one figure is mislabelled
+
+Found by reading `reports/milestones/M7_uncertainty_robust.md` against its `summary.json` and
+every figure with the run finished. Every *number* in the propagation, violation, attribution,
+verification and §39 tables matches the file. These do not, or mislead. **None is fixed yet**:
+the fixes are in `src/aether/uncertainty/` and `scripts/run_uncertainty.py`, and M5 and M6 were
+running on that source tree (NR-18 guard), so the report stands as generated with
+`M7_addendum_posthoc.md` beside it.
+
+1. **"measured throughput 17 evaluations/s … achieved parallel efficiency 80.0%."** Neither is
+   measured: 17.02 = 4 x 0.80 / 0.188, the *declared* efficiency echoed into
+   `sizing.measured_parallel_efficiency`. Achieved: 19,668 evaluations in 1,499 s = 13.1 /s,
+   about 62%, on a machine shared with M6's CFD and M5.
+2. **Convergence half-widths of 0.02–0.09%.** The bootstrap resamples 3000 rows, but the draw
+   set is nested (24 epistemic branches x 125 shared draws) and 97–99% of bondline variance is
+   between branches. Resampling whole branches gives 0.38–1.06%
+   (`paired_difference.json`). The pre-declared check is met as declared; on the stricter
+   reading the baseline mean (1.06%) marginally misses the 1% tolerance and the three front
+   designs meet it. No conclusion rests on it — the paired differences have a branch-bootstrap
+   interval of +-0.56 K — but "converged to 0.05%" is not true.
+3. **§7, "Not propagated: `cd_fidelity0_judgment`. At Fidelity 0 the four sourced C_D terms do
+   not exist … the C_D-related numbers here should not be carried into a Fidelity-1
+   discussion."** This run IS Fidelity 1 and propagated all four. The paragraph was written for
+   the other branch and is unconditional (same family as NR-31).
+4. **§7, "The two inputs that are T1"** — the report's own inventory tiers four inputs T1.
+5. **`M7_attribution.png` is wrong.** `plot_attribution` uses `sharey=True` with a per-panel
+   sort, so the last panel's labels are stamped on all three: the 0.609 heat-flux bar reads
+   `entry_flight_path_angle` and is `sutton_graves_coefficient`; the 0.883 bondline bar is
+   `tps_conductivity`. It also draws only the first attributed design (`baseline`), so
+   `joint_knee` — where the nose-radius model carries 71% of flux variance — has no figure.
+6. **`M7_robust_vs_nominal.png`** is titled "Nominal vs robust Pareto fronts" and contains no
+   nominal front: the runner passes `nominal_front=None`. Its `--report-only` path also passes
+   `None` for the robust front, so `make uncertainty-report` would silently drop two figures —
+   it was therefore NOT run.
+7. `M7_input_inventory.png`: legends overprint data and a tier label, footnote clipped.
+   `M7_output_distributions.png`: the flux panel is scaled by the baseline, the three front
+   designs are unreadable. §2 shows 0 robust evaluations (they are in the robust run: 98,256
+   logged, 8,305 s). Two sections numbered 3.1, two 4.1.
+8. The §39 robust row's uncertainty is 500 *mixed* draws; the other three rows are 3000
+   *nested* draws on another seed. The rows are not like-for-like and the robust design cannot
+   be paired with the others.
+
+**Lesson.** A field named `measured_*` must be assigned from a measurement. A bootstrap must
+resample the unit that was independently drawn. And a generated report is checked against its
+figures as well as its JSON — the tables here were right and the picture of them was not.
