@@ -1,0 +1,41 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2512                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _87ed40d256-20251219 OPENFOAM=2512 version=v2512
+Arch   : "LSB;label=32;scalar=64"
+Exec   : postProcess -func sampleOutlet -latestTime
+Date   : Sep 21 2026
+Time   : 03:07:25
+Host   : AKJs-MACCA.local
+PID    : 28720
+I/O    : uncollated
+Case   : /Users/akj/Projects/aether/cfd/generated/M6-AF-20260920T211148Z/af443e03462e_coarse_a0
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+memory pool : not available
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 15000
+
+Sampled surface:
+    outlet -> raw
+        sampledPatch: outlet : patches:(outlet)
+
+Time = 15000
+
+Reading fields:
+    volScalarField: T
+    volVectorField: U
+
+Executing functionObjects
+
+End
+

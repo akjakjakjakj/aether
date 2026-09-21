@@ -1,0 +1,127 @@
+{
+  "case_name": "af6e83620cc9_coarse_a0",
+  "case_dir": "/Users/akj/Projects/aether/cfd/generated/M6-AF-20260920T211148Z/af6e83620cc9_coarse_a0",
+  "status": "OK",
+  "failure_reason": "",
+  "steps": [
+    {
+      "name": "blockMesh",
+      "command": "blockMesh",
+      "returncode": 0,
+      "wall_time_s": 3.573656458000187,
+      "timed_out": false
+    },
+    {
+      "name": "extrudeMesh",
+      "command": "extrudeMesh",
+      "returncode": 0,
+      "wall_time_s": 2.551146542013157,
+      "timed_out": false
+    },
+    {
+      "name": "checkMesh",
+      "command": "checkMesh",
+      "returncode": 0,
+      "wall_time_s": 2.6801759590016445,
+      "timed_out": false
+    },
+    {
+      "name": "setFields",
+      "command": "setFields",
+      "returncode": 0,
+      "wall_time_s": 2.065832624997711,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_startup",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 9.59436183400976,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 72.52001666701108,
+      "timed_out": false
+    },
+    {
+      "name": "sampleLine",
+      "command": "postProcess -func sampleLine -latestTime",
+      "returncode": 0,
+      "wall_time_s": 1.948423209003522,
+      "timed_out": false
+    },
+    {
+      "name": "sampleBody",
+      "command": "postProcess -func sampleBody -latestTime",
+      "returncode": 0,
+      "wall_time_s": 1.8498255840095226,
+      "timed_out": false
+    },
+    {
+      "name": "sampleOutlet",
+      "command": "postProcess -func sampleOutlet -latestTime",
+      "returncode": 0,
+      "wall_time_s": 1.9967995830083964,
+      "timed_out": false
+    }
+  ],
+  "mesh_quality": {
+    "mesh_ok": true,
+    "n_failed_checks": 0,
+    "n_cells": 3072.0,
+    "max_non_orthogonality_deg": 61.3377496,
+    "avg_non_orthogonality_deg": 27.21539977,
+    "n_severely_non_orthogonal_faces": null,
+    "max_skewness": 1.309088947,
+    "max_aspect_ratio": 3.44377835
+  },
+  "n_cells": 3072,
+  "representative_cell_size_m": 0.012905759834153225,
+  "solver_wall_time_s": 82.11437850102084,
+  "total_wall_time_s": 98.78023846105498,
+  "metrics": {
+    "cd_total": 1.1170669970847913,
+    "cd_fore": 1.1170669970847913,
+    "cd_aft": NaN,
+    "mesh_extent": "forebody",
+    "outlet_min_mach": 1.8783946278892476,
+    "cd_total_last_iteration": 1.1169927309427223,
+    "standoff_m": 0.042054460559304244,
+    "standoff_over_max_radius": 0.0700907675988404,
+    "upstream_clearance_fraction": 0.8139479995769527,
+    "shock_thickness_m": 0.005473780048920303,
+    "shock_thickness_cells": 1.5975315566516832,
+    "stagnation_line_cell_size_at_shock_m": 0.0034263986999999996,
+    "p_stag_wall_face_pa": 509310.3775,
+    "p_stag_line_extrapolated_pa": 509675.4936844964,
+    "p_max_on_body_pa": 510735.9502,
+    "p_stag_over_p_inf": 509.67549368449636,
+    "final_mean_abs_drho_dtau": 0.062557217198,
+    "initial_mean_abs_drho_dtau": 46.0046996,
+    "n_iterations": 10000,
+    "n_iterations_planned": 10000,
+    "n_extensions": 0,
+    "startup_first_order_iterations": 1500
+  },
+  "convergence": {
+    "cd_total": {
+      "quantity": "cd_total",
+      "mean": 1.1170669970847913,
+      "peak_to_peak_rel": 0.0003804607748980122,
+      "drift_rel": 0.00012775784397542093,
+      "window_iterations": 2000,
+      "converged": true
+    },
+    "cd_fore": {
+      "quantity": "cd_fore",
+      "mean": 1.1170669970847913,
+      "peak_to_peak_rel": 0.0003804607748980122,
+      "drift_rel": 0.00012775784397542093,
+      "window_iterations": 2000,
+      "converged": true
+    }
+  }
+}

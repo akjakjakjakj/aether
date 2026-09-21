@@ -1,0 +1,1282 @@
+{
+ "adaptive|37": {
+  "arm": "adaptive",
+  "seed": 37,
+  "wall_s": 9925.486536333992,
+  "evaluations_used": 200,
+  "n_probes": 56,
+  "n_reevaluations": 7,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 6,
+  "n_repeat_requests": 0,
+  "surface_version": 4,
+  "surface_history": [
+   {
+    "arm": "adaptive",
+    "seed": 37,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_37/v000"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 37,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "0bcb4369cc2bcef6",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_37/v001"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 37,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "c2fc4a8efce48ac8",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_37/v002"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 37,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "77e3be5c46efe86f",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_37/v003"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 37,
+    "version": 4,
+    "n_train": 74,
+    "training_hash": "5c596d1438844a09",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_37/v004"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "adaptive|41": {
+  "arm": "adaptive",
+  "seed": 41,
+  "wall_s": 8316.591930042006,
+  "evaluations_used": 200,
+  "n_probes": 56,
+  "n_reevaluations": 9,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 3,
+  "n_repeat_requests": 0,
+  "surface_version": 3,
+  "surface_history": [
+   {
+    "arm": "adaptive",
+    "seed": 41,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_41/v000"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 41,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "aba035eb39ab6654",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_41/v001"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 41,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "990d2ca746016762",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_41/v002"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 41,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "5f95aad15d44b11f",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_41/v003"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "adaptive|59": {
+  "arm": "adaptive",
+  "seed": 59,
+  "wall_s": 8632.401497833998,
+  "evaluations_used": 200,
+  "n_probes": 56,
+  "n_reevaluations": 6,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 3,
+  "n_repeat_requests": 0,
+  "surface_version": 2,
+  "surface_history": [
+   {
+    "arm": "adaptive",
+    "seed": 59,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_59/v000"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 59,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "09693146cb87f3ea",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_59/v001"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 59,
+    "version": 2,
+    "n_train": 72,
+    "training_hash": "fefb7d96a7c04383",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_59/v002"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "adaptive|67": {
+  "arm": "adaptive",
+  "seed": 67,
+  "wall_s": 9096.38916050001,
+  "evaluations_used": 200,
+  "n_probes": 66,
+  "n_reevaluations": 8,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 3,
+  "n_repeat_requests": 0,
+  "surface_version": 3,
+  "surface_history": [
+   {
+    "arm": "adaptive",
+    "seed": 67,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_67/v000"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 67,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "2118f549cc134285",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_67/v001"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 67,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "2c289b4f24795601",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_67/v002"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 67,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "d0ee010f7ea5fe46",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_67/v003"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "adaptive|73": {
+  "arm": "adaptive",
+  "seed": 73,
+  "wall_s": 9759.636677333998,
+  "evaluations_used": 200,
+  "n_probes": 32,
+  "n_reevaluations": 2,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 3,
+  "n_repeat_requests": 0,
+  "surface_version": 2,
+  "surface_history": [
+   {
+    "arm": "adaptive",
+    "seed": 73,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_73/v000"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 73,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "5a5a77144f65b523",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_73/v001"
+   },
+   {
+    "arm": "adaptive",
+    "seed": 73,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "434f9c3871b5e9f8",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/adaptive/seed_73/v002"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "random|37": {
+  "arm": "random",
+  "seed": 37,
+  "wall_s": 12005.698921874995,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 20,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 7,
+  "surface_history": [
+   {
+    "arm": "random",
+    "seed": 37,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_37/v000"
+   },
+   {
+    "arm": "random",
+    "seed": 37,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "f1ff20ab3d7cc68e",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_37/v001"
+   },
+   {
+    "arm": "random",
+    "seed": 37,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "8c860b8e72fa51e7",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_37/v002"
+   },
+   {
+    "arm": "random",
+    "seed": 37,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "d57a0ad84ab97442",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_37/v003"
+   },
+   {
+    "arm": "random",
+    "seed": 37,
+    "version": 4,
+    "n_train": 73,
+    "training_hash": "f25adc59bbe3c8b3",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_37/v004"
+   },
+   {
+    "arm": "random",
+    "seed": 37,
+    "version": 5,
+    "n_train": 74,
+    "training_hash": "6b5b07f998e0833c",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_37/v005"
+   },
+   {
+    "arm": "random",
+    "seed": 37,
+    "version": 6,
+    "n_train": 75,
+    "training_hash": "1b0992f8b09546b9",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_37/v006"
+   },
+   {
+    "arm": "random",
+    "seed": 37,
+    "version": 7,
+    "n_train": 76,
+    "training_hash": "7f788346a46c1b60",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_37/v007"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "random|41": {
+  "arm": "random",
+  "seed": 41,
+  "wall_s": 11966.087930000009,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 38,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 8,
+  "surface_history": [
+   {
+    "arm": "random",
+    "seed": 41,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_41/v000"
+   },
+   {
+    "arm": "random",
+    "seed": 41,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "161ccfecef76d3af",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_41/v001"
+   },
+   {
+    "arm": "random",
+    "seed": 41,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "367accf07ae0be44",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_41/v002"
+   },
+   {
+    "arm": "random",
+    "seed": 41,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "4daaf5c50c2ae3b8",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_41/v003"
+   },
+   {
+    "arm": "random",
+    "seed": 41,
+    "version": 4,
+    "n_train": 73,
+    "training_hash": "9aac76cc4289b57b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_41/v004"
+   },
+   {
+    "arm": "random",
+    "seed": 41,
+    "version": 5,
+    "n_train": 74,
+    "training_hash": "18fac896f8179e15",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_41/v005"
+   },
+   {
+    "arm": "random",
+    "seed": 41,
+    "version": 6,
+    "n_train": 75,
+    "training_hash": "ab5dfd16c089a875",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_41/v006"
+   },
+   {
+    "arm": "random",
+    "seed": 41,
+    "version": 7,
+    "n_train": 76,
+    "training_hash": "8db6bcde00303699",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_41/v007"
+   },
+   {
+    "arm": "random",
+    "seed": 41,
+    "version": 8,
+    "n_train": 77,
+    "training_hash": "68fe5dce966a9f9e",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_41/v008"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "random|59": {
+  "arm": "random",
+  "seed": 59,
+  "wall_s": 12798.314314624993,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 11,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 6,
+  "surface_history": [
+   {
+    "arm": "random",
+    "seed": 59,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_59/v000"
+   },
+   {
+    "arm": "random",
+    "seed": 59,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "09693146cb87f3ea",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_59/v001"
+   },
+   {
+    "arm": "random",
+    "seed": 59,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "ced65e41407bbd34",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_59/v002"
+   },
+   {
+    "arm": "random",
+    "seed": 59,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "ecb536df2b30a821",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_59/v003"
+   },
+   {
+    "arm": "random",
+    "seed": 59,
+    "version": 4,
+    "n_train": 73,
+    "training_hash": "bb45900de7ec6ccf",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_59/v004"
+   },
+   {
+    "arm": "random",
+    "seed": 59,
+    "version": 5,
+    "n_train": 74,
+    "training_hash": "74e52da6ab3fcedb",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_59/v005"
+   },
+   {
+    "arm": "random",
+    "seed": 59,
+    "version": 6,
+    "n_train": 75,
+    "training_hash": "d2e16bb5f82f4a60",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_59/v006"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "random|67": {
+  "arm": "random",
+  "seed": 67,
+  "wall_s": 11691.853702124994,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 23,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 8,
+  "surface_history": [
+   {
+    "arm": "random",
+    "seed": 67,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_67/v000"
+   },
+   {
+    "arm": "random",
+    "seed": 67,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "7cb74e7ef6536a9a",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_67/v001"
+   },
+   {
+    "arm": "random",
+    "seed": 67,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "665a04e31d530142",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_67/v002"
+   },
+   {
+    "arm": "random",
+    "seed": 67,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "1b11eb93a848daae",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_67/v003"
+   },
+   {
+    "arm": "random",
+    "seed": 67,
+    "version": 4,
+    "n_train": 73,
+    "training_hash": "73862d206ca4166e",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_67/v004"
+   },
+   {
+    "arm": "random",
+    "seed": 67,
+    "version": 5,
+    "n_train": 74,
+    "training_hash": "100fcba8cc227fe5",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_67/v005"
+   },
+   {
+    "arm": "random",
+    "seed": 67,
+    "version": 6,
+    "n_train": 75,
+    "training_hash": "8c6f50a5c94cf130",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_67/v006"
+   },
+   {
+    "arm": "random",
+    "seed": 67,
+    "version": 7,
+    "n_train": 76,
+    "training_hash": "7bf01a6800abed26",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_67/v007"
+   },
+   {
+    "arm": "random",
+    "seed": 67,
+    "version": 8,
+    "n_train": 77,
+    "training_hash": "d456fcc36f612587",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_67/v008"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "random|73": {
+  "arm": "random",
+  "seed": 73,
+  "wall_s": 12069.411584540998,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 11,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 7,
+  "surface_history": [
+   {
+    "arm": "random",
+    "seed": 73,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_73/v000"
+   },
+   {
+    "arm": "random",
+    "seed": 73,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "f80cb4c7ac0e1aa5",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_73/v001"
+   },
+   {
+    "arm": "random",
+    "seed": 73,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "3c7da49cd771049f",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_73/v002"
+   },
+   {
+    "arm": "random",
+    "seed": 73,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "2d0f7ba7b0c266a0",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_73/v003"
+   },
+   {
+    "arm": "random",
+    "seed": 73,
+    "version": 4,
+    "n_train": 73,
+    "training_hash": "4d0cfd19308c3656",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_73/v004"
+   },
+   {
+    "arm": "random",
+    "seed": 73,
+    "version": 5,
+    "n_train": 74,
+    "training_hash": "d4a2003f8948f993",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_73/v005"
+   },
+   {
+    "arm": "random",
+    "seed": 73,
+    "version": 6,
+    "n_train": 75,
+    "training_hash": "8dda17560f6a3ac9",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_73/v006"
+   },
+   {
+    "arm": "random",
+    "seed": 73,
+    "version": 7,
+    "n_train": 76,
+    "training_hash": "1173b95bb5bea42c",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/random/seed_73/v007"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "greedy|37": {
+  "arm": "greedy",
+  "seed": 37,
+  "wall_s": 12552.621966833001,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 12,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 6,
+  "surface_history": [
+   {
+    "arm": "greedy",
+    "seed": 37,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_37/v000"
+   },
+   {
+    "arm": "greedy",
+    "seed": 37,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "0bcb4369cc2bcef6",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_37/v001"
+   },
+   {
+    "arm": "greedy",
+    "seed": 37,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "c2fc4a8efce48ac8",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_37/v002"
+   },
+   {
+    "arm": "greedy",
+    "seed": 37,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "77e3be5c46efe86f",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_37/v003"
+   },
+   {
+    "arm": "greedy",
+    "seed": 37,
+    "version": 4,
+    "n_train": 73,
+    "training_hash": "e31a7a6b2f2f323e",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_37/v004"
+   },
+   {
+    "arm": "greedy",
+    "seed": 37,
+    "version": 5,
+    "n_train": 74,
+    "training_hash": "2b90d5f90ef943e1",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_37/v005"
+   },
+   {
+    "arm": "greedy",
+    "seed": 37,
+    "version": 6,
+    "n_train": 75,
+    "training_hash": "2bb07e7f674cfffd",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_37/v006"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "greedy|41": {
+  "arm": "greedy",
+  "seed": 41,
+  "wall_s": 11553.316472916005,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 30,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 7,
+  "surface_history": [
+   {
+    "arm": "greedy",
+    "seed": 41,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_41/v000"
+   },
+   {
+    "arm": "greedy",
+    "seed": 41,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "aba035eb39ab6654",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_41/v001"
+   },
+   {
+    "arm": "greedy",
+    "seed": 41,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "990d2ca746016762",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_41/v002"
+   },
+   {
+    "arm": "greedy",
+    "seed": 41,
+    "version": 3,
+    "n_train": 73,
+    "training_hash": "c01727a92c4b5b36",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_41/v003"
+   },
+   {
+    "arm": "greedy",
+    "seed": 41,
+    "version": 4,
+    "n_train": 74,
+    "training_hash": "9b219355a57edb56",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_41/v004"
+   },
+   {
+    "arm": "greedy",
+    "seed": 41,
+    "version": 5,
+    "n_train": 75,
+    "training_hash": "67941fa7ed282c44",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_41/v005"
+   },
+   {
+    "arm": "greedy",
+    "seed": 41,
+    "version": 6,
+    "n_train": 76,
+    "training_hash": "a44496129d0c42c1",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_41/v006"
+   },
+   {
+    "arm": "greedy",
+    "seed": 41,
+    "version": 7,
+    "n_train": 77,
+    "training_hash": "6d8f80e0ede4ce6a",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_41/v007"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "greedy|59": {
+  "arm": "greedy",
+  "seed": 59,
+  "wall_s": 11905.58470320901,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 8,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 7,
+  "n_repeat_requests": 0,
+  "surface_version": 7,
+  "surface_history": [
+   {
+    "arm": "greedy",
+    "seed": 59,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_59/v000"
+   },
+   {
+    "arm": "greedy",
+    "seed": 59,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "09693146cb87f3ea",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_59/v001"
+   },
+   {
+    "arm": "greedy",
+    "seed": 59,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "14e39923a805a270",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_59/v002"
+   },
+   {
+    "arm": "greedy",
+    "seed": 59,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "5cdd606a05de84d4",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_59/v003"
+   },
+   {
+    "arm": "greedy",
+    "seed": 59,
+    "version": 4,
+    "n_train": 73,
+    "training_hash": "34084296d401558c",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_59/v004"
+   },
+   {
+    "arm": "greedy",
+    "seed": 59,
+    "version": 5,
+    "n_train": 74,
+    "training_hash": "aa0098fa33e42138",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_59/v005"
+   },
+   {
+    "arm": "greedy",
+    "seed": 59,
+    "version": 6,
+    "n_train": 75,
+    "training_hash": "67976d2b0bbd125f",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_59/v006"
+   },
+   {
+    "arm": "greedy",
+    "seed": 59,
+    "version": 7,
+    "n_train": 76,
+    "training_hash": "5b06c68e18d7aaf3",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_59/v007"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "greedy|67": {
+  "arm": "greedy",
+  "seed": 67,
+  "wall_s": 11657.280021833009,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 18,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 7,
+  "surface_history": [
+   {
+    "arm": "greedy",
+    "seed": 67,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_67/v000"
+   },
+   {
+    "arm": "greedy",
+    "seed": 67,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "2118f549cc134285",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_67/v001"
+   },
+   {
+    "arm": "greedy",
+    "seed": 67,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "f6c51a7d93990f25",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_67/v002"
+   },
+   {
+    "arm": "greedy",
+    "seed": 67,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "431f2fa5ac0ddb01",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_67/v003"
+   },
+   {
+    "arm": "greedy",
+    "seed": 67,
+    "version": 4,
+    "n_train": 73,
+    "training_hash": "3012dc2343fe7d64",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_67/v004"
+   },
+   {
+    "arm": "greedy",
+    "seed": 67,
+    "version": 5,
+    "n_train": 75,
+    "training_hash": "9f03c6b3c0146827",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_67/v005"
+   },
+   {
+    "arm": "greedy",
+    "seed": 67,
+    "version": 6,
+    "n_train": 76,
+    "training_hash": "d940bb78a227e029",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_67/v006"
+   },
+   {
+    "arm": "greedy",
+    "seed": 67,
+    "version": 7,
+    "n_train": 77,
+    "training_hash": "6cbf9b84d66e4593",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_67/v007"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "greedy|73": {
+  "arm": "greedy",
+  "seed": 73,
+  "wall_s": 11146.552178209007,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 3,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 5,
+  "n_repeat_requests": 0,
+  "surface_version": 3,
+  "surface_history": [
+   {
+    "arm": "greedy",
+    "seed": 73,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_73/v000"
+   },
+   {
+    "arm": "greedy",
+    "seed": 73,
+    "version": 1,
+    "n_train": 70,
+    "training_hash": "5a5a77144f65b523",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_73/v001"
+   },
+   {
+    "arm": "greedy",
+    "seed": 73,
+    "version": 2,
+    "n_train": 71,
+    "training_hash": "112e7e6a75f57af2",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_73/v002"
+   },
+   {
+    "arm": "greedy",
+    "seed": 73,
+    "version": 3,
+    "n_train": 72,
+    "training_hash": "6c5d44d7f16ab871",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/greedy/seed_73/v003"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "upfront|37": {
+  "arm": "upfront",
+  "seed": 37,
+  "wall_s": 3866.2821640420007,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 1,
+  "surface_history": [
+   {
+    "arm": "upfront",
+    "seed": 37,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/upfront/seed_37/v000"
+   },
+   {
+    "arm": "upfront",
+    "seed": 37,
+    "version": 1,
+    "n_train": 77,
+    "training_hash": "648a8cc6b7fe9620",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/upfront/seed_37/v001"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "upfront|41": {
+  "arm": "upfront",
+  "seed": 41,
+  "wall_s": 3887.8626831670117,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 1,
+  "surface_history": [
+   {
+    "arm": "upfront",
+    "seed": 41,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/upfront/seed_41/v000"
+   },
+   {
+    "arm": "upfront",
+    "seed": 41,
+    "version": 1,
+    "n_train": 77,
+    "training_hash": "793b6c8f0b7f5f78",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/upfront/seed_41/v001"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "upfront|59": {
+  "arm": "upfront",
+  "seed": 59,
+  "wall_s": 1795.1521836249885,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 1,
+  "surface_history": [
+   {
+    "arm": "upfront",
+    "seed": 59,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/upfront/seed_59/v000"
+   },
+   {
+    "arm": "upfront",
+    "seed": 59,
+    "version": 1,
+    "n_train": 75,
+    "training_hash": "ad76f3de56592669",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/upfront/seed_59/v001"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "upfront|67": {
+  "arm": "upfront",
+  "seed": 67,
+  "wall_s": 2095.7424080420024,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 1,
+  "surface_history": [
+   {
+    "arm": "upfront",
+    "seed": 67,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/upfront/seed_67/v000"
+   },
+   {
+    "arm": "upfront",
+    "seed": 67,
+    "version": 1,
+    "n_train": 77,
+    "training_hash": "beb1caedc4eaf720",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/upfront/seed_67/v001"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "upfront|73": {
+  "arm": "upfront",
+  "seed": 73,
+  "wall_s": 2970.2060460830107,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 8,
+  "cfd_calls": 8,
+  "n_repeat_requests": 0,
+  "surface_version": 1,
+  "surface_history": [
+   {
+    "arm": "upfront",
+    "seed": 73,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/upfront/seed_73/v000"
+   },
+   {
+    "arm": "upfront",
+    "seed": 73,
+    "version": 1,
+    "n_train": 76,
+    "training_hash": "3d002147900f00dc",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/upfront/seed_73/v001"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "f0_only|37": {
+  "arm": "f0_only",
+  "seed": 37,
+  "wall_s": 117.81026229199779,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 0,
+  "cfd_calls": 0,
+  "n_repeat_requests": 0,
+  "surface_version": 0,
+  "surface_history": [
+   {
+    "arm": "f0_only",
+    "seed": 37,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/f0_only/seed_37/v000"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "f0_only|41": {
+  "arm": "f0_only",
+  "seed": 41,
+  "wall_s": 113.45510320800531,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 0,
+  "cfd_calls": 0,
+  "n_repeat_requests": 0,
+  "surface_version": 0,
+  "surface_history": [
+   {
+    "arm": "f0_only",
+    "seed": 41,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/f0_only/seed_41/v000"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "f0_only|59": {
+  "arm": "f0_only",
+  "seed": 59,
+  "wall_s": 111.28061179199722,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 0,
+  "cfd_calls": 0,
+  "n_repeat_requests": 0,
+  "surface_version": 0,
+  "surface_history": [
+   {
+    "arm": "f0_only",
+    "seed": 59,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/f0_only/seed_59/v000"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "f0_only|67": {
+  "arm": "f0_only",
+  "seed": 67,
+  "wall_s": 115.46072762500262,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 0,
+  "cfd_calls": 0,
+  "n_repeat_requests": 0,
+  "surface_version": 0,
+  "surface_history": [
+   {
+    "arm": "f0_only",
+    "seed": 67,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/f0_only/seed_67/v000"
+   }
+  ],
+  "llm_calls": 0
+ },
+ "f0_only|73": {
+  "arm": "f0_only",
+  "seed": 73,
+  "wall_s": 109.08842720800021,
+  "evaluations_used": 200,
+  "n_probes": 0,
+  "n_reevaluations": 0,
+  "n_cache_hits": 0,
+  "cfd_budget": 0,
+  "cfd_calls": 0,
+  "n_repeat_requests": 0,
+  "surface_version": 0,
+  "surface_history": [
+   {
+    "arm": "f0_only",
+    "seed": 73,
+    "version": 0,
+    "n_train": 69,
+    "training_hash": "b63b68a40321f38b",
+    "directory": "/Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z/surfaces/f0_only/seed_73/v000"
+   }
+  ],
+  "llm_calls": 0
+ }
+}

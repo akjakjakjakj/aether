@@ -1,0 +1,84 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+// AETHER template - upper-case placeholders between at-signs are filled by aether.cfd.case.
+
+application     rhoCentralFoam;
+
+startFrom       latestTime;
+startTime       0;
+stopAt          endTime;
+endTime         25000;      // local time stepping: "time" is the iteration count
+deltaT          1;
+
+writeControl    timeStep;
+writeInterval   25000;
+purgeWrite      2;
+writeFormat     ascii;
+writePrecision  10;
+writeCompression off;
+timeFormat      general;
+timePrecision   8;
+runTimeModifiable true;
+
+adjustTimeStep  yes;
+maxCo           0.2;
+maxDeltaT       1;
+rDeltaTSmoothingCoeff 0.02;
+
+functions
+{
+    forcesFore
+    {
+        type            forces;
+        libs            (forces);
+        patches         (body_fore);
+        rho             rho;
+        pRef            1000;     // so an isolated patch reports force relative to p_inf
+        CofR            (0 0 0);
+        writeControl    timeStep;
+        writeInterval   5;
+        log             false;
+    }
+
+    ddtRho
+    {
+        type            ddt;
+        libs            (fieldFunctionObjects);
+        field           rho;
+        result          ddtRho;
+        executeControl  timeStep;
+        executeInterval 5;
+        writeControl    none;
+        log             false;
+    }
+    magDdtRho
+    {
+        type            mag;
+        libs            (fieldFunctionObjects);
+        field           ddtRho;
+        result          magDdtRho;
+        executeControl  timeStep;
+        executeInterval 5;
+        writeControl    none;
+        log             false;
+    }
+    residualRho
+    {
+        type            volFieldValue;
+        libs            (fieldFunctionObjects);
+        fields          (magDdtRho);
+        operation       volAverage;
+        regionType      all;
+        writeFields     false;
+        executeControl  timeStep;
+        executeInterval 5;
+        writeControl    timeStep;
+        writeInterval   5;
+        log             false;
+    }
+}

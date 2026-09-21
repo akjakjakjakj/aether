@@ -1325,3 +1325,44 @@ running on that source tree (NR-18 guard), so the report stands as generated wit
 **Lesson.** A field named `measured_*` must be assigned from a measurement. A bootstrap must
 resample the unit that was independently drawn. And a generated report is checked against its
 figures as well as its JSON — the tables here were right and the picture of them was not.
+
+
+### NR-35 — H2 not supported: extra CFD bought nothing here, and the study's target was beyond its own search budget
+
+**Verdict, as pre-declared** (`configs/adaptive_fidelity.yaml`, run `M6-AF-20260920T211148Z`,
+`SKIP_LLM=1`): **H2 @ 95% of the reference hypervolume: NOT_SUPPORTED** — `adaptive` reached
+the target (0.3264) in 0 of 5 seeds (needs 3); no arm reached it. Same at 90% (`greedy` 1 seed,
+`upfront` 2, `adaptive` 0, `f0_only` 0) and 98% (nobody). Not NOT_TESTABLE: that verdict is
+reserved for the no-CFD arm reaching the target, and it did not. The exploratory `ai_adaptive`
+arm was not run (live LLM calls not authorised; it is outside the criterion), so H2's
+"AI-guided" clause is untested.
+
+**What the numbers say.** Mean truth hypervolume: `upfront` 0.2972, `adaptive` 0.2835 on 3.6
+calls, `greedy` 0.2823 on 7.2, `f0_only` 0.2754 on none, `random` 0.2652 on 8. No paired
+difference between `adaptive` and any arm is significant (p = 0.11 to 0.73, n = 5);
+against the no-CFD arm it is +0.0081, better in 1 seed of 5. False claims: 0 everywhere.
+Largest optimism gap 0.0004. `f0_only`'s recommended designs are worth 0.2753 on the starting
+surface and 0.2754 on pooled truth — 109 more CFD points moved them by 0.0001.
+
+**Why.** (1) The drag surface was already good enough where the objectives are decided (M4:
+C_D at peak heating varies ~0.1% across the front; M7: GP term <= 0.02 of any variance), so
+there was no error for CFD to remove. (2) The target was unreachable at 200 F0 evaluations:
+all 25 arm-seeds pooled (5000 evaluations) reach 94.1% of a reference set by a 2 x 1000
+search. Seed explains 69% of the variance in final hypervolume, arm 11%. (3) The searches
+never reached the front's region — reference shapes have R_n/D 0.999–1.133; no arm found a
+feasible design above 0.984 — so the promoting arms bought CFD where they were, at
+R_n/D 0.25–0.875. Not one of their 94 calls was at R_n/D >= 1.0. (4) Promotion costs search
+budget: `random` paid 20.6 of 200 evaluations in charged re-evaluations and finished below the
+arm that bought nothing.
+
+**What is and is not claimed.** H2 is not supported in this design space at this budget, and
+the reason is that there was nothing for adaptive fidelity to save. It is not contradicted in
+general, and this study could not have detected an effect: the criterion's target sat above
+what the budget allows, which the config's sizing section did not foresee (it checked
+statistical power and machine time, not reachability). `adaptive` matching `greedy` on half
+the CFD calls is true and is NOT the criterion. 11 of 125 CFD cases failed (10 rejected by the
+force criterion after 4 attempts, 1 solver failure) and stay on record, charged.
+
+**Lesson.** Before fixing a hypervolume target, run the no-CFD arm and the reference search at
+the planned budgets and check the target is reachable at all. The criterion is left as
+written; a reachable one is a new pre-declared study, not a re-scoring.

@@ -1,0 +1,41 @@
+.venv/bin/python scripts/run_adaptive_fidelity.py  \
+		--skip-llm-arms 
+AETHER M6 adaptive fidelity  run=M6-AF-20260920T211148Z  mode=study  F1=openfoam  mesh=coarse
+git=bf4f9a3 (dirty)  source hash=c0a44bb0c14acd88  gate G4: built PASS, now PASS  allow_provisional=False
+arms=['adaptive', 'random', 'greedy', 'upfront', 'f0_only']
+active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg'] (screening of M4-DOE-20260920T204844Z)
+  f0_only      seed  73: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (69 points), 109 s
+  f0_only      seed  59: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (69 points), 111 s
+  f0_only      seed  41: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (69 points), 113 s
+  f0_only      seed  67: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (69 points), 115 s
+  f0_only      seed  37: 200/200 evaluations (0 re-evaluations, 0 probes), 0/0 CFD calls, surface v0 (69 points), 118 s
+  upfront      seed  59: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (75 points), 1795 s
+  upfront      seed  67: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (77 points), 2096 s
+  upfront      seed  73: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (76 points), 2970 s
+  upfront      seed  37: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (77 points), 3866 s
+  upfront      seed  41: 200/200 evaluations (0 re-evaluations, 0 probes), 8/8 CFD calls, surface v1 (77 points), 3888 s
+  adaptive     seed  41: 200/200 evaluations (9 re-evaluations, 56 probes), 3/8 CFD calls, surface v3 (72 points), 8317 s
+  adaptive     seed  59: 200/200 evaluations (6 re-evaluations, 56 probes), 3/8 CFD calls, surface v2 (72 points), 8632 s
+  adaptive     seed  67: 200/200 evaluations (8 re-evaluations, 66 probes), 3/8 CFD calls, surface v3 (72 points), 9096 s
+  adaptive     seed  73: 200/200 evaluations (2 re-evaluations, 32 probes), 3/8 CFD calls, surface v2 (71 points), 9760 s
+  adaptive     seed  37: 200/200 evaluations (7 re-evaluations, 56 probes), 6/8 CFD calls, surface v4 (74 points), 9925 s
+  greedy       seed  73: 200/200 evaluations (3 re-evaluations, 0 probes), 5/8 CFD calls, surface v3 (72 points), 11147 s
+  greedy       seed  41: 200/200 evaluations (30 re-evaluations, 0 probes), 8/8 CFD calls, surface v7 (77 points), 11553 s
+  greedy       seed  67: 200/200 evaluations (18 re-evaluations, 0 probes), 8/8 CFD calls, surface v7 (77 points), 11657 s
+  random       seed  67: 200/200 evaluations (23 re-evaluations, 0 probes), 8/8 CFD calls, surface v8 (77 points), 11692 s
+  greedy       seed  59: 200/200 evaluations (8 re-evaluations, 0 probes), 7/8 CFD calls, surface v7 (76 points), 11906 s
+  random       seed  41: 200/200 evaluations (38 re-evaluations, 0 probes), 8/8 CFD calls, surface v8 (77 points), 11966 s
+  random       seed  37: 200/200 evaluations (20 re-evaluations, 0 probes), 8/8 CFD calls, surface v7 (76 points), 12006 s
+  random       seed  73: 200/200 evaluations (11 re-evaluations, 0 probes), 8/8 CFD calls, surface v7 (76 points), 12069 s
+  greedy       seed  37: 200/200 evaluations (12 re-evaluations, 0 probes), 8/8 CFD calls, surface v6 (75 points), 12553 s
+  random       seed  59: 200/200 evaluations (11 re-evaluations, 0 probes), 8/8 CFD calls, surface v6 (75 points), 12798 s
+
+  adaptive     truth HV 0.2835  belief 0.2833  CFD calls 3.6  (n = 5)
+  random       truth HV 0.2652  belief 0.2648  CFD calls 8.0  (n = 5)
+  greedy       truth HV 0.2823  belief 0.2821  CFD calls 7.2  (n = 5)
+  upfront      truth HV 0.2972  belief 0.2969  CFD calls 8.0  (n = 5)
+  f0_only      truth HV 0.2754  belief 0.2753  CFD calls 0.0  (n = 5)
+H2 @ 95%: NOT_SUPPORTED - 'adaptive' reached the target in 0 seeds (needs 3); no arm reached it
+figures: ['M6_hv_vs_cfd_calls.png', 'M6_cfd_spend_map.png', 'M6_surface_error_vs_truth.png']
+report -> /Users/akj/Projects/aether/reports/milestones/M6_adaptive_fidelity.md
+results -> /Users/akj/Projects/aether/results/M6/M6-AF-20260920T211148Z

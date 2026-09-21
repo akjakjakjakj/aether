@@ -1,0 +1,141 @@
+{
+  "case_name": "afedc4bd7922_coarse_a0",
+  "case_dir": "/Users/akj/Projects/aether/cfd/generated/M6-AF-20260920T211148Z/afedc4bd7922_coarse_a0",
+  "status": "OK",
+  "failure_reason": "",
+  "steps": [
+    {
+      "name": "blockMesh",
+      "command": "blockMesh",
+      "returncode": 0,
+      "wall_time_s": 4.433972791011911,
+      "timed_out": false
+    },
+    {
+      "name": "extrudeMesh",
+      "command": "extrudeMesh",
+      "returncode": 0,
+      "wall_time_s": 8.264442957995925,
+      "timed_out": false
+    },
+    {
+      "name": "checkMesh",
+      "command": "checkMesh",
+      "returncode": 0,
+      "wall_time_s": 5.537820333993295,
+      "timed_out": false
+    },
+    {
+      "name": "setFields",
+      "command": "setFields",
+      "returncode": 0,
+      "wall_time_s": 11.090667958007543,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_startup",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 20.590775541000767,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 122.82061508299375,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_ext1",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 85.11174108299019,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_ext2",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 78.59187441699032,
+      "timed_out": false
+    },
+    {
+      "name": "sampleLine",
+      "command": "postProcess -func sampleLine -latestTime",
+      "returncode": 0,
+      "wall_time_s": 10.349759749995428,
+      "timed_out": false
+    },
+    {
+      "name": "sampleBody",
+      "command": "postProcess -func sampleBody -latestTime",
+      "returncode": 0,
+      "wall_time_s": 9.856329041998833,
+      "timed_out": false
+    },
+    {
+      "name": "sampleOutlet",
+      "command": "postProcess -func sampleOutlet -latestTime",
+      "returncode": 0,
+      "wall_time_s": 11.205148749999353,
+      "timed_out": false
+    }
+  ],
+  "mesh_quality": {
+    "mesh_ok": true,
+    "n_failed_checks": 0,
+    "n_cells": 3072.0,
+    "max_non_orthogonality_deg": 56.24669154,
+    "avg_non_orthogonality_deg": 33.42820035,
+    "n_severely_non_orthogonal_faces": null,
+    "max_skewness": 0.8654875665,
+    "max_aspect_ratio": 2.958639808
+  },
+  "n_cells": 3072,
+  "representative_cell_size_m": 0.011397972746834446,
+  "solver_wall_time_s": 307.11500612397504,
+  "total_wall_time_s": 367.8531477069773,
+  "metrics": {
+    "cd_total": 1.3687639925794006,
+    "cd_fore": 1.3687639925794006,
+    "cd_aft": NaN,
+    "mesh_extent": "forebody",
+    "outlet_min_mach": 1.725868569665301,
+    "cd_total_last_iteration": 1.3687165841142996,
+    "standoff_m": 0.12713078895489602,
+    "standoff_over_max_radius": 0.21188464825816003,
+    "upstream_clearance_fraction": 0.626053977755369,
+    "shock_thickness_m": 0.011210452882577895,
+    "shock_thickness_cells": 1.6196636273090326,
+    "stagnation_line_cell_size_at_shock_m": 0.0069214697999999825,
+    "p_stag_wall_face_pa": 509948.7866,
+    "p_stag_line_extrapolated_pa": 509929.6451870346,
+    "p_max_on_body_pa": 510923.0311,
+    "p_stag_over_p_inf": 509.9296451870346,
+    "final_mean_abs_drho_dtau": 3.014495197,
+    "initial_mean_abs_drho_dtau": 77.606164883,
+    "n_iterations": 20000,
+    "n_iterations_planned": 10000,
+    "n_extensions": 2,
+    "startup_first_order_iterations": 1500
+  },
+  "convergence": {
+    "cd_total": {
+      "quantity": "cd_total",
+      "mean": 1.3687639925794006,
+      "peak_to_peak_rel": 0.00033099320083387727,
+      "drift_rel": 4.845927642437682e-05,
+      "window_iterations": 2000,
+      "converged": true
+    },
+    "cd_fore": {
+      "quantity": "cd_fore",
+      "mean": 1.3687639925794006,
+      "peak_to_peak_rel": 0.00033099320083387727,
+      "drift_rel": 4.845927642437682e-05,
+      "window_iterations": 2000,
+      "converged": true
+    }
+  }
+}

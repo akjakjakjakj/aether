@@ -1,0 +1,72 @@
+solver: rhoCentralFoam
+equations: axisymmetric compressible Euler
+time_integration: localEuler pseudo-time marching to steady state
+flux_scheme: Kurganov central-upwind, vanLeer reconstruction
+gas_model: calorically perfect gas, single species, no chemistry
+flow:
+  mach: 12.0
+  pressure_pa: 1000.0
+  temperature_k: 220.0
+  gamma: 1.4
+  gas_constant_j_kgk: 287.0530720470647
+  velocity_m_s: 3568.105639051542
+  density_kg_m3: 0.015834892527153588
+  dynamic_pressure_pa: 100800.0
+boundary_conditions:
+  freestream: fixedValue p, T, U (supersonic inflow; bow shock stays inside)
+  outlet: zeroGradient p, T, U
+  body_fore/body_aft: slip U, zeroGradient p and T
+  front/back: wedge
+  axis: empty (collapsed by extrudeMesh)
+mesh:
+  generator: blockMesh (planar strip) + extrudeMesh wedge
+  n_body_cells: 64
+  n_radial_cells: 48
+  n_cells: 3072
+  n_blocks: 16
+  extent: forebody
+  body_patches:
+  - body_fore
+  refinement_factor: 1
+  representative_cell_size_m: 0.010472042739352276
+  domain_area_m2: 0.33688682230216926
+  outflow_x_m: 0.24988646478552914
+  upstream_axis_x_m: -0.3140909306149769
+  sizing_radius_m: 1.0737860000000001
+  settings:
+    n_body_cells_base: 64
+    n_radial_cells_base: 48
+    cells_per_block_base: 4
+    refinement_factor: 1
+    radial_expansion_ratio: 4.0
+    standoff_margin: 2.0
+    asymptote_margin_deg: 6.0
+    wake_length_diameters: 3.0
+    wedge_angle_deg: 5.0
+    outer_samples_per_block: 24
+    extent: forebody
+solver_settings:
+  n_iterations: 10000
+  max_co: 0.1
+  rdeltat_smoothing: 0.02
+  flux_scheme: Kurganov
+  limiter: vanLeer
+  force_interval: 5
+  n_ranks: 1
+  dynamic_viscosity_pa_s: 0.0
+  prandtl: 1.0
+  max_extensions: 3
+  extension_fraction: 0.5
+body:
+  name: af78ba23e489
+  length_m: 0.42
+  max_radius_m: 0.6
+  frontal_area_m2: 1.1309733552923256
+restart:
+  source_case_dir: /Users/akj/Projects/aether/cfd/generated/M6-AF-20260920T211148Z/af78ba23e489_coarse_c0
+  source_iteration: 55000
+  source_max_co: 0.2
+  block_iterations: 5000
+  max_blocks: 8
+  reason: "spec \xA736 step 6: lower Courant limit on a case that ran but did not\
+    \ meet the declared force criterion; criterion unchanged"

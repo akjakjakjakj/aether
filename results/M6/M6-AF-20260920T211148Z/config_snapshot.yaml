@@ -1,0 +1,504 @@
+_meta:
+  run_id: M6-AF-20260920T211148Z
+  config_hash: a8ab430d1dc5
+  git_commit: bf4f9a3
+  git_dirty: true
+  created_utc: '2026-09-20T21:11:48+00:00'
+  aether_version: 0.1.0
+  notes: M6 adaptive fidelity, mode=study, fake_f1=False
+config:
+  study:
+    meta:
+      name: m4_design_space
+      base_config: configs/baseline.yaml
+      geometry_bounds: configs/geometry_bounds.yaml
+    base_overrides:
+      vehicle:
+        aero:
+          model: cfd_surface_v2
+        geometry:
+          effective_nose_radius_model: velocity_gradient
+      limits:
+        max_bluntness_ratio: null
+        max_heatshield_mass_fraction: 1.0
+    variables:
+      diameter_m:
+        kind: direct
+        path: vehicle.geometry.diameter_m
+        units: m
+        role: design
+        bounds_ref: diameter_m
+        min: 0.8
+        max: 4.5
+        reference: 1.2
+      bluntness_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.nose_radius_m
+        units: '-'
+        role: design
+        min: 0.25
+        max: 1.35
+        reference: 0.5
+      shoulder_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.shoulder_radius_m
+        units: '-'
+        role: design
+        min: 0.02
+        max: 0.1
+        reference: 0.1
+      cone_half_angle_deg:
+        kind: direct
+        path: vehicle.geometry.cone_half_angle_deg
+        units: deg
+        role: design
+        bounds_ref: cone_half_angle_deg
+        min: 20.0
+        max: 70.0
+        reference: 25.0
+      aft_cone_angle_deg:
+        kind: direct
+        path: vehicle.geometry.aft_cone_angle_deg
+        units: deg
+        role: design
+        bounds_ref: aft_cone_angle_deg
+        min: 0.0
+        max: 35.0
+        reference: 20.0
+      fineness_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.length_m
+        units: '-'
+        role: design
+        bounds_ref: fineness_ratio
+        min: 0.5
+        max: 1.2
+        reference: 0.875
+      flight_path_angle_deg:
+        kind: direct
+        path: entry.flight_path_angle_deg
+        units: deg
+        role: design
+        min: -8.0
+        max: -1.5
+        reference: -3.0
+      entry_velocity_m_s:
+        kind: direct
+        path: entry.velocity_m_s
+        units: m/s
+        role: given
+        min: 7200.0
+        max: 7800.0
+        reference: 7400.0
+      mass_kg:
+        kind: direct
+        path: vehicle.mass_kg
+        units: kg
+        role: given
+        min: 250.0
+        max: 450.0
+        reference: 350.0
+      insulator_thickness_m:
+        kind: direct
+        path: tps.layers.0.thickness_m
+        units: m
+        role: deferred
+        min: 0.01
+        max: 0.03
+        reference: 0.015
+    objectives:
+    - peak_heat_flux_w_m2
+    - peak_bondline_temperature_k
+    reported_metrics:
+    - integrated_external_heat_j_m2
+    - peak_surface_temperature_k
+    - max_g
+    - entry_duration_s
+    doe:
+      seed: 20260920
+      workers: 6
+      oat:
+        points_per_variable: 15
+      lhs:
+        n_samples: 3000
+        given_data_bins: 20
+      sobol:
+        n_base: 512
+        n_bootstrap: 500
+        confidence: 0.95
+        sub_box:
+          bluntness_ratio:
+            min: 0.25
+            max: 0.9
+          cone_half_angle_deg:
+            min: 60.0
+            max: 70.0
+          aft_cone_angle_deg:
+            min: 0.0
+            max: 20.0
+          fineness_ratio:
+            min: 0.6
+            max: 1.2
+      screening:
+        total_index_threshold: 0.01
+        validity_index_threshold: 0.03
+        outputs:
+        - peak_heat_flux_w_m2
+        - peak_bondline_temperature_k
+        - max_g
+        - heatshield_mass_fraction
+    optimize:
+      workers: 6
+      budget_evaluations: 1000
+      seeds:
+      - 11
+      - 23
+      - 37
+      - 41
+      - 59
+      - 67
+      - 73
+      hypervolume:
+        reference_point:
+          peak_heat_flux_w_m2: 2500000.0
+          peak_bondline_temperature_k: 450.0
+        ideal_point:
+          peak_heat_flux_w_m2: 0.0
+          peak_bondline_temperature_k: 300.0
+      curve_checkpoints: 40
+      methods:
+        lhs_search:
+          enabled: true
+        nsga2:
+          enabled: true
+          population_size: 40
+        scalarised_de:
+          enabled: true
+          n_weights: 5
+          population_size: 20
+          mutation:
+          - 0.5
+          - 1.0
+          recombination: 0.7
+      exploit_audit:
+        bound_tolerance_fraction: 0.01
+        max_heat_load_fraction_above_86km: 0.05
+        max_bondline_end_rate_k_s: 0.0
+  adaptive_fidelity:
+    mode: study
+    allow_provisional: false
+    require_aero_model: cfd_surface_v2
+    initial_surface:
+      directory: data/aero/cfd_surface_v2
+    f1:
+      mesh_level: from_surface
+      max_concurrent_cases: 3
+    seeds:
+    - 37
+    - 41
+    - 59
+    - 67
+    - 73
+    budget_evaluations: 200
+    cfd_budget_calls: 8
+    curve_step: 10
+    workers: 3
+    max_parallel_arm_seeds: 32
+    arms:
+      adaptive:
+        strategy: adaptive
+        search: nsga2
+        population_size: 20
+        enabled: true
+      random:
+        strategy: random
+        search: nsga2
+        population_size: 20
+        enabled: true
+      greedy:
+        strategy: greedy
+        search: nsga2
+        population_size: 20
+        enabled: true
+      upfront:
+        strategy: upfront
+        search: nsga2
+        population_size: 20
+        enabled: true
+      f0_only:
+        strategy: none
+        search: nsga2
+        population_size: 20
+        cfd_budget: 0
+        enabled: true
+      ai_adaptive:
+        strategy: adaptive
+        search: ai_agent
+        enabled: true
+        seeds:
+        - 37
+        - 41
+        n_initial_per_variable: 5
+        rounds: 9
+        max_proposals_per_call: 30
+        tables:
+          front: 12
+          near_feasible: 8
+          recent: 20
+          failures: 8
+    llm:
+      model: claude-sonnet-5
+      max_llm_calls: 12
+      max_llm_calls_study: 30
+      timeout_s: 1500
+      concurrency: 2
+    policy:
+      weights:
+        value: 1.0
+        uncertainty: 0.5
+        novelty: 0.5
+        agent_request: 0.25
+        cost: 0.5
+      scales:
+        uncertainty: 0.01
+        novelty: 0.15
+      gates:
+        min_p_nondominated: 0.2
+        min_objective_uncertainty: 0.002
+        min_novelty: 0.08
+      min_score: 0.6
+      max_promotions_per_batch: 2
+      max_front_reevaluations: 8
+      min_training_separation: 0.02
+      spend_by_fraction: 0.8
+      prescreen:
+        max_candidates: 4
+        max_outside_hull: 2
+        max_epsilon_to_front: 0.05
+        max_constraint_violation: 0.05
+        recent_hull_rejected: 20
+      exploration:
+        after_idle_batches: 3
+        max_calls: 2
+      mach_rule:
+        nodes:
+        - 20.0
+        - 12.0
+        - 6.0
+        - 3.0
+        weights:
+        - 0.55
+        - 0.4
+        - 0.037
+        - 0.011
+      upfront:
+        max_draws: 512
+    reference:
+      seeds:
+      - 101
+      - 103
+      budget_evaluations: 1000
+      population_size: 40
+    holdout:
+      cases_per_arm: 1
+    analysis:
+      max_probe_shapes: 40
+    success_criteria:
+      subject: adaptive
+      comparators:
+      - random
+      - greedy
+      - upfront
+      no_cfd_arm: f0_only
+      target_fraction_of_reference_hv: 0.95
+      sensitivity_fractions:
+      - 0.9
+      - 0.98
+      min_seeds_reaching: 3
+      alpha: 0.05
+  base:
+    meta:
+      name: baseline
+      description: Nominal ballistic entry of a spherically-blunted capsule.
+    vehicle:
+      mass_kg: 350.0
+      cd: 1.2
+      cl: 0.0
+      bank_angle_deg: 0.0
+      geometry:
+        nose_radius_m: 0.6
+        diameter_m: 1.2
+        effective_nose_radius_model: velocity_gradient
+      aero:
+        model: cfd_surface_v2
+    entry:
+      altitude_m: 120000.0
+      velocity_m_s: 7400.0
+      flight_path_angle_deg: -3.0
+    tps:
+      emissivity: 0.85
+      t_initial_k: 300.0
+      t_radiation_sink_k: 4.0
+      bondline_after_layer: 0
+      t_bondline_reference_k: 400.0
+      t_penetration_threshold_k: 500.0
+      layers:
+      - name: insulator
+        thickness_m: 0.015
+        conductivity_w_mk: 0.3
+        density_kg_m3: 280.0
+        specific_heat_j_kgk: 1200.0
+        n_cells: 120
+      - name: structure
+        thickness_m: 0.01
+        conductivity_w_mk: 150.0
+        density_kg_m3: 2700.0
+        specific_heat_j_kgk: 900.0
+        n_cells: 20
+    limits:
+      max_g: 12.0
+      max_dynamic_pressure_pa: null
+      t_bondline_allowable_k: 450.0
+      t_surface_allowable_k: null
+      max_bluntness_ratio: null
+      max_heatshield_mass_fraction: 1.0
+    numerics:
+      terminal_altitude_m: 20000.0
+      max_time_s: 3000.0
+      rtol: 1.0e-09
+      atol: 1.0e-09
+      max_step_s: 0.5
+      soak_time_s: 1200.0
+      soak_samples: 400
+  active:
+  - diameter_m
+  - bluntness_ratio
+  - cone_half_angle_deg
+  - flight_path_angle_deg
+  design_points:
+    meta:
+      name: cfd_design_points
+      milestone: M3
+      description: Seeded space-filling design over (Mach, forebody shape) for C_D,fore.
+    inherit:
+      cfd_validation_config: configs/cfd_validation.yaml
+    production_level: coarse
+    mesh_check:
+      level: medium
+      n_points: 6
+      always_include:
+      - dp015
+      - dp017
+    execution:
+      max_concurrent_cases: 4
+      threads_per_case: 1
+      solver_timeout_s: 10800
+    startup:
+      first_order_iterations_per_refinement_factor: 1500
+    domain_sizing:
+      angle_lo_deg: 40.0
+      angle_hi_deg: 70.0
+      max_body_radius_factor: 2.0
+      detached_above_deg: 55.0
+      cone_shock_margin_deg: 5.0
+    inputs:
+      mach:
+        min: 3.0
+        max: 20.0
+        sampling: log
+      bluntness_ratio:
+        min: 0.25
+        max: 1.35
+      cone_half_angle_deg:
+        min: 20.0
+        max: 70.0
+      shoulder_ratio:
+        min: 0.02
+        max: 0.1
+    fixed:
+      diameter_m: 1.2
+    scale_check:
+      enabled: true
+      diameter_m: 3.0
+      mach: 6.0
+      shape:
+        bluntness_ratio: 0.5
+        cone_half_angle_deg: 25.0
+        shoulder_ratio: 0.1
+      max_rel_difference: 0.002
+    design:
+      seed: 20260920
+      n_fill: 34
+      max_fill_draws: 512
+      anchors:
+        box_vertices: true
+        validity_boundary:
+          margin_deg: 0.5
+          points:
+          - bluntness_ratio: 0.8
+            shoulder_ratio: 0.02
+          - bluntness_ratio: 0.8
+            shoulder_ratio: 0.1
+          - bluntness_ratio: 1.2
+            shoulder_ratio: 0.1
+        explicit:
+        - name: baseline
+          bluntness_ratio: 0.5
+          cone_half_angle_deg: 25.0
+          shoulder_ratio: 0.1
+        - name: blunt_lo_angle_a
+          bluntness_ratio: 0.5
+          cone_half_angle_deg: 20.0
+          shoulder_ratio: 0.02
+        - name: blunt_lo_angle_b
+          bluntness_ratio: 0.5
+          cone_half_angle_deg: 20.0
+          shoulder_ratio: 0.1
+      late_anchors:
+      - name: m4_front_hi
+        bluntness_ratio: 1.2
+        cone_half_angle_deg: 70.0
+        shoulder_ratio: 0.1
+      - name: m4_front_lo_b
+        bluntness_ratio: 1.15
+        cone_half_angle_deg: 70.0
+        shoulder_ratio: 0.1
+      - name: m4_front_lo_b_crit
+        bluntness_ratio: 1.15
+        cone_half_angle_deg_above_critical: 0.5
+        shoulder_ratio: 0.1
+      holdout:
+        n_test: 8
+      mach_extension:
+        enabled: true
+        mach:
+        - 27.0
+        extra_shapes: []
+    acceptance:
+      require_force_converged: true
+      min_outlet_mach: 1.0
+      min_upstream_clearance_fraction: 0.25
+      max_outer_outlet_mach_deficit_rel: 0.01
+      outer_outlet_fraction: 0.05
+      stagnation_pressure_check_rel: 0.01
+      convergence_retry:
+        enabled: true
+        max_extensions: 9
+      courant_retry:
+        enabled: true
+        max_co:
+        - 0.1
+        - 0.05
+        block_iterations: 5000
+        min_blocks: 2
+        max_blocks: 8
+        consecutive_passes: 2
+      domain_retry:
+        max_retries: 2
+        standoff_margin_factor: 1.6
+        asymptote_margin_add_deg: 4.0
+    gci_hook:
+      m2_run_glob: results/M2/M2-*/gci.csv
+      quantity: cd_fore
+      column: gci_medium
+  base_surface_hash: b63b68a40321f38b

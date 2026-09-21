@@ -1,0 +1,37 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// AETHER template - upper-case placeholders between at-signs are filled by aether.cfd.case.
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (5648.87617668 0 0);
+
+boundaryField
+{
+    freestream
+    {
+        type            fixedValue;
+        value           uniform (5648.87617668 0 0);
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+    "body_.*"
+    {
+        type            slip;
+    }
+    "(front|back)"
+    {
+        type            wedge;
+    }
+    axis
+    {
+        type            empty;
+    }
+}

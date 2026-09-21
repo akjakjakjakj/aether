@@ -1,0 +1,60 @@
+
+Overall number of cells of each type:
+    hexahedra:     3024
+    prisms:        48
+    wedges:        0
+    pyramids:      0
+    tet wedges:    0
+    tetrahedra:    0
+    polyhedra:     0
+
+Checking topology...
+    Boundary definition OK.
+    Cell to face addressing OK.
+    Point usage OK.
+    Upper triangular ordering OK.
+    Face vertices OK.
+    Number of regions: 1 (OK).
+
+Checking patch topology for multiply connected surfaces...
+    Patch               Faces    Points     Surface topology
+    body_fore           64       129      ok (non-closed singly connected)  
+    freestream          64       129      ok (non-closed singly connected)  
+    outlet              48       98       ok (non-closed singly connected)  
+    axis                0        0        ok (empty)                        
+    front               3072     3185     ok (non-closed singly connected)  
+    back                3072     3185     ok (non-closed singly connected)  
+    ".*"                6320     6321     ok (closed singly connected)      
+
+
+Checking faceZone topology for multiply connected surfaces...
+    No faceZones found.
+
+Checking basic cellZone addressing...
+    No cellZones found.
+
+Checking basic pointZone addressing...
+    No pointZones found.
+
+Checking geometry...
+    Overall domain bounding box (-0.3149898201 0 -0.05460961693) (0.2991820067 1.250765863 0.05460961693)
+    Mesh has 2 geometric (non-empty/wedge) directions (1 1 0)
+    Mesh has 3 solution (non-empty) directions (1 1 1)
+    Wedge front with angle 2.5 degrees
+    Wedge back with angle 2.5 degrees
+    All edges aligned with or perpendicular to non-empty directions.
+    Boundary openness (2.253861612e-17 -8.185192842e-18 1.237592415e-15) OK.
+    Max cell openness = 2.586702247e-16 OK.
+    Max aspect ratio = 2.732268246 OK.
+    Minimum face area = 2.922114115e-06. Maximum face area = 0.003339824589.  Face area magnitudes OK.
+    Min volume = 1.61651096e-08. Max volume = 5.647679108e-05.  Total volume = 0.01833293094.  Cell volumes OK.
+    Mesh non-orthogonality Max: 52.49192248 average: 30.23457476
+    Non-orthogonality check OK.
+    Face pyramids OK.
+    Max skewness = 0.8592156526 OK.
+    Coupled point location match (average 0) OK.
+
+Mesh OK.
+
+End
+

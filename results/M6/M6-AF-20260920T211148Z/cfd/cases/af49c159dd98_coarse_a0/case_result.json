@@ -1,0 +1,148 @@
+{
+  "case_name": "af49c159dd98_coarse_a0",
+  "case_dir": "/Users/akj/Projects/aether/cfd/generated/M6-AF-20260920T211148Z/af49c159dd98_coarse_a0",
+  "status": "OK",
+  "failure_reason": "",
+  "steps": [
+    {
+      "name": "blockMesh",
+      "command": "blockMesh",
+      "returncode": 0,
+      "wall_time_s": 1.038420374999987,
+      "timed_out": false
+    },
+    {
+      "name": "extrudeMesh",
+      "command": "extrudeMesh",
+      "returncode": 0,
+      "wall_time_s": 1.0886759999993956,
+      "timed_out": false
+    },
+    {
+      "name": "checkMesh",
+      "command": "checkMesh",
+      "returncode": 0,
+      "wall_time_s": 1.0330298750050133,
+      "timed_out": false
+    },
+    {
+      "name": "setFields",
+      "command": "setFields",
+      "returncode": 0,
+      "wall_time_s": 1.0372139579994837,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_startup",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 6.4249770830065245,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 63.69520229198679,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_ext1",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 29.40113562499755,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_ext2",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 23.071223291000933,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_ext3",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 22.45414274999348,
+      "timed_out": false
+    },
+    {
+      "name": "sampleLine",
+      "command": "postProcess -func sampleLine -latestTime",
+      "returncode": 0,
+      "wall_time_s": 1.3710386659950018,
+      "timed_out": false
+    },
+    {
+      "name": "sampleBody",
+      "command": "postProcess -func sampleBody -latestTime",
+      "returncode": 0,
+      "wall_time_s": 1.1080163750011707,
+      "timed_out": false
+    },
+    {
+      "name": "sampleOutlet",
+      "command": "postProcess -func sampleOutlet -latestTime",
+      "returncode": 0,
+      "wall_time_s": 0.8883683329913765,
+      "timed_out": false
+    }
+  ],
+  "mesh_quality": {
+    "mesh_ok": true,
+    "n_failed_checks": 0,
+    "n_cells": 3072.0,
+    "max_non_orthogonality_deg": 52.00299548,
+    "avg_non_orthogonality_deg": 34.66006927,
+    "n_severely_non_orthogonal_faces": null,
+    "max_skewness": 0.8929568914,
+    "max_aspect_ratio": 2.88735278
+  },
+  "n_cells": 3072,
+  "representative_cell_size_m": 0.010992339349537968,
+  "solver_wall_time_s": 145.04668104098528,
+  "total_wall_time_s": 152.6114446229767,
+  "metrics": {
+    "cd_total": 1.3509216657073915,
+    "cd_fore": 1.3509216657073915,
+    "cd_aft": NaN,
+    "mesh_extent": "forebody",
+    "outlet_min_mach": 1.741084364659821,
+    "cd_total_last_iteration": 1.3506837230102877,
+    "standoff_m": 0.14877978111152979,
+    "standoff_over_max_radius": 0.24796630185254964,
+    "upstream_clearance_fraction": 0.5614569806053825,
+    "shock_thickness_m": 0.012342034028322069,
+    "shock_thickness_cells": 1.6355708334291879,
+    "stagnation_line_cell_size_at_shock_m": 0.0075460101,
+    "p_stag_wall_face_pa": 935728.4745,
+    "p_stag_line_extrapolated_pa": 935809.8041900554,
+    "p_max_on_body_pa": 936713.9412,
+    "p_stag_over_p_inf": 935.8098041900554,
+    "final_mean_abs_drho_dtau": 6.9176142657,
+    "initial_mean_abs_drho_dtau": 115.58898954,
+    "n_iterations": 25000,
+    "n_iterations_planned": 10000,
+    "n_extensions": 3,
+    "startup_first_order_iterations": 1500
+  },
+  "convergence": {
+    "cd_total": {
+      "quantity": "cd_total",
+      "mean": 1.3509216657073915,
+      "peak_to_peak_rel": 0.0014727935089353897,
+      "drift_rel": 0.000819509214721758,
+      "window_iterations": 2000,
+      "converged": false
+    },
+    "cd_fore": {
+      "quantity": "cd_fore",
+      "mean": 1.3509216657073915,
+      "peak_to_peak_rel": 0.0014727935089353897,
+      "drift_rel": 0.000819509214721758,
+      "window_iterations": 2000,
+      "converged": false
+    }
+  }
+}

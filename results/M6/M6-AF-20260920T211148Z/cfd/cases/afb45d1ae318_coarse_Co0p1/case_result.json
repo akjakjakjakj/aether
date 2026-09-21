@@ -1,0 +1,146 @@
+{
+  "case_name": "afb45d1ae318_coarse_Co0p1",
+  "case_dir": "/Users/akj/Projects/aether/cfd/generated/M6-AF-20260920T211148Z/afb45d1ae318_coarse_Co0p1",
+  "status": "OK",
+  "failure_reason": "",
+  "steps": [
+    {
+      "name": "rhoCentralFoam_block1",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 43.01364829100203,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_block2",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 44.08563208299165,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_block3",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 57.37839929199254,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_block4",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 59.998224041002686,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_block5",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 55.75884029100416,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_block6",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 54.72500883300381,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_block7",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 49.9690556669957,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_block8",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 46.28484033299901,
+      "timed_out": false
+    },
+    {
+      "name": "sampleLine",
+      "command": "postProcess -func sampleLine -latestTime",
+      "returncode": 0,
+      "wall_time_s": 2.1596526670036837,
+      "timed_out": false
+    },
+    {
+      "name": "sampleBody",
+      "command": "postProcess -func sampleBody -latestTime",
+      "returncode": 0,
+      "wall_time_s": 1.9094651249906747,
+      "timed_out": false
+    },
+    {
+      "name": "sampleOutlet",
+      "command": "postProcess -func sampleOutlet -latestTime",
+      "returncode": 0,
+      "wall_time_s": 1.8886777910083765,
+      "timed_out": false
+    }
+  ],
+  "mesh_quality": {
+    "mesh_ok": true,
+    "n_failed_checks": 0,
+    "n_cells": 3072.0,
+    "max_non_orthogonality_deg": 64.07725406,
+    "avg_non_orthogonality_deg": 42.38482468,
+    "n_severely_non_orthogonal_faces": null,
+    "max_skewness": 1.194937523,
+    "max_aspect_ratio": 3.647907002
+  },
+  "n_cells": 3072,
+  "representative_cell_size_m": 0.011306569194924234,
+  "solver_wall_time_s": 411.2136488309916,
+  "total_wall_time_s": 417.1714444139943,
+  "metrics": {
+    "cd_total": 1.4990159140569719,
+    "cd_fore": 1.4990159140569719,
+    "cd_aft": NaN,
+    "mesh_extent": "forebody",
+    "outlet_min_mach": 1.5195758879481394,
+    "cd_total_last_iteration": 1.4954371020063555,
+    "standoff_m": 0.16944408045793444,
+    "standoff_over_max_radius": 0.282406800763224,
+    "upstream_clearance_fraction": 0.5471356528719941,
+    "shock_thickness_m": 0.012490750695076352,
+    "shock_thickness_cells": 1.4572525427734313,
+    "stagnation_line_cell_size_at_shock_m": 0.008571438600000009,
+    "p_stag_wall_face_pa": 164350.7295,
+    "p_stag_line_extrapolated_pa": 164403.2208501959,
+    "p_max_on_body_pa": 164411.3074,
+    "p_stag_over_p_inf": 164.4032208501959,
+    "final_mean_abs_drho_dtau": 4.2606778178,
+    "initial_mean_abs_drho_dtau": 4.4659876467,
+    "n_iterations": 95000,
+    "n_iterations_planned": 40000,
+    "n_extensions": 0,
+    "restart_source_case": "afb45d1ae318_coarse_c0",
+    "restart_source_iteration": 55000,
+    "max_co": 0.1,
+    "restart_blocks_run": 8,
+    "restart_consecutive_passes_required": 2,
+    "restart_passed_in_a_row": false
+  },
+  "convergence": {
+    "cd_total": {
+      "quantity": "cd_total",
+      "mean": 1.4990159140569719,
+      "peak_to_peak_rel": 0.011680422861493718,
+      "drift_rel": 0.0033119154750638757,
+      "window_iterations": 2000,
+      "converged": false
+    },
+    "cd_fore": {
+      "quantity": "cd_fore",
+      "mean": 1.4990159140569719,
+      "peak_to_peak_rel": 0.011680422861493718,
+      "drift_rel": 0.0033119154750638757,
+      "window_iterations": 2000,
+      "converged": false
+    }
+  }
+}

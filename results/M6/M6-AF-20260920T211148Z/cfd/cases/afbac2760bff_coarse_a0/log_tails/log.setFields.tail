@@ -1,0 +1,40 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2512                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _87ed40d256-20251219 OPENFOAM=2512 version=v2512
+Arch   : "LSB;label=32;scalar=64"
+Exec   : setFields
+Date   : Sep 21 2026
+Time   : 04:30:19
+Host   : AKJs-MACCA.local
+PID    : 83018
+I/O    : uncollated
+Case   : /Users/akj/Projects/aether/cfd/generated/M6-AF-20260920T211148Z/afbac2760bff_coarse_a0
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+memory pool : not available
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+Reading setFieldsDict
+
+Setting volume field default values
+    - set internal values of volVectorField: U = (5946.842732 0 0)
+
+Setting field region values
+
+    Adding cells with centre within boxes 1((0.2750549724 -1000000 -1000000) (1000000 0.72 1000000))
+    Selected 0/3072 cells
+    - set internal values of volVectorField: U = (0 0 0)
+
+End
+

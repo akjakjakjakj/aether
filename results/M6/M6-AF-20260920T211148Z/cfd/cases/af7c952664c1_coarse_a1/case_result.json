@@ -1,0 +1,66 @@
+{
+  "case_name": "af7c952664c1_coarse_a1",
+  "case_dir": "/Users/akj/Projects/aether/cfd/generated/M6-AF-20260920T211148Z/af7c952664c1_coarse_a1",
+  "status": "SOLVER_FAILED",
+  "failure_reason": "rhoCentralFoam returned -4",
+  "steps": [
+    {
+      "name": "blockMesh",
+      "command": "blockMesh",
+      "returncode": 0,
+      "wall_time_s": 1.8266081249894341,
+      "timed_out": false
+    },
+    {
+      "name": "extrudeMesh",
+      "command": "extrudeMesh",
+      "returncode": 0,
+      "wall_time_s": 1.844693124992773,
+      "timed_out": false
+    },
+    {
+      "name": "checkMesh",
+      "command": "checkMesh",
+      "returncode": 0,
+      "wall_time_s": 1.7326497920003021,
+      "timed_out": false
+    },
+    {
+      "name": "setFields",
+      "command": "setFields",
+      "returncode": 0,
+      "wall_time_s": 1.7965245839877753,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam_startup",
+      "command": "rhoCentralFoam",
+      "returncode": 0,
+      "wall_time_s": 9.58129812500556,
+      "timed_out": false
+    },
+    {
+      "name": "rhoCentralFoam",
+      "command": "rhoCentralFoam",
+      "returncode": -4,
+      "wall_time_s": 3.237059541992494,
+      "timed_out": false
+    }
+  ],
+  "mesh_quality": {
+    "mesh_ok": true,
+    "n_failed_checks": 0,
+    "n_cells": 3072.0,
+    "max_non_orthogonality_deg": 56.69692029,
+    "avg_non_orthogonality_deg": 23.20713293,
+    "n_severely_non_orthogonal_faces": null,
+    "max_skewness": 1.164205166,
+    "max_aspect_ratio": 2.972016991
+  },
+  "n_cells": 3072,
+  "representative_cell_size_m": 0.013257654904300285,
+  "solver_wall_time_s": 12.818357666998054,
+  "total_wall_time_s": 20.01883329296834,
+  "metrics": {},
+  "convergence": {}
+}

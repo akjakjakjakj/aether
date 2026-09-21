@@ -1,0 +1,25 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      sampleLine;
+}
+// AETHER template - upper-case placeholders between at-signs are filled by aether.cfd.case.
+
+type            sets;
+libs            (sampling);
+interpolationScheme cell;          // raw cell values: no interpolation smearing the shock
+setFormat       raw;
+fields          (p rho T U);
+
+sets
+{
+    stagnationLine
+    {
+        type    midPoint;
+        axis    x;
+        start   (-0.293606963421 6e-05 0);
+        end     (-6e-10 6e-05 0);
+    }
+}

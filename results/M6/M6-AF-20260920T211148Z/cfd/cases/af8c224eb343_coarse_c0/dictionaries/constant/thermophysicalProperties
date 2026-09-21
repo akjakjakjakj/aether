@@ -1,0 +1,38 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      thermophysicalProperties;
+}
+// AETHER template - upper-case placeholders between at-signs are filled by aether.cfd.case.
+
+// Calorically perfect air, INVISCID (mu = 0 switches rhoCentralFoam to the Euler equations).
+thermoType
+{
+    type            hePsiThermo;
+    mixture         pureMixture;
+    transport       const;
+    thermo          hConst;
+    equationOfState perfectGas;
+    specie          specie;
+    energy          sensibleInternalEnergy;
+}
+
+mixture
+{
+    specie
+    {
+        molWeight   28.9644;
+    }
+    thermodynamics
+    {
+        Cp          1004.68575216;
+        Hf          0;
+    }
+    transport
+    {
+        mu          0;
+        Pr          1;
+    }
+}
