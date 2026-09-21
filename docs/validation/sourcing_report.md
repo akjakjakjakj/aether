@@ -38,6 +38,14 @@ The popular `q = k·√(ρ/Rn)·V³` SI form is a **later, derived simplificatio
 - Cold-wall / fully-catalytic: the primary report itself uses discrete wall temperatures (300 K/1111 K), not literally a cold-wall limit; the popular V³-form derivation explicitly assumes a cold wall (🟡 T2, Carroll &amp; Brandis, NASA Ames, "Stagnation Point Convective Heating Correlations for Entry into H₂/He Atmospheres," AIAA Aviation 2022, NTRS 20220018610). The equilibrium-boundary-layer basis is characterized by secondary sources as equivalent to a fully catalytic wall (🟡 T2), with catalytic-wall heat flux reported roughly 2× non-catalytic for the same conditions (ONERA/CNES, "Noncatalytic and Finite Catalytic Heating Models for Atmospheric Re-entry Codes," 1st Int'l Orbital Debris Conf. 2019, https://www.hou.usra.edu/meetings/orbitaldebris2019/orbital2019paper/pdf/6112.pdf).
 - Tauber's review papers (NASA TP-2914, 1989; Tauber &amp; Sutton 1991) are the standard critical assessment of this correlation class and are cited by the AIAA 2022 paper but were **not opened** in this pass — flagged as a real gap (❌ T3).
 
+  > **Note, 2026-09-21.** `docs/engineering_notebook/2026-09-20_effective_nose_radius.md`
+  > §Action item 1 records NASA TP-2914 as one of four primaries "obtained and read." This
+  > report says the opposite. This project cannot tell which record is correct from the
+  > files alone — the contradiction is left standing rather than silently resolved in
+  > either direction. No claim in the paper rests on TP-2914
+  > (`reports/final/AETHER_paper.md`). The student should open the document and settle
+  > which record was wrong.
+
 **Recommendation for ASSUMPTIONS.md:** downgrade A-HEAT-1's citation. "NASA TR R-376" is the correct origin of the underlying physics but the project's exact numeric constant and equation form should be attributed to a **derived simplification** (best available cite: NASA TFAWS 2012 training material), not read as verbatim content of TR-R-376. If precision matters, the next step is to algebraically re-derive k from K(air)=0.1113 via the three-assumption chain and check it lands on 1.7415×10⁻⁴ — not yet done.
 
 ---

@@ -4,15 +4,23 @@ Spec §49 and §50. What a stranger needs in order to re-run this work, in the f
 a submission: one short section in the paper or brief, plus a pointer to the full
 instructions.
 
-**Status: skeleton.** Run IDs and the repository link are `[PENDING]` until the final runs
-exist and a public location is chosen.
+**Status: run IDs filled 2026-09-21; the repository link is `[PENDING — STUDENT]`** because
+choosing a public location and cleaning the tree at a release commit is the student's act.
+The paper and package were drafted against commit `de2a834`.
+
+Run IDs the paper cites: `M1-20260902T130547Z` (M1, M1b), `TPI-20260920T124732Z`,
+`M2-20260920T123901Z` (gate G4), `M3-DP-20260920T1610Z` (`cfd_surface_v2`),
+`M4-DOE-20260920T204844Z`, `M4-OPT-20260920T205252Z`, `M5-ABL-20260920T211134Z` (replays
+`M5-REPLAY-20260920T224633Z`, `M5-REPLAY-20260921T013046Z`), `M6-AF-20260920T211148Z`,
+`M7-ROBUST-20260920T211216Z`, `M7-UQ-20260920T233048Z`, `M7-LFL-20260921T011854Z`.
 
 ---
 
 ## The section as it appears in the paper
 
-> **Reproducibility.** The repository is at `[PENDING — public URL or archived DOI]`, at
-> commit `[PENDING]`. Every result in this paper is produced by a command in that
+> **Reproducibility.** The repository is at `[PENDING — STUDENT: public URL or archived
+> DOI]`, at commit `[PENDING — STUDENT: the clean release commit; drafted against de2a834]`.
+> Every result in this paper is produced by a command in that
 > repository, and every number in every report is read from a result file rather than typed:
 > reports in `reports/milestones/` are generated, and hand-editing one is overwritten by the
 > next run.
@@ -55,41 +63,44 @@ should reproduce:
 
 | Quantity | Value |
 |---|---|
-| Candidates feasible with geometry frozen | 0 of 27 |
+| Candidates feasible with geometry frozen | 0 of 41 |
 | Feasible on the 2-D grid | 21 of 140 |
 | Peak-flux-only optimum | q″ = 37.0 W/cm², T_bond = 444.1 K |
 | Joint O1 optimum | q″ = 44.3 W/cm², T_bond = 411.6 K |
 
 If a reader gets different numbers, that is a bug and worth reporting.
 
-> Note for whoever finalises this: `REPRODUCIBILITY.md` states the sweep as 27 points in its
-> reproduction list while `reports/milestones/M1_burn_vs_bake.md` reports 41 candidates over
-> the same angle range. Resolve which is current against the committed config and the stored
-> `candidates.csv` before this goes into a submission, and fix the stale one. Do not paper
-> over it by quoting neither.
+> Note, 2026-09-21: this table previously read "0 of 27". `REPRODUCIBILITY.md` now reads
+> "0 of 41", which agrees with `reports/milestones/M1_burn_vs_bake.md` (41 candidates, run
+> `M1-20260902T130547Z`), so the table was corrected to 41. One stale "27" remains, in the
+> 2026-09-02 entry of `docs/research_story.md` ("Zero of 27 trajectories"); that file is a
+> dated record and is not rewritten, so the discrepancy is noted in its 2026-09-21 entry
+> instead. The check against the stored `candidates.csv` row count has not been done by a
+> person and should be: `[PENDING — STUDENT]`.
 
 ---
 
 ## Command index
 
-| Command | Produces | Needs | `[PENDING FINAL RUN]`? |
+| Command | Produces | Needs | State at `de2a834` |
 |---|---|---|---|
-| `make test` | verification suite | — | no |
-| `make baseline` | one nominal entry | — | no |
-| `make burn-vs-bake` | M1 + M1b reports and figures | — | no |
-| `make tpi` | the §44 Thermal Penetration Index study | — | no |
-| `make cfd-validate` | M2 CFD validation, gate G4 | OpenFOAM, hours | gate not yet PASS |
-| `make cfd-design-points` | M3 CFD design points | OpenFOAM, hours | already run, coarse mesh |
-| `make aero-surface RUN_ID=…` | the GP drag surface | — | already run, PROVISIONAL |
-| `make m3-coupled RUN_ID=…` | M3 report, gate G5 | — | already run, LIMITED |
-| `make doe` | screening and sensitivity | — | **must be re-run**; current screening void |
-| `make optimize` | Pareto fronts | a current `make doe` | **must be re-run** |
-| `make ablation` | M5 AI-versus-conventional study | Claude Code CLI signed in | **not run** |
-| `make ablation-replay RUN_ID=…` | the same study with no model access | — | needs a recorded run |
-| `make adaptive` | M6 adaptive fidelity | OpenFOAM, G4 = PASS, current DOE | **not run**; refuses otherwise |
-| `make robust` | M7 robust optimisation | current DOE, hours | **not run**; refuses otherwise |
-| `make uncertainty` | M7 propagation, Sobol' attribution, §39 table | a robust run | **not run**; refuses otherwise |
-| `make figures` | every figure from the last run | — | no |
+| `make test` | verification suite | — | 497 passed, 1 skipped (2026-09-21 regeneration record) |
+| `make baseline` | one nominal entry | — | run |
+| `make burn-vs-bake` | M1 + M1b reports and figures | — | run `M1-20260902T130547Z` |
+| `make tpi` | the §44 Thermal Penetration Index study | — | run `TPI-20260920T124732Z`, verdict DISCARD |
+| `make cfd-validate` | M2 CFD validation, gate G4 | OpenFOAM, hours | run `M2-20260920T123901Z`; gate PASS, first read LIMITED (NR-25) |
+| `make cfd-design-points` | M3 CFD design points | OpenFOAM, hours | run `M3-DP-20260920T1610Z`, coarse mesh, 69 usable |
+| `make aero-surface RUN_ID=…` | the GP drag surface | — | `cfd_surface_v2`, row M3 LIMITED |
+| `make m3-coupled RUN_ID=…` | M3 report, gate G5 | — | G5 PASS (software gate only) |
+| `make doe` | screening and sensitivity | — | run `M4-DOE-20260920T204844Z`, Fidelity 1 |
+| `make optimize` | Pareto fronts | a current `make doe` | run `M4-OPT-20260920T205252Z` |
+| `make ablation` | M5 AI-versus-conventional study | Claude Code CLI signed in | run `M5-ABL-20260920T211134Z`; a fresh run gives new numbers |
+| `make ablation-replay RUN_ID=…` | the same study with no model access | — | two strict replays, 0 prompt mismatches |
+| `make adaptive` | M6 adaptive fidelity | OpenFOAM, G4 = PASS, current DOE | run `M6-AF-20260920T211148Z` with `SKIP_LLM=1`; H2 NOT_SUPPORTED; `ai_adaptive` arm not run |
+| `make robust` | M7 robust optimisation | current DOE, hours | run `M7-ROBUST-20260920T211216Z` |
+| `make uncertainty` | M7 propagation, Sobol' attribution, §39 table | a robust run | run `M7-UQ-20260920T233048Z`; like-for-like robust cell `M7-LFL-20260921T011854Z` |
+| `make figures` | every figure from the last run | — | run |
+| coupon experiment (`experiments/thermal_coupon/`) | blind thermal prediction | a printed, instrumented coupon | `[PENDING — STUDENT]`: not run |
 
 ---
 
@@ -115,8 +126,9 @@ If a reader gets different numbers, that is a bug and worth reporting.
 - [ ] The working tree was **clean** at that commit. Several existing reports carry a "dirty
       working tree" flag in their header, which is honest but should not be true of the final
       artefacts.
-- [ ] Every `[PENDING FINAL RUN]` in `docs/submission_package/` and `reports/final/` has been
-      filled or deliberately removed.
+- [x] Every `[PENDING FINAL RUN]` in `docs/submission_package/` and the paper has been filled
+      from the result files (2026-09-21). What remains is marked `[PENDING — STUDENT]`: the
+      experiment, external review, the public location, and the review counts.
 - [ ] Result directories referenced by the paper are present, including the aborted and
       rejected ones (`results/M5/M5-ABL-20260920T141724Z/` with its "do not analyse" README,
       `results/M6/M6-DRY-*/ABORTED.md`, `results/M2/M2-20260920T123535Z/`). A repository that

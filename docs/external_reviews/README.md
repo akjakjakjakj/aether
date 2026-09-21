@@ -93,10 +93,11 @@ recorded:
 So they spend their time on the real weaknesses rather than rediscovering the documented
 ones:
 
-- Every optimisation result in the repository is **Fidelity 0**: constant drag coefficient.
-  The CFD-derived drag surface exists, is provisional, and is switched off.
-- Gate **G4 is not PASS**. Mesh independence is not complete and no published blunt-body
-  case has been compared.
+- Gate **G4 is `PASS`** (2026-09-20), but on a restart rule written after the original
+  results were seen — `VALIDATION_MATRIX.md` records that history and it is not hidden.
+  Optimisation results now run on a CFD-derived drag surface (`cfd_surface_v2`, Mach 3–27),
+  not a constant drag coefficient, but that surface is coarse-mesh, perfect-gas, and has no
+  capsule validation data of its own (row M3, `LIMITED`).
 - **No physical measurement exists.** The thermal coupon has not been printed.
 - Several constraint limits and material properties are **engineering placeholders**, and
   `ASSUMPTIONS.md` says which.

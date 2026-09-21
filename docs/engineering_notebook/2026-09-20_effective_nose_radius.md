@@ -44,6 +44,14 @@ the failed search.
    Table I was transcribed directly from the rendered page, and TM X-1067's eqs. (3)–(5),
    its validity statements and its 11%/22% corner-effect numbers were read off the page
    rather than taken from a summary.
+
+   > **Note, 2026-09-21.** This entry says NASA TP-2914 was obtained and read.
+   > `docs/validation/sourcing_report.md` records it as **not opened** (❌ T3), and
+   > `VALIDATION_MATRIX.md` G2′ says the same. This project cannot tell which record is
+   > correct from the files alone — the contradiction is left standing rather than
+   > silently resolved in either direction. No claim in the paper rests on TP-2914
+   > (`reports/final/AETHER_paper.md`). The student should open the document and settle
+   > which record was wrong.
 2. Implemented `src/aether/geometry/stagnation_gradient.py`: `R_b/R_eff` interpolated over
    Ellison's nine α = 0 values plus an exact hemisphere anchor, PCHIP in `K = R_b/R_n`,
    linear in `R = R_c/R_b`. Wired into `CapsuleGeometry.effective_nose_radius_m` behind

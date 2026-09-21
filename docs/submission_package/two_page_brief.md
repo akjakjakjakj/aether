@@ -3,9 +3,10 @@
 Spec §51. Source for a two-page PDF: one page of argument, one page of evidence. Written
 for a technically literate reader who is not an aerothermodynamicist.
 
-**Status: skeleton.** `[PENDING FINAL RUN]` marks every slot that needs a study that has not
-been run. Prose that is final is marked *final*; everything else is a specification of what
-goes there.
+**Status: simulation slots filled 2026-09-21 from the result files at commit `de2a834`;
+AI-drafted, to be revised and owned by the student.** Prose that is final is marked *final*.
+Slots that depend on the physical experiment or on external review are marked
+`[PENDING — STUDENT]`.
 
 ---
 
@@ -88,18 +89,25 @@ physics), found 818 counterexample pairs.
 nose_radius_m`. That model was later found to be wrong for shallow spherical caps and was
 replaced. For M1 and M1b specifically the replacement changes nothing: both use a
 hemisphere-nosed body (R_n = D/2, so K = R_b/R_n = 1), where the two models agree
-identically by construction. The numbers above are unaffected. The M4 fronts are not: see
-page 2.
+identically by construction. The numbers above are unaffected by that correction. They are
+still constant-drag-coefficient numbers: with the CFD-derived drag surface the same baseline
+capsule's peak flux is 16.52% higher and its bondline 9.56 K hotter
+(`reports/milestones/M3_coupled_model.md` §10). The Fidelity-1 result is on page 2.
 
-### What is not claimed (final)
+### What is not claimed (updated 2026-09-21)
 
-Four lines, in the brief itself, not in a footnote:
+Five lines, in the brief itself, not in a footnote:
 
-- Every optimisation result is at reduced fidelity with a constant drag coefficient. The
-  CFD-derived drag surface exists, is provisional, and is switched off.
-- Gate G4 (CFD validation) is not passed: mesh independence is incomplete and no published
-  blunt-body case has been compared.
-- No physical measurement exists.
+- The Fidelity-1 result is a statement about entry steepness at a geometry set by
+  placeholder constraints. The knee design's heat shield is 346 kg of a 350 kg vehicle; it
+  is not a capsule.
+- The CFD gate G4 reads `PASS` under a restart rule written after the first results were
+  seen; on the original runs it read `LIMITED`. The CFD is inviscid perfect gas on a coarse
+  mesh, validated on a sphere at Mach 3 and 6 only, with a declared ±5% band that this
+  project has not validated.
+- H2 (adaptive use of CFD saves CFD runs) was **not supported**.
+- No physical measurement exists and no external review has taken place.
+  `[PENDING — STUDENT]`
 - Nothing here is a statement about a flight vehicle or a real thermal protection material.
 
 ---
@@ -116,7 +124,7 @@ The chain, each with its verification status:
 | Trajectory | Point-mass 3-DOF planar, non-rotating spherical Earth, inverse-square gravity | G1B `PASS` |
 | Heating | Sutton–Graves stagnation-point convective, with R_eff from measured stagnation-point velocity gradients | G2 `PASS` (the constant); G2′ `LIMITED` (the model form, *not attempted*) |
 | TPS | 1-D transient multilayer conduction, implicit, radiating surface, post-entry soak-out | G3 `PASS` |
-| Aerodynamics (Fidelity 1) | OpenFOAM inviscid axisymmetric forebody, GP drag surface | G4 `NOT_STARTED` as a gate; surface PROVISIONAL and off |
+| Aerodynamics (Fidelity 1) | OpenFOAM v2512 inviscid axisymmetric forebody; GP drag surface `cfd_surface_v2` through 69 usable coarse-mesh cases, Mach 3–27; base drag assumed | G4 `PASS` (first read `LIMITED`; restart rule written after the fact, NR-25); surface `LIMITED`; G5 `PASS` (software gate only) |
 
 One paragraph on the canonical evaluator: every study calls one function, so no study can
 build its own shortcut, and gate G5 fingerprints every metric, margin, diagnostic and the
@@ -144,11 +152,13 @@ whole velocity history bit for bit.
 | Trade space | `reports/figures/M1_trade_space.png` | Peak flux against bondline temperature across the sweep |
 | Feasible region | `reports/figures/M1b_feasible_region.png` | Where both constraints are satisfied on the 2-D grid |
 | Optimiser comparison | `reports/figures/M1b_optimiser_comparison.png` | Peak-flux-only against joint selection |
-| Pareto front | `[PENDING FINAL RUN]` — `reports/figures/M4_pareto_front.png` regenerated | The front under the corrected heating model and the CFD drag surface |
+| Pareto front | `reports/figures/M4_pareto_front.png` (run `M4-OPT-20260920T205252Z`, Fidelity 1) | The front under the corrected heating model and the CFD drag surface, with the peak-flux-only optimum, the knee and the bondline-only optimum marked |
+| Nominal against robust | `reports/figures/M7_robust_vs_nominal.png` (runs `M4-OPT-20260920T205252Z`, `M7-ROBUST-20260920T211216Z`) | The 78-design nominal front, the chance-constrained front, and each nominal design's 95th percentile |
 
 ### Negative results panel (final, this is a selling point rather than a confession)
 
-Pick three of the 24 entries. Recommended:
+Pick three of the 35 entries. Recommended (a fourth candidate since the studies ran is
+NR-35: H2 not supported, and the study's target was beyond its own search budget):
 
 - **NR-15.** The optimiser was exploiting the heating model. With the nose radius taken as
   the cap radius, `1/√R_n` sends heating to zero as the nose flattens, so an infinitely flat
@@ -171,12 +181,42 @@ Pick three of the 24 entries. Recommended:
 
 ### Results panel
 
-`[PENDING FINAL RUN]` — the §39 comparison table: baseline, peak-heat-only optimised, joint
-O1 optimised, robust O1 optimised, with peak heat flux, integrated heat, peak surface
-temperature, peak bondline temperature, penetration metric, max g, max dynamic pressure,
-entry duration, feasibility and uncertainty. Generated by the §39 generator, which
-re-evaluates every row under one source hash and prints the stored value beside it with the
-difference. Nothing is typed.
+The §39 comparison table, copied from `reports/milestones/M7_uncertainty_robust.md` §6
+(run `M7-UQ-20260920T233048Z`; Fidelity 1, `cfd_surface_v2`; every row re-evaluated under one
+source hash; uncertainty from 3000 nested draws, seed 20260921). For the brief, cut to the
+rows below; the full table is in the paper.
+
+| Metric | Baseline | Peak-heat-only | Joint O1 (knee) | Robust O1 (knee) |
+|---|---|---|---|---|
+| Peak heat flux [W/m²] | 1.868e+06 | 2.295e+05 | 2.51e+05 | 2.588e+05 |
+| Integrated heat [J/m²] | 1.306e+08 | 1.975e+07 | 1.781e+07 | 1.801e+07 |
+| Peak bondline T [K] | 504.3 | 418.4 | 403.5 | 403 |
+| Max g | 12.25 | 9.216 | 10.35 | 10.48 |
+| Feasible at nominal | no | yes | yes | yes |
+| p95 peak bondline T [K] | 523.1 | 426.2 | 410.4 | 410 † |
+| P(any constraint violated) | 100.00% [99.87, 100.00] | 34.40% [32.72, 36.12] | 29.60% [27.99, 31.26] | 3.20% [2.63, 3.89] † |
+
+† Like-for-like cell, run `M7-LFL-20260921T011854Z`. The cell as first generated was 500
+mixed draws on another seed: p95 bondline 414.1 K, P(violation) 2.80% [1.68, 4.64].
+
+Three sentences that must travel with the table:
+
+- Paired on the same draws, the knee is 14.31 K cooler at the bondline than the
+  peak-flux-only design (s.d. 1.45 K), in 3000 of 3000 draws and 24 of 24 epistemic branches
+  (`M7_addendum_posthoc.md` §1). That holds within the declared uncertainty model only.
+- None of the violations is thermal (bondline 0 of 3000 for every optimised design). The
+  constraint crossed is a heat-shield mass fraction of 1.0, which is a logical fence, not a
+  mass budget, and for the bondline-only design also a 12 g limit that matches no document.
+- Along the front only the entry angle trades the objectives; C_D at peak heating varies by
+  about 0.1% across it (M4 report §11a; NR-30).
+
+Method results, one line each: a language-model agent beat the best conventional optimiser at
+50 and 100 evaluations and showed no measured difference at 200 under the pre-declared rule
+(n = 5, one model; its early lead cannot be separated from prior knowledge). Adaptive
+fidelity: H2 `NOT_SUPPORTED`, 0 of 5 seeds reached a target that was itself unreachable at
+the budget, and the AI-guided arm was not run.
+
+Physical experiment result: `[PENDING — STUDENT]`. Not run.
 
 ### Footer (final)
 

@@ -35,8 +35,10 @@ are marked.
 > **Review status is tracked honestly.** Rows in `AI_USAGE.md` marked *review pending* mean
 > the author has not yet read that code line by line and understood it. They change only when
 > that has happened, not when a milestone is declared complete.
-> `[PENDING — the current count of reviewed against unreviewed components, from
-> AI_USAGE.md at submission time.]`
+> As of 2026-09-21 every component added since the first milestone is marked *review
+> pending* in `AI_USAGE.md`, and twenty-two AI-proposed modelling decisions await the author's
+> approval. `[PENDING — STUDENT: the count of reviewed against unreviewed components at
+> submission time. Only the author can move a row, by reading the file.]`
 >
 > **Defects introduced by AI-generated code are recorded, not hidden.** At least five are
 > documented in `docs/negative_results.md`: a divergent radiating boundary condition, a
@@ -51,8 +53,19 @@ are marked.
 > conventional optimisation algorithms under matched evaluation budgets. The success criteria
 > for that comparison were written into a configuration file before any run, every prompt and
 > response is persisted, and a replay mode reproduces the recorded run without any model
-> access. `[PENDING FINAL RUN — the study has not been run, and no claim about AI
-> performance is made anywhere.]`
+> access. The study was run once on the final model (`M5-ABL-20260920T211134Z`, five seeds,
+> one model). Under the pre-declared rule the agent helped at 50 and 100 evaluations and
+> showed no measured difference at 200. Its lever directions came from prior aerospace
+> knowledge, which it usually stated, so the early lead cannot be separated from training-set
+> contamination, and about half of its small final lead is precision in parking on two
+> placeholder limits. No general claim about AI performance is made. A second AI-related
+> hypothesis, that AI-guided adaptive use of CFD would save CFD runs, was not supported, and
+> its AI-guided arm was never run.
+>
+> **The paper itself was AI-drafted.** The first complete draft of the paper and of this
+> submission package was written by the assistant from the repository's result files on
+> 2026-09-21. `[PENDING — STUDENT: a statement, true at submission time, of how much of the
+> submitted text the author has rewritten.]`
 >
 > **What AI did not contribute.** The research question, the hypotheses, the frozen scope,
 > the decision that the bondline rather than the surface is the interesting failure mode, and

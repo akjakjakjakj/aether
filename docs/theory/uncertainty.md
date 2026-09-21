@@ -369,10 +369,11 @@ part of the result.
   Sutton–Graves constant — are the ones this project measured about itself, and they are
   not the small ones.
 * **At Fidelity 0 the C_D uncertainty is a guess.** The four sourced Fidelity-1 terms (GP
-  predictive σ with its measured 1.65 inflation, the M2 discretisation band, the
-  base-drag band, the declared perfect-gas half-band) do not exist when the aerodynamics
-  are a constant, and are replaced by one unsourced ±10% band. That substitution is not
-  equivalent and the report says which branch it took.
+  predictive σ with its measured 1.21 inflation — `cfd_surface_v2`, current; `cfd_surface_v1`
+  used 1.65 — the M2 discretisation band, the base-drag band, the declared perfect-gas
+  half-band) do not exist when the aerodynamics are a constant, and are replaced by one
+  unsourced ±10% band. That substitution is not equivalent and the report says which branch
+  it took.
 * **The deceleration limit is an open decision.** A-LIM-1b establishes that 12 g
   corresponds to *no* documented sustained-g curve, and that adopting the NASA-STD-3001
   deconditioned curve would empty the feasible region. Every chance constraint on `max_g`

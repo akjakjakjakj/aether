@@ -265,6 +265,160 @@ start until the DOE and the front are regenerated, M2's gate G4 is IN_PROGRESS, 
 no measurement. That is the honest position, and it is written here rather than in a
 results section because there are no results to put in one yet.
 
+**2026-09-21 — The CFD gate first said LIMITED, and then PASS, and both files are kept.** All
+six sphere benchmark cases of run `M2-20260920T123901Z` ran. The coarse and medium cases met
+the force criterion declared beforehand. Both fine cases did not: after 100 000 iterations
+they sat in a bounded limit cycle at 0.282% and 0.223% peak-to-peak against an allowed 0.1%,
+with drift one to two orders below its limit, so waiting longer could not have cured it. The
+gate read LIMITED on that evidence (`gate_assessment_20260921_0057_before_restarts.json`).
+The criterion was not moved. Following the specification's failure-handling order, which puts
+the Courant number ahead of solver settings and physics, each fine case was continued as a
+new, separately named case at max Courant 0.1, and met the unchanged criterion in two
+consecutive blocks (0.033% and 0.077%). The gate then read PASS.
+
+Two things about that belong in the story and not only in NR-25. The restart rule, the
+two-block minimum and the rule for which solution is "of record" were all written after the
+original result had been seen, and a reader who does not accept that should read the gate as
+LIMITED. And the mean of the limit cycle was not the fixed point: the converged C_D differs
+from the oscillating window mean by about 0.03%, a third of the fine-to-medium difference,
+which moved the observed order from 0.67 and 0.60 to 1.13 and 0.88. The same lever, applied
+afterwards to the six capsule cases M3 had rejected, recovered four and not six, and the
+first pass nearly let the other two in on a single quiet window before a
+two-consecutive-blocks rule caught them (NR-27). With G4 at PASS the drag surface was rebuilt
+as `cfd_surface_v2`: 69 usable cases, a Mach 27 node where 9 of 14 anchors converged (NR-28),
+and the share of heat load flown above the top CFD Mach number down from 53.7–66.5% to
+0.0–2.9%. That closes an extrapolation in Mach number. It does nothing about the perfect gas
+being the wrong gas at those speeds.
+
+**2026-09-21 — M4 was re-run on the final physics, and the front turned out to be the M1
+curve drawn at a fenced geometry.** Screening was re-derived from scratch at Fidelity 1 (run
+`M4-DOE-20260920T204844Z`) and three optimisers were given 1000 evaluations over 7 seeds (run
+`M4-OPT-20260920T205252Z`). The knee of the 78-design front runs 14.9 K cooler at the
+bondline than the peak-flux-only optimum, for +21.5 kW/m² of peak flux (403.5 K against
+418.4 K). H1 is supported within the model.
+
+What the audit then said about it is the more important half (NR-29, NR-30). Every front
+diameter lies within 0.021 m of 3.37 m, because the optimiser grows drag area at fixed mass
+until the mass-closure fence stops it; 50 of 78 designs are within 1% of that fence, and the
+knee's heat shield is 346 kg of a 350 kg vehicle. 28 of 78 sit on the edge of the CFD hull at
+R_n/D 1.2, which is where CFD anchors were put because the Fidelity-0 front had sat on a
+bluntness cap at 1.2: the cap that was removed as "a fence, not a model" came back as the
+edge of where CFD was run. The cone angle lives in a window of about a degree. C_D at peak
+heating spans 1.363 to 1.364 across the whole front. The only variable that trades the two
+objectives is entry angle. Fidelity 1 was built so that shape could matter, and along this
+front shape does not vary.
+
+The exploit that had been predicted the day before did not happen, for a reason that is not
+reassuring. The screening rule froze the shoulder ratio on a total-order upper bound of
+0.0048, so the optimiser never touched it. Probes showed the frozen lever is worth about 7%
+of peak flux at the front, a third of the front's whole flux span. A Sobol' index is a share
+of variance over the sub-box, where diameter carries 0.90, so a 7% lever rounds to zero. The
+rule answers "which variables explain the spread of the box", and the question that mattered
+was "which would an optimiser exploit at the optimum". The freeze stayed, labelled as a fence
+standing in the right place by accident.
+
+**2026-09-21 — The AI ablation ran, and the answer was mixed in a way worth being exact
+about.** Run `M5-ABL-20260920T211134Z`: 200 evaluations over 5 seeds, 67 live LLM calls, none
+failed. Under the rule declared before the run, the agent beat the best conventional method
+(the Bayesian optimiser) at 50 evaluations (+0.0283 hypervolume) and at 100 (+0.0085), and at
+200 (+0.0036) the verdict was "no measured difference". That last verdict came from the
+effect-size leg of the rule. The significance leg rejected: every agent seed was above every
+Bayesian-optimiser seed. The agent was distinguishably ahead by an amount declared in advance
+to be too small to count, and the rule was applied as written.
+
+Reading all 67 rounds (the hand-written audit) gave the part the hypervolume cannot. The
+agent stated the direction of every lever in round 1, before it had data, and said in 35 of
+47 rounds that it was using prior knowledge; its first-round directions were right on 88 of
+95 flux calls. It starts where the other optimisers have to get to, and this study cannot
+separate that from contamination. It also extracted things only the data held: three seeds
+derived, from the validator's error messages, a closed-form validity rule that agrees with
+the evaluator on all 5400 paid designs of the run. Then it spent more than half its budget
+walking the diameter from 3.384 to 3.38523 m toward a mass-fraction margin of 9 × 10⁻⁶, and
+never once in 67 rounds asked whether a heat shield weighing as much as the vehicle was a
+meaningful place to be. Dropping designs within 0.1% of a constraint cuts its final lead from
+0.0036 to 0.0020. And in one seed it threw away the correct validity rule it had derived,
+because the harness lets it remember only 400 characters of one field between rounds (NR-32).
+
+**2026-09-21 — H2 was not supported, and the study had been sized against a target it could
+not reach.** Run `M6-AF-20260920T211148Z`: five arms, five seeds, 200 cheap evaluations and 8
+real OpenFOAM calls each, 3 h 44 min, 125 CFD cases of which 11 failed and stay on record.
+The pre-declared verdict is NOT_SUPPORTED: the adaptive arm reached the 95% target in 0 of 5
+seeds, and so did every other arm. The LLM-guided adaptive arm was declared and not run,
+because its live calls were not authorised, so the hypothesis's "AI-guided" clause is
+untested.
+
+Why nobody reached the target is the finding. Extra CFD did not change what the designs are
+worth: the no-CFD arm's recommendations score 0.2753 on the starting surface and 0.2754 on a
+truth surface with 109 more CFD points. The drag surface was already accurate where the
+objectives are decided. And the target was out of reach of the study's own budget: all 25
+arm-seeds pooled, 5000 evaluations, reach 94.1% of a reference set by a 2 × 1000-evaluation
+search. The config's sizing section had checked statistical power and machine time. It had
+not checked reachability. The searches never got to where the front is (reference shapes at
+R_n/D 0.999–1.133; no arm found a feasible design above 0.984), so not one of the promoting
+arms' 94 calls was placed at R_n/D ≥ 1.0. The criterion was left as written and not
+re-scored; a reachable one is a new pre-declared study (NR-35). The adaptive arm did match the
+greedy arm's score on half the calls. That is true, it is not the criterion, and it is not
+claimed as support.
+
+**2026-09-21 — Under uncertainty the ordering held, the feasibility did not, and the
+generated report was wrong about itself in three places.** Runs `M7-ROBUST-20260920T211216Z`
+and `M7-UQ-20260920T233048Z`. Read as independent clouds, a 14.9 K difference between designs
+whose own spreads are 6.5 and 7.6 K would look marginal. That reading is wrong because every
+design was propagated on the same 3000 draws. Paired, the knee is 14.31 K cooler than the
+peak-flux-only design with a standard deviation of 1.45 K, in 3000 of 3000 draws and 24 of 24
+epistemic branches. Which model is right changes the size of the advantage by about ±3 K, not
+its sign.
+
+The word "feasible" did not survive for the nominal optima: they violate a constraint in
+29.6%, 34.4% and 46.6% of draws. None of it is thermal (bondline 0 of 3000 each). What is
+crossed is the mass-closure fence, pushed over by a ±2% mass dispersion on a placeholder
+mass, plus the unsourceable 12 g for one design. Then the robust optimiser did the
+mirror-image thing: all 46 designs of its front sit at exactly 1/32 on the mass-fraction
+chance constraint, having used the allowance to the last of 32 fixed draws, and on fresh
+draws one of 8 re-scored designs reads 5.7% against the 5% limit. The pre-declared shortcut
+verification passed as declared, a flipped verdict not being one of its three tolerances, and
+the flip is reported beside the pass (NR-33).
+
+The attribution confirmed one expectation and refuted another. At the front, the 20%
+disagreement between the two NASA nose-radius sources carries 71% of peak-flux variance, and
+exactly zero on the hemispherical baseline where they agree identically. But the bondline,
+the project's second objective, is governed by TPS conductivity (64%) and by heating above
+86 km (26%), both engineering judgment. The objective the project exists to study is
+dominated by the two numbers it has least evidence for.
+
+And the generated M7 report printed a projected throughput under the word "measured",
+claimed convergence to a few hundredths of a percent from a bootstrap that resampled rows
+which were not independent (a branch bootstrap gives about ten times more, and the baseline
+mean marginally misses its tolerance), and drew an attribution figure whose y-axis labels
+belonged to a different panel. Every table number matched its JSON; the picture of them did
+not (NR-34). The M5 generator had done the same kind of thing, labelling 4038 drag-surface
+look-ups as "CFD calls" in a study that ran the solver zero times (NR-31). Neither could be
+fixed while the studies held the source tree, so the corrections first went into hand-written
+addenda.
+
+**2026-09-21 — The generators were fixed once the tree was free, with a proof that no result
+moved.** A checker compared every stored value before and after against commit `eac22c7`:
+2,551 values in M5's summary and 13,744 in M7's unchanged; M6's and the robust run's files
+byte-identical; 272 of 275 table rows reappearing intact and 3 differing for declared
+reasons. One fix needed evaluations: the robust knee was propagated through the same 3000
+nested draws as the other three designs (`M7-LFL-20260921T011854Z`), after first reproducing
+120 of the study's own evaluations to 3.5 × 10⁻¹⁴ relative. Its violation probability is
+3.20% [2.63, 3.89] on that like-for-like sample; the 2.80% [1.68, 4.64] from the original 500
+mixed draws is kept beside it (`reports/milestones/REPORT_REGENERATION_2026-09-21.md`).
+
+**2026-09-21 — State at the end of the simulation work.** H0 is supported within the model.
+H1 is supported narrowly, as a statement about entry steepness at a fenced geometry. H2 is
+not supported. The AI ablation is mixed. The final paper was drafted by the AI assistant from
+the result files (`reports/final/AETHER_paper.md`). What the project still does not have is
+everything that needs a person: no coupon has been heated, nobody outside the project has
+criticised it, and the student has not yet read the code or revised the paper. By the
+specification's own final gate the project is not complete.
+
+A correction to an earlier entry, made here because this file is not rewritten: the
+2026-09-02 entry above says "Zero of 27 trajectories". The M1 milestone report, generated from
+run `M1-20260902T130547Z`, says 0 of 41 candidates, and that is the figure the paper uses.
+The entry is left as written.
+
 ## Assumptions rejected along the way
 
 - *That the trajectory solve could end at terminal altitude.* False; the bondline peak
@@ -298,3 +452,23 @@ Added 2026-09-20:
 - *That geometric membership tests are exact.* Whether a design at a box edge was evaluable
   depended on a floating-point residue of 2.2×10⁻¹⁶ and on which triangulation Qhull
   happened to build (NR-23).
+
+Added 2026-09-21:
+
+- *That a better drag model would make capsule shape matter to the optimum.* It made shape
+  matter across the box (C_D at peak heating 0.496–1.378 over twelve swept shapes) and not at
+  all along the front (1.363–1.364), because fences, not drag, fix the front's geometry
+  (NR-30).
+- *That a variable with a negligible Sobol' index is a variable an optimiser cannot exploit.*
+  The frozen shoulder ratio is worth about 7% of peak flux at the front (NR-29).
+- *That more CFD is worth buying.* In this design space 109 extra cases moved the no-CFD
+  arm's score by 0.0001 (NR-35).
+- *That a study sized for statistical power and machine time is sized.* M6's target sat above
+  what all of its searches pooled could reach (NR-35).
+- *That the mean of a limit cycle is the converged value.* It differed by about 0.03%, enough
+  to move the observed order of convergence from 0.67 to 1.13 (NR-25).
+- *That a nominally feasible optimum is feasible.* The three nominal optima violate a
+  constraint in 30–47% of draws, because an optimiser leaves a design on its constraint
+  (NR-33).
+- *That a generated report cannot be wrong if its numbers match its JSON.* Two were wrong in
+  their words, and one in a figure's axis labels (NR-31, NR-34).

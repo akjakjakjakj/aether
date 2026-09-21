@@ -101,10 +101,12 @@ Primary documents:
 
 **On the surrogate**
 
-13. The GP drag surface is fitted on 56 CFD points in four inputs, validated on a 7-point
-    held-out set drawn before any case ran, and its error bars are **inflated by a measured
-    factor of 1.65** because k-fold z-scores showed overconfidence. Is a one-number
-    recalibration adequate when the held-out points show a bias as well as a spread?
+13. The GP drag surface (`cfd_surface_v2`, extended to Mach 27 under gate G4 PASS) is fitted
+    on 69 usable CFD points in four inputs, validated on an 8-point held-out set drawn before
+    any case ran, and its error bars are **inflated by a measured factor of 1.21** because
+    k-fold z-scores showed overconfidence (the original `cfd_surface_v1`, 56 points / 7
+    held-out, used a factor of 1.65). Is a one-number recalibration adequate when the
+    held-out points show a bias as well as a spread?
 14. Shapes outside the convex hull of the training points are **refused**, not extrapolated
     (A-AERO-1), which means failed CFD cases shrink the usable design space. Is that the
     right trade?

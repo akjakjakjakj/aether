@@ -2,7 +2,9 @@
 
 Spec §51. Panel-by-panel source for an A0 portrait poster (841 × 1189 mm), three columns.
 
-**Status: skeleton.** `[PENDING FINAL RUN]` marks every panel that needs an unrun study.
+**Status: simulation panels filled 2026-09-21 from the result files at commit `de2a834`;
+AI-drafted, to be revised and owned by the student.** `[PENDING — STUDENT]` marks what
+depends on the physical experiment or on external review.
 
 ---
 
@@ -102,9 +104,21 @@ effective-nose-radius model agrees identically, so these numbers are unchanged b
 
 ### Panel 7. Pareto front
 
-`[PENDING FINAL RUN]` — `reports/figures/M4_pareto_front.png`, regenerated under the
-corrected heating model and the CFD drag surface, with the joint knee design and the
+Figure: `reports/figures/M4_pareto_front.png` (run `M4-OPT-20260920T205252Z`, Fidelity 1:
+corrected heating model and the CFD drag surface), with the joint knee design and the
 peak-flux-only optimum marked.
+
+> With CFD-derived drag, the knee of the front runs **14.9 K cooler** at the bondline than
+> the peak-flux-only optimum (403.5 K against 418.4 K), for **+21.5 kW/m²** of peak flux.
+>
+> Under the declared uncertainties, paired on the same 3000 draws: **−14.31 K**, s.d. 1.45 K,
+> cooler in 3000 of 3000 draws and 24 of 24 epistemic branches.
+
+Caption, at the same size as the result and not smaller: *This is a trade in entry angle at
+a geometry fixed by placeholder constraints. Every front design has the same diameter to
+within 0.021 m and C_D at peak heating varies by about 0.1% across the front. The knee's heat
+shield is 346 kg of a 350 kg vehicle. Sources: `M4_pareto_optimisation.md` §10–§11a;
+`M7_addendum_posthoc.md` §1.*
 
 ---
 
@@ -140,11 +154,16 @@ Two entries, because this is the panel people stop at.
 
 ### Panel 10. Limitations (not small type)
 
-> - Every optimisation result is **Fidelity 0**: constant drag coefficient. The CFD drag
->   surface is provisional and **switched off**.
-> - CFD gate **G4 is not passed**. Mesh independence incomplete; no published blunt-body case
->   compared.
+> - Panels 4 to 6 are **Fidelity 0**: constant drag coefficient. Panel 7 is Fidelity 1: drag
+>   from inviscid perfect-gas CFD on a coarse mesh, validated on a sphere at Mach 3 and 6
+>   only, with a declared ±5% band that has not been validated.
+> - CFD gate G4 reads `PASS` under a restart rule written after the first results were seen.
+>   On the original runs it read `LIMITED`.
+> - **H2 was not supported.** Adaptive use of CFD reached its target in 0 of 5 seeds; extra
+>   CFD changed the no-CFD arm's score by 0.0001; the AI-guided arm was not run.
 > - **No physical measurement exists.** The thermal coupon has not been printed.
+>   `[PENDING — STUDENT]`
+> - No external review has taken place. `[PENDING — STUDENT]`
 > - Several constraint limits are engineering placeholders. The 12 g deceleration limit
 >   corresponds to **no** documented sustained-g curve, and adopting the documented curve for
 >   a deconditioned crew would empty the feasible region entirely.
@@ -168,8 +187,11 @@ QR code to the repository, bottom right, ≥ 40 mm square.
 
 - Any Spearman correlation coefficient.
 - Any margin ratio.
-- Any AI-versus-human optimiser comparison, until M5 has run and the declared criterion has
-  been evaluated.
+- Any AI-versus-conventional optimiser comparison beyond one sentence in the conversation.
+  M5 has run and the declared rule returned "AI helped" at 50 and 100 evaluations and "no
+  measured difference" at 200 (n = 5, one model; the early lead cannot be separated from
+  prior knowledge). It is a result about methods, it is mixed, and it does not belong on a
+  poster about the physics. The spoken answer is in `docs/defense_questions.md` Q44.
 - Any mention of a venue, award, institution or admissions context.
 - Anything about the framework, the language model, or the tooling in the top third of the
   poster. Spec §51: the first thing a reader sees is the scientific question.

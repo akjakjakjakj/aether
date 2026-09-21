@@ -35,10 +35,11 @@ The reading guide below is the part that earns the reviewer's time. Do not remov
 > **What I should warn you about up front**, so you do not spend your time rediscovering
 > things I already know are weak:
 >
-> - Every optimisation result is at reduced fidelity, with a constant drag coefficient. The
->   CFD-derived drag model exists but is provisional and switched off.
-> - The CFD validation gate has not passed: mesh independence is incomplete and no published
->   blunt-body case has been compared.
+> - The CFD validation gate (G4) passed on 2026-09-20, on a restart rule written after the
+>   original results were seen — see `VALIDATION_MATRIX.md`'s note on that history. The
+>   optimisation results now run on a CFD-derived drag surface (`cfd_surface_v2`, Mach
+>   3–27), not a constant drag coefficient, but that surface is coarse-mesh, perfect-gas
+>   and has no capsule validation data of its own — see row M3.
 > - No physical experiment has been run. The thermal coupon has not been printed.
 > - Several constraint limits and material properties are engineering placeholders, and the
 >   assumptions file says which.

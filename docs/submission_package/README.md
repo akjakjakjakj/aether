@@ -4,11 +4,18 @@ Spec §49 and §51. Source material for describing this project to people outsid
 abstract, a two-page technical brief, a poster, two spoken explainers, an authorship and AI
 disclosure, an acknowledgement template and a reproducibility section.
 
-**These are skeletons.** Every place a result belongs is marked `[PENDING FINAL RUN]`,
-because the studies that would fill those slots have not been run. The structure, the
-claims each section is *allowed* to make, and the limitations each must carry are written
-now so that filling them in later is transcription from result files rather than
-composition under deadline.
+**State on 2026-09-21.** The simulation studies are complete (commit `de2a834`) and every
+`[PENDING FINAL RUN]` slot has been filled by transcription from the result files and the
+generated milestone reports. The filling was done by the AI assistant; the student has not
+yet revised any of it. What is left is marked **`[PENDING — STUDENT]`** and cannot be filled
+by anyone else: the coupon experiment's results, any external review, the public repository
+location and release commit, and the review counts in the disclosure. The full paper is
+`reports/final/AETHER_paper.md`; the hand-over note is `reports/final/HANDOFF.md`.
+
+One thing every artefact here must now carry, because it is the easiest thing to lose in
+compression: the Fidelity-1 result is a trade in entry angle at a geometry fixed by
+placeholder constraints (the knee's heat shield is 346 kg of a 350 kg vehicle), and H2 was
+not supported.
 
 ---
 
@@ -49,9 +56,9 @@ They are not stylistic preferences.
    "simulation suggests", "validated against X within Y%". Never "flight ready", "solves
    re-entry", "proves optimal", "eliminates heating".
 6. **The limitations travel with the claim.** A brief or a poster that states the result
-   without stating that it is a reduced-order result at Fidelity 0, with no CFD in the loop
-   and no physical measurement, is not a shortened version of this project. It is a
-   different and less honest project.
+   without stating which fidelity it came from, that the optimised geometry is fixed by
+   placeholder constraints, and that no physical measurement exists, is not a shortened
+   version of this project. It is a different and less honest project.
 7. **The AI disclosure is not optional and is not buried.** It appears in every artefact
    that carries a result, at a size a reader will actually see.
 8. **Nothing here is described as reviewed, validated or endorsed by any person** unless a
@@ -72,14 +79,19 @@ They are not stylistic preferences.
 - the negative results;
 - the AI disclosure and the reproducibility instructions.
 
-**Cannot be written now**, and is marked `[PENDING FINAL RUN]` wherever it appears:
+**Written on 2026-09-21 from the final runs** (this list previously read "cannot be written
+now"):
 
 - the Pareto front under the corrected heating model and the CFD drag surface (M4 re-run);
 - the AI-versus-conventional-optimiser comparison (M5);
-- whether adaptive fidelity saves CFD calls (M6);
+- whether adaptive fidelity saves CFD calls (M6: not supported);
 - uncertainty bands, the p-box, the Sobol' attribution and robust designs (M7);
-- the physical coupon comparison (M8);
-- the §39 four-row comparison table, which needs all of the above.
+- the §39 four-column comparison table, with the like-for-like robust column.
+
+**Still cannot be written**, and is marked `[PENDING — STUDENT]` wherever it appears:
+
+- the physical coupon comparison (M8), because the experiment has not been run;
+- anything about external review, because none has been requested or received.
 
 ---
 

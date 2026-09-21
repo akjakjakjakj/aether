@@ -15,13 +15,16 @@ uv pip install -e ".[dev]"
 Dependencies are pinned by lower bound in `pyproject.toml`: numpy, scipy, matplotlib,
 pyyaml, pandas, pyarrow. No compiled extensions, no GPU, no network access at runtime.
 
-OpenFOAM v2606 is required only for Fidelity 1, which is not yet active. Nothing below
-needs it.
+OpenFOAM v2606 is required only to build or extend a CFD-derived aero surface (M2
+validation, M3 design-point runs, M6 promotions). Fidelity 1 **is** active: since
+2026-09-21 `configs/design_space.yaml` sets `cfd_surface_v2` (a pre-built GP surface, not
+a constant coefficient) as the default aero model, but evaluating that surface at runtime
+is a lookup, not a live OpenFOAM run. Nothing below needs OpenFOAM installed.
 
 ## Commands
 
 ```bash
-make test           # 38 verification tests: analytical benchmarks, convergence, ordering
+make test           # 498 verification tests (497 pass, 1 skipped pending sourcing): analytical benchmarks, convergence, ordering
 make baseline       # one nominal entry, prints the performance vector, writes figures
 make burn-vs-bake   # M1 + M1b: the full result, reports and figures
 make figures        # regenerate every figure from the last run
@@ -48,7 +51,7 @@ Measured on an Apple M4, single-threaded. Nothing here is parallelised yet.
 | `make burn-vs-bake` | ~4 min (41 one-dimensional + 140 grid evaluations) |
 | `make doe` | **Fidelity 1 (2026-09-21, run `M4-DOE-20260920T204844Z`): 3 min 20 s** on 6 worker processes, one BLAS thread each - 9294 coupled evaluations, 47.5/s, median 0.150 s per evaluation; the hull pre-flight adds ~10 s. (Fidelity 0, 2026-09-20: ~6 min on a loaded machine.) |
 | `make optimize` | **Fidelity 1 (run `M4-OPT-20260920T205252Z`): 7 min 23 s** on 6 worker processes (3 methods × 7 seeds × 1000 evaluations; per seed: LHS 11 s, NSGA-II 28 s, scalarised DE 24 s). REFUSES if the latest DOE's screening is void for today's design space. (Fidelity 0: ~13 min on a loaded machine.) `scripts/run_m4_audit_probes.py <run>` then `make optimize-report RUN_ID=<run>`: ~15 s, adds the audit probes to the report. |
-| `make ablation` | M5, added 2026-09-20. **Not yet run to completion**; estimated ~2–3 h, almost all LLM latency (≈ 5 min per call, ≤ 80 calls). Needs the Claude Code CLI installed and signed in; reads no API key. |
+| `make ablation` | M5, added 2026-09-20. **Run to completion 2026-09-20** (`M5-ABL-20260920T211134Z`): ~1 h 34 min measured (21:11:34–22:45:22 UTC), 67 of a cap of 80 live LLM calls made, 0 failed or malformed, almost all LLM latency. Needs the Claude Code CLI installed and signed in; reads no API key. |
 | `make ablation-replay RUN_ID=…` | re-runs a recorded M5 study with **no LLM access**; a few minutes (evaluations and GP fits only) |
 | `make cfd-validate` | M2 (gate G4). **Needs OpenFOAM** (v2512 used). Serial solvers. Measured solver wall times, run `M2-20260920T123901Z`: coarse 63–93 s, medium ~490 s per case; the two **fine cases took 14 247 s (Mach 3) and 8 911 s (Mach 6)** for 100 000 iterations each — **while the machine was heavily loaded** (the M3 design-point study, 4 solvers, and interactive sessions were running beside them), so these (0.14 and 0.09 s per iteration) are not benchmarks of the solver and no unloaded timing of the fine mesh exists. The fine-level lower-Courant restarts (`--stage restart`, 4 solvers side by side, 2 × 5000 iterations each) took ~1460 s each (0.15 s per iteration with four to six solvers on a 4-performance-core machine), ~25 min wall in total. Negative case ~130 s; pipeline demo ~110 s (failed attempt) + ~1050 s (usable attempt) + ~60 s (isolation case). Resumable by run ID: finished cases are loaded, a case directory left by a killed driver is set aside and re-run. |
 | `make cfd-report RUN_ID=…` | ~1–2 min: tables, nine figures and the M2 report from the run's files (runs `postProcess -func writeCellCentres` on the fine cases if OpenFOAM is present) |
@@ -60,7 +63,7 @@ Measured on an Apple M4, single-threaded. Nothing here is parallelised yet.
 | `make adaptive-report RUN_ID=…` | seconds; figures + report from the run's files |
 | `make adaptive-smoke` | ~10 min: 1 seed, 2 real CFD promotions, one at a time. Not a result; writes only into `results/M6/<run>/` |
 | `make adaptive-dry-run` | ~2–4 min (2 min measured 2026-09-21 on `cfd_surface_v2`), no OpenFOAM: the whole M6 pipeline with a FAKE analytic F1. Not a result |
-| `make uncertainty` | M7, added 2026-09-20. **MEASURED 2026-09-21: 25.0 min** (1,499 s, run `M7-UQ-20260920T233048Z`, 19,668 evaluations, `--workers 4` on the 10-core machine while M6 ran 3 CFD solvers and M5 ran: 13.1 eval/s achieved against 17.0 projected; propagation 946 s, attribution 1,462 s as logged). Do NOT use `make uncertainty-report` until NR-34 item 6 is fixed - it drops two figures. Written before the run: Its preconditions hold since the 2026-09-21 Fidelity-1 re-run of `make doe && make optimize` (current screening, all four C_D uncertainty terms available incl. the GCI band); it still refuses whenever the design space changes again. Estimated **~15 min** on 6 workers: 4 designs x 3000 nested draws + 2 designs x 2816 Saltelli points + the §39 table, projected from a per-evaluation cost the script MEASURES at launch and prints beside the value declared in `configs/uncertainty.yaml`. |
+| `make uncertainty` | M7, added 2026-09-20. **MEASURED 2026-09-21: 25.0 min** (1,499 s, run `M7-UQ-20260920T233048Z`, 19,668 evaluations, `--workers 4` on the 10-core machine while M6 ran 3 CFD solvers and M5 ran: 13.1 eval/s achieved against 17.0 projected; propagation 946 s, attribution 1,462 s as logged). `make uncertainty-report` is safe to use as of 2026-09-21 — NR-34 item 6 (the runner passed `None` for the nominal/robust fronts, silently dropping two figures) was fixed and the report regenerated with all seven figures intact (`reports/milestones/REPORT_REGENERATION_2026-09-21.md`). Written before the run: Its preconditions hold since the 2026-09-21 Fidelity-1 re-run of `make doe && make optimize` (current screening, all four C_D uncertainty terms available incl. the GCI band); it still refuses whenever the design space changes again. Estimated **~15 min** on 6 workers: 4 designs x 3000 nested draws + 2 designs x 2816 Saltelli points + the §39 table, projected from a per-evaluation cost the script MEASURES at launch and prints beside the value declared in `configs/uncertainty.yaml`. |
 | `make robust` | M7. **MEASURED 2026-09-21: 2 h 18 min** (8,305 s, run `M7-ROBUST-20260920T211216Z`, 98,256 logged evaluations, `--workers 4`, same shared machine at load average 12-77; the three seeds took 2,033 s, 1,976 s and 3,461 s as contention rose - the runner's own projection was 118.5 min). Written before the run: Estimated **~1 h** on 6 workers: 3 seeds x 30000 inner evaluations (24 candidates x 32 common random draws per generation, ~39 generations) plus 8 x 1000 full-Monte-Carlo evaluations to verify the shortcut. Background it. |
 | `make uncertainty-smoke` | ~2 min: the robust and propagation chains end to end at tiny sample sizes. Not a result; writes only into `results/M7/<run>/` and publishes nothing. |
 | `make uncertainty-time` | seconds; measures and prints the per-evaluation cost the study is sized from. |

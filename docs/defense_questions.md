@@ -13,11 +13,19 @@ questions to be able to answer cold. Answering "the model said so" is a fail.
   is worse than no pointer.
 - **Push** — the follow-up a good examiner asks next, and how to meet it.
 
-**`[PENDING FINAL RUN]`** marks an answer that depends on a study which has not been run:
-M4 after the nose-radius correction, M5, M6, M7 and M8. Those entries state the question,
-the method and what the criterion for an answer is. They do **not** state a result, because
-there is not one. If an examiner asks anyway, the correct answer is "the harness is built
-and verified, the criterion was declared before the run, and the run has not happened."
+**Updated 2026-09-21.** M4 (re-run at Fidelity 1), M5, M6 and M7 have run, and the answers
+that were marked `[PENDING FINAL RUN]` have been filled from the generated milestone reports
+and their hand-written addenda, with the file named beside each number. The filling was done
+by the AI assistant; say these answers in your own words and check each against its file
+before relying on it. **`[PENDING — STUDENT]`** marks what still has no answer because it
+depends on the physical experiment (M8) or on external review. For those, the correct answer
+is "the support package is built and checked on synthetic data, the criterion will be
+declared before the run, and the run has not happened."
+
+Several *main* answers below were written on 2026-09-20 and still describe the Fidelity-0
+state (for example Q30's indices, and any answer that says the drag surface is provisional or
+that M5, M6 or M7 has not run). The filled *Push* answers are current. Bringing the main
+answers up to date is part of reading the code, and is the student's.
 
 ---
 
@@ -852,8 +860,23 @@ here is frozen because the model is blind to it, not because shape is unimportan
 in the report and enforced in code. The M4 screening is already **void**, for a second
 reason: the effective-nose-radius correction made `shoulder_ratio` non-inert (worth 1.45% of
 peak flux across its box) after it had been frozen on a total-order index of exactly zero.
-M7's runner refuses to start on a stale screening and prints why. `[PENDING FINAL RUN]` for
-what the regenerated screening says.
+M7's runner refuses to start on a stale screening and prints why.
+
+*Filled 2026-09-21 from `reports/milestones/M4_pareto_optimisation.md` §5–§6, §11 (vi) and
+NR-29.* The screening was re-derived from scratch at Fidelity 1 (run
+`M4-DOE-20260920T204844Z`). Total-order indices inside the Saltelli sub-box: peak flux is
+diameter 0.896, bluntness 0.063, entry angle 0.054; bondline is diameter 0.429, insulator
+thickness 0.377, entry angle 0.239; max g is entry angle 0.979. Active variables: diameter,
+bluntness, cone half-angle (it moves no objective but decides validity) and entry angle.
+**The rule froze the shoulder ratio again**, on an upper bound of 0.0048 against a threshold
+of 0.01, and that is the part to be ready for. Probes on the three selected front designs
+show the frozen lever is worth 16.6–19.9 kW/m², about 7% of peak flux, and 3.1–3.9 K at the
+front. A Sobol' index is a share of variance over the sub-box, where diameter carries about
+0.90 of the flux variance, so a 7% lever rounds to zero. The rule answers "which variables
+explain the spread of the box", not "which would an optimiser exploit at the optimum". And
+the lever is one the stagnation-point-only heating model rewards for the wrong reason. The
+freeze was left in place and labelled a fence that happens to stand in the right place;
+re-running the screening with a rule chosen after seeing this would have been tuning.
 
 ---
 
@@ -896,10 +919,13 @@ front (NR-22), six near-duplicate points sat in one corner, and near-duplicates 
 more confident than it should be, because the kernel reads repeated agreement as evidence of
 low noise. The k-fold z-score spread rose from about 1.1 to about 1.65 when they went in.
 
-The response was a **sigma inflation factor of 1.65**, measured rather than assumed, stored
-with the surface and applied to the GP term before M7 samples it. The report calls it what
-it is: a one-number recalibration, not a cure. The held-out points show a **bias** as well
-as a spread, and a single multiplier cannot fix a bias.
+The response was a **sigma inflation factor**, measured rather than assumed, stored with the
+surface and applied to the GP term before M7 samples it: **1.65 on `cfd_surface_v1`**; the
+surface was rebuilt as `cfd_surface_v2` on 2026-09-20 (extended to Mach 27 under gate G4
+PASS) with a recomputed factor of **1.21**, which is what M7's propagation and robust runs
+actually sampled. The report calls it what it is: a one-number recalibration, not a cure.
+The held-out points show a **bias** as well as a spread, and a single multiplier cannot fix
+a bias.
 
 **Evidence.** `reports/milestones/M3_coupled_model.md` §6 (the coverage table and
 §"Calibration"); `docs/negative_results.md` NR-22;
@@ -973,8 +999,25 @@ distribution, which it is not.
 `tests/test_uncertainty.py` (nested draws proven to share common random numbers across
 epistemic branches and to hold the epistemic block fixed within one).
 
-**Push.** *"Which dominates, in your problem?"* `[PENDING FINAL RUN]` — the study has not
-run. The declared hypothesis, written before building, is that epistemic terms dominate,
+**Push.** *"Which dominates, in your problem?"* *Filled 2026-09-21 from
+`reports/milestones/M7_uncertainty_robust.md` §3.1, §4 and `M7_addendum_posthoc.md` §5 (run
+`M7-UQ-20260920T233048Z`).* Epistemic, for both thermal objectives: 84.4–93.9% of peak-flux
+variance and 97.2–98.7% of bondline variance across the four designs. Max g is the opposite
+(12–38% epistemic; it is driven by delivered entry angle and density). At the knee
+(K = 0.417), peak flux is dominated by the choice between the two NASA nose-radius sources,
+S_T 0.706 [0.599, 0.819], then the Sutton–Graves constant 0.181; on the hemispherical
+baseline that same term is exactly 0.000, because the two sources agree identically at
+K = 1, and the constant leads at 0.609. The bondline is dominated by TPS conductivity (0.638
+at the knee, 0.883 at the baseline) and by the multiplier on heating above 86 km (0.262 at
+the knee), **both engineering judgment**. So the second objective is governed by the two
+numbers the project has least evidence for. The GP surrogate (≤ 0.020) and the mesh term
+(≤ 0.003) are negligible everywhere. There are 12 active inputs, 7 of them judgment (T3),
+4 primary (T1), 1 secondary. An index on an epistemic input is a sensitivity to which model
+is believed, not a share of real variability. And every spread is a lower bound, because gate
+G2′ (catalycity above all) has no distribution attached.
+
+What follows is the text written before the study ran, kept for the record. The declared
+hypothesis, written before building, is that epistemic terms dominate,
 because the aleatory inputs are a few percent while the epistemic ones are a ±15% band on a
 placeholder conductivity and a ~20% disagreement about R_eff. The smoke runs put the
 epistemic share of the bondline variance at 98–99%, but on 12 draws with a stale
@@ -1008,8 +1051,24 @@ average one.
 **Evidence.** `ASSUMPTIONS.md` A-UQ-ROB-1; `docs/theory/uncertainty.md` §on the chance
 rule; `configs/uncertainty.yaml`; `tests/test_robust.py`.
 
-**Push.** *"Do the M4 front designs survive a chance constraint?"* `[PENDING FINAL RUN]`.
-The declared hypothesis is that they do not, because an optimiser with no reason to leave
+**Push.** *"Do the M4 front designs survive a chance constraint?"* *Filled 2026-09-21 from
+the M7 report §3.2, §5–§6, the addendum §2–§3 and NR-33.* No. P(any constraint violated) is
+34.40% [32.72, 36.12] for the peak-flux-only optimum, 29.60% [27.99, 31.26] for the knee and
+46.60% [44.82, 48.39] for the bondline-only optimum, against the declared 5%. **None of it is
+thermal:** the bondline limit is violated in 0 of 3000 draws for each, which is below 0.13%
+at 95% confidence and is not zero. What is crossed is the heat-shield mass-fraction fence,
+pushed over by a ±2% mass dispersion on a 350 kg placeholder, plus the 12 g limit for the
+bondline-only design (36.00%). The designs sat 0.84%, 1.09% and 0.19% from their binding
+constraint at nominal. So the fragility is about two placeholders and a fence, not evidence
+that anything overheats. The robust knee, propagated on the same 3000 draws, reads 3.20%
+[2.63, 3.89], all of it mass fraction, for +7.8 kW/m² (+3.1%) of nominal peak flux and a
+bondline lower by 0.42 K. Be ready for the follow-up: all 46 robust-front designs sit at
+exactly 1/32 on the mass-fraction chance constraint, the optimiser having used its allowance
+to the last of 32 fixed draws, and on 1000 fresh draws one of 8 checked designs reads 5.7%
+against the 5% limit.
+
+Written before the study ran, kept for the record: the declared hypothesis is that they do
+not, because an optimiser with no reason to leave
 margin parks on its binding constraint and A-LIM-1b records the baseline at +0.9% on the g
 limit. It is untestable until the front is regenerated, because the designs in question came
 from a superseded run.
@@ -1062,7 +1121,20 @@ a wrong violation probability. A verification that cannot fail is a rubber stamp
 **Evidence.** `ASSUMPTIONS.md` A-UQ-ROB-2; `src/aether/uncertainty/`;
 `tests/test_robust.py` (the three injected-failure tests).
 
-**Push.** *"What did the verification say?"* `[PENDING FINAL RUN]`. Smoke runs at S = 8
+**Push.** *"What did the verification say?"* *Filled 2026-09-21 from the M7 report §5.2 and
+the addendum §3 (run `M7-ROBUST-20260920T211216Z`).* PASSED, applied exactly as declared.
+Eight designs along the robust front were re-scored with 1000 fresh independent draws:
+relative bias −1.61% on p95 peak flux and +0.32% on p95 bondline (tolerance 5%); Spearman
+1.000 on both (tolerance ≥ 0.80); largest violation-probability error 2.60% (tolerance 5%).
+The bias has a consistent sign: the 32-draw p95 under-reads peak flux on all 8. One
+feasibility verdict flipped: design `C-22b67c409bf2` at the low-bondline end reads
+P(any) = 5.7% on fresh draws, 2.6% of it from max g, which the 32 inner draws had seen as
+zero. A flipped verdict is not one of the three declared tolerances, so the check passes and
+the flip is reported beside it, not absorbed into it. The criterion was not re-tuned either
+way. Also true and slightly embarrassing: common random numbers produced 0 cache hits in
+90,000 inner evaluations, so the free re-evaluations the harness anticipated never happened.
+
+Written before the study ran, kept for the record: smoke runs at S = 8
 passed on three designs with biases of −1.51% and −0.69% and Spearman 1.000 on both
 objectives, which means the plumbing works and nothing more. The instruction written into
 the notebook is to **read the shortcut verification first** when the study runs, before
@@ -1186,8 +1258,8 @@ simulator.
 `experiments/thermal_coupon/blind_validation/` (`make_prediction.py`, README);
 spec §47; `VALIDATION_MATRIX.md` row M8 (`IN_PROGRESS`).
 
-**Push.** *"Has any of this been run?"* `[PENDING FINAL RUN]` — **no coupon has been
-printed, no heater has been switched on, and no measurement exists.** What has been done is
+**Push.** *"Has any of this been run?"* `[PENDING — STUDENT]` — as of 2026-09-21 **no coupon
+has been printed, no heater has been switched on, and no measurement exists.** What has been done is
 the whole chain against a **synthetic twin**: data generated by this project's own solver
 with known parameters. That is a check on the software and nothing else, and the matrix row
 says so.
@@ -1303,8 +1375,29 @@ in the report.
 `src/aether/optimization/ai_agent.py`;
 `docs/engineering_notebook/2026-09-20_M5_ai_ablation_fidelity0.md`.
 
-**Push.** *"Did the AI beat the conventional optimisers?"* `[PENDING FINAL RUN]` — **the
-study has not been run.** What exists is a criterion, declared before any run: "AI helped"
+**Push.** *"Did the AI beat the conventional optimisers?"* *Filled 2026-09-21 from
+`reports/milestones/M5_ai_ablation.md` §3–§4, `M5_qualitative_audit.md` and NR-32 (run
+`M5-ABL-20260920T211134Z`, Fidelity 1, 200 evaluations × 5 seeds, model `claude-sonnet-5`).*
+Early, yes; at the end, not by an amount I had agreed in advance to count. Against the best
+conventional method, which was the Bayesian optimiser at every checkpoint: +0.0283 in
+hypervolume at 50 evaluations (Holm p 0.0278) and +0.0085 at 100 (0.0119), both "AI helped";
++0.0036 at 200, "no measured difference". Be precise about that last cell: the test
+*rejected* there (every agent seed beat every `bo_parego` seed, p = 1/252), and the verdict
+comes from the effect-size leg, because 0.0036 is under the 0.005 threshold declared
+beforehand. Three things to say with it. One: the agent stated the direction of every lever
+in round 1, before it had data, 35 of 47 rounds say it is using prior knowledge, and its
+first-round directions were right on 88 of 95 flux calls, so the early lead measures priors
+plus data and cannot be separated from contamination. Two: dropping designs within 0.1% of a
+constraint cuts the final lead from 0.0036 to 0.0020, so a little under half of it is
+precision in parking on a mass fence and an unsourceable 12 g; a fifth of its budget went on
+near-repeats that bought 0.0004. Three: n = 5, one model, one easy problem with monotone
+free improvements, which is the most favourable case for a textbook prior. Nothing shows it
+found a design that NSGA-II with five times the budget did not. It arrived sooner and parked
+closer. The separate claim that AI-guided *adaptive fidelity* would save CFD runs (H2) was
+not supported, and its AI-guided arm was never run (`M6_adaptive_fidelity.md`, NR-35).
+
+Written before the study ran, kept for the record. The criterion, declared before any run,
+was: "AI helped"
 at 50/100/200 evaluations only if mean hypervolume exceeds the best non-LLM method's by
 ≥ 0.005 **and** a one-sided exact permutation test gives p < 0.05 after Holm correction;
 mirror image for "AI hurt"; otherwise "no measured difference". With n = 5 seeds only

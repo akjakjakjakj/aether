@@ -3,7 +3,9 @@
 Spec §51. A longer piece than the 90-second explainer: this one shows the work, including the
 parts that went wrong.
 
-**Status: skeleton.** `[PENDING FINAL RUN]` marks beats that need an unrun study.
+**Status: filled 2026-09-21 from the result files at commit `de2a834`; AI-drafted.** The
+spoken lines are the student's to rewrite in his own words. `[PENDING — STUDENT]` marks what
+depends on the physical experiment or on external review.
 
 Target 4:00. Seven beats. Every visual is a file that already exists in the repository or a
 screen recording of a command that actually runs.
@@ -135,16 +137,49 @@ This is the beat that distinguishes this video from a results summary. Give it t
 
 ## Beat 6 — the results (3:20–3:45)
 
-`[PENDING FINAL RUN]`
+**Visual.** `reports/figures/M4_pareto_front.png`; then `reports/figures/M7_pbox.png`; then
+the §39 comparison table from `reports/milestones/M7_uncertainty_robust.md` §6; then
+`reports/figures/M6_cfd_spend_map.png`.
 
-**Visual.** The regenerated Pareto front; the p-box from M7; the §39 comparison table.
+**Spoken (numbers from the result files; wording to be made the student's own).**
 
-**Spoken.** To be written from the result files. Content required: the front under the
-corrected heating model and the CFD drag surface; the joint-versus-peak-only comparison with
-its uncertainty band; whether the robust design differs from the nominal one; and, if M5 and
-M6 ran, the declared verdict on whether AI guidance and adaptive fidelity measurably helped,
-including the `no measured difference` and `NOT_TESTABLE` outcomes, which are real verdicts
-and are said out loud if that is what the criterion returns.
+> With the corrected heating and drag taken from CFD, I ran the optimisation again. The
+> design at the knee of the front runs 14.9 kelvin cooler at the bondline than the one a
+> peak-flux-only search picks, and pays 21.5 kilowatts per square metre of peak flux for it.
+>
+> Then I asked whether that survives what I do not know. Twelve uncertain inputs, three
+> thousand draws, every design on the same draws. Paired, the difference is 14.3 kelvin with
+> a spread of one and a half, and the knee is cooler in every single draw.
+>
+> Here is what that result is not. Every design on that front is the same shape and the same
+> size. The optimiser grew the diameter until the heat shield weighed as much as the vehicle,
+> 346 kilograms out of 350, and stopped only because I had told it a shield cannot outweigh
+> the vehicle. So the front is a curve in entry angle, drawn at a vehicle nobody could build.
+> It tells you about steepness. It does not tell you about shape.
+>
+> The nominal optima also fail a constraint in thirty to forty-seven percent of draws. None
+> of those failures is thermal; they are the mass limit and the g limit. A design optimised
+> with a five percent chance constraint brings that down to 3.2 percent, for about three
+> percent more peak flux.
+>
+> Two method questions. A language-model agent beat the best conventional optimiser at fifty
+> and a hundred evaluations, and by two hundred the rule I had written down beforehand said
+> no measured difference. It knew the textbook directions before it saw any data, and I cannot
+> separate that from reasoning. And my third hypothesis, that choosing CFD runs adaptively
+> would save CFD runs, was not supported. No arm reached the target in any seed, the target
+> turned out to be out of reach at that budget, which was my sizing mistake, and a hundred
+> and nine extra CFD points changed the no-CFD arm's score by one part in ten thousand.
+
+**Sources.** `M4_pareto_optimisation.md` §10, §11a; `M7_addendum_posthoc.md` §1;
+`M7_uncertainty_robust.md` §3.2, §6; `M5_ai_ablation.md` §4; `M6_adaptive_fidelity.md`;
+`M6_addendum_posthoc.md` §2; NR-30, NR-33, NR-35.
+
+**On screen.** The §39 table with the like-for-like robust column and its footnote. Not a
+hypervolume number; nobody watching knows what one is.
+
+**Experimental comparison.** `[PENDING — STUDENT]`. If the coupon experiment has been run by
+the time this is recorded, it gets its own beat between 6 and 7, from
+`experiments/thermal_coupon/results/`, and beat 7's sentence about the laboratory changes.
 
 ---
 
@@ -155,9 +190,11 @@ read.
 
 **Spoken (final, not to be rushed or cut).**
 
-> To be clear about what this is. Every optimisation number here is at reduced fidelity, with
-> a constant drag coefficient. The CFD validation gate has not passed. Nothing has been
-> measured in a laboratory. Several of the constraint limits are engineering placeholders,
+> To be clear about what this is. The drag comes from inviscid, perfect-gas CFD on a coarse
+> mesh, checked against published values on a sphere at two Mach numbers and nowhere else,
+> and that check first came back limited before a restart rule I wrote afterwards turned it
+> into a pass. Nothing has been measured in a laboratory, and nobody outside the project has
+> reviewed it. Several of the constraint limits are engineering placeholders,
 > and one of them, the deceleration limit, matches no document I could find; the documented
 > alternative would empty the feasible region entirely, and that is an open decision, not a
 > setting.

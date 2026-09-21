@@ -1,5 +1,9 @@
 # Final paper — outline and claim budget
 
+> **Note, 2026-09-21.** This outline predates the final M4–M7 study runs and the paper
+> draft; it is a pre-study planning record, not rewritten to match what actually ran.
+> `reports/final/AETHER_paper.md` supersedes it.
+
 Spec §40. Source structure for a 15–25 page paper. Twenty required sections, in the
 specification's order.
 
