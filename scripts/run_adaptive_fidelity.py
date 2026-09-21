@@ -277,8 +277,12 @@ def publish(summary: dict, out_dir: Path) -> int:
     figures = plot_adaptive_figures(summary, pd.read_csv(out_dir / "curves.csv"), calls,
                                     base.table, reference_shape_frame(shapes.to_dict("records")),
                                     fig_dir)
+    companion = ROOT / "reports" / "milestones" / "M6_addendum_posthoc.md"
+    addendum = (companion.name if official and companion.exists()
+                and summary["run_id"] in companion.read_text() else None)   # never a stale one
     report = write_m6_report(summary, report_path,
-                             figure_prefix="../figures" if official else "figures")
+                             figure_prefix="../figures" if official else "figures",
+                             snapshot=snap, addendum=addendum)
     print()
     for arm, a in summary["arms"].items():
         print(f"  {arm:<12} truth HV {a['hv_truth_mean']:.4f}  belief {a['hv_belief_mean']:.4f}"

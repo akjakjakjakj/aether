@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import subprocess
 from dataclasses import asdict, dataclass, field
 from datetime import UTC, datetime
@@ -88,3 +89,60 @@ def snapshot_config(config: dict[str, Any], out_dir: str | Path, meta: RunMeta) 
     with open(target, "w") as fh:
         yaml.safe_dump(payload, fh, sort_keys=False)
     return target
+
+
+_CREATED = re.compile(r"^\s*created_utc:\s*'?([0-9T:+\-.]+)'?\s*$", flags=re.MULTILINE)
+
+
+def run_window(run_dir: str | Path) -> tuple[datetime, datetime] | None:
+    """(start, end) of a run, UTC, from what the run itself recorded.
+
+    start = `_meta.created_utc` of its config snapshot (written once, at launch);
+    end   = modification time of its append-only `candidates.csv`, i.e. the moment of its
+            last evaluation. Report-only rebuilds rewrite `summary.json`, never that log.
+    None if either record is missing. A file time is weaker evidence than a logged
+    timestamp (copying a results tree resets it) - callers that publish a window should
+    store it the first time it is computed and reuse the stored value afterwards.
+    """
+    run_dir = Path(run_dir)
+    snap, log = run_dir / "config_snapshot.yaml", run_dir / "candidates.csv"
+    if not (snap.exists() and log.exists()):
+        return None
+    with open(snap) as fh:
+        match = _CREATED.search(fh.read(2000))
+    if match is None:
+        return None
+    start = datetime.fromisoformat(match.group(1))
+    if start.tzinfo is None:
+        start = start.replace(tzinfo=UTC)
+    return start, datetime.fromtimestamp(log.stat().st_mtime, tz=UTC)
+
+
+def overlapping_runs(results_root: str | Path, run_dir: str | Path) -> dict[str, Any] | None:
+    """Every other run under `results_root` whose recorded window overlaps `run_dir`'s.
+
+    Used to caveat wall-time figures: a wall time measured while other studies held the
+    machine is not a clean cost comparison. Reads timestamps only; evaluates nothing.
+    """
+    run_dir = Path(run_dir)
+    mine = run_window(run_dir)
+    if mine is None:
+        return None
+    others = []
+    for snap in sorted(Path(results_root).glob("*/*/config_snapshot.yaml")):
+        if snap.parent.resolve() == run_dir.resolve():
+            continue
+        window = run_window(snap.parent)
+        if window is None or window[1] <= mine[0] or window[0] >= mine[1]:
+            continue
+        overlap = (min(window[1], mine[1]) - max(window[0], mine[0])).total_seconds()
+        others.append({"run_id": snap.parent.name,
+                       "start_utc": window[0].isoformat(timespec="seconds"),
+                       "last_evaluation_utc": window[1].isoformat(timespec="seconds"),
+                       "overlap_s": float(overlap),
+                       "overlap_fraction_of_this_run":
+                           float(overlap / max((mine[1] - mine[0]).total_seconds(), 1e-9))})
+    return {"start_utc": mine[0].isoformat(timespec="seconds"),
+            "last_evaluation_utc": mine[1].isoformat(timespec="seconds"),
+            "basis": "config_snapshot.yaml _meta.created_utc -> candidates.csv mtime",
+            "overlapping_runs": others}

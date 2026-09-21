@@ -149,7 +149,8 @@ def main() -> int:
                                 "propagation": 0, "attribution": 0, "comparison": 0})
     print(f"projected: {sizing['total_evaluations']:,} evaluations, "
           f"~{sizing['total_seconds'] / 60:.1f} min at "
-          f"{sizing['measured_evaluations_per_second']:.1f} eval/s", flush=True)
+          f"{sizing['projected_evaluations_per_second']:.1f} eval/s (a projection from "
+          "the declared parallel efficiency, not a measurement)", flush=True)
 
     record: list[dict] = []
     runs: list[dict] = []

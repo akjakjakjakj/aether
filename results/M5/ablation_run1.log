@@ -1,11 +1,9 @@
 .venv/bin/python scripts/run_ai_ablation.py 
 AETHER M5 ablation  run=M5-ABL-20260920T141724Z  mode=LIVE  git=715ac9f (dirty)  workers=6
 active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flight_path_angle_deg']
-  lhs_search   seed  11: spent 200 of 200, 0 cache hits, 0 LLM calls, 7 s
-  lhs_search   seed  23: spent 200 of 200, 0 cache hits, 0 LLM calls, 4 s
-  lhs_search   seed  37: spent 200 of 200, 0 cache hits, 0 LLM calls, 3 s
-  lhs_search   seed  41: spent 200 of 200, 0 cache hits, 0 LLM calls, 3 s
-  lhs_search   seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 4 s
+  lhs_search   seed  11: spent 200 o/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
+earch   seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 4 s
   nsga2        seed  11: spent 200 of 200, 0 cache hits, 0 LLM calls, 6 s
   nsga2        seed  23: spent 200 of 200, 0 cache hits, 0 LLM calls, 6 s
   nsga2        seed  37: spent 200 of 200, 0 cache hits, 0 LLM calls, 7 s
@@ -22,3 +20,5 @@ active variables: ['diameter_m', 'bluntness_ratio', 'cone_half_angle_deg', 'flig
   bo_parego    seed  41: spent 200 of 200, 0 cache hits, 0 LLM calls, 39 s
   bo_parego    seed  59: spent 200 of 200, 0 cache hits, 0 LLM calls, 45 s
 make: *** [ablation] Terminated: 15
+/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/resource_tracker.py:254: UserWarning: resource_tracker: There appear to be 5 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

@@ -6,7 +6,7 @@
 
 *Produced from an uncommitted working tree; the config snapshot beside the result is the authoritative record of what ran.*
 
-**Read this first.** Fidelity 1, aerodynamic model `cfd_surface_v2`, 4 active design variables (`diameter_m`, `bluntness_ratio`, `cone_half_angle_deg`, `flight_path_angle_deg`) taken from the DOE screening named above. **Evaluations at a fidelity above 0 (CFD-backed), all methods and seeds: 4038.** An optimiser comparison is a statement about the methods ON THIS MODEL, under the limits and variable ranges in the config snapshot; it is not evidence about how the methods would rank on a different model, and nothing here is a statement about a real vehicle.
+**Read this first.** Fidelity 1, aerodynamic model `cfd_surface_v2`, 4 active design variables (`diameter_m`, `bluntness_ratio`, `cone_half_angle_deg`, `flight_path_angle_deg`) taken from the DOE screening named above. **CFD solver calls made by this study, all methods and seeds: 0.** 4038 paid evaluations returned physics through the CFD-*derived* drag surface `cfd_surface_v2` (the evaluator labels those fidelity > 0); that is a count of surface look-ups, not of CFD runs. An optimiser comparison is a statement about the methods ON THIS MODEL, under the limits and variable ranges in the config snapshot; it is not evidence about how the methods would rank on a different model, and nothing here is a statement about a real vehicle.
 
 ## 1. What was asked, and what was declared before the run
 
@@ -43,16 +43,18 @@ Where two NSGA-II populations are listed, both were declared before the run so t
 
 ## 3. Results (spec §46 table)
 
-| method | seeds | total evaluations / seed | CFD calls | feasible found (mean) | HV @ final, mean ± s.d. | min – max | front size (mean) | design diversity, all / feasible | wall s / seed (mean) | LLM calls | LLM tokens in / out | proposals rejected |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `lhs_search` | 5 | 200 | 90 | 8.2 | **0.2524 ± 0.0171** | 0.2332 – 0.2757 | 2.2 | 0.780 / 0.404 | 2 | 0 | — | — |
-| `nsga2` | 5 | 200 | 161 | 60.4 | **0.2803 ± 0.0253** | 0.2569 – 0.3186 | 3.4 | 0.645 / 0.326 | 7 | 0 | — | — |
-| `nsga2_pop20` | 5 | 200 | 177 | 106.6 | **0.2753 ± 0.0381** | 0.2156 – 0.3082 | 3.8 | 0.492 / 0.258 | 10 | 0 | — | — |
-| `bo_parego` | 5 | 200 | 121 | 103.0 | **0.3520 ± 0.0011** | 0.3506 – 0.3530 | 7.8 | 0.602 / 0.445 | 46 | 0 | — | — |
-| `ai_agent` | 5 | 200 | 184 | 163.8 | **0.3556 ± 0.0000** | 0.3555 – 0.3556 | 72.4 | 0.307 / 0.178 | 1724 | 47 | 704145 / 816076 | 37 of 937 |
-| `ai_adaptive` | 2 | 200 | 188 | 161.5 | NOT YET MEANINGFUL — no second fidelity available (0.3556, F0 only) | 0.3556 – 0.3556 | 75.5 | 0.306 / 0.182 | 1756 | 20 | 303254 / 319308 | 24 of 384 |
+| method | seeds | total evaluations / seed | drag-surface evaluations / seed (fidelity > 0) | CFD solver calls | feasible found (mean) | HV @ final, mean ± s.d. | min – max | front size (mean) | design diversity, all / feasible | wall s / seed (mean) | LLM calls | LLM tokens in / out | proposals rejected |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| `lhs_search` | 5 | 200 | 90 | 0 | 8.2 | **0.2524 ± 0.0171** | 0.2332 – 0.2757 | 2.2 | 0.780 / 0.404 | 2 | 0 | — | — |
+| `nsga2` | 5 | 200 | 161 | 0 | 60.4 | **0.2803 ± 0.0253** | 0.2569 – 0.3186 | 3.4 | 0.645 / 0.326 | 7 | 0 | — | — |
+| `nsga2_pop20` | 5 | 200 | 177 | 0 | 106.6 | **0.2753 ± 0.0381** | 0.2156 – 0.3082 | 3.8 | 0.492 / 0.258 | 10 | 0 | — | — |
+| `bo_parego` | 5 | 200 | 121 | 0 | 103.0 | **0.3520 ± 0.0011** | 0.3506 – 0.3530 | 7.8 | 0.602 / 0.445 | 46 | 0 | — | — |
+| `ai_agent` | 5 | 200 | 184 | 0 | 163.8 | **0.3556 ± 0.0000** | 0.3555 – 0.3556 | 72.4 | 0.307 / 0.178 | 1724 | 47 | 704145 / 816076 | 37 of 937 |
+| `ai_adaptive` | 2 | 200 | 188 | 0 | 161.5 | NOT YET MEANINGFUL — no second fidelity available (0.3556; every candidate at Fidelity 1 (`cfd_surface_v2`), 0 promotions to a new CFD case) | 0.3556 – 0.3556 | 75.5 | 0.306 / 0.182 | 1756 | 20 | 303254 / 319308 | 24 of 384 |
 
-s.d. is the sample standard deviation over seeds. *Design diversity* is the mean pairwise Euclidean distance between a run's evaluated designs in the unit cube of the active variables (all paid designs / feasible ones only), averaged over seeds: large = explored widely, small = concentrated. Wall time for the LLM methods is dominated by model latency and was measured with several seeds running concurrently, so it is an upper bound per seed, not a CPU cost; the conventional methods ran one seed at a time on the same 6-process pool. All methods and seeds pooled: 234 front designs, normalised hypervolume 0.3556.
+s.d. is the sample standard deviation over seeds. *Design diversity* is the mean pairwise Euclidean distance between a run's evaluated designs in the unit cube of the active variables (all paid designs / feasible ones only), averaged over seeds: large = explored widely, small = concentrated. *Drag-surface evaluations* counts paid evaluations that returned physics through a CFD-derived drag surface (evaluator fidelity label > 0); the rest of the budget went to designs refused before any physics. It is not a count of CFD runs - *CFD solver calls* is, and counts promotions to a new CFD case granted by the adaptive-fidelity hook (agent_log.json fidelity_decisions); the M5 harness has no other path that runs a CFD solver. Wall time for the LLM methods is dominated by model latency and was measured with several seeds running concurrently, so it is an upper bound per seed, not a CPU cost; the conventional methods ran one seed at a time on the same 6-process pool. All methods and seeds pooled: 234 front designs, normalised hypervolume 0.3556.
+
+**Wall times here are not a clean cost comparison.** 2 other runs shared the machine while this one was evaluating (2026-09-20T21:11:34+00:00 to 2026-09-20T22:45:22+00:00): `M6-AF-20260920T211148Z` (100% of this run's duration); `M7-ROBUST-20260920T211216Z` (99% of this run's duration). Windows are read from each run's own records (config_snapshot.yaml _meta.created_utc -> candidates.csv mtime). Machine load was not logged by this run; the load observed is in docs/engineering_notebook/2026-09-21_M6_study_run.md and 2026-09-21_M7_study_run.md. Every wall-time and seconds-per-evaluation figure in this report was measured under that contention; how much lower it would be on an idle machine was not measured.
 
 **Against the large-budget reference.** M4's NSGA-II (run `M4-OPT-20260920T205252Z`) reached 0.3467 ± 0.0055 after 1000 evaluations (7 seeds). Determinism check: M5's `nsga2` runs reproduce the first 200 evaluations of M4's runs on the shared seeds to within 0.0e+00 in hypervolume.
 
@@ -68,7 +70,9 @@ s.d. is the sample standard deviation over seeds. *Design diversity* is the mean
 
 Samples are the per-seed hypervolumes (n = 5 per method). No normality is assumed. **Rank test:** exact two-sample permutation test on rank sums (the exact Mann–Whitney test, valid with ties), all C(2n, n) relabellings enumerated. **Signed-rank:** exact Wilcoxon on seed-wise differences, reported only against `bo_parego`, the one method that shares the agent's initial design seed for seed. **A12:** Vargha–Delaney probability that a random agent run beats a random comparator run (0.5 = none, 1 = always).
 
-**Power, stated plainly.** With n = 5 per method the smallest attainable one-sided rank-test p is 1/252 = 0.0040 — reachable only when every run of one method beats every run of the other — and the smallest attainable *two-sided* signed-rank p is 2/32 = 0.0625, which can never reach 0.05. A "no measured difference" below therefore means *this study could not tell them apart*, not *they are equivalent*. Effect sizes and the raw per-seed values are given so the reader is not left with a p-value alone.
+**Power, stated plainly.** With n = 5 per method the smallest attainable one-sided rank-test p is 1/252 = 0.0040 — reachable only when every run of one method beats every run of the other — and the smallest attainable *two-sided* signed-rank p is 2/32 = 0.0625, which can never reach 0.05. The rule has two legs - an effect-size threshold and a significance level - and a "no measured difference" can come from either; which one is stated per cell below, from the legs as evaluated. Effect sizes and the raw per-seed values are given so the reader is not left with a p-value alone.
+
+At 200 evaluations the agent is ahead of `bo_parego` by 0.0036 (A12 = 1.00; Holm-adjusted p = 0.0119). The permutation test **rejects** (p < 0.05); the verdict is "no measured difference" because the mean difference is under the pre-declared practical threshold of 0.005 - the rule's effect-size leg, not its significance leg. The study *could* tell the two apart here, by an amount declared in advance to be too small to count.
 
 ### Pre-declared comparison: agent vs best conventional
 
@@ -122,8 +126,8 @@ Validity classifier (does the design return physics at all), mean over 5 splits:
 
 | output | region | n | RMSE | MAE | R² | z s.d. | coverage 50 / 68 / 90 / 95 % |
 |---|---|---|---|---|---|---|---|
-| `peak_heat_flux_w_m2` | inside hull | 145 | 0.0037 | 0.00174 | 0.999 | 1.47 | 0.44 / 0.67 / 0.80 / 0.85 |
-| `peak_heat_flux_w_m2` | outside hull | 391 | 0.0125 | 0.00421 | 0.994 | 1.62 | 0.59 / 0.70 / 0.83 / 0.86 |
+| `peak_heat_flux_w_m2` (log₁₀) | inside hull | 145 | 0.0037 | 0.00174 | 0.999 | 1.47 | 0.44 / 0.67 / 0.80 / 0.85 |
+| `peak_heat_flux_w_m2` (log₁₀) | outside hull | 391 | 0.0125 | 0.00421 | 0.994 | 1.62 | 0.59 / 0.70 / 0.83 / 0.86 |
 | `peak_bondline_temperature_k` | inside hull | 145 | 0.811 | 0.333 | 0.997 | 1.45 | 0.48 / 0.66 / 0.79 / 0.83 |
 | `peak_bondline_temperature_k` | outside hull | 391 | 1.49 | 0.64 | 0.994 | 1.21 | 0.56 / 0.70 / 0.86 / 0.90 |
 | `margin__max_g` | inside hull | 145 | 0.00392 | 0.00191 | 0.996 | 1.61 | 0.41 / 0.55 / 0.80 / 0.81 |
@@ -155,7 +159,7 @@ Validity probability on the same picks: accuracy 0.857, Brier 0.110, base rate v
 - proposals: 384 received, 360 accepted, **24 rejected** ({'duplicate': 24}); malformed responses 0; failed calls 0; budget spent on the LHS fallback because the agent could not fill it: 0 evaluations
 - the agent's own numeric predictions (360 scored): feasibility called correctly 89% of the time (it predicted feasible 359×, 321 were); `peak_heat_flux_w_m2` MAE 2.59e+03, bias -698; `peak_bondline_temperature_k` MAE 0.65, bias -0.225
 
-**Adaptive-fidelity hook — NOT YET MEANINGFUL — no second fidelity available.** The promotion policy (`src/aether/optimization/fidelity.py`; spec §26: predicted Pareto value, uncertainty, novelty, cost) was called on every accepted proposal: 360 decisions, the agent asked for Fidelity 1 on 7, the policy wanted to promote 40, and **0 were granted**. No Fidelity-1 evaluator was available to this run, so every candidate was evaluated at Fidelity 0 and this method's search is, by construction, the plain agent's with different LLM samples. Its hypervolume is printed only to show the plumbing ran; it is excluded from every comparison and says nothing about adaptive fidelity. The policy thresholds are placeholders until they are set against real CFD cost data.
+**Adaptive-fidelity hook — NOT YET MEANINGFUL — no second fidelity available.** The promotion policy (`src/aether/optimization/fidelity.py`; spec §26: predicted Pareto value, uncertainty, novelty, cost) was called on every accepted proposal: 360 decisions, the agent asked for a promotion (requested fidelity ≥ 1) on 7, the policy wanted to promote 40, and **0 were granted**. No promotion to a new CFD case was available to this run, so every candidate was evaluated at Fidelity 1 (`cfd_surface_v2`) - the same model as every other method - and this method's search is, by construction, the plain agent's with different LLM samples. Its hypervolume is printed only to show the plumbing ran; it is excluded from every comparison and says nothing about adaptive fidelity. The policy thresholds are placeholders until they are set against real CFD cost data.
 
 ## 7. Qualitative audit of the agent's stated mechanisms
 
@@ -349,6 +353,19 @@ which was frozen while three studies ran. For this run, read it with these corre
    pre-declared practical threshold of 0.005 - the rule's effect-size leg, not its
    significance leg. The rule is applied as written; the agent was *distinguishably* ahead
    at 200 evaluations by an amount declared in advance to be too small to count.
+
+**Follow-up, 2026-09-21 (appended; the three items above are left as written).** With no
+study holding the source tree, the generator was corrected and the report regenerated
+(`make ablation-report`), so the sentences quoted in items 1–3 no longer appear in the
+generated sections: (1) the §3 column is now "drag-surface evaluations / seed (fidelity > 0)"
+beside a separate "CFD solver calls" column, which counts promotions to a new CFD case
+granted by the fidelity hook and reads 0 for every method; the header states 0 solver calls;
+(2) the `ai_adaptive` label and section are generated from the run's recorded fidelity and
+aero model; (3) the power paragraph is generated per checkpoint from the two legs of the rule
+as evaluated (recorded in `summary.json` as `criteria.checkpoints.*.rule_legs`) and says of
+the 200-evaluation cell what item 3 says. The report also gained a generated caveat that its
+wall times were measured while two other studies shared the machine. No number in
+`summary.json` changed: `reports/milestones/REPORT_REGENERATION_2026-09-21.md`.
 
 ## 8. Metric-gaming audit, per method
 

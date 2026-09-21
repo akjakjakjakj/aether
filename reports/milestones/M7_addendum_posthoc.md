@@ -213,3 +213,50 @@ path passes `None` for the robust front as well, which would drop `M7_robust_vs_
 * The GP surrogate (≤ 0.020) and the mesh discretisation term (≤ 0.003) are negligible for
   every output on both designs. Of the C_D terms, the unvalidated perfect-gas band and the
   base-drag band are the ones that register.
+
+## 6. Follow-up, 2026-09-21 (appended; nothing above is edited)
+
+M5 and M6 finished, so the source tree was free. The generator and runner were corrected and
+the report rebuilt with `make uncertainty-report RUN_ID=M7-UQ-20260920T233048Z`, which now
+reproduces all seven figures. Every value that was in `summary.json` is unchanged (13,744
+values compared, `REPORT_REGENERATION_2026-09-21.md`); blocks were only added. The warning
+in §4.3 above - that `make uncertainty-report` must not be run - is **lifted**.
+
+**What §4 listed, and its state now.**
+
+| §4 item | Now |
+|---|---|
+| 4.1 row bootstrap understates the error | The report's §3.3 prints both: the row bootstrap, labelled as the pre-declared check with its verdict unchanged, and the branch (cluster) bootstrap beside it. It states that the `baseline` mean misses 1% on the branch bootstrap (1.06%). `uncertainty.propagate.cluster_convergence` reproduces this file's baseline figure exactly (5.34 K, seed 20260927); the other designs differ in the third significant figure from the table in 4.1 because that table came from one continuing random stream and the function reseeds per statistic (e.g. `peak_flux_only` mean 0.71% against 0.72%). The block `convergence_cluster_bootstrap_bondline` in `paired_difference.json` was written by an ad-hoc analysis that was never committed; the file is untouched and the script now preserves it. |
+| 4.2 "measured 17 /s, achieved 80%" | Relabelled as the projection it is; the achieved 13.1 /s and 61.7% are computed from the run's own evaluation count and wall clock. |
+| 4.2 robust rows read 0 | The report says they are this run's share and gives the robust run's counts. |
+| 4.2 Fidelity-0 paragraph, "two inputs are T1" | Both generated from the run's fidelity and tier counts. |
+| 4.2 cache-hit sentence | Reports the measured count: 0 of 90,000. |
+| 4.2 duplicate section numbers | 3.1.1 / 3.1.2 and 4.1 / 4.2; 3.2 and 3.3 keep the numbers this file cites. |
+| 4.3 `M7_attribution` wrong | Fixed and re-read: every panel carries its own labels (the 0.609 bar reads `sutton_graves_coefficient`, the 0.883 bar `tps_conductivity`), and `joint_knee` has its own row of panels. |
+| 4.3 `M7_robust_vs_nominal` has no nominal front | Draws the 78-design front of `M4-OPT-20260920T205252Z` with M4's logged values (which match this run's re-evaluation to 1.3e-16), labels both axes as nominal-or-p95, and gives the arrows a legend entry. |
+| 4.3 `M7_input_inventory`, `M7_output_distributions` | Legends moved out of the data and the footnote wrapped; the reference design has its own panels (separate linear axes, stated in the caption), and an allowable that falls off a panel is stated in words on it. |
+
+**The §39 robust row, like-for-like (§3's caveat, closed).** The robust knee was propagated
+through the same 3000 nested draws and seed as the other three rows, as a new labelled run,
+`M7-LFL-20260921T011854Z` (`scripts/run_m7_robust_likeforlike.py`; one design, 3,120
+evaluations, 98 s; not a study re-run). It ran under source hash `51292369ab52d18a`
+because report code had been edited; before propagating it re-ran 120 of the study's own
+`joint_knee` evaluations and reproduced them to 3.5e-14 relative, feasibility identical.
+
+| Robust O1 optimised, uncertainty cell | n | p95 peak flux [W/m²] | p95 bondline [K] | P(any violation) |
+|---|---|---|---|---|
+| **original** (kept: 500 *mixed* draws, seed 20260925) | 500 | 2.699e+05 | 414.1 | 2.80% [1.68, 4.64] (14 of 500) |
+| like-for-like (3000 *nested* draws, seed 20260921) | 3000 | 2.651e+05 | 410.0 | 3.20% [2.63, 3.89] (96 of 3000) |
+
+All 96 violations are `heatshield_mass_fraction`; `max_g` and the bondline are 0 of 3000
+(below 0.13% at 95% confidence, not zero). The two cells are different samples of the same
+design and their violation intervals overlap.
+
+Paired with the joint knee on the shared draws (`M7-LFL-…/paired_difference.json`, same
+method as §1): bondline −0.42 K (s.d. 0.12, range −0.71 … −0.12 K, lower in 3000 of 3000
+draws, branch-bootstrap CI [−0.47, −0.38]); peak flux +7.46 kW/m² (s.d. 0.33, higher in
+3000 of 3000, CI [+7.32, +7.58]). So within the declared uncertainty model the model
+predicts the robust knee buys its feasibility margin for about 3% of peak flux and gives a
+bondline that is lower by less than half a kelvin - the same reading as the nominal
+`cost_of_robustness` in §3, now with its spread. Against `peak_flux_only` the robust knee is
+14.73 K cooler at the bondline (3000 of 3000 draws).

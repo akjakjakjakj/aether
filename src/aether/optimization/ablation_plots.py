@@ -21,24 +21,46 @@ METHOD_STYLE = {
     "nsga2_pop20": dict(color="#6f9bc8", marker="h", linestyle="-.", label="NSGA-II, pop 20"),
     "bo_parego": dict(color=ACCENT, marker="^", linestyle="--", label="GP surrogate / ParEGO"),
     "ai_agent": dict(color=HOT, marker="D", linestyle="-", label="AI engineering agent (LLM)"),
+    # the bracket of this label is a FACT about a run (NR-31: it read "F0 only" on a
+    # Fidelity-1 run), so it is filled in per run by `_bind_labels`, not typed here
     "ai_adaptive": dict(color="#8a5a9e", marker="P", linestyle=(0, (1, 1)),
-                        label="AI + adaptive fidelity [F0 only: NOT YET MEANINGFUL]"),
+                        label="AI + adaptive fidelity"),
 }
+_RUN_LABELS: dict[str, str] = {}
+
+
+def _bind_labels(summary: dict[str, Any]) -> None:
+    """Labels that depend on what the run recorded (promotions granted per method)."""
+    _RUN_LABELS.clear()
+    per_method = (summary.get("cfd_solver_calls") or {}).get("per_method", {})
+    for method, kind in summary.get("method_kinds", {}).items():
+        if kind != "ai_adaptive":
+            continue
+        n = int(per_method.get(method, 0))
+        base = METHOD_STYLE.get(method, {}).get("label", method)
+        _RUN_LABELS[method] = (f"{base} [{n} promotions: not yet meaningful]" if n == 0
+                               else f"{base} [{n} promotions to CFD]")
 
 
 def _style(method: str) -> dict[str, Any]:
-    return METHOD_STYLE.get(method, dict(color=INK, marker="x", linestyle="-", label=method))
+    style = dict(METHOD_STYLE.get(method, dict(color=INK, marker="x", linestyle="-",
+                                               label=method)))
+    style["label"] = _RUN_LABELS.get(method, style["label"])
+    return style
 
 
 def plot_ablation_figures(summary: dict[str, Any], frame: pd.DataFrame,
                           curves: dict[str, np.ndarray], checkpoints: np.ndarray,
                           out_dir: Path) -> list[Path]:
+    _bind_labels(summary)
     tag = (f"AETHER M5 ablation · run {summary['run_id']} · FIDELITY {summary['fidelity']} "
            f"(aero model: {summary['aero_model']})")
     ref = summary["hypervolume"]["reference_point"]
     objectives = tuple(summary["objectives"])
     budget = summary["budget"]
-    n_cfd = sum(sum(m["per_seed"]["cfd_calls"]) for m in summary["methods"].values())
+    n_surface = sum(sum(m["per_seed"]["surface_evaluations"])
+                    for m in summary["methods"].values())
+    n_solver = int(summary["cfd_solver_calls"]["total"])
     written: list[Path] = []
 
     # -- hypervolume vs evaluations ------------------------------------------------------
@@ -67,7 +89,8 @@ def plot_ablation_figures(summary: dict[str, Any], frame: pd.DataFrame,
         f"{tag}. Line = mean over seeds, band = min-max over seeds. Fixed reference point "
         f"({ref['peak_heat_flux_w_m2']:.3g} W/m^2, {ref['peak_bondline_temperature_k']:.0f} K); "
         f"identical budget of {budget} evaluations for every method. Dotted verticals: the "
-        f"pre-declared comparison checkpoints. Evaluations above fidelity 0: {n_cfd}."))
+        f"pre-declared comparison checkpoints. CFD solver calls: {n_solver}; evaluations "
+        f"through the CFD-derived drag surface (fidelity label > 0): {n_surface}."))
 
     # -- per-seed hypervolume at the declared checkpoints ---------------------------------
     marks = [int(c) for c in summary["criteria"].get("checkpoints", {})] or [budget]
@@ -87,7 +110,9 @@ def plot_ablation_figures(summary: dict[str, Any], frame: pd.DataFrame,
         ax.set_title(f"after {n_eval} evaluations")
         ax.set_ylim(bottom=0.0)
     np.atleast_1d(axes)[0].set_ylabel("normalised hypervolume  [-]")
-    np.atleast_1d(axes)[0].legend(fontsize=5.5, loc="lower left")
+    # above the panels: inside the first one it covered seed markers and ran off its edge
+    fig.legend(*np.atleast_1d(axes)[0].get_legend_handles_labels(), fontsize=6.5,
+               loc="lower center", bbox_to_anchor=(0.5, 0.98), ncol=3)
     written.append(save_figure(
         fig, out_dir, "M5_hypervolume_per_seed",
         f"{tag}. One marker per seed, black bar = mean. These are the samples the exact "
@@ -106,7 +131,10 @@ def plot_ablation_figures(summary: dict[str, Any], frame: pd.DataFrame,
                 label=f"{style['label']}  ({len(front)} designs, all seeds pooled)")
     ax.set_xlabel("peak heat flux  [W cm$^{-2}$]")
     ax.set_ylabel("peak bondline temperature  [K]")
-    ax.legend(fontsize=6.5, loc="upper right")
+    # under the axes (inside them it covered the fronts), with room kept above the caption
+    ax.legend(fontsize=6.5, loc="upper center", bbox_to_anchor=(0.5, -0.16), ncol=2)
+    fig.set_size_inches(6.6, 5.4)
+    fig.subplots_adjust(bottom=0.30)
     written.append(save_figure(
         fig, out_dir, "M5_fronts",
         f"{tag}. Feasible non-dominated designs per method, seeds pooled. Axes span the "

@@ -26,7 +26,10 @@ ablation:
   # capped at 80 LLM calls; 9 rounds of ~20 proposals spend the ~180 evaluations left after
   # the initial design, so 5 seeds cost 45 calls and leave room for retries and for
   # the two plumbing seeds of `ai_adaptive`. M4's 1000-evaluation runs stay the
-  # conventional reference for what a large budget reaches (NSGA-II: HV 0.3773 +/- 0.0070).
+  # conventional reference for what a large budget reaches. (This comment quoted the
+  # Fidelity-0 M4 value, NSGA-II HV 0.3773 +/- 0.0070, until 2026-09-21; on the final physics,
+  # run M4-OPT-20260920T205252Z, it is 0.3467 +/- 0.0055. The report never read this comment:
+  # it reads M4's summary.json. NR-31.)
 
   methods:
     lhs_search:                    # M4 implementation, unchanged

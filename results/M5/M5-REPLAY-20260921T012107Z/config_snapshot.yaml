@@ -1,0 +1,426 @@
+_meta:
+  run_id: M5-REPLAY-20260921T012107Z
+  config_hash: 5829c576ba8c
+  git_commit: eac22c7
+  git_dirty: true
+  created_utc: '2026-09-21T01:21:07+00:00'
+  aether_version: 0.1.0
+  notes: M5 replay of M5-ABL-20260920T211134Z
+config:
+  study:
+    meta:
+      name: m4_design_space
+      base_config: configs/baseline.yaml
+      geometry_bounds: configs/geometry_bounds.yaml
+    base_overrides:
+      vehicle:
+        aero:
+          model: cfd_surface_v2
+        geometry:
+          effective_nose_radius_model: velocity_gradient
+      limits:
+        max_bluntness_ratio: null
+        max_heatshield_mass_fraction: 1.0
+    variables:
+      diameter_m:
+        kind: direct
+        path: vehicle.geometry.diameter_m
+        units: m
+        role: design
+        bounds_ref: diameter_m
+        min: 0.8
+        max: 4.5
+        reference: 1.2
+      bluntness_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.nose_radius_m
+        units: '-'
+        role: design
+        min: 0.25
+        max: 1.35
+        reference: 0.5
+      shoulder_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.shoulder_radius_m
+        units: '-'
+        role: design
+        min: 0.02
+        max: 0.1
+        reference: 0.1
+      cone_half_angle_deg:
+        kind: direct
+        path: vehicle.geometry.cone_half_angle_deg
+        units: deg
+        role: design
+        bounds_ref: cone_half_angle_deg
+        min: 20.0
+        max: 70.0
+        reference: 25.0
+      aft_cone_angle_deg:
+        kind: direct
+        path: vehicle.geometry.aft_cone_angle_deg
+        units: deg
+        role: design
+        bounds_ref: aft_cone_angle_deg
+        min: 0.0
+        max: 35.0
+        reference: 20.0
+      fineness_ratio:
+        kind: times_diameter
+        path: vehicle.geometry.length_m
+        units: '-'
+        role: design
+        bounds_ref: fineness_ratio
+        min: 0.5
+        max: 1.2
+        reference: 0.875
+      flight_path_angle_deg:
+        kind: direct
+        path: entry.flight_path_angle_deg
+        units: deg
+        role: design
+        min: -8.0
+        max: -1.5
+        reference: -3.0
+      entry_velocity_m_s:
+        kind: direct
+        path: entry.velocity_m_s
+        units: m/s
+        role: given
+        min: 7200.0
+        max: 7800.0
+        reference: 7400.0
+      mass_kg:
+        kind: direct
+        path: vehicle.mass_kg
+        units: kg
+        role: given
+        min: 250.0
+        max: 450.0
+        reference: 350.0
+      insulator_thickness_m:
+        kind: direct
+        path: tps.layers.0.thickness_m
+        units: m
+        role: deferred
+        min: 0.01
+        max: 0.03
+        reference: 0.015
+    objectives:
+    - peak_heat_flux_w_m2
+    - peak_bondline_temperature_k
+    reported_metrics:
+    - integrated_external_heat_j_m2
+    - peak_surface_temperature_k
+    - max_g
+    - entry_duration_s
+    doe:
+      seed: 20260920
+      workers: 6
+      oat:
+        points_per_variable: 15
+      lhs:
+        n_samples: 3000
+        given_data_bins: 20
+      sobol:
+        n_base: 512
+        n_bootstrap: 500
+        confidence: 0.95
+        sub_box:
+          bluntness_ratio:
+            min: 0.25
+            max: 0.9
+          cone_half_angle_deg:
+            min: 60.0
+            max: 70.0
+          aft_cone_angle_deg:
+            min: 0.0
+            max: 20.0
+          fineness_ratio:
+            min: 0.6
+            max: 1.2
+      screening:
+        total_index_threshold: 0.01
+        validity_index_threshold: 0.03
+        outputs:
+        - peak_heat_flux_w_m2
+        - peak_bondline_temperature_k
+        - max_g
+        - heatshield_mass_fraction
+    optimize:
+      workers: 6
+      budget_evaluations: 1000
+      seeds:
+      - 11
+      - 23
+      - 37
+      - 41
+      - 59
+      - 67
+      - 73
+      hypervolume:
+        reference_point:
+          peak_heat_flux_w_m2: 2500000.0
+          peak_bondline_temperature_k: 450.0
+        ideal_point:
+          peak_heat_flux_w_m2: 0.0
+          peak_bondline_temperature_k: 300.0
+      curve_checkpoints: 40
+      methods:
+        lhs_search:
+          enabled: true
+        nsga2:
+          enabled: true
+          population_size: 40
+        scalarised_de:
+          enabled: true
+          n_weights: 5
+          population_size: 20
+          mutation:
+          - 0.5
+          - 1.0
+          recombination: 0.7
+      exploit_audit:
+        bound_tolerance_fraction: 0.01
+        max_heat_load_fraction_above_86km: 0.05
+        max_bondline_end_rate_k_s: 0.0
+  ablation:
+    workers: 6
+    budget_evaluations: 200
+    seeds:
+    - 37
+    - 41
+    - 59
+    - 67
+    - 73
+    curve_step: 10
+    methods:
+      lhs_search:
+        kind: lhs_search
+        enabled: true
+      nsga2:
+        kind: nsga2
+        enabled: true
+        population_size: 40
+      nsga2_pop20:
+        kind: nsga2
+        enabled: true
+        population_size: 20
+      bo_parego:
+        kind: bo_parego
+        enabled: true
+        n_initial_per_variable: 5
+        batch_size: 10
+        pool_size: 4096
+        mc_samples: 64
+        local_sigma: 0.05
+        min_probability_feasible: 0.05
+        gp_restarts: 2
+        transforms:
+          peak_heat_flux_w_m2: log10
+      ai_agent:
+        kind: ai_agent
+        enabled: true
+        n_initial_per_variable: 5
+        rounds: 9
+        max_proposals_per_call: 30
+        tables:
+          front: 12
+          near_feasible: 8
+          recent: 20
+          failures: 8
+      ai_adaptive:
+        kind: ai_adaptive
+        enabled: true
+        seeds:
+        - 37
+        - 41
+        n_initial_per_variable: 5
+        rounds: 9
+        max_proposals_per_call: 30
+        tables:
+          front: 12
+          near_feasible: 8
+          recent: 20
+          failures: 8
+        transforms:
+          peak_heat_flux_w_m2: log10
+        promotion_policy:
+          min_predicted_hv_gain: 0.0001
+          min_uncertainty: 0.25
+          min_novelty: 0.1
+          max_high_fidelity_fraction: 0.1
+    llm:
+      model: claude-sonnet-5
+      max_llm_calls: 12
+      max_llm_calls_study: 80
+      timeout_s: 1500
+      concurrency: 4
+    surrogate_validation:
+      train_method: lhs_search
+      transforms:
+        peak_heat_flux_w_m2: log10
+    success_criteria:
+      subject: ai_agent
+      checkpoints:
+      - 50
+      - 100
+      - 200
+      min_hv_gain: 0.005
+      alpha: 0.05
+  base:
+    meta:
+      name: baseline
+      description: Nominal ballistic entry of a spherically-blunted capsule.
+    vehicle:
+      mass_kg: 350.0
+      cd: 1.2
+      cl: 0.0
+      bank_angle_deg: 0.0
+      geometry:
+        nose_radius_m: 0.6
+        diameter_m: 1.2
+        effective_nose_radius_model: velocity_gradient
+      aero:
+        model: cfd_surface_v2
+    entry:
+      altitude_m: 120000.0
+      velocity_m_s: 7400.0
+      flight_path_angle_deg: -3.0
+    tps:
+      emissivity: 0.85
+      t_initial_k: 300.0
+      t_radiation_sink_k: 4.0
+      bondline_after_layer: 0
+      t_bondline_reference_k: 400.0
+      t_penetration_threshold_k: 500.0
+      layers:
+      - name: insulator
+        thickness_m: 0.015
+        conductivity_w_mk: 0.3
+        density_kg_m3: 280.0
+        specific_heat_j_kgk: 1200.0
+        n_cells: 120
+      - name: structure
+        thickness_m: 0.01
+        conductivity_w_mk: 150.0
+        density_kg_m3: 2700.0
+        specific_heat_j_kgk: 900.0
+        n_cells: 20
+    limits:
+      max_g: 12.0
+      max_dynamic_pressure_pa: null
+      t_bondline_allowable_k: 450.0
+      t_surface_allowable_k: null
+      max_bluntness_ratio: null
+      max_heatshield_mass_fraction: 1.0
+    numerics:
+      terminal_altitude_m: 20000.0
+      max_time_s: 3000.0
+      rtol: 1.0e-09
+      atol: 1.0e-09
+      max_step_s: 0.5
+      soak_time_s: 1200.0
+      soak_samples: 400
+  screening:
+    doe_run_id: M4-DOE-20260920T204844Z
+    thresholds:
+      total_index: 0.01
+      validity_index: 0.03
+    variables:
+      diameter_m:
+        role: design
+        reference: 1.2
+        max_total_index_upper: 1.043111574238745
+        max_total_index_output: heatshield_mass_fraction
+        validity_index_upper: 0.024969217926431992
+        decision: active
+        reason: total-order index on heatshield_mass_fraction is not below 0.01
+      bluntness_ratio:
+        role: design
+        reference: 0.5
+        max_total_index_upper: 0.08164996514884605
+        max_total_index_output: peak_heat_flux_w_m2
+        validity_index_upper: 0.5667407933257067
+        decision: active
+        reason: total-order index on peak_heat_flux_w_m2 is not below 0.01
+      shoulder_ratio:
+        role: design
+        reference: 0.1
+        max_total_index_upper: 0.0047589451233594655
+        max_total_index_output: heatshield_mass_fraction
+        validity_index_upper: 0.02346745420466204
+        decision: frozen
+        reason: total-order upper bound < 0.01 on every output and validity index
+          upper bound < 0.03
+      cone_half_angle_deg:
+        role: design
+        reference: 25.0
+        max_total_index_upper: 0.000609146470789186
+        max_total_index_output: heatshield_mass_fraction
+        validity_index_upper: 0.16652935081814643
+        decision: active
+        reason: moves no objective or constraint, but decides which geometries are
+          valid
+      aft_cone_angle_deg:
+        role: design
+        reference: 20.0
+        max_total_index_upper: 0.0
+        max_total_index_output: peak_heat_flux_w_m2
+        validity_index_upper: 0.023402613257134514
+        decision: frozen
+        reason: total-order upper bound < 0.01 on every output and validity index
+          upper bound < 0.03
+      fineness_ratio:
+        role: design
+        reference: 0.875
+        max_total_index_upper: 0.0
+        max_total_index_output: peak_heat_flux_w_m2
+        validity_index_upper: 0.02031676531434029
+        decision: frozen
+        reason: total-order upper bound < 0.01 on every output and validity index
+          upper bound < 0.03
+      flight_path_angle_deg:
+        role: design
+        reference: -3.0
+        max_total_index_upper: 1.0742294671555486
+        max_total_index_output: max_g
+        validity_index_upper: 0.021461659159356977
+        decision: active
+        reason: total-order index on max_g is not below 0.01
+      entry_velocity_m_s:
+        role: given
+        reference: 7400.0
+        max_total_index_upper: 0.014162571138960607
+        max_total_index_output: peak_bondline_temperature_k
+        validity_index_upper: 0.020630887354073663
+        decision: frozen
+        reason: mission given, not a design choice
+      mass_kg:
+        role: given
+        reference: 350.0
+        max_total_index_upper: 0.09748941941314623
+        max_total_index_output: heatshield_mass_fraction
+        validity_index_upper: 0.020358349987345304
+        decision: frozen
+        reason: mission given, not a design choice
+      insulator_thickness_m:
+        role: deferred
+        reference: 0.015
+        max_total_index_upper: 0.4366428977693342
+        max_total_index_output: peak_bondline_temperature_k
+        validity_index_upper: 0.022161849392047024
+        decision: frozen
+        reason: deferred design variable (A-OPT-2)
+    active:
+    - diameter_m
+    - bluntness_ratio
+    - cone_half_angle_deg
+    - flight_path_angle_deg
+    frozen:
+    - shoulder_ratio
+    - aft_cone_angle_deg
+    - fineness_ratio
+    - entry_velocity_m_s
+    - mass_kg
+    - insulator_thickness_m

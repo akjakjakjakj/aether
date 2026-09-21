@@ -188,8 +188,12 @@ def size_study(ctx: Context, *, seconds_per_evaluation: float, workers: int,
         "measured_seconds_per_evaluation": seconds_per_evaluation,
         "workers": workers,
         "declared_parallel_efficiency": sizing.get("parallel_efficiency"),
-        "measured_parallel_efficiency": efficiency,
-        "measured_evaluations_per_second": rate,
+        # NR-34: these two are a PROJECTION - the declared efficiency and the rate it
+        # implies. Until 2026-09-21 they were stored as `measured_parallel_efficiency` and
+        # `measured_evaluations_per_second`, and the report printed them as measurements.
+        # What a run achieved is `achieved_throughput`, computed after it has finished.
+        "assumed_parallel_efficiency": efficiency,
+        "projected_evaluations_per_second": rate,
         "budget_seconds": float(sizing.get("budget_seconds", 7200.0)),
     }
     total = 0
@@ -429,9 +433,31 @@ def assemble_summary(ctx: Context, *, run_id: str, meta: Any, workers: int,
         summary["comparison"] = {**comparison.to_dict(),
                                  "uncertainty_samples": getattr(
                                      comparison, "uncertainty_samples", None)}
+    summary["achieved_throughput"] = achieved_throughput(
+        n_evaluations=n_evaluations, wall_s=wall_s, workers=workers,
+        seconds_per_evaluation=(sizing or {}).get("measured_seconds_per_evaluation"))
     summary["nominal_designs_under_uncertainty"] = _fragility(ctx, propagations)
     summary["cost_of_robustness"] = _cost_of_robustness(ctx, summary)
     return summary
+
+
+def achieved_throughput(*, n_evaluations: int, wall_s: float, workers: int,
+                        seconds_per_evaluation: float | None) -> dict[str, Any]:
+    """What the run ACHIEVED, from its own evaluation count and its own clock.
+
+    rate = paid evaluations / wall seconds of the evaluation stages; efficiency = that rate
+    over the ideal `workers / single-process seconds per evaluation`. The single-process
+    time is the one measured at this run's launch, on the machine as it then was.
+    """
+    rate = n_evaluations / wall_s if wall_s else float("nan")
+    ideal = (workers / seconds_per_evaluation) if seconds_per_evaluation else float("nan")
+    return {"n_evaluations": int(n_evaluations), "wall_s": float(wall_s),
+            "workers": int(workers),
+            "evaluations_per_second": float(rate),
+            "ideal_evaluations_per_second": float(ideal),
+            "parallel_efficiency": float(rate / ideal) if ideal else float("nan"),
+            "basis": "summary n_evaluations / wall_s; ideal = workers / measured "
+                     "single-process seconds per evaluation"}
 
 
 def _fragility(ctx: Context, propagations: dict[str, Any]) -> list[dict[str, Any]]:

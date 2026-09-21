@@ -24,6 +24,22 @@ from typing import Any
 from .ablation import LLM_KINDS
 
 NOT_MEANINGFUL = "NOT YET MEANINGFUL — no second fidelity available"
+_NOTEBOOK_LOAD = ("docs/engineering_notebook/2026-09-21_M6_study_run.md and "
+                  "2026-09-21_M7_study_run.md")
+
+
+def _surface_evals(s: dict[str, Any]) -> int:
+    return sum(sum(m["per_seed"]["surface_evaluations"]) for m in s["methods"].values())
+
+
+def _solver_calls(s: dict[str, Any], method: str | None = None) -> int:
+    calls = s["cfd_solver_calls"]
+    return int(calls["total"] if method is None else calls["per_method"].get(method, 0))
+
+
+def _model_phrase(s: dict[str, Any]) -> str:
+    """How every candidate of this run was evaluated - from the recorded label and model."""
+    return f"Fidelity {s['fidelity']} (`{s['aero_model']}`)"
 _AUDIT_FILE = "M5_qualitative_audit.md"
 
 
@@ -50,15 +66,16 @@ def _header(s: dict[str, Any]) -> list[str]:
     if s["git_dirty"]:
         lines += ["*Produced from an uncommitted working tree; the config snapshot beside the "
                   "result is the authoritative record of what ran.*", ""]
-    cfd = sum(sum(m["per_seed"]["cfd_calls"]) for m in s["methods"].values())
+    surface, solver = _surface_evals(s), _solver_calls(s)
     lines += [
         f"**Read this first.** Fidelity {s['fidelity']}, aerodynamic model "
         f"`{s['aero_model']}`, {len(s['active'])} active design variables "
         f"({', '.join(f'`{n}`' for n in s['active'])}) taken from the DOE screening named "
-        f"above. **Evaluations at a fidelity above 0 (CFD-backed), all methods and seeds: "
-        f"{cfd}.** "
-        + ("No CFD-derived number enters any result below. " if cfd == 0 and s["fidelity"] == 0
-           else "")
+        f"above. **CFD solver calls made by this study, all methods and seeds: {solver}.** "
+        + (f"{surface} paid evaluations returned physics through the CFD-*derived* drag "
+           f"surface `{s['aero_model']}` (the evaluator labels those fidelity > 0); that is "
+           "a count of surface look-ups, not of CFD runs. " if surface else
+           "No CFD-derived number enters any result below. ")
         + "An optimiser comparison is a statement about the methods ON THIS MODEL, under the "
         "limits and variable ranges in the config snapshot; it is not evidence about how the "
         "methods would rank on a different model, and nothing here is a statement about a "
@@ -173,25 +190,88 @@ def _setup(s: dict[str, Any]) -> list[str]:
     return lines
 
 
+def _wall_time_caveat(s: dict[str, Any]) -> list[str]:
+    """Wall-time figures are not a clean cost comparison if other studies held the machine.
+    Generated from the runs' recorded windows when they exist (summary `concurrency`)."""
+    conc = s.get("concurrency") or {}
+    others = conc.get("overlapping_runs") or []
+    if others:
+        listed = "; ".join(f"`{o['run_id']}` ({100 * o['overlap_fraction_of_this_run']:.0f}% "
+                           "of this run's duration)" for o in others)
+        return [f"**Wall times here are not a clean cost comparison.** {len(others)} other "
+                f"run{'s' if len(others) != 1 else ''} shared the machine while this one was "
+                f"evaluating ({conc['start_utc']} to {conc['last_evaluation_utc']}): {listed}. "
+                f"Windows are read from each run's own records ({conc['basis']}). Machine load "
+                f"was not logged by this run; the load observed is in {_NOTEBOOK_LOAD}. Every "
+                "wall-time and seconds-per-evaluation figure in this report was measured "
+                "under that contention; how much lower it would be on an idle machine was "
+                "not measured.", ""]
+    if conc:
+        return ["No other run's recorded window overlaps this one's "
+                f"({conc['start_utc']} to {conc['last_evaluation_utc']}); machine load was "
+                "still not logged, so wall times are indicative only.", ""]
+    return ["Machine load and concurrent runs were not recorded for this run; wall times are "
+            "indicative only and are not a cost comparison.", ""]
+
+
+def _power_reading(s: dict[str, Any]) -> list[str]:
+    """What a "no measured difference" means, cell by cell, from the two legs of the rule
+    AS EVALUATED (NR-31: a fixed sentence here misdescribed a cell where the test rejects)."""
+    crit, declared = s["criteria"], s["criteria_declared"]
+    gain, alpha = float(declared["min_hv_gain"]), float(declared["alpha"])
+    out = []
+    for n_eval, cell in crit["checkpoints"].items():
+        if cell["verdict"] != "no measured difference":
+            continue
+        side = "helped" if cell["mean_difference"] >= 0 else "hurt"
+        legs = cell["rule_legs"][side]
+        p_holm = cell["p_helped_holm"] if side == "helped" else cell["p_hurt_holm"]
+        who = "ahead of" if side == "helped" else "behind"
+        head = (f"At {n_eval} evaluations the agent is {who} `{cell['comparator']}` by "
+                f"{abs(cell['mean_difference']):.4f} (A12 = {cell['a12']:.2f}; Holm-adjusted "
+                f"p = {p_holm:.4f}).")
+        if legs["significance_met"] and not legs["effect_size_met"]:
+            out.append(f"{head} The permutation test **rejects** (p < {alpha}); the verdict "
+                       "is \"no measured difference\" because the mean difference is under "
+                       f"the pre-declared practical threshold of {gain} - the rule's "
+                       "effect-size leg, not its significance leg. The study *could* tell the "
+                       "two apart here, by an amount declared in advance to be too small to "
+                       "count.")
+        elif legs["effect_size_met"] and not legs["significance_met"]:
+            out.append(f"{head} The difference exceeds the pre-declared threshold of {gain} "
+                       f"but the permutation test does not reject at {alpha}: the rule fails "
+                       "on its significance leg, and at this n that means *this study could "
+                       "not tell them apart*, not *they are equivalent*.")
+        else:
+            out.append(f"{head} Neither leg of the rule is met (threshold {gain}, alpha "
+                       f"{alpha}): *this study could not tell them apart*, which is not "
+                       "evidence that they are equivalent.")
+    return out
+
+
 def _results(s: dict[str, Any], fig: str) -> list[str]:
     lines = [
         "## 3. Results (spec §46 table)",
         "",
-        "| method | seeds | total evaluations / seed | CFD calls | feasible found (mean) | "
+        "| method | seeds | total evaluations / seed | drag-surface evaluations / seed "
+        "(fidelity > 0) | CFD solver calls | feasible found (mean) | "
         "HV @ final, mean ± s.d. | min – max | front size (mean) | design diversity, all / "
         "feasible | wall s / seed (mean) | LLM calls | LLM tokens in / out | proposals "
         "rejected |",
-        "|---|---|---|---|---|---|---|---|---|---|---|---|---|",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for method, m in s["methods"].items():
         kind = s["method_kinds"][method]
         agent = s["agent"].get(method)
         wall = s["wall_s"].get(method) or [float("nan")]
         hv = (f"**{m['hv_mean']:.4f} ± {_fmt(m['hv_std'])}**"
-              if kind != "ai_adaptive" else f"{NOT_MEANINGFUL} ({m['hv_mean']:.4f}, F0 only)")
+              if kind != "ai_adaptive" else
+              f"{NOT_MEANINGFUL} ({m['hv_mean']:.4f}; every candidate at {_model_phrase(s)}, "
+              f"{_solver_calls(s, method)} promotions to a new CFD case)")
         lines.append(
             f"| `{method}` | {m['n_seeds']} | {_fmt(m['budget_used_mean'], '.0f')} | "
-            f"{_fmt(m['cfd_calls_mean'], '.0f')} | {_fmt(m['n_feasible_mean'], '.1f')} | {hv} | "
+            f"{_fmt(m['surface_evaluations_mean'], '.0f')} | {_solver_calls(s, method)} | "
+            f"{_fmt(m['n_feasible_mean'], '.1f')} | {hv} | "
             f"{m['hv_min']:.4f} – {m['hv_max']:.4f} | {_fmt(m['front_size_mean'], '.1f')} | "
             f"{_fmt(m['diversity_all_mean'], '.3f')} / {_fmt(m['diversity_feasible_mean'], '.3f')}"
             f" | {sum(wall) / len(wall):.0f} | "
@@ -203,13 +283,18 @@ def _results(s: dict[str, Any], fig: str) -> list[str]:
         "s.d. is the sample standard deviation over seeds. *Design diversity* is the mean "
         "pairwise Euclidean distance between a run's evaluated designs in the unit cube of "
         "the active variables (all paid designs / feasible ones only), averaged over seeds: "
-        "large = explored widely, small = concentrated. Wall time for the LLM methods is "
+        "large = explored widely, small = concentrated. *Drag-surface evaluations* counts "
+        "paid evaluations that returned physics through a CFD-derived drag surface (evaluator "
+        "fidelity label > 0); the rest of the budget went to designs refused before any "
+        "physics. It is not a count of CFD runs - *CFD solver calls* is, and counts "
+        f"{s['cfd_solver_calls']['basis']}. Wall time for the LLM methods is "
         "dominated by model latency and was measured with several seeds running "
         "concurrently, so it is an upper bound per seed, not a CPU cost; the conventional "
         "methods ran one seed at a time on the same 6-process pool. "
         f"All methods and seeds pooled: {s['combined']['n_front']} front designs, normalised "
         f"hypervolume {s['combined']['hv']:.4f}.",
         "",
+        *_wall_time_caveat(s),
     ]
     m4 = s.get("m4_reference") or {}
     if m4:
@@ -251,10 +336,12 @@ def _statistics(s: dict[str, Any]) -> list[str]:
         "only when every run of one method beats every run of the other — and the smallest "
         f"attainable *two-sided* signed-rank p is 2/{2 ** n} = {2 / 2 ** n:.4f}"
         + (", which can never reach 0.05" if 2 / 2 ** n > 0.05 else "")
-        + ". A \"no measured difference\" below therefore means *this study could not tell "
-        "them apart*, not *they are equivalent*. Effect sizes and the raw per-seed values "
+        + ". The rule has two legs - an effect-size threshold and a significance level - "
+        "and a \"no measured difference\" can come from either; which one is stated per "
+        "cell below, from the legs as evaluated. Effect sizes and the raw per-seed values "
         "are given so the reader is not left with a p-value alone.",
         "",
+        *[line for text in _power_reading(s) for line in (text, "")],
         "### Pre-declared comparison: agent vs best conventional",
         "",
         "| evaluations | best conventional (mean HV) | agent mean HV | difference | A12 | "
@@ -348,7 +435,8 @@ def _surrogate(s: dict[str, Any], fig: str) -> list[str]:
                 if not r.get("n"):
                     continue
                 cov = " / ".join(f"{r['coverage'][k]:.2f}" for k in sorted(r["coverage"]))
-                lines.append(f"| `{name}` | {region.replace('_', ' ')} | {r['n']} | "
+                lines.append(f"| `{name}`{' (log₁₀)' if cell.get('transform') == 'log10' else ''}"
+                             f" | {region.replace('_', ' ')} | {r['n']} | "
                              f"{r['rmse']:.3g} | {r['mae']:.3g} | {_fmt(r['r2'], '.3f')} | "
                              f"{_fmt(r['z_std'], '.2f')} | {cov} |")
         v = pro["validity"]
@@ -404,11 +492,13 @@ def _agent(s: dict[str, Any]) -> list[str]:
                 f"**Adaptive-fidelity hook — {NOT_MEANINGFUL}.** The promotion policy "
                 "(`src/aether/optimization/fidelity.py`; spec §26: predicted Pareto value, "
                 "uncertainty, novelty, cost) was called on every accepted proposal: "
-                f"{f['n_decisions']} decisions, the agent asked for Fidelity 1 on "
+                f"{f['n_decisions']} decisions, the agent asked for a promotion (requested "
+                "fidelity ≥ 1) on "
                 f"{f['n_agent_requested_high']}, the policy wanted to promote "
                 f"{f['n_policy_promotions']}, and **{f['n_granted']} were granted**. "
-                + ("No Fidelity-1 evaluator was available to this run, so every candidate "
-                   "was evaluated at Fidelity 0 and this method's search is, by construction, "
+                + ("No promotion to a new CFD case was available to this run, so every "
+                   f"candidate was evaluated at {_model_phrase(s)} - the same model as every "
+                   "other method - and this method's search is, by construction, "
                    "the plain agent's with different LLM samples. Its hypervolume is printed "
                    "only to show the plumbing ran; it is excluded from every comparison and "
                    "says nothing about adaptive fidelity. "

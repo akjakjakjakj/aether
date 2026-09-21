@@ -1194,6 +1194,28 @@ from M4's summary and prints correctly, is 0.3467 ± 0.0055).
 `results/M5/M5-ABL-20260920T211134Z/summary.json` (`methods.*.cfd_calls_mean`,
 `criteria.checkpoints.200`).
 
+**Follow-up, 2026-09-21 (after M5, M6 and M7 had finished; the entry above is unchanged).**
+The "Open" items were done and the report regenerated with `make ablation-report`.
+(1) `ablation.method_table` now records the count as `surface_evaluations` (same numbers,
+honest name) and the runner records `cfd_solver_calls` separately: promotions to a new CFD
+case granted by the fidelity hook, the only path in this harness that could run a solver - 0
+for every method. The report prints both columns and its header says 0 solver calls, 4038
+surface evaluations. (2) The `ai_adaptive` label and paragraph are generated from the
+recorded fidelity and aero model ("every candidate at Fidelity 1 (`cfd_surface_v2`), 0
+promotions to a new CFD case"). (3) The rule's two legs are recorded per checkpoint
+(`criteria.checkpoints.*.rule_legs`; the verdict logic does not read them) and the power
+paragraph is generated from them: at 200 evaluations the test rejects and the rule fails on
+its effect-size leg. Also: the prospective surrogate table marks heat flux as log₁₀; the
+`configs/ai_ablation.yaml` comment quotes the final-physics M4 value (comments do not enter
+the config hash, which is taken over the parsed mapping - checked: `ddd70cac52e9` before and
+after); and the report now carries a generated caveat that its wall times were measured
+while `M6-AF-20260920T211148Z` and `M7-ROBUST-20260920T211216Z` shared the machine for 99–100%
+of the run, read from the runs' own timestamps. **No result moved:** every one of the 2,551
+values in the old `summary.json` is in the new one unchanged
+(`scripts/check_report_regeneration.py`, `reports/milestones/REPORT_REGENERATION_2026-09-21.md`).
+Strict replay after the edits: see that file. The hand-written audit §6 keeps its three
+corrections as the record and has a dated note that the generator now says them itself.
+
 ### NR-32 — The LLM agent threw away a correct rule it had derived, because the harness only lets it remember 400 characters; and a fifth of its budget went on polishing two placeholder limits
 
 **What happened.** Two things in the M5 agent's behaviour that the hypervolume does not show.
@@ -1280,6 +1302,22 @@ fresh-draw re-score of the chance constraints and not only of the objectives, an
 flipped verdicts as their own line.
 
 
+**Follow-up, 2026-09-21 (the entry above is unchanged).** "What it cost" quoted the robust
+knee's violation probability from 500 *mixed* draws on a different seed from the other three
+§39 rows. The robust knee has since been propagated through the same 3000 nested draws and
+seed as a separate labelled run (`M7-LFL-20260921T011854Z`, one design, 3,120 evaluations;
+it first reproduced 120 of the study's own evaluations to 3.5e-14 relative): **P(any
+violation) 3.20% [2.63, 3.89] (96 of 3000)**, all of it `heatshield_mass_fraction`; `max_g`
+and the bondline 0 of 3000 (below 0.13% at 95% confidence, not zero). The original 2.80%
+[1.68, 4.64] (n = 500) is a different sample of the same design; the intervals overlap and
+it stays on record in the report and the addendum. Paired with the joint knee on the shared
+draws: bondline −0.42 K (s.d. 0.12 K, lower in 3000 of 3000 draws), peak flux +7.46 kW/m²
+(s.d. 0.33, higher in 3000 of 3000). The reading above stands: within the declared
+uncertainty model, the robust knee trades about 3% of peak flux for chance-feasibility and
+leaves the bondline essentially where it was. The cache-hit sentence in the generated report
+now reports the measured count (0 of 90,000) instead of describing a saving.
+
+
 ### NR-34 — The M7 report printed a projection as a measurement, understated its own sampling error tenfold, and one figure is mislabelled
 
 Found by reading `reports/milestones/M7_uncertainty_robust.md` against its `summary.json` and
@@ -1327,6 +1365,30 @@ resample the unit that was independently drawn. And a generated report is checke
 figures as well as its JSON — the tables here were right and the picture of them was not.
 
 
+**Follow-up, 2026-09-21 (the entry above is unchanged; items keep their numbers).** Fixed once
+no study held the source tree, and the report rebuilt with `make uncertainty-report`, which
+now reproduces all seven figures. 1: the rate and efficiency are labelled as the projection;
+the achieved 13.1 /s and 61.7% are computed from the run's evaluation count and wall clock
+(`summary.json` → `achieved_throughput`; `size_study` no longer writes a `measured_*` key for
+an assumed value). 2: §3.3 prints the row bootstrap - labelled as the pre-declared check,
+verdict logic untouched, all eight statistics still "met" - and the branch bootstrap beside
+it (`statistics.cluster_bootstrap_ci`, 24 clusters, 4000 resamples), and says plainly that the
+baseline mean misses 1% on the latter (1.06%); the other seven meet it. 3, 4: the §7 drag
+paragraph and the T1 count are generated from the run's fidelity and tier counts. 5:
+`plot_attribution` labels every panel on its own axis and draws every attributed design;
+re-read, the 0.609 bar is `sutton_graves_coefficient` and `joint_knee` has its row. 6: the
+runner passes the real nominal front (78 designs of `M4-OPT-20260920T205252Z`, whose logged
+values match this run's re-evaluation to 1.3e-16) and `--report-only` reloads both fronts
+from the runs the summary names. 7: legends moved out of the data, reference design given
+its own panels, section numbers unique, robust-run counts stated. 8: closed by the
+like-for-like run recorded under NR-33. One more finding while doing this: the
+`convergence_cluster_bootstrap_bondline` block of `paired_difference.json` was written by an
+analysis that was never committed - `analyse_m7_paired.py` could not reproduce it and would
+have deleted it on a re-run. The function above reproduces its baseline figure exactly, and
+the script now preserves keys it does not regenerate. No value in `summary.json` changed
+(13,744 compared; `reports/milestones/REPORT_REGENERATION_2026-09-21.md`).
+
+
 ### NR-35 — H2 not supported: extra CFD bought nothing here, and the study's target was beyond its own search budget
 
 **Verdict, as pre-declared** (`configs/adaptive_fidelity.yaml`, run `M6-AF-20260920T211148Z`,
@@ -1366,3 +1428,11 @@ force criterion after 4 attempts, 1 solver failure) and stay on record, charged.
 **Lesson.** Before fixing a hypervolume target, run the no-CFD arm and the reference search at
 the planned budgets and check the target is reachable at all. The criterion is left as
 written; a reachable one is a new pre-declared study, not a re-scoring.
+
+**Follow-up, 2026-09-21 (the entry above is unchanged).** The generated M6 report now opens
+with this entry's three facts, computed from `summary.json` and the config snapshot rather
+than left to the addendum: the NOT_SUPPORTED verdict, `ai_adaptive` declared but not run (H2's
+AI-guided clause untested), and the reachability flaw (25 arm-seeds pooled reach 94.1% of the
+reference against a 95% target; best single arm-seed 93.6%). The sentence is conditional: a
+run whose pooled arms reach the target does not get it. `M6_surface_error_vs_truth` and
+`M6_hv_vs_cfd_calls` have titles (§34). `summary.json` is byte-identical.

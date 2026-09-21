@@ -70,6 +70,10 @@ def _header(s: dict[str, Any]) -> str:
         "from result files; nothing is hand-typed. Figures: "
         + (", ".join(f"`{Path(p).name}`" for p in fig) if fig else "none") + ".",
         "",
+        *([f"> Hand-written companion for this run (paired same-draw differences, H0/H1 "
+           f"restated under uncertainty, robust vs nominal, which uncertainty dominates): "
+           f"`{s['addendum']}`. It is not generated; where it and this report disagree "
+           "about a NUMBER, `summary.json` decides.", ""] if s.get("addendum") else []),
     ])
 
 
@@ -153,6 +157,18 @@ def _inventory(s: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _achieved_rows(s: dict[str, Any]) -> list[list[str]]:
+    a = s.get("achieved_throughput") or {}
+    if not a:
+        return [["ACHIEVED throughput", "not recorded for this run"]]
+    return [["**ACHIEVED throughput** (this run's paid evaluations / its wall clock)",
+             f"**{_f(a['evaluations_per_second'], '.3g')} evaluations/s** "
+             f"({a['n_evaluations']:,} evaluations in {_f(a['wall_s'], '.0f')} s)"],
+            ["**ACHIEVED parallel efficiency** (achieved / ideal "
+             f"{_f(a['ideal_evaluations_per_second'], '.3g')} evaluations/s)",
+             f"**{_pct(a['parallel_efficiency'])}**"]]
+
+
 def _sizing(s: dict[str, Any]) -> str:
     z = s.get("sizing", {})
     if not z:
@@ -164,9 +180,13 @@ def _sizing(s: dict[str, Any]) -> str:
           f"{_f(z.get('measured_seconds_per_evaluation'), '.4g')} s (single process, "
           "one BLAS thread)"],
          ["workers", str(z.get("workers"))],
-         ["measured throughput", f"{_f(z.get('measured_evaluations_per_second'), '.3g')} "
-                                 "evaluations/s"],
-         ["achieved parallel efficiency", _pct(z.get("measured_parallel_efficiency"))],
+         ["parallel efficiency ASSUMED for the projection (declared in the config)",
+          _pct(z.get("assumed_parallel_efficiency", z.get("measured_parallel_efficiency")))],
+         ["PROJECTED throughput = workers × assumed efficiency / seconds per evaluation",
+          _f(z.get("projected_evaluations_per_second",
+                   z.get("measured_evaluations_per_second")), ".3g")
+          + " evaluations/s (a projection, not a measurement)"],
+         *_achieved_rows(s),
          ["propagation", f"{z.get('propagation_evaluations', 0):,} evaluations "
                          f"(~{_f(z.get('propagation_seconds'), '.3g')} s)"],
          ["attribution", f"{z.get('attribution_evaluations', 0):,} evaluations "
@@ -181,6 +201,27 @@ def _sizing(s: dict[str, Any]) -> str:
                                  f"~{_f(z.get('total_seconds', 0.0) / 60.0, '.3g')} min**"],
          ["budget", f"{_f(z.get('budget_seconds', 0.0) / 60.0, '.3g')} min"]]))
     lines.append("")
+    lines.append(
+        "The per-evaluation time is measured at launch and the two ACHIEVED rows are "
+        "measured after the run; the assumed efficiency, the projected throughput and "
+        "every per-stage and total time are projections made before the first evaluation. "
+        "Until 2026-09-21 this table printed the projected rate and the "
+        "declared efficiency under the words \"measured\" and \"achieved\" (NR-34 item 1); "
+        "older `summary.json` files still store them under `measured_*` keys.")
+    lines.append("")
+    robust = s.get("robust") or {}
+    if robust and not z.get("robust_evaluations"):
+        paid = sum(r["budget_used"] for r in robust.get("runs", []))
+        ver = robust.get("verification") or {}
+        lines.append(
+            f"The zeros against robust optimisation and shortcut verification are THIS "
+            f"run's own share: that work was done by run `{robust.get('run_id', '?')}` "
+            f"({paid:,} inner evaluations paid by the search"
+            + (f", {ver['n_designs']} × {ver['n_full']:,} by the verification"
+               if ver.get("n_designs") else "")
+            + f"; {_f(robust.get('wall_s', 0.0) / 60.0, '.0f')} min wall on "
+            f"{robust.get('workers', '?')} workers) and is folded in here from its files.")
+        lines.append("")
     fits = z.get("fits_budget")
     if fits is not None:
         lines.append(f"The projected total **{'fits' if fits else 'DOES NOT fit'}** the "
@@ -203,8 +244,10 @@ def _propagation(s: dict[str, Any]) -> str:
         "Every sample is a full coupled evaluation through `evaluate_design`.")
     lines.append("")
 
-    for name in s["objectives"]:
-        lines.append(f"### 3.1 {name}")
+    lines.append("### 3.1 Output statistics")
+    lines.append("")
+    for i, name in enumerate(s["objectives"], start=1):
+        lines.append(f"#### 3.1.{i} {name}")
         lines.append("")
         rows = []
         for label, block in blocks.items():
@@ -294,33 +337,102 @@ def _violations(s: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _between_branch_share(blocks: dict[str, Any]) -> str:
+    """How much of the convergence output's variance is between branches - from §3.1's
+    decomposition, not asserted."""
+    shares = []
+    for block in blocks.values():
+        output = block["convergence"]["output"]
+        share = block.get("decomposition", {}).get(output, {}).get(
+            "epistemic_share_of_variance")
+        if share is not None and np.isfinite(share):
+            shares.append(float(share))
+    if not shares:
+        return "the between-branch share of this output's variance was not recorded."
+    return (f"{_pct(min(shares))}–{_pct(max(shares))} of this output's variance is between "
+            "branches (§3.1 decomposition).")
+
+
 def _convergence(s: dict[str, Any]) -> str:
     blocks = {k: b for k, b in s.get("propagation", {}).items()
               if b.get("convergence", {}).get("table")}
     if not blocks:
         return ""
+    draws = s.get("draws", {})
     lines = ["### 3.3 Convergence of the statistics", ""]
-    rows = []
+    rows, strict_rows = [], []
     for label, block in blocks.items():
         conv = block["convergence"]
+        cluster = (conv.get("cluster_bootstrap") or {}).get("statistics", {})
         for stat, verdict in conv["verdict"].items():
+            c = cluster.get(stat, {})
             rows.append([f"`{label}`", stat, f"{verdict.get('n', '—')}",
                          _f(verdict.get("value")),
                          _pct(verdict.get("half_width_rel"), 2),
                          _pct(verdict.get("tolerance_rel"), 2),
-                         "yes" if verdict.get("converged") else "**no**"])
+                         "yes" if verdict.get("converged") else "**no**",
+                         _pct(c.get("half_width_rel"), 2) if c else "—",
+                         ("—" if not c else
+                          "yes" if c.get("within_tolerance") else "**no**")])
+            if c:
+                strict_rows.append((label, stat, c, verdict))
     lines.append(_table(["Design", "Statistic", "N", "value",
-                         "bootstrap half-width", "declared tolerance", "within?"], rows))
+                         "ROW bootstrap half-width (the pre-declared check)",
+                         "declared tolerance", "pre-declared check met?",
+                         "BRANCH (cluster) bootstrap half-width (post hoc)",
+                         "declared tolerance met on the branch bootstrap?"], rows))
     lines.append("")
-    failed = [r for r in rows if r[-1] != "yes"]
+    failed = [r for r in rows if r[6] != "yes"]
     lines.append(
-        "All reported statistics are within the tolerance declared before the run."
-        if not failed else
-        f"**{len(failed)} of {len(rows)} reported statistics are NOT within the declared "
-        "tolerance at the sample size used.** Those numbers are quoted with their "
-        "intervals throughout and must not be read to more precision than the interval "
-        "supports; the study was sized to a wall-clock budget, and this is what that cost.")
+        "**The pre-declared check is the ROW bootstrap**, as `configs/uncertainty.yaml` "
+        "declared it before the run, and its verdict is the only verdict here: "
+        + ("all reported statistics are within the declared tolerance on it."
+           if not failed else
+           f"**{len(failed)} of {len(rows)} reported statistics are NOT within the declared "
+           "tolerance at the sample size used.** Those numbers are quoted with their "
+           "intervals throughout and must not be read to more precision than the interval "
+           "supports; the study was sized to a wall-clock budget, and this is what that "
+           "cost."))
     lines.append("")
+    if strict_rows:
+        info = next(iter(blocks.values()))["convergence"]["cluster_bootstrap"]
+        ratios = [c["half_width_rel"] / v["half_width_rel"] for _, _, c, v in strict_rows
+                  if v.get("half_width_rel")]
+        missed = [(label, stat, c) for label, stat, c, _ in strict_rows
+                  if not c["within_tolerance"]]
+        unit = s["units"].get(next(iter(blocks.values()))["convergence"]["output"], "")
+        lines.append(
+            f"**That check understates the sampling error, and the second pair of columns "
+            f"is why (NR-34 item 2).** The draw set is {draws.get('mode', '?')}: "
+            f"{draws.get('n_epistemic_branches', '?')} epistemic branches × "
+            f"{draws.get('n_aleatory', '?')} shared aleatory draws, so the "
+            f"{draws.get('n_samples', '?')} rows are not independent - every row of a branch "
+            "shares one value of every epistemic input, and "
+            + _between_branch_share(blocks)
+            + " A bootstrap must resample the unit that "
+            f"was independently drawn. Resampling whole branches ({info['n_clusters']} "
+            f"clusters, {info['n_bootstrap']} resamples, seed {info['seed']}) gives "
+            f"half-widths {min(ratios):.0f}–{max(ratios):.0f} times the row bootstrap's. "
+            "This second bootstrap was added after the run; it is reported beside the "
+            "pre-declared check, never instead of it, and it changes no verdict.")
+        lines.append("")
+        if missed:
+            lines.append(
+                "Applying the declared tolerance to the branch bootstrap - the stricter "
+                "reading, not the declared one - "
+                + "; ".join(f"the `{label}` {stat} misses it ({_pct(c['half_width_rel'], 2)} "
+                            f"= ±{_f(c['half_width'], '.2g')} {unit}"
+                            f" against {_pct(c['tolerance_rel'], 2)})"
+                            for label, stat, c in missed)
+                + f"; the other {len(strict_rows) - len(missed)} of {len(strict_rows)} "
+                "statistics meet it. So \"converged to a few hundredths of a percent\" is "
+                "not a fair summary of this table: absolute means and percentiles here are "
+                "known to roughly the branch-bootstrap half-width. More epistemic branches, "
+                "not more draws, is what would tighten them.")
+        else:
+            lines.append("On the branch bootstrap every statistic still meets the declared "
+                         "tolerance.")
+        lines.append("")
     return "\n".join(lines)
 
 
@@ -334,8 +446,8 @@ def _attribution(s: dict[str, Any]) -> str:
              "first-order estimator on an output with a 400 K mean produced confidence "
              "intervals wider than [0, 1] the first time this repository tried it "
              "(NR-16).", ""]
-    for label, block in blocks.items():
-        lines.append(f"### 4.1 Design `{label}`  "
+    for n_block, (label, block) in enumerate(blocks.items(), start=1):
+        lines.append(f"### 4.{n_block} Design `{label}`  "
                      f"({block['n_evaluations']:,} evaluations, n_base "
                      f"{block['n_base']})")
         lines.append("")
@@ -411,10 +523,15 @@ def _robust(s: dict[str, Any]) -> str:
         paid = sum(r["budget_used"] for r in runs)
         if paid:
             lines.append(
-                f"Common random numbers made {hits:,} of {hits + paid:,} inner "
-                f"evaluations ({_pct(hits / (hits + paid))}) free cache hits: a design the "
-                "optimiser re-proposes is re-tested on exactly the same weather at no "
-                "cost. That saving is logged per candidate rather than assumed.")
+                "Common random numbers mean a design the optimiser re-proposes is re-tested "
+                "on exactly the same draws and served from cache at no cost. Measured in "
+                f"this run: **{hits:,} cache hits in {hits + paid:,} inner evaluations "
+                f"({_pct(hits / (hits + paid))})**. "
+                + ("The optimiser never re-proposed a design, so that saving did not "
+                   "occur; what common random numbers did do is compare every candidate on "
+                   "the same inner draws."
+                   if hits == 0 else
+                   "That saving is logged per candidate rather than assumed."))
             lines.append("")
 
     lines.append("### 5.2 Verifying the shortcut")
@@ -492,6 +609,92 @@ def _robust(s: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _cell_phrase(s: dict[str, Any], cell: dict[str, Any]) -> str:
+    parts = [f"n = {cell.get('n_samples', '?')}"]
+    parts += [f"{name} p95 {_f(cell.get(name, {}).get('p95'))}" for name in s["objectives"]]
+    anyv = cell.get("violation_probability", {}).get("any", {})
+    if anyv:
+        parts.append(f"P(violation) {anyv.get('phrase', '—')}")
+    return "; ".join(parts)
+
+
+def _likeforlike_notes(s: dict[str, Any], table: dict[str, Any],
+                       replaced: list[tuple[str, dict[str, Any]]]) -> list[str]:
+    """Are the uncertainty cells of the §39 rows the same kind of sample? Said either way."""
+    draws = s.get("draws", {})
+    prov = table.get("provenance", {})
+    lfl = s.get("robust_likeforlike") or {}
+    sizes = {r["label"]: r.get("uncertainty", {}).get("n_samples") for r in table["rows"]
+             if r.get("available")}
+    lines: list[str] = []
+    if not lfl:
+        if len(set(sizes.values())) > 1:
+            lines += [
+                "**The uncertainty cells are NOT like-for-like.** Rows that already had a "
+                f"propagation reuse it ({draws.get('n_samples')} {draws.get('mode')} draws, "
+                f"seed {draws.get('seed')}); a row without one gets "
+                f"{prov.get('uncertainty_samples')} mixed draws on seed "
+                f"{prov.get('uncertainty_seed')}. Those rows cannot be paired draw for draw "
+                "with the others. `scripts/run_m7_robust_likeforlike.py` closes the gap.", ""]
+        return lines
+    eq = lfl["evaluator_equivalence"]
+    lines.append(
+        f"**Like-for-like.** All four uncertainty cells above are now the same sample: "
+        f"{draws.get('n_samples')} {draws.get('mode')} draws "
+        f"({draws.get('n_epistemic_branches')} epistemic branches × {draws.get('n_aleatory')} "
+        f"aleatory), seed {draws.get('seed')}. The `{lfl['comparison_row']}` cell comes from "
+        f"a separate, labelled run, `{lfl['run_id']}`: a propagation of that ONE design "
+        f"through this run's draw set ({lfl['n_evaluations']:,} evaluations, "
+        f"{_f(lfl['wall_s'] / 60.0, '.1f')} min), made after the study; it is not a re-run of "
+        "the study and no other number in this report comes from it. It ran under evaluator "
+        f"source hash `{lfl['source_hash']}` (this study: `{lfl['parent_source_hash']}`) "
+        "because report and plotting code under `src/aether` was edited in between; before "
+        f"propagating, it re-ran {eq['n_evaluations']} of this study's own `{eq['design']}` "
+        "evaluations and reproduced the logged outputs to a largest relative difference of "
+        f"{max(eq['max_relative_difference'].values()):.1e} (required ≤ "
+        f"{eq['rtol_required']:.0e}; feasibility identical: "
+        f"{'yes' if eq['feasibility_identical'] else 'NO'}).")
+    lines.append("")
+    for label, cell in replaced:
+        lines.append(
+            f"As this study originally generated it, the `{label}` cell was: "
+            f"{_cell_phrase(s, cell)} - {prov.get('uncertainty_samples')} *mixed* draws on "
+            f"seed {prov.get('uncertainty_seed')}, a different draw set from the other rows. "
+            "It is kept here and in the addendum; it is superseded in the table only "
+            "because it could not be compared or paired with them.")
+        lines.append("")
+    conv = (lfl.get("convergence") or {}).get("cluster_bootstrap", {}).get("statistics", {})
+    if conv:
+        lines.append(
+            "Sampling error of the like-for-like cell "
+            f"({(lfl.get('convergence') or {}).get('output')}, branch bootstrap, see §3.3): "
+            + "; ".join(f"{stat} ±{_pct(c['half_width_rel'], 2)}" for stat, c in conv.items())
+            + ".")
+        lines.append("")
+    pairs = lfl.get("paired") or []
+    if pairs:
+        lines.append(f"**Paired on the shared draws** (`{lfl['label']}` minus the named "
+                     "design, same draw; interval = bootstrap over whole epistemic branches):")
+        lines.append("")
+        lines.append(_table(
+            ["Difference", "Output", "mean", "s.d.", "p5 … p95", "min … max",
+             "draws with Δ < 0", "95% CI on the mean"],
+            [[f"`{p['a']}` − `{p['b']}`", f"`{p['output']}`", _f(p["mean"], "+.4g"),
+              _f(p["sd"], ".3g"),
+              f"{_f(p['percentiles']['p5'], '+.4g')} … {_f(p['percentiles']['p95'], '+.4g')}",
+              f"{_f(p['min'], '+.4g')} … {_f(p['max'], '+.4g')}",
+              f"{p['n_draws_a_below_b']} / {p['n_pairs']}",
+              f"[{_f(p['mean_ci95_cluster_bootstrap'][0], '+.4g')}, "
+              f"{_f(p['mean_ci95_cluster_bootstrap'][1], '+.4g')}]"] for p in pairs]))
+        lines.append("")
+        lines.append("A difference that keeps one sign in every draw holds within the "
+                     "declared uncertainty model only; a model error common to both designs "
+                     "(gate G2′ above all) moves them together and a paired test cannot see "
+                     "it.")
+        lines.append("")
+    return lines
+
+
 def _comparison(s: dict[str, Any]) -> str:
     table = s.get("comparison")
     if not table:
@@ -524,9 +727,14 @@ def _comparison(s: dict[str, Any]) -> str:
     rows.append(["**feasible**", "",
                  *[("—" if not r["available"] else
                     ("yes" if r["feasible"] else "**no**")) for r in table["rows"]]])
+    lfl = s.get("robust_likeforlike") or {}
+    replaced: list[tuple[str, dict[str, Any]]] = []
     unc = []
     for row in table["rows"]:
         cell = row.get("uncertainty", {})
+        if lfl and row.get("available") and row["label"] == lfl.get("comparison_row"):
+            replaced.append((row["label"], cell))
+            cell = lfl["uncertainty_cell"]
         if not row["available"] or not cell.get("available"):
             unc.append(cell.get("reason", "—") if not cell.get("available") else "—")
             continue
@@ -543,6 +751,7 @@ def _comparison(s: dict[str, Any]) -> str:
     rows.append(["**uncertainty**", "per row", *unc])
     lines.append(_table(header, rows))
     lines.append("")
+    lines += _likeforlike_notes(s, table, replaced)
     lines.append(f"> **On the penetration metric.** {TPI_FOOTNOTE}")
     lines.append("")
     for warning in table.get("stale_warnings", []):
@@ -553,27 +762,61 @@ def _comparison(s: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def _largest_index_among(s: dict[str, Any], names: list[str]) -> str:
+    """Where, in §4, the named inputs carry the most variance - from the indices."""
+    best: tuple[float, str, str, str] | None = None
+    for label, block in (s.get("attribution") or {}).items():
+        inputs = [i["name"] for i in block.get("inputs", [])]
+        for output, data in block.get("outputs", {}).items():
+            for name, value in zip(inputs, data["total"], strict=False):
+                if name in names and np.isfinite(value) and (best is None or value > best[0]):
+                    best = (float(value), name, label, output)
+    if best is None:
+        return ""
+    return (f" The largest total-order index any of them reaches in §4 is "
+            f"{_f(best[0], '.3f')} (`{best[1]}`, design `{best[2]}`, `{best[3]}`).")
+
+
 def _limitations(s: dict[str, Any]) -> str:
     model = s["uncertainty_model"]
     t3 = [i["name"] for i in model["inputs"] if i["tier"] == "T3"]
     skipped = [r["name"] for r in model["skipped"]]
     lines = ["## 7. Limitations", ""]
+    t1 = [i["name"] for i in model["inputs"] if i["tier"] == "T1"]
     lines.append(
         f"**{len(t3)} of {model['n_inputs']} active inputs are engineering judgment** "
         f"(`{'`, `'.join(t3)}`). Their spreads are declared, not sourced, and the width of "
-        "every output distribution here is conditional on them. The two inputs that are "
-        "T1 — the effective-nose-radius model form and the Sutton–Graves constant — are "
-        "the ones this project measured itself, and they are not the small ones.")
+        "every output distribution here is conditional on them. "
+        + (f"{len(t1)} input{'s are' if len(t1) != 1 else ' is'} tiered "
+           f"{TIER_LABEL['T1']} (`{'`, `'.join(t1)}`)." if t1 else
+           f"No input is tiered {TIER_LABEL['T1']}.")
+        + _largest_index_among(s, t1))
     lines.append("")
-    if skipped:
+    aero_terms = [i for i in model["inputs"]
+                  if str(i["apply"].get("path", "")).startswith("vehicle.aero.")]
+    if int(s.get("fidelity", 0)) == 0:
+        if skipped:
+            lines.append(
+                f"**Not propagated in this run:** `{'`, `'.join(skipped)}`. This run is "
+                f"Fidelity 0 (`{s.get('aero_model')}`): the sourced C_D terms of the "
+                "CFD-surface branch (GP predictive σ with its stored inflation, the M2 "
+                "discretisation band, the base-drag band and the declared perfect-gas "
+                "half-band) do not exist here"
+                + (f", and C_D uncertainty is carried by "
+                   f"`{'`, `'.join(i['name'] for i in aero_terms)}` instead"
+                   if aero_terms else "")
+                + ". That substitution is not equivalent and the C_D-related numbers here "
+                "should not be carried into a Fidelity-1 discussion.")
+            lines.append("")
+    else:
         lines.append(
-            f"**Not propagated in this run:** `{'`, `'.join(skipped)}`. At Fidelity 0 the "
-            "four sourced C_D terms (GP predictive σ with its stored 1.65 inflation, the "
-            "M2 discretisation band, the base-drag band and the declared perfect-gas "
-            "half-band) do not exist, and they are replaced by a single unsourced ±10% "
-            "band on a constant C_D. That substitution is not equivalent and the "
-            "C_D-related numbers here should not be carried into a Fidelity-1 "
-            "discussion.")
+            f"**Drag uncertainty.** This run is Fidelity {s.get('fidelity')} "
+            f"(`{s.get('aero_model')}`), and {len(aero_terms)} C_D term"
+            f"{'s were' if len(aero_terms) != 1 else ' was'} propagated: "
+            + ", ".join(f"`{i['name']}` ({TIER_LABEL[i['tier']]})" for i in aero_terms)
+            + "."
+            + ("".join(f" Declared but not active: `{r['name']}` - {r['reason']}."
+                       for r in model["skipped"]) if model["skipped"] else ""))
         lines.append("")
     lines.append(
         "**Not covered at all.** Gate G2′ (aeroheating model form: catalycity, hot wall, "
@@ -606,6 +849,8 @@ def _reproduce(s: dict[str, Any]) -> str:
         "```bash",
         "make uncertainty          # propagation, attribution, §39 table",
         "make robust               # robust optimisation + shortcut verification",
+        f"make uncertainty-report RUN_ID={s['run_id']}   # every figure + this report, "
+        "no evaluation",
         f"# this run: {s['run_id']}, source hash {s.get('source_hash', '?')}",
         "```",
         "",
@@ -625,8 +870,13 @@ def _reproduce(s: dict[str, Any]) -> str:
 
 def write_m7_report(root: Path, summary: dict[str, Any], path: Path | None = None) -> Path:
     """Render the milestone report and write it. Returns the path written."""
+    published = path is None
     path = path or (Path(root) / "reports" / "milestones" / "M7_uncertainty_robust.md")
     path.parent.mkdir(parents=True, exist_ok=True)
+    companion = path.parent / "M7_addendum_posthoc.md"
+    summary = {**summary, "addendum": companion.name
+               if published and companion.exists()
+               and str(summary.get("run_id")) in companion.read_text() else None}
     sections = [_header(summary), _scope(summary), _inventory(summary), _sizing(summary),
                 _propagation(summary), _violations(summary), _convergence(summary),
                 _attribution(summary), _robust(summary), _comparison(summary),

@@ -190,3 +190,16 @@ which was frozen while three studies ran. For this run, read it with these corre
    pre-declared practical threshold of 0.005 - the rule's effect-size leg, not its
    significance leg. The rule is applied as written; the agent was *distinguishably* ahead
    at 200 evaluations by an amount declared in advance to be too small to count.
+
+**Follow-up, 2026-09-21 (appended; the three items above are left as written).** With no
+study holding the source tree, the generator was corrected and the report regenerated
+(`make ablation-report`), so the sentences quoted in items 1–3 no longer appear in the
+generated sections: (1) the §3 column is now "drag-surface evaluations / seed (fidelity > 0)"
+beside a separate "CFD solver calls" column, which counts promotions to a new CFD case
+granted by the fidelity hook and reads 0 for every method; the header states 0 solver calls;
+(2) the `ai_adaptive` label and section are generated from the run's recorded fidelity and
+aero model; (3) the power paragraph is generated per checkpoint from the two legs of the rule
+as evaluated (recorded in `summary.json` as `criteria.checkpoints.*.rule_legs`) and says of
+the 200-evaluation cell what item 3 says. The report also gained a generated caveat that its
+wall times were measured while two other studies shared the machine. No number in
+`summary.json` changed: `reports/milestones/REPORT_REGENERATION_2026-09-21.md`.

@@ -9,6 +9,7 @@ without seeing its shape.
 
 from __future__ import annotations
 
+import textwrap
 from pathlib import Path
 from typing import Any
 
@@ -68,13 +69,18 @@ def plot_input_inventory(summary: dict[str, Any], out_dir: Path) -> list[Path]:
     ax_left.set_title("Declared uncertain inputs (those with a relative spread)")
     handles = [plt.Rectangle((0, 0), 1, 1, color=ALEATORY_STYLE["color"]),
                plt.Rectangle((0, 0), 1, 1, color=EPISTEMIC_STYLE["color"], hatch="///")]
+    # Legends sit BELOW the axes: inside them they overprinted a bar, its tier label and
+    # the low-altitude density points (NR-34 item 7).
     ax_left.legend(handles, [ALEATORY_STYLE["label"], EPISTEMIC_STYLE["label"]],
-                   fontsize=7, loc="lower right")
+                   fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.20), ncol=2)
+    ax_left.set_xlim(right=max(spans) * 100.0 * 1.22 if spans else 1.0)  # room for tiers
     if other:
         listing = "; ".join(_describe_incomparable(i) for i in other)
-        ax_left.text(0.0, -0.32, "not expressible as a relative spread — " + listing,
-                     transform=ax_left.transAxes, fontsize=6.5, color=INK, va="top",
-                     wrap=True)
+        # wrapped here, by character count: matplotlib's own wrap=True measures against
+        # the FIGURE edge and ran this note off the right-hand side
+        note = textwrap.fill("not expressible as a relative spread, so not drawn as a "
+                             "bar: " + listing, width=165)
+        fig.text(0.01, 0.02, note, fontsize=6.5, color=INK, va="bottom", ha="left")
 
     profile = summary["uncertainty_model"].get("density_profile")
     if profile:
@@ -96,8 +102,8 @@ def plot_input_inventory(summary: dict[str, Any], out_dir: Path) -> list[Path]:
         ax_right.set_xlabel("1 s.d. density dispersion [% of nominal]")
         ax_right.set_ylabel("geometric altitude [km]")
         ax_right.set_title("Atmospheric density dispersion")
-        ax_right.legend(fontsize=7, loc="lower right")
-    fig.tight_layout()
+        ax_right.legend(fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.20), ncol=3)
+    fig.tight_layout(rect=(0.0, 0.10, 1.0, 1.0))
     return [save_figure(fig, out_dir, "M7_input_inventory",
                         _caption(summary, "declared in configs/uncertainty.yaml"))]
 
@@ -152,37 +158,65 @@ def _describe_incomparable(item: dict[str, Any]) -> str:
 
 def plot_output_distributions(summary: dict[str, Any], frames: dict[str, pd.DataFrame],
                               out_dir: Path) -> list[Path]:
-    """Empirical CDFs of the two objectives, per propagated design, with p95 marked."""
+    """Empirical CDFs of the two objectives, per propagated design, with p95 marked.
+
+    The un-optimised reference design is drawn in ITS OWN PANEL, on its own linear axis.
+    On a shared axis its peak heat flux (several times the optimised designs') squeezed
+    the designs the report is about into an unreadable sliver (NR-34 item 7). Separate
+    panels were chosen over a log axis because a log axis compresses exactly the
+    few-percent differences between the optimised designs that the figure exists to show.
+    Both panels of a row carry the same quantity and units; their ranges differ and the
+    caption says so.
+    """
     objectives = tuple(summary["objectives"])
-    fig, axes = plt.subplots(1, len(objectives), figsize=(5.4 * len(objectives), 4.2))
-    axes = np.atleast_1d(axes)
-    colours = [DEEP, HOT, ACCENT, INK, MUTED]
-    for ax, name in zip(axes, objectives, strict=True):
-        for i, (label, frame) in enumerate(frames.items()):
-            values = frame[name].to_numpy(dtype=float)
-            values = np.sort(values[np.isfinite(values)])
-            if values.size == 0:
-                continue
-            cdf = np.arange(1, values.size + 1) / values.size
-            colour = colours[i % len(colours)]
-            ax.plot(values, cdf, color=colour, lw=1.5, label=label)
-            p95 = float(np.percentile(values, 95.0))
-            ax.plot([p95], [0.95], marker="v", ms=6, color=colour)
-        allowable = summary.get("allowables", {}).get(name)
-        if allowable is not None:
-            ax.axvline(float(allowable), color=HOT, ls="--", lw=1.1)
-            ax.text(float(allowable), 0.05, " allowable", color=HOT, fontsize=7,
-                    rotation=90, va="bottom")
-        ax.axhline(0.95, color=GRID, lw=0.8)
-        ax.set_xlabel(f"{name} [{summary['units'].get(name, '')}]")
-        ax.set_ylabel("cumulative probability [-]")
-        ax.set_title(name)
-        ax.legend(fontsize=7)
+    reference = [e["label"] for e in summary.get("nominal_designs_under_uncertainty", [])
+                 if not e.get("is_nominal_optimum") and e["label"] in frames]
+    groups = [[lab for lab in frames if lab not in reference], reference]
+    groups = [g for g in groups if g]
+    titles = (["optimised designs", "reference design (not optimised)"]
+              if len(groups) == 2 else [""])
+    colour_of = dict(zip(frames, [DEEP, HOT, ACCENT, INK, MUTED] * 2, strict=False))
+    style_of = dict(zip(frames, ["-", "--", "-.", ":", (0, (5, 1))] * 2, strict=False))
+    fig, axes = plt.subplots(len(objectives), len(groups), squeeze=False,
+                             figsize=(5.4 * len(groups), 3.6 * len(objectives)),
+                             gridspec_kw={"width_ratios": [1.6, 1.0][:len(groups)]})
+    for row, name in zip(axes, objectives, strict=True):
+        for ax, labels, title in zip(row, groups, titles, strict=True):
+            for label in labels:
+                values = frames[label][name].to_numpy(dtype=float)
+                values = np.sort(values[np.isfinite(values)])
+                if values.size == 0:
+                    continue
+                cdf = np.arange(1, values.size + 1) / values.size
+                ax.plot(values, cdf, color=colour_of[label], ls=style_of[label], lw=1.5,
+                        label=label)
+                ax.plot([float(np.percentile(values, 95.0))], [0.95], marker="v", ms=6,
+                        color=colour_of[label])
+            allowable = summary.get("allowables", {}).get(name)
+            lo, hi = ax.get_xlim()
+            if allowable is not None and lo <= float(allowable) <= hi + 0.25 * (hi - lo):
+                ax.axvline(float(allowable), color=HOT, ls="--", lw=1.1)
+                ax.text(float(allowable), 0.05, " allowable", color=HOT, fontsize=7,
+                        rotation=90, va="bottom")
+            elif allowable is not None:
+                # off this panel's range: said in words, so the limit is never dropped
+                side = "right" if float(allowable) > hi else "left"
+                ax.text(0.02, 0.97, f"allowable {float(allowable):g} "
+                        f"{summary['units'].get(name, '')}: off-axis to the {side}",
+                        transform=ax.transAxes, color=HOT, fontsize=7, va="top", ha="left")
+            ax.axhline(0.95, color=GRID, lw=0.8)
+            ax.set_xlabel(f"{name} [{summary['units'].get(name, '')}]")
+            ax.set_ylabel("cumulative probability [-]")
+            ax.set_title(f"{name}: {title}" if title else name, fontsize=8.5)
+            ax.legend(fontsize=7, loc="lower right")
     fig.suptitle("Propagated output distributions (markers: 95th percentile)", fontsize=10)
     fig.tight_layout()
     return [save_figure(fig, out_dir, "M7_output_distributions",
                         _caption(summary, "pooled aleatory+epistemic mixture; see the "
-                                          "p-box figure for the separated view"))]
+                                          "p-box figure for the separated view. Left and "
+                                          "right panels of a row show the same quantity on "
+                                          "DIFFERENT linear ranges; an allowable off a "
+                                          "panel's range is stated in words on it"))]
 
 
 def plot_pbox(summary: dict[str, Any], frames: dict[str, pd.DataFrame],
@@ -257,41 +291,53 @@ def plot_convergence(summary: dict[str, Any], out_dir: Path) -> list[Path]:
 
 
 def plot_attribution(summary: dict[str, Any], out_dir: Path) -> list[Path]:
-    """Sobol' total-order indices: which uncertain input to go and measure next."""
+    """Sobol' total-order indices: which uncertain input to go and measure next.
+
+    One ROW of panels per attributed design, one panel per output, and EVERY PANEL CARRIES
+    ITS OWN y LABELS. Each panel is sorted by its own indices, so the axes cannot be
+    shared: with `sharey=True` matplotlib stamped the last panel's labels on all of them
+    and two of three panels were mislabelled (NR-34 item 5). The first version also drew
+    only the first attributed design.
+    """
     blocks = summary.get("attribution", {})
     usable = {label: b for label, b in blocks.items() if b.get("outputs")}
     if not usable:
         return []
-    label, block = next(iter(usable.items()))
-    outputs = list(block["outputs"])
-    names = [i["name"] for i in block["inputs"]]
-    kinds = [i["kind"] for i in block["inputs"]]
-    fig, axes = plt.subplots(1, len(outputs), figsize=(4.6 * len(outputs), 4.4),
-                             sharey=True)
-    axes = np.atleast_1d(axes)
-    for ax, output in zip(axes, outputs, strict=True):
-        data = block["outputs"][output]
-        total = np.asarray(data["total"], dtype=float)
-        ci = np.asarray(data["total_ci"], dtype=float)
-        order = np.argsort(total)
-        y = np.arange(len(order))
-        for pos, idx in zip(y, order, strict=True):
-            style = EPISTEMIC_STYLE if kinds[idx] == "epistemic" else ALEATORY_STYLE
-            ax.barh(pos, total[idx], color=style["color"], hatch=style["hatch"],
-                    edgecolor="white", height=0.66)
-            ax.plot([ci[idx, 0], ci[idx, 1]], [pos, pos], color=INK, lw=1.1)
-        ax.set_yticks(y, [names[i] for i in order], fontsize=7.5)
-        ax.set_xlabel("Sobol' total-order index [-]")
-        ax.set_title(output, fontsize=9)
+    n_cols = max(len(b["outputs"]) for b in usable.values())
+    fig, axes = plt.subplots(len(usable), n_cols, squeeze=False, sharey=False,
+                             figsize=(5.6 * n_cols, 3.9 * len(usable)))
+    for row, (label, block) in zip(axes, usable.items(), strict=True):
+        names = [i["name"] for i in block["inputs"]]
+        kinds = [i["kind"] for i in block["inputs"]]
+        k = block.get("k_body_over_nose")
+        for ax in row[len(block["outputs"]):]:
+            ax.set_visible(False)
+        for ax, (output, data) in zip(row, block["outputs"].items(), strict=False):
+            total = np.asarray(data["total"], dtype=float)
+            ci = np.asarray(data["total_ci"], dtype=float)
+            order = np.argsort(total)
+            y = np.arange(len(order))
+            for pos, idx in zip(y, order, strict=True):
+                style = EPISTEMIC_STYLE if kinds[idx] == "epistemic" else ALEATORY_STYLE
+                ax.barh(pos, total[idx], color=style["color"], hatch=style["hatch"],
+                        edgecolor="white", height=0.66)
+                ax.plot([ci[idx, 0], ci[idx, 1]], [pos, pos], color=INK, lw=1.1)
+            ax.set_yticks(y, [names[i] for i in order], fontsize=7)   # THIS panel's order
+            ax.set_xlabel("Sobol' total-order index [-]")
+            ax.set_title(f"design '{label}'"
+                         + (f" (R_b/R_n = {k:.3f})" if k is not None and np.isfinite(k)
+                            else "") + f"\n{output}", fontsize=8.5)
     handles = [plt.Rectangle((0, 0), 1, 1, color=ALEATORY_STYLE["color"]),
                plt.Rectangle((0, 0), 1, 1, color=EPISTEMIC_STYLE["color"], hatch="///")]
-    axes[-1].legend(handles, [ALEATORY_STYLE["label"], EPISTEMIC_STYLE["label"]],
-                    fontsize=7, loc="lower right")
-    fig.suptitle(f"Variance attribution on design '{label}' "
+    fig.legend(handles, [ALEATORY_STYLE["label"], EPISTEMIC_STYLE["label"]], fontsize=7.5,
+               loc="lower center", ncol=2, bbox_to_anchor=(0.5, 0.0))
+    fig.suptitle("Variance attribution, one row per attributed design "
                  "(bars: total order; lines: 95% bootstrap interval)", fontsize=9.5)
-    fig.tight_layout()
+    fig.tight_layout(rect=(0.0, 0.04, 1.0, 0.97))
     return [save_figure(fig, out_dir, "M7_attribution",
-                        _caption(summary, "an index on an EPISTEMIC input is a "
+                        _caption(summary, "designs: " + ", ".join(usable) + ". Each panel "
+                                          "is sorted by its own indices and labelled on its "
+                                          "own axis. An index on an EPISTEMIC input is a "
                                           "sensitivity to which model is believed, not a "
                                           "share of real variability"))]
 
@@ -305,10 +351,14 @@ def plot_robust_vs_nominal(summary: dict[str, Any], nominal_front: pd.DataFrame 
     if robust_front is None or robust_front.empty:
         return []
     objectives = tuple(summary["objectives"])
-    fig, ax = plt.subplots(figsize=(6.6, 4.8))
-    if nominal_front is not None and not nominal_front.empty:
-        ax.plot(nominal_front[objectives[0]], nominal_front[objectives[1]], color=MUTED,
-                lw=1.2, marker="o", ms=3, label="nominal front (M4, re-evaluated)")
+    fig, ax = plt.subplots(figsize=(7.2, 6.4))
+    has_nominal = nominal_front is not None and not nominal_front.empty
+    if has_nominal:
+        ordered = nominal_front.sort_values(objectives[0])
+        ax.plot(ordered[objectives[0]], ordered[objectives[1]], color=MUTED,
+                lw=1.2, marker="o", ms=3,
+                label=f"nominal front: {len(ordered)} designs of M4 run "
+                      f"{summary.get('m4_run_id', '?')}, nominal values as M4 logged them")
     percentile = summary["robust"]["settings"]["objective_percentile"]
     ax.plot(robust_front[f"robust__{objectives[0]}"],
             robust_front[f"robust__{objectives[1]}"], color=DEEP, lw=1.6, marker="s",
@@ -328,14 +378,29 @@ def plot_robust_vs_nominal(summary: dict[str, Any], nominal_front: pd.DataFrame 
     allowable = summary.get("allowables", {}).get(objectives[1])
     if allowable is not None:
         ax.axhline(float(allowable), color=HOT, ls="--", lw=1.1, label="bondline allowable")
-    ax.set_xlabel(f"{objectives[0]} [{summary['units'].get(objectives[0], '')}]")
-    ax.set_ylabel(f"{objectives[1]} [{summary['units'].get(objectives[1], '')}]")
-    ax.set_title("Nominal vs robust Pareto fronts")
-    ax.legend(fontsize=7)
+    ax.set_xlabel(f"{objectives[0]} [{summary['units'].get(objectives[0], '')}]\n"
+                  "(nominal value, or 95th percentile under uncertainty - see legend)")
+    ax.set_ylabel(f"{objectives[1]} [{summary['units'].get(objectives[1], '')}]\n"
+                  "(nominal value, or 95th percentile - see legend)")
+    # the title says what is drawn: a front that was not supplied is not announced
+    ax.set_title("Nominal vs robust Pareto fronts" if has_nominal else
+                 "Robust Pareto front, and the nominal optima under uncertainty")
+    if moved:       # the arrows get a legend entry of their own
+        ax.plot([], [], color=HOT, lw=1.1, marker=">", ms=4,
+                label="arrow: that design's nominal value -> its 95th percentile")
+    # below the axes: inside them the legend sat across the allowable line
+    ax.legend(fontsize=6.5, loc="upper center", bbox_to_anchor=(0.5, -0.22), ncol=1)
     fig.tight_layout()
+    check = summary.get("nominal_front_consistency") or {}
     return [save_figure(fig, out_dir, "M7_robust_vs_nominal",
-                        _caption(summary, "arrows run from each nominal-optimal design's "
-                                          "nominal objective to its 95th percentile"))]
+                        _caption(summary, f"robust run {summary['robust'].get('run_id', '?')}"
+                                          "; arrows run from each nominal-optimal design's "
+                                          "nominal objective to its 95th percentile"
+                                 + (f"; M4's logged values of those designs differ from "
+                                    f"this run's re-evaluation by at most "
+                                    f"{check['max_abs_relative_difference']:.1e} (relative)"
+                                    if check.get("max_abs_relative_difference") is not None
+                                    else "")))]
 
 
 def plot_shortcut_verification(summary: dict[str, Any], out_dir: Path) -> list[Path]:

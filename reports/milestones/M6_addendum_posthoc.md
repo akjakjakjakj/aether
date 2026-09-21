@@ -125,3 +125,23 @@ written before the run and is left as written.
 | `M6_hv_vs_cfd_calls` | Units, legend, run ID, caption: meets §34. No overall title (panel titles only). Panel (a) is easy to misread — curves rise with CFD calls because search progresses while calls are spent; the caption says so and panel (b) is the honest view. |
 | `M6_cfd_spend_map` | Meets §34. Shoulder ratio and Mach not shown (stated). This is the figure that carries §2. |
 | `M6_surface_error_vs_truth` | Units, run ID, caption present; **no title**. |
+
+## 8. Follow-up, 2026-09-21 (appended; nothing above is edited)
+
+The generator was corrected once no study held the source tree, and the report was rebuilt
+with `make adaptive-report`. `summary.json` is byte-identical (SHA-256 checked,
+`REPORT_REGENERATION_2026-09-21.md`); only text and figure furniture changed.
+
+* **§7 above is superseded for two figures.** `M6_hv_vs_cfd_calls` now carries an overall
+  title as well as its panel titles, and `M6_surface_error_vs_truth` has a title. Both were
+  re-read after regeneration and meet §34. `M6_cfd_spend_map` is unchanged.
+* **The generated report now opens with what §0–§2 above had to supply by hand**, generated
+  from `summary.json` and the run's config snapshot: the NOT_SUPPORTED verdict; that
+  `ai_adaptive` was declared and not run, so H2's "AI-guided" clause is untested; and the
+  reachability sizing flaw (all arm-seeds pooled reach 94.1% of the reference against a 95%
+  target). Its §8 no longer describes `ai_adaptive` as if it had run.
+* The line at the top of this file, "`make adaptive-report` reproduces it byte-for-byte",
+  was true of the report as first generated. It now reproduces the corrected report.
+* Everything else in this addendum (the variance split, where each arm spent its CFD, the
+  failed cases, the hold-out limits, the bottom line) is not generated anywhere and remains
+  the record; the generated report links here.

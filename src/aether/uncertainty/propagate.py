@@ -36,6 +36,7 @@ from .space import UncertainDesignSpace
 from .statistics import (
     DEFAULT_PERCENTILES,
     ViolationProbability,
+    cluster_bootstrap_ci,
     converged,
     convergence_table,
     quantile,
@@ -203,11 +204,54 @@ def analyse(label: str, frame: pd.DataFrame, draws: DrawSet, *,
         result.convergence = {
             "output": convergence_output,
             "table": table,
+            # THE PRE-DECLARED CHECK: row bootstrap, as configs/uncertainty.yaml declared
+            # it before the run. Its verdict logic is not touched by what follows.
             "verdict": {label_: converged(table, label_, convergence_tolerance_rel)
                         for label_ in stats},
             "tolerance_rel": convergence_tolerance_rel,
+            # reported BESIDE it, never instead of it (NR-34)
+            "cluster_bootstrap": cluster_convergence(
+                _series(frame, convergence_output), draws.epistemic_index,
+                convergence_tolerance_rel, confidence=confidence),
         }
     return result
+
+
+CLUSTER_BOOTSTRAP_RESAMPLES = 4000
+CLUSTER_BOOTSTRAP_SEED = 20260927      # the seed of the post-hoc analysis that found NR-34
+
+
+def cluster_convergence(values, branches, tolerance_rel: float, *,
+                        confidence: float = 0.95) -> dict[str, Any]:
+    """Branch-level (cluster) bootstrap half-widths of the convergence statistics.
+
+    POST-HOC, NOT PRE-DECLARED. The declared convergence check resamples rows; the draws
+    are nested in epistemic branches, so rows are not the independent unit (NR-34). This
+    is the stricter reading, reported next to the declared one. It has no verdict of its
+    own: `within_tolerance` is the declared tolerance applied to this half-width, labelled
+    as such by the report, and nothing downstream branches on it.
+    """
+    arr = np.asarray(values, dtype=float).ravel()
+    ids = np.asarray(branches).ravel()
+    stats = {"mean": lambda a: float(np.mean(a)),
+             "p95": lambda a: float(np.percentile(a, 95.0))}
+    finite = arr[np.isfinite(arr)]
+    out: dict[str, Any] = {
+        "method": "percentile bootstrap resampling whole epistemic branches",
+        "n_clusters": int(np.unique(ids).size), "n_rows": int(arr.size),
+        "n_bootstrap": CLUSTER_BOOTSTRAP_RESAMPLES, "seed": CLUSTER_BOOTSTRAP_SEED,
+        "confidence": confidence, "pre_declared": False, "statistics": {}}
+    for label_, fn in stats.items():
+        value = fn(finite) if finite.size else float("nan")
+        lo, hi = cluster_bootstrap_ci(arr, ids, fn, n_bootstrap=CLUSTER_BOOTSTRAP_RESAMPLES,
+                                      confidence=confidence, seed=CLUSTER_BOOTSTRAP_SEED)
+        half = (hi - lo) / 2.0
+        rel = abs(half / value) if value and np.isfinite(value) else float("nan")
+        out["statistics"][label_] = {
+            "value": float(value), "ci_lo": lo, "ci_hi": hi, "half_width": float(half),
+            "half_width_rel": float(rel), "tolerance_rel": tolerance_rel,
+            "within_tolerance": bool(np.isfinite(rel) and rel <= tolerance_rel)}
+    return out
 
 
 def _decompose(values: np.ndarray, draws: DrawSet) -> dict[str, Any]:

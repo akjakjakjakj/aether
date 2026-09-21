@@ -42,8 +42,57 @@ def _h2_sentences(cell: dict[str, Any], budget: int) -> list[str]:
     return out
 
 
-def write_m6_report(summary: dict[str, Any], path: Path, figure_prefix: str = "../figures"
-                    ) -> Path:
+def _read_first(summary: dict[str, Any], snapshot: dict[str, Any] | None) -> list[str]:
+    """The opening paragraph: verdict, what was NOT run, and whether the target was reachable
+    at all. Every clause is computed from `summary` (and the run's config snapshot for the
+    declared-but-not-run arms and the reference search's budget); NR-35."""
+    truth, arms = summary["truth"], summary["arms"]
+    cell = summary["h2"][next(iter(summary["h2"]))]
+    out = [f"**Read this first. H2 verdict, as pre-declared: {cell['status']}** at "
+           f"{100 * cell['fraction']:.0f}% of the reference hypervolume (target "
+           f"{cell['target_hv']:.4f}) - {cell['verdict']}."]
+    af = (snapshot or {}).get("adaptive_fidelity") or {}
+    declared = [a for a, s in (af.get("arms") or {}).items() if s.get("enabled", False)]
+    not_run = [a for a in declared if a not in arms]
+    llm_not_run = [a for a in not_run if af["arms"][a].get("search") == "ai_agent"]
+    if not_run:
+        out.append("Declared in the config and NOT run in this invocation: "
+                   + ", ".join(f"`{a}`" for a in not_run)
+                   + f" (LLM calls made: {summary['llm_calls_total']}).")
+    if llm_not_run:
+        out.append("That is the LLM-guided arm, so **H2's \"AI-guided\" clause is untested by "
+                   "this study**; the arm is exploratory and outside the declared criterion, "
+                   "so the verdict above does not depend on it.")
+    union, ref = float(truth["hv_union_of_arms"]), float(truth["hv_reference"])
+    n_evals = sum(a["evaluations_used_mean"] * a["n_seeds"] for a in arms.values())
+    n_runs = sum(a["n_seeds"] for a in arms.values())
+    best_arm, best = max(((arm, max(a["per_seed"]["hv_truth"])) for arm, a in arms.items()),
+                         key=lambda item: item[1])
+    reference = af.get("reference") or {}
+    ref_text = (f" by {len(reference['seeds'])} x {reference['budget_evaluations']}-evaluation "
+                "searches on the truth surface" if reference else "")
+    if union < cell["target_hv"]:
+        out.append(
+            f"**Reachability (a sizing flaw of this study, NR-35).** Every truly feasible "
+            f"design of all {n_runs} arm-seeds pooled - {n_evals:.0f} F0 evaluations - reaches "
+            f"{union:.4f} = {100 * union / ref:.1f}% of the reference ({ref:.4f}, set{ref_text}"
+            f"), which is below the {100 * cell['fraction']:.0f}% target; the best single "
+            f"arm-seed (`{best_arm}`) reached {best:.4f} = {100 * best / ref:.1f}%. At "
+            f"{summary['budget_evaluations']} F0 evaluations per arm-seed the target was "
+            "therefore beyond what the searches as run could reach, singly or pooled, so a "
+            "saving in CFD calls could not have shown up in this criterion. The config's "
+            "sizing checked statistical power and "
+            "machine time, not reachability. The criterion is applied as written and is not "
+            "re-scored.")
+    else:
+        out.append(f"Reachability: all arm-seeds pooled reach {100 * union / ref:.1f}% of the "
+                   f"reference, at or above the {100 * cell['fraction']:.0f}% target.")
+    return out
+
+
+def write_m6_report(summary: dict[str, Any], path: Path, figure_prefix: str = "../figures",
+                    snapshot: dict[str, Any] | None = None,
+                    addendum: str | None = None) -> Path:
     arms = summary["arms"]
     crit = summary["criteria_declared"]
     subject = crit["subject"]
@@ -58,6 +107,11 @@ def write_m6_report(summary: dict[str, Any], path: Path, figure_prefix: str = ".
         "files; the generator contains no pre-written finding.*\n")
     if summary.get("banner"):
         add(f"> **{summary['banner']}**\n")
+    add(" ".join(_read_first(summary, snapshot)) + "\n")
+    if addendum:
+        add(f"*Hand-written companion for this run (what the verdict means, where each arm "
+            f"spent its CFD, failed cases, figure check): `{addendum}`. It is not generated "
+            "and nothing in it overrides a number here.*\n")
     if gate["provisional"]:
         add(f"> **PROVISIONAL.** Gate G4 was `{gate['gate_G4_status_at_build']}` when the "
             f"starting surface was built and `{gate['gate_G4_status_now']}` when this run "
@@ -211,8 +265,10 @@ def write_m6_report(summary: dict[str, Any], path: Path, figure_prefix: str = ".
         "- NSGA-II's internal population is not re-scored after a refit.\n"
         "- Probes are `evaluate_design` calls that are counted but not charged (A-AF-5).\n"
         "- The sigma inflation factor is M3's and is not re-measured after a refit (A-AF-6).\n"
-        "- `ai_adaptive` uses a different search from the other arms and fewer seeds; it is "
-        "exploratory and is not part of the criterion.\n")
+        + ("- `ai_adaptive` uses a different search from the other arms and fewer seeds; it is "
+           "exploratory and is not part of the criterion.\n" if "ai_adaptive" in arms else
+           "- `ai_adaptive` (LLM-guided search, exploratory, outside the criterion) was NOT run "
+           "in this invocation: nothing in this report is evidence about it.\n"))
 
     add("## 9. Reproduce\n")
     add("```\nmake adaptive                          # the study: hours, OpenFOAM, gate G4 PASS\n"

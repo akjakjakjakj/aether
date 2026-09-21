@@ -111,6 +111,38 @@ def bootstrap_ci(values, statistic: Callable[[np.ndarray], float], *,
     return (float(lo), float(hi))
 
 
+def cluster_bootstrap_ci(values, clusters, statistic: Callable[[np.ndarray], float], *,
+                         n_bootstrap: int = 4000, confidence: float = 0.95,
+                         seed: int = 0) -> tuple[float, float]:
+    """Percentile-bootstrap interval that resamples whole CLUSTERS, not rows.
+
+    A bootstrap must resample the unit that was independently drawn (NR-34). In a nested
+    draw set the independent unit of the epistemic inputs is the BRANCH: every row of a
+    branch shares one value of every epistemic input, so when most of an output's variance
+    is between branches the rows are far from independent and `bootstrap_ci` understates
+    the sampling error (here about tenfold). Each resample draws as many cluster ids as
+    there are clusters, with replacement, pools their rows and applies `statistic`.
+    """
+    arr = np.asarray(values, dtype=float).ravel()
+    ids = np.asarray(clusters).ravel()
+    if arr.size != ids.size:
+        raise ValueError(f"{arr.size} values for {ids.size} cluster labels")
+    keep = np.isfinite(arr)
+    arr, ids = arr[keep], ids[keep]
+    unique = np.unique(ids)
+    if unique.size < 2:
+        return (float("nan"), float("nan"))
+    groups = {k: arr[ids == k] for k in unique}
+    rng = np.random.default_rng(seed)
+    draws = np.empty(n_bootstrap)
+    for i in range(n_bootstrap):
+        pick = rng.choice(unique, size=unique.size, replace=True)
+        draws[i] = statistic(np.concatenate([groups[k] for k in pick]))
+    alpha = 100.0 * (1.0 - confidence) / 2.0
+    lo, hi = np.percentile(draws, [alpha, 100.0 - alpha])
+    return (float(lo), float(hi))
+
+
 # ---------------------------------------------------------------------------------------
 # binomial outputs: constraint violation probability
 # ---------------------------------------------------------------------------------------

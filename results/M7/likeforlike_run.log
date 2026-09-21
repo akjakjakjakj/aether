@@ -1,0 +1,9 @@
+AETHER M7 like-for-like  run=M7-LFL-20260921T011854Z  parent=M7-UQ-20260920T233048Z  robust=M7-ROBUST-20260920T211216Z
+source hash now 51292369ab52d18a, parent c0a44bb0c14acd88
+equivalence check: {'design': 'joint_knee', 'draw_indices': '0::25', 'n_evaluations': 120, 'rtol_required': 1e-12, 'max_relative_difference': {'peak_heat_flux_w_m2': 1.3025796544017597e-16, 'peak_bondline_temperature_k': 1.459080730559257e-16, 'max_g': 1.7180298852295255e-16, 'margin__heatshield_mass_fraction': 3.54577409856722e-14}, 'feasibility_identical': True, 'passed': True}
+
+robust_knee: n = 3000, P(any violation) 3.20% [2.63, 3.89] at 95% confidence (96 of 3000)
+  peak_heat_flux_w_m2            mean 247485  p95 265088
+  peak_bondline_temperature_k    mean 400.395  p95 409.956
+3120 evaluations in 98 s
+results -> /Users/akj/Projects/aether/results/M7/M7-LFL-20260921T011854Z

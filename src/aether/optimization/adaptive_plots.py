@@ -88,7 +88,9 @@ def plot_adaptive_figures(summary: dict[str, Any], curves: pd.DataFrame, calls: 
     ax_e.set_title("(b) the same runs against F0 evaluations", fontsize=9, loc="left")
     fig.legend(*ax.get_legend_handles_labels(), fontsize=7, loc="lower center", ncol=3,
                frameon=False, bbox_to_anchor=(0.5, -0.02))
-    fig.subplots_adjust(bottom=0.27)
+    fig.subplots_adjust(bottom=0.27, top=0.86)
+    fig.suptitle(f"M6: truth hypervolume of each arm's recommended set - run "
+                 f"{summary['run_id']}", fontsize=10, x=0.5, y=0.97)
     written.append(save_figure(
         fig, out_dir, "M6_hv_vs_cfd_calls",
         f"{tag}\n(a) Best truth hypervolume reached within a given number of CFD calls: mean over "
@@ -152,6 +154,8 @@ def plot_adaptive_figures(summary: dict[str, Any], curves: pd.DataFrame, calls: 
                        fontsize=7, rotation=12)
     ax.set_ylabel("RMSE of $C_{D,fore}$ vs pooled truth  [-]")
     ax.set_ylim(bottom=0.0)
+    ax.set_title(f"M6: each arm's final drag surface vs pooled truth - run "
+                 f"{summary['run_id']}", fontsize=9)
     written.append(save_figure(
         fig, out_dir, "M6_surface_error_vs_truth",
         f"{tag}\nEach arm's FINAL drag surface against the pooled-truth surface on one common "

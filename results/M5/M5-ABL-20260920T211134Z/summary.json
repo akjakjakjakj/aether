@@ -50,6 +50,27 @@
   },
   "source_hash": "c0a44bb0c14acd88",
   "replay_check": null,
+  "concurrency": {
+    "start_utc": "2026-09-20T21:11:34+00:00",
+    "last_evaluation_utc": "2026-09-20T22:45:22+00:00",
+    "basis": "config_snapshot.yaml _meta.created_utc -> candidates.csv mtime",
+    "overlapping_runs": [
+      {
+        "run_id": "M6-AF-20260920T211148Z",
+        "start_utc": "2026-09-20T21:11:48+00:00",
+        "last_evaluation_utc": "2026-09-21T00:45:06+00:00",
+        "overlap_s": 5614.128412,
+        "overlap_fraction_of_this_run": 0.9975124945674392
+      },
+      {
+        "run_id": "M7-ROBUST-20260920T211216Z",
+        "start_utc": "2026-09-20T21:12:16+00:00",
+        "last_evaluation_utc": "2026-09-20T23:30:42+00:00",
+        "overlap_s": 5586.128412,
+        "overlap_fraction_of_this_run": 0.9925374837023175
+      }
+    ]
+  },
   "fidelity": 1,
   "objectives": [
     "peak_heat_flux_w_m2",
@@ -359,7 +380,7 @@
           0,
           0
         ],
-        "cfd_calls": [
+        "surface_evaluations": [
           90,
           90,
           90,
@@ -376,7 +397,7 @@
       "diversity_all_mean": 0.7799510379542302,
       "diversity_feasible_mean": 0.40369698029598877,
       "inert_repeats_mean": 0.0,
-      "cfd_calls_mean": 89.8
+      "surface_evaluations_mean": 89.8
     },
     "nsga2": {
       "seeds": [
@@ -528,7 +549,7 @@
           0,
           0
         ],
-        "cfd_calls": [
+        "surface_evaluations": [
           166,
           151,
           166,
@@ -545,7 +566,7 @@
       "diversity_all_mean": 0.6453037818456014,
       "diversity_feasible_mean": 0.32619088275027686,
       "inert_repeats_mean": 0.0,
-      "cfd_calls_mean": 161.0
+      "surface_evaluations_mean": 161.0
     },
     "nsga2_pop20": {
       "seeds": [
@@ -697,7 +718,7 @@
           0,
           0
         ],
-        "cfd_calls": [
+        "surface_evaluations": [
           188,
           164,
           182,
@@ -714,7 +735,7 @@
       "diversity_all_mean": 0.492039427396117,
       "diversity_feasible_mean": 0.25765187393761607,
       "inert_repeats_mean": 0.0,
-      "cfd_calls_mean": 176.8
+      "surface_evaluations_mean": 176.8
     },
     "bo_parego": {
       "seeds": [
@@ -866,7 +887,7 @@
           0,
           0
         ],
-        "cfd_calls": [
+        "surface_evaluations": [
           123,
           126,
           138,
@@ -883,7 +904,7 @@
       "diversity_all_mean": 0.6022026981243986,
       "diversity_feasible_mean": 0.4451284281609539,
       "inert_repeats_mean": 0.0,
-      "cfd_calls_mean": 120.8
+      "surface_evaluations_mean": 120.8
     },
     "ai_agent": {
       "seeds": [
@@ -1035,7 +1056,7 @@
           0,
           0
         ],
-        "cfd_calls": [
+        "surface_evaluations": [
           168,
           190,
           187,
@@ -1052,7 +1073,7 @@
       "diversity_all_mean": 0.30704377917361814,
       "diversity_feasible_mean": 0.1779074745160551,
       "inert_repeats_mean": 0.0,
-      "cfd_calls_mean": 183.8
+      "surface_evaluations_mean": 183.8
     },
     "ai_adaptive": {
       "seeds": [
@@ -1171,7 +1192,7 @@
           0,
           0
         ],
-        "cfd_calls": [
+        "surface_evaluations": [
           189,
           188
         ]
@@ -1185,7 +1206,7 @@
       "diversity_all_mean": 0.30615423506373385,
       "diversity_feasible_mean": 0.18220278575788562,
       "inert_repeats_mean": 0.0,
-      "cfd_calls_mean": 188.5
+      "surface_evaluations_mean": 188.5
     }
   },
   "criteria_declared": {
@@ -1243,6 +1264,16 @@
         },
         "p_helped_holm": 0.027777777777777776,
         "p_hurt_holm": 1.0,
+        "rule_legs": {
+          "helped": {
+            "effect_size_met": true,
+            "significance_met": true
+          },
+          "hurt": {
+            "effect_size_met": false,
+            "significance_met": false
+          }
+        },
         "verdict": "AI helped"
       },
       "100": {
@@ -1281,6 +1312,16 @@
         },
         "p_helped_holm": 0.011904761904761904,
         "p_hurt_holm": 1.0,
+        "rule_legs": {
+          "helped": {
+            "effect_size_met": true,
+            "significance_met": true
+          },
+          "hurt": {
+            "effect_size_met": false,
+            "significance_met": false
+          }
+        },
         "verdict": "AI helped"
       },
       "200": {
@@ -1319,6 +1360,16 @@
         },
         "p_helped_holm": 0.011904761904761904,
         "p_hurt_holm": 1.0,
+        "rule_legs": {
+          "helped": {
+            "effect_size_met": false,
+            "significance_met": true
+          },
+          "hurt": {
+            "effect_size_met": false,
+            "significance_met": false
+          }
+        },
         "verdict": "no measured difference"
       }
     },
@@ -3018,6 +3069,7 @@
       },
       "outputs": {
         "peak_heat_flux_w_m2": {
+          "transform": "log10",
           "all": {
             "n": 536,
             "rmse": 0.010847982945185151,
@@ -3062,6 +3114,7 @@
           }
         },
         "peak_bondline_temperature_k": {
+          "transform": "identity",
           "all": {
             "n": 536,
             "rmse": 1.338937534702362,
@@ -3106,6 +3159,7 @@
           }
         },
         "margin__max_g": {
+          "transform": "identity",
           "all": {
             "n": 536,
             "rmse": 0.009665659718478875,
@@ -3150,6 +3204,7 @@
           }
         },
         "margin__peak_bondline_temperature_k": {
+          "transform": "identity",
           "all": {
             "n": 536,
             "rmse": 0.002975383664250206,
@@ -3194,6 +3249,7 @@
           }
         },
         "margin__heatshield_mass_fraction": {
+          "transform": "identity",
           "all": {
             "n": 536,
             "rmse": 0.016015181661035906,
@@ -3332,6 +3388,18 @@
         "n_granted": 0
       }
     }
+  },
+  "cfd_solver_calls": {
+    "per_method": {
+      "lhs_search": 0,
+      "nsga2": 0,
+      "nsga2_pop20": 0,
+      "bo_parego": 0,
+      "ai_agent": 0,
+      "ai_adaptive": 0
+    },
+    "total": 0,
+    "basis": "promotions to a new CFD case granted by the adaptive-fidelity hook (agent_log.json fidelity_decisions); the M5 harness has no other path that runs a CFD solver"
   },
   "llm": {
     "model": "claude-sonnet-5",

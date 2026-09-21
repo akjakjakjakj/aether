@@ -117,8 +117,16 @@ def main() -> int:
     if args.report_only:
         out_dir = results / args.report_only
         summary = json.loads((out_dir / "summary.json").read_text())
+        if summary.get("smoke"):
+            raise SystemExit("a smoke run publishes nothing; --report-only is for a study")
         frames, branches = _load_frames(out_dir, summary)
-        figures = plots.plot_all(summary, frames, branches, None, None,
+        # NR-34 item 6: this path used to pass None for BOTH fronts and silently dropped
+        # two figures. Every input of every figure is now re-read from the run's records.
+        import yaml
+        snap = yaml.safe_load((out_dir / "config_snapshot.yaml").read_text())["config"]
+        nominal_front, robust_front = _report_inputs(
+            summary, frames, branches, float(snap["study"]["propagation"]["confidence"]))
+        figures = plots.plot_all(summary, frames, branches, nominal_front, robust_front,
                                  ROOT / "reports" / "figures")
         summary["figures"] = [str(p) for p in figures]
         write_summary(out_dir, summary)
@@ -194,7 +202,8 @@ def main() -> int:
                                 "comparison": n_cmp, "robust": 0, "verification": 0})
     print(f"projected: {sizing['total_evaluations']:,} evaluations, "
           f"~{sizing['total_seconds'] / 60:.1f} min at "
-          f"{sizing['measured_evaluations_per_second']:.1f} eval/s", flush=True)
+          f"{sizing['projected_evaluations_per_second']:.1f} eval/s (a projection from "
+          "the declared parallel efficiency, not a measurement)", flush=True)
 
     start = time.perf_counter()
     with ProcessPoolExecutor(max_workers=workers) as pool:
@@ -249,7 +258,9 @@ def main() -> int:
                    else out_dir / "M7_uncertainty_robust.SMOKE.md")
     frames = {label: block["result"].rows for label, block in propagations.items()}
     branches = {label: draws.epistemic_index for label in frames}
-    figures = plots.plot_all(summary, frames, branches, None, robust_front, fig_dir)
+    nominal_front, robust_front = _report_inputs(summary, frames, branches,
+                                                 float(prop_cfg["confidence"]))
+    figures = plots.plot_all(summary, frames, branches, nominal_front, robust_front, fig_dir)
     summary["figures"] = [str(p) for p in figures]
     write_summary(out_dir, summary)
     report = write_m7_report(ROOT, summary, report_path)
@@ -281,6 +292,79 @@ def _load_robust(robust_dir: Path | None):
     front = pd.read_csv(front_path) if front_path.exists() else None
     block["front"] = [] if front is None else front.to_dict("records")
     return block, front
+
+
+def _report_inputs(summary: dict, frames: dict, branches: dict, confidence: float):
+    """Everything the figures and the report need beyond `summary`, re-read from the runs
+    the summary NAMES (never from "the latest"), plus the derived blocks a summary written
+    before 2026-09-21 does not carry. Evaluates nothing. Existing summary fields are never
+    modified: blocks are only ADDED, and only when absent.
+
+    Returns (nominal_front, robust_front), either of which may be None.
+    """
+    from src.aether.optimization import feasible_front, load_candidates
+    from src.aether.uncertainty.driver import achieved_throughput
+    from src.aether.uncertainty.propagate import cluster_convergence
+
+    objectives = tuple(summary["objectives"])
+    results = ROOT / "results"
+
+    robust_front = None
+    robust_id = (summary.get("robust") or {}).get("run_id")
+    if robust_id and (results / "M7" / robust_id / "robust_front.csv").exists():
+        robust_front = pd.read_csv(results / "M7" / robust_id / "robust_front.csv")
+
+    # the ACTUAL nominal front: the feasible non-dominated set of the M4 run this study
+    # took its designs from, with the objective values M4 logged
+    nominal_front = None
+    m4_dir = results / "M4" / str(summary.get("m4_run_id") or "")
+    if summary.get("m4_run_id") and (m4_dir / "candidates.csv").exists():
+        nominal_front = feasible_front(load_candidates(m4_dir / "candidates.csv"),
+                                       objectives).reset_index(drop=True)
+        # is "as M4 logged them" the same physics as this run? measured, not assumed:
+        # the §39 rows carry both M4's stored value and this run's re-evaluation
+        diffs = [abs(row["metrics"][n] - row["stored_metrics"][n]) / abs(row["stored_metrics"][n])
+                 for row in (summary.get("comparison") or {}).get("rows", [])
+                 if row.get("available") and row.get("source") == "m4_selected"
+                 for n in objectives if row.get("stored_metrics", {}).get(n)]
+        summary.setdefault("nominal_front_consistency", {
+            "m4_run_id": summary["m4_run_id"], "n_front_designs": int(len(nominal_front)),
+            "n_values_compared": len(diffs),
+            "max_abs_relative_difference": float(max(diffs)) if diffs else None,
+            "basis": "objectives of the m4_selected §39 rows: this run's re-evaluation vs "
+                     "the value M4 stored"})
+
+    for label, block in summary.get("propagation", {}).items():
+        conv = block.get("convergence") or {}
+        if conv.get("table") and "cluster_bootstrap" not in conv \
+                and label in frames and label in branches:
+            conv["cluster_bootstrap"] = cluster_convergence(
+                frames[label][conv["output"]].to_numpy(dtype=float), branches[label],
+                float(conv["tolerance_rel"]), confidence=confidence)
+
+    if "achieved_throughput" not in summary and summary.get("wall_s"):
+        summary["achieved_throughput"] = achieved_throughput(
+            n_evaluations=int(summary["n_evaluations"]), wall_s=float(summary["wall_s"]),
+            workers=int(summary["workers"]),
+            seconds_per_evaluation=(summary.get("sizing") or {}).get(
+                "measured_seconds_per_evaluation"))
+
+    # a like-for-like propagation of the robust knee on THIS run's draws, if one exists
+    # (scripts/run_m7_robust_likeforlike.py). The newest one that names this run is used.
+    for lfl_path in sorted((results / "M7").glob("M7-LFL-*/likeforlike.json"), reverse=True):
+        lfl = json.loads(lfl_path.read_text())
+        if lfl.get("parent_run") != summary["run_id"] \
+                or not lfl["evaluator_equivalence"]["passed"]:
+            continue
+        block = {k: v for k, v in lfl.items() if k != "propagation"}
+        block["violations"] = lfl["propagation"]["violations"]
+        block["convergence"] = lfl["propagation"].get("convergence", {})
+        paired = lfl_path.parent / "paired_difference.json"
+        if paired.exists():
+            block["paired"] = json.loads(paired.read_text())["pairs"]
+        summary["robust_likeforlike"] = block
+        break
+    return nominal_front, robust_front
 
 
 def _load_frames(out_dir: Path, summary: dict):

@@ -152,7 +152,7 @@ def method_table(frame: pd.DataFrame, space: DesignSpace, objectives: tuple[str,
         per_seed: dict[str, list[float]] = {key: [] for key in (
             "budget_used", "n_feasible", "n_no_physics", "cache_hits", "front_size",
             "spacing", "diversity_all", "diversity_feasible", "inert_repeats",
-            "cfd_calls")}
+            "surface_evaluations")}
         seed_curves = []
         for seed in seeds:
             run = sub[sub["seed"] == seed]
@@ -173,7 +173,11 @@ def method_table(frame: pd.DataFrame, space: DesignSpace, objectives: tuple[str,
             physics = paid[paid["status"] == "OK"]
             per_seed["inert_repeats"].append(
                 int(physics.duplicated(list(objectives), keep="first").sum()))
-            per_seed["cfd_calls"].append(int((paid["fidelity"] > 0).sum()))
+            # NR-31: this is NOT a count of CFD solver runs. It counts paid evaluations the
+            # evaluator labelled fidelity > 0, i.e. that returned physics through a
+            # CFD-DERIVED drag surface. It was called "cfd_calls" until 2026-09-21; solver
+            # calls are counted separately (`cfd_solver_calls`, run_ai_ablation.summarise).
+            per_seed["surface_evaluations"].append(int((paid["fidelity"] > 0).sum()))
         curve = np.array(seed_curves)
         curves[method] = curve
         final = curve[:, -1]
@@ -235,6 +239,13 @@ def evaluate_success_criteria(curves: dict[str, np.ndarray], checkpoints: np.nda
     for i, n_eval in enumerate(criteria["checkpoints"]):
         cell = out["checkpoints"][str(n_eval)]
         cell["p_helped_holm"], cell["p_hurt_holm"] = help_adj[i], hurt_adj[i]
+        # the two legs of the rule AS EVALUATED, recorded so the report can say which one
+        # decided a verdict (NR-31). Descriptive only: the verdict below does not read them.
+        cell["rule_legs"] = {
+            "helped": {"effect_size_met": bool(cell["mean_difference"] >= gain),
+                       "significance_met": bool(help_adj[i] < alpha)},
+            "hurt": {"effect_size_met": bool(cell["mean_difference"] <= -gain),
+                     "significance_met": bool(hurt_adj[i] < alpha)}}
         if cell["mean_difference"] >= gain and help_adj[i] < alpha:
             cell["verdict"] = "AI helped"
         elif cell["mean_difference"] <= -gain and hurt_adj[i] < alpha:
@@ -330,7 +341,8 @@ def score_prediction_log(records: list[dict[str, Any]], frame: pd.DataFrame
             if pred["transform"] == "log10":
                 value = math.log10(value)
             bucket = collected.setdefault(name, {"truth": [], "mean": [], "std": [],
-                                                 "outside": []})
+                                                 "outside": [],
+                                                 "transform": pred["transform"]})
             bucket["truth"].append(value)
             bucket["mean"].append(pred["mean"])
             bucket["std"].append(pred["std"])
@@ -339,7 +351,8 @@ def score_prediction_log(records: list[dict[str, Any]], frame: pd.DataFrame
     for name, b in collected.items():
         t, m, s = (np.array(b[k], dtype=float) for k in ("truth", "mean", "std"))
         outside = np.array(b["outside"], dtype=bool)
-        outputs[name] = {"all": regression_metrics(t, m, s),
+        outputs[name] = {"transform": b["transform"],
+                         "all": regression_metrics(t, m, s),
                          "inside_hull": regression_metrics(t[~outside], m[~outside],
                                                            s[~outside]),
                          "outside_hull": regression_metrics(t[outside], m[outside],

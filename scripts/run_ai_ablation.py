@@ -95,6 +95,7 @@ from src.aether.utils.run import (  # noqa: E402
     config_hash,
     load_config,
     new_run_id,
+    overlapping_runs,
     snapshot_config,
 )
 
@@ -170,6 +171,11 @@ def summarise(frame, space, study, abl, run_meta, agent_logs, predictions, m4_re
                  if int(s) in mine]
         m4_ref["max_abs_hv_difference_vs_m5_nsga2"] = max(diffs) if diffs else None
 
+    agent_scores = score_agent(agent_logs, frame, objectives)
+    # NR-31. A CFD SOLVER call in this harness can only be a promotion the fidelity hook
+    # GRANTED (no other code path here launches a case); methods without the hook have none.
+    solver_calls = {m: int(agent_scores[m]["fidelity"]["n_granted"])
+                    if kinds[m] == "ai_adaptive" and m in agent_scores else 0 for m in methods}
     summary = {
         **run_meta,
         "fidelity": int(frame["fidelity"].max()),
@@ -187,7 +193,12 @@ def summarise(frame, space, study, abl, run_meta, agent_logs, predictions, m4_re
             "static": static_surrogate_validation(frame, space, objectives,
                                                   abl["surrogate_validation"]),
             "prospective": score_prediction_log(predictions, frame)},
-        "agent": score_agent(agent_logs, frame, objectives),
+        "agent": agent_scores,
+        "cfd_solver_calls": {
+            "per_method": solver_calls, "total": int(sum(solver_calls.values())),
+            "basis": "promotions to a new CFD case granted by the adaptive-fidelity hook "
+                     "(agent_log.json fidelity_decisions); the M5 harness has no other path "
+                     "that runs a CFD solver"},
         "llm": {**abl["llm"],
                 "calls_total": int(sum(len(log["rounds"]) for log in agent_logs.values()))},
         "gaming": gaming_audit(frame, space, objectives, study["optimize"]["exploit_audit"],
@@ -252,6 +263,10 @@ def main() -> int:
         run_meta = {k: saved.get(k) for k in ("run_id", "replay_of", "doe_run_id", "git_commit",
                                           "git_dirty", "config_hash", "aero_model",
                                           "workers", "wall_s", "source_hash", "replay_check")}
+        # computed once from the runs' own timestamps, then kept (a file time does not
+        # survive a copied results tree; the stored record does)
+        run_meta["concurrency"] = (saved.get("concurrency")
+                                   or overlapping_runs(ROOT / "results", out_dir))
     else:
         run_id = new_run_id("M5-REPLAY" if args.replay else "M5-ABL")
         out_dir = results / run_id
@@ -339,6 +354,7 @@ def main() -> int:
         }
         if args.replay:
             run_meta["replay_check"] = {"prompt_mismatches": replay_mismatches}
+        run_meta["concurrency"] = overlapping_runs(ROOT / "results", out_dir)
 
     frame = load_candidates(out_dir / "candidates.csv")
     agent_logs_d = json.loads((out_dir / "agent_log.json").read_text())
