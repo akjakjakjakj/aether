@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="972pt" height="619.2pt" viewBox="0 0 972 619.2" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-22T10:44:39.329293</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 619.2 
+L 972 619.2 
+L 972 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="line2d_1">
+    <path d="M 34.02 110.5272 
+L 937.98 110.5272 
+" clip-path="url(#p900e6a60af)" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 34.02 213.624 
+L 937.98 213.624 
+" clip-path="url(#p900e6a60af)" style="fill: none; stroke: #e6e5df; stroke-width: 0.8; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_3">
+    <path d="M 34.02 321.30288 
+L 937.98 321.30288 
+" clip-path="url(#p900e6a60af)" style="fill: none; stroke: #e6e5df; stroke-width: 0.8; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_4">
+    <path d="M 34.02 428.98176 
+L 937.98 428.98176 
+" clip-path="url(#p900e6a60af)" style="fill: none; stroke: #e6e5df; stroke-width: 0.8; stroke-linecap: square"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 7.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="34.02" y="106.272" transform="rotate(-0 34.02 106.272)">HYPOTHESIS, VERBATIM</text>
+   </g>
+   <g id="text_2">
+    <text style="font-weight: 700; font-size: 7.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="363.9654" y="106.272" transform="rotate(-0 363.9654 106.272)">VERDICT</text>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 7.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="535.7178" y="106.272" transform="rotate(-0 535.7178 106.272)">THE ONE NUMBER</text>
+   </g>
+   <g id="text_4">
+    <text style="font-weight: 700; font-size: 7.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="725.5494" y="106.272" transform="rotate(-0 725.5494 106.272)">WHAT LIMITS IT</text>
+   </g>
+   <g id="text_5">
+    <text style="font-weight: 700; font-size: 22px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #0ca30c" x="34.02" y="146.27344" transform="rotate(-0 34.02 146.27344)">H0</text>
+   </g>
+   <g id="text_6">
+    <text style="font-size: 8.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(81.02592 138.761726)">Minimising peak heat flux alone does not necessarily produce the</text>
+    <text style="font-size: 8.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(81.02592 154.033606)">thermally safest re-entry solution.</text>
+   </g>
+   <g id="text_7">
+    <text style="font-weight: 700; font-size: 19px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="535.7178" y="146.939104" transform="rotate(-0 535.7178 146.939104)">-38.3%  /  +114.1 K</text>
+   </g>
+   <g id="text_8">
+    <text style="font-size: 7px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(535.7178 168.993271)">peak flux / bondline between the two ends of a</text>
+    <text style="font-size: 7px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(535.7178 181.381761)">41-point entry-angle sweep; 818 counterexample pairs</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 138.32727)">Falsifiable and once falsified: at a 40 mm insulator the</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 150.768036)">bondline rose 8.8 K over a whole entry and the two metrics</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 164.086536)">decoupled (NR-03). Fidelity 0, one parameter, so the ρ = −1</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 177.405036)">rank correlation is tautological; the monotonicity is the</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 190.723536)">evidence. Restated at Fidelity 1 and under uncertainty by</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 204.896918)">H1's numbers.</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 6.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="535.7178" y="204.44508" transform="rotate(-0 535.7178 204.44508)">M1 M1-20260902T130547Z</text>
+   </g>
+   <g id="text_11">
+    <text style="font-weight: 700; font-size: 22px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #fab219" x="34.02" y="253.95232" transform="rotate(-0 34.02 253.95232)">H1</text>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 8.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(81.02592 246.440606)">Joint optimisation of peak heat flux and in-depth TPS response can</text>
+    <text style="font-size: 8.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(81.02592 261.712486)">identify safer feasible designs than peak-heat-only optimisation.</text>
+   </g>
+   <g id="text_13">
+    <text style="font-weight: 700; font-size: 19px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="535.7178" y="254.617984" transform="rotate(-0 535.7178 254.617984)">-14.9 K</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 7px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(535.7178 276.672151)">knee vs peak-flux-only optimum at the bondline, for</text>
+    <text style="font-size: 7px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(535.7178 289.060641)">+21.5 kW/m²; paired on shared draws -14.31 K (s.d.</text>
+    <text style="font-size: 7px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(535.7178 301.816632)">1.45), below zero in 3000 of 3000 draws</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 245.173533)">The front trades the objectives through entry angle only;</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 258.446916)">diameter, bluntness and cone angle are pinned by a mass</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 271.810533)">fence (the knee's shield is 346 of 350 kg), the CFD-hull</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 285.083916)">edge and a box bound. It is the same mechanism as H0, not</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 298.447533)">evidence that joint optimisation finds a better capsule</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 311.720916)">shape.</text>
+   </g>
+   <g id="text_16">
+    <text style="font-size: 6.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="535.7178" y="312.12396" transform="rotate(-0 535.7178 312.12396)">M4-OPT-20260920T205252Z · M7-UQ-20260920T233048Z</text>
+   </g>
+   <g id="text_17">
+    <text style="font-weight: 700; font-size: 22px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #d03b3b" x="34.02" y="361.6312" transform="rotate(-0 34.02 361.6312)">H2</text>
+   </g>
+   <g id="text_18">
+    <text style="font-size: 8.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(81.02592 354.119486)">Surrogate-assisted and AI-guided adaptive-fidelity search can</text>
+    <text style="font-size: 8.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(81.02592 369.391366)">approach the Pareto frontier with fewer expensive CFD evaluations</text>
+    <text style="font-size: 8.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(81.02592 384.663246)">than unguided or brute-force search.</text>
+   </g>
+   <g id="text_19">
+    <text style="font-weight: 700; font-size: 19px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="535.7178" y="362.296864" transform="rotate(-0 535.7178 362.296864)">0 of 5 seeds</text>
+   </g>
+   <g id="text_20">
+    <text style="font-size: 7px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(535.7178 384.351031)">reached the pre-declared target (95% of reference</text>
+    <text style="font-size: 7px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(535.7178 396.739521)">hypervolume = 0.3264); the rule needed 3; no arm</text>
+    <text style="font-size: 7px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(535.7178 409.968012)">reached it</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 352.807296)">The target was beyond the study's own search budget: all</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 366.170913)">arm-seeds pooled reach 94.1% of the reference (NR-35), and</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 379.444296)">extra CFD moved the no-CFD arm's score by 0.0001. The AI-</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 392.762796)">guided adaptive arm was declared and not run, so the 'AI-</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 406.081296)">guided' clause is untested. Not contradicted in general; not</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 419.399796)">supported here.</text>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 6.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="535.7178" y="419.80284" transform="rotate(-0 535.7178 419.80284)">M6 M6-AF-20260920T211148Z</text>
+   </g>
+   <g id="text_23">
+    <text style="font-weight: 700; font-size: 16px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="34.02" y="463.31008" transform="rotate(-0 34.02 463.31008)">M5</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(81.02592 461.288284)">Not a hypothesis: the pre-declared AI-vs-conventional comparison. LLM</text>
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(81.02592 475.899172)">engineering agent against the best of 4 conventional optimisers, 5</text>
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(81.02592 490.460732)">seeds, rule declared first: gain ≥ 0.005 in hypervolume AND α = 0.05.</text>
+   </g>
+   <g id="text_25">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="535.7178" y="463.975744" transform="rotate(-0 535.7178 463.975744)">+0.0283</text>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 6.9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(535.7178 481.184022)">at 50 evaluations</text>
+    <text style="font-size: 6.9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(535.7178 492.671034)">AI helped</text>
+   </g>
+   <g id="text_27">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="597.18708" y="463.975744" transform="rotate(-0 597.18708 463.975744)">+0.0085</text>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 6.9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(597.18708 481.184022)">at 100 evaluations</text>
+    <text style="font-size: 6.9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(597.18708 492.671034)">AI helped</text>
+   </g>
+   <g id="text_29">
+    <text style="font-weight: 700; font-size: 13px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="658.65636" y="463.975744" transform="rotate(-0 658.65636 463.975744)">+0.0036</text>
+   </g>
+   <g id="text_30">
+    <text style="font-size: 6.9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(658.65636 481.184022)">at 200 evaluations</text>
+    <text style="font-size: 6.9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(658.65636 493.499034)">no measured difference</text>
+   </g>
+   <g id="text_31">
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 460.486176)">At 200 evaluations every agent seed beat every comparator</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 474.224793)">seed, and the verdict is still 'no measured difference'</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 487.168293)">because the mean gain fell under the effect size declared in</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 500.441676)">advance. n = 5, one model, one easy problem; the early lead</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 513.805293)">cannot be separated from prior knowledge, and the AI-plus-</text>
+    <text style="font-size: 7.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(725.5494 527.123793)">adaptive-fidelity arm has no result.</text>
+   </g>
+   <g id="text_32">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="535.7178" y="527.37192" transform="rotate(-0 535.7178 527.37192)">M5 M5-ABL-20260920T211134Z</text>
+   </g>
+   <g id="patch_2">
+    <path d="M 369.38916 146.725632 
+L 523.96632 146.725632 
+Q 529.39008 146.725632 529.39008 143.976384 
+L 529.39008 132.062976 
+Q 529.39008 129.313728 523.96632 129.313728 
+L 369.38916 129.313728 
+Q 363.9654 129.313728 363.9654 132.062976 
+L 363.9654 143.976384 
+Q 363.9654 146.725632 369.38916 146.725632 
+z
+" clip-path="url(#p900e6a60af)" style="fill: #d3eed3"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 369.38916 254.404512 
+L 529.118892 254.404512 
+Q 534.542652 254.404512 534.542652 251.655264 
+L 534.542652 239.741856 
+Q 534.542652 236.992608 529.118892 236.992608 
+L 369.38916 236.992608 
+Q 363.9654 236.992608 363.9654 239.741856 
+L 363.9654 251.655264 
+Q 363.9654 254.404512 369.38916 254.404512 
+z
+" clip-path="url(#p900e6a60af)" style="fill: #fef1d6"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 369.38916 362.083392 
+L 436.372596 362.083392 
+Q 441.796356 362.083392 441.796356 359.334144 
+L 441.796356 347.420736 
+Q 441.796356 344.671488 436.372596 344.671488 
+L 369.38916 344.671488 
+Q 363.9654 344.671488 363.9654 347.420736 
+L 363.9654 359.334144 
+Q 363.9654 362.083392 369.38916 362.083392 
+z
+" clip-path="url(#p900e6a60af)" style="fill: #f7dcdc"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 369.38916 469.762272 
+L 412.77924 469.762272 
+Q 418.203 469.762272 418.203 467.013024 
+L 418.203 455.099616 
+Q 418.203 452.350368 412.77924 452.350368 
+L 369.38916 452.350368 
+Q 363.9654 452.350368 363.9654 455.099616 
+L 363.9654 467.013024 
+Q 363.9654 469.762272 369.38916 469.762272 
+z
+" clip-path="url(#p900e6a60af)" style="fill: #eae9e8"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 363.9654 146.725632 
+L 369.38916 146.725632 
+L 369.38916 129.313728 
+L 363.9654 129.313728 
+z
+" clip-path="url(#p900e6a60af)" style="fill: #0ca30c"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 363.9654 254.404512 
+L 369.38916 254.404512 
+L 369.38916 236.992608 
+L 363.9654 236.992608 
+z
+" clip-path="url(#p900e6a60af)" style="fill: #fab219"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 363.9654 362.083392 
+L 369.38916 362.083392 
+L 369.38916 344.671488 
+L 363.9654 344.671488 
+z
+" clip-path="url(#p900e6a60af)" style="fill: #d03b3b"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 363.9654 469.762272 
+L 369.38916 469.762272 
+L 369.38916 452.350368 
+L 363.9654 452.350368 
+z
+" clip-path="url(#p900e6a60af)" style="fill: #898781"/>
+   </g>
+   <g id="text_33">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="374.81292" y="140.55568" transform="rotate(-0 374.81292 140.55568)">Supported in the tested domain</text>
+   </g>
+   <g id="text_34">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="374.81292" y="248.23456" transform="rotate(-0 374.81292 248.23456)">Supported, narrowly (see §10.4)</text>
+   </g>
+   <g id="text_35">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="374.81292" y="355.91344" transform="rotate(-0 374.81292 355.91344)">NOT SUPPORTED</text>
+   </g>
+   <g id="text_36">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="374.81292" y="463.59232" transform="rotate(-0 374.81292 463.59232)">MIXED</text>
+   </g>
+  </g>
+  <g id="text_37">
+   <text style="font-weight: 700; font-size: 30px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #c3c2b7" x="34.02" y="57.864" transform="rotate(-0 34.02 57.864)">4</text>
+  </g>
+  <g id="text_38">
+   <text style="font-weight: 700; font-size: 17px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="72.9" y="44.864" transform="rotate(-0 72.9 44.864)">Hypothesis scorecard: verdicts as the reports state them</text>
+  </g>
+  <g id="text_39">
+   <text style="font-size: 10.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="72.9" y="66.228" transform="rotate(-0 72.9 66.228)">Three hypotheses were frozen before any model was built, each with a falsification condition. One of them fired. Every verdict below is a statement about a model, not a vehicle.</text>
+  </g>
+  <g id="text_40">
+   <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #898781" transform="translate(34.02 567.197987)">Hypothesis text and verdict wording: reports/final/AETHER_paper.md §4 (parsed). H0 numbers: results/M1/M1-20260902T130547Z/candidates.csv and the M1 report. H1: results/M4/M4-OPT-20260920T205252Z/summary.json,</text>
+   <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #898781" transform="translate(34.02 579.369047)">results/M7/M7-UQ-20260920T233048Z/paired_difference.json.</text>
+   <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #898781" transform="translate(34.02 591.540107)">H2: results/M6/M6-AF-20260920T211148Z/summary.json (h2, criteria_declared) and reports/milestones/M6_adaptive_fidelity.md (pooled reach). M5: results/M5/M5-ABL-20260920T211134Z/summary.json (criteria). Caveats paraphrase the paper's §4, §10.4, §11.2, §12 and §17.</text>
+   <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #898781" transform="translate(34.02 603.671464)">Within tested assumptions. Nothing here is established about a real vehicle or material; the coupon experiment has not been run.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p900e6a60af">
+   <rect x="34.02" y="99.072" width="903.96" height="458.208"/>
+  </clipPath>
+ </defs>
+</svg>

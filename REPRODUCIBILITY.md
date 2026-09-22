@@ -38,7 +38,21 @@ make uncertainty    # propagation + Sobol' attribution + the §39 table; folds i
 make m7             # robust, then uncertainty, in the order the report needs
 make uncertainty-smoke  # tiny N, proves the chain, publishes nothing
 make uncertainty-time   # measure the per-evaluation cost the study is sized from
+
+# The paper (added 2026-09-22). Not a study: typesets reports/final/AETHER_paper.md into
+# reports/final/AETHER_paper.pdf with the figure set from reports/figures/. Reads nothing
+# under src/, configs/ or results/.
+make paper              # = reports/final/build_paper.sh: pandoc -> LaTeX -> tectonic (XeTeX)
 ```
+
+`make paper` needs three tools that are not Python packages — `pandoc` (>= 3.1, for the
+Lua filter API), `tectonic` (a self-contained XeTeX; it downloads the LaTeX packages it
+needs on first run) and `pdfinfo` from poppler — and four fonts that ship with macOS:
+Charter, Avenir Next, Menlo and STIX Two Math (`reports/final/paper_build/preamble.tex`
+names them; on another platform substitute installed faces there). Figures are taken from
+the vector `.pdf` next to each `.png` the markdown references, so `make figures`,
+`make cfd-gallery` and `make infographics` must have run first; they have, and their
+outputs are committed.
 
 ## Expected runtime
 
@@ -47,6 +61,7 @@ Measured on an Apple M4, single-threaded. Nothing here is parallelised yet.
 | Command | Wall time |
 |---|---|
 | `make test` | ~25 s |
+| `make paper` | ~15 s (pandoc + one tectonic run; the first run also downloads LaTeX packages, a minute or so on a normal connection) |
 | `make baseline` | ~3 s |
 | `make burn-vs-bake` | ~4 min (41 one-dimensional + 140 grid evaluations) |
 | `make doe` | **Fidelity 1 (2026-09-21, run `M4-DOE-20260920T204844Z`): 3 min 20 s** on 6 worker processes, one BLAS thread each - 9294 coupled evaluations, 47.5/s, median 0.150 s per evaluation; the hull pre-flight adds ~10 s. (Fidelity 0, 2026-09-20: ~6 min on a loaded machine.) |

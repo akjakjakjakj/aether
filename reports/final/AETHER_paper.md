@@ -28,6 +28,10 @@ That allowable differs between flown vehicles. The Space Shuttle Orbiter's alumi
 
 Peak heat flux is an instantaneous surface quantity. Bondline temperature is what remains after the whole pulse has been filtered by conduction through the stack, and it peaks late, after aeroheating has stopped, because heat already inside the material keeps diffusing inward. Stagnation heating goes as V³√ρ, so a shallower entry, which decelerates higher in thinner air, has a lower peak. It also lasts much longer. Whether that matters depends on one comparison: the diffusion time of the stack, L²/α, against the duration of the entry. If the stack is much thicker than the diffusion length √(αt), the bondline never registers the entry. If it is much thinner, the bondline tracks the surface. When the two timescales are comparable, the duration of the pulse changes the answer as well as its size. A heat shield with no spare insulation sits in that regime, because spare insulation is mass.
 
+![Figure 1](../figures/infographics/01_burn_vs_bake_mechanism.png)
+
+*Figure 1. Burn versus bake, the mechanism: a shallow entry lowers peak heat flux by 38.3% and raises the peak bondline temperature by 114.1 K (M1, Fidelity 0, run `M1-20260902T130547Z`). Explanatory figure: the heat-flux and in-depth histories are re-derived through `evaluate_design()` from the run's configuration snapshot and the scalars are asserted equal to `candidates.csv`; legacy cap-radius nose model, as the M1 run used. File `reports/figures/infographics/01_burn_vs_bake_mechanism.png`.*
+
 This project asks what follows. Can minimising peak external heat flux alone select a trajectory that is worse at the bondline? Does optimising the peak and the in-depth response jointly find designs a peak-only procedure would miss? The objective is kept as a multi-objective problem throughout and is never collapsed into a weighted score.
 
 The approach was to build a reduced-order chain, check each component against a reference outside the project before using it, demonstrate the effect where the model is defensible, and then add a CFD-derived drag model under an explicit gate: no CFD result could enter the optimisation until mesh independence, force convergence and a published blunt-body comparison were documented. Optimisation, an optimiser comparison, an adaptive-fidelity study and an uncertainty study followed on that model.
@@ -117,6 +121,10 @@ Two model versions appear in this paper. Fidelity 0 has a constant drag coeffici
 ### 5.1 The canonical evaluator
 
 One function, `evaluate_design(config)`, runs the whole chain: validate the geometry, obtain the aerodynamic model, integrate the trajectory, compute the heat-flux history, solve the TPS response, compute objectives, check constraints, attach provenance, return a status. No study bypasses it. The uncertainty propagation, which would naturally loop over draws outside the optimiser, was implemented by appending the draw index to the design space as one synthetic variable, so each design-and-draw pair is an ordinary design vector that is charged and logged like any other (A-UQ; `uncertainty/space.py`). Three runs of the evaluator on one configuration produce identical result fingerprints covering every metric, margin, diagnostic, the provenance block and the velocity history (`reports/milestones/M3_coupled_model.md` §10).
+
+![Figure 2](../figures/infographics/02_pipeline_validation.png)
+
+*Figure 2. The pipeline and what is validated against what. Gate statuses are the validation matrix's own (`VALIDATION_MATRIX.md`, 2026-09-21); G4 `PASS` carries its restart history (§8.2). Box descriptions paraphrase the matrix's validation-source column; no number on the figure is typed by hand. Sources: `results/M2/M2-20260920T123901Z/gate_assessment.json`, `results/M4/M4-OPT-20260920T205252Z/summary.json`, `results/M7/M7-UQ-20260920T233048Z/summary.json`, `ARCHITECTURE.md`. File `reports/figures/infographics/02_pipeline_validation.png`.*
 
 ### 5.2 Atmosphere
 
@@ -246,17 +254,17 @@ B reduces peak flux by 38.3% and runs the bondline 114.1 K hotter. An automated 
 
 What this establishes is monotonicity. Over the whole range, every step that lowers peak flux raises bondline temperature, and no interior angle improves both. That is enough for H0. The Spearman rank correlation over the sweep is −1.000, and that number is tautological: two strictly monotone functions of one swept variable can only give ±1. It restates "both are monotone in γ with opposite signs" and measures nothing about a design space, because this domain is a line segment.
 
-![Figure 1](../figures/M1_anticorrelation.png)
+![Figure 3](../figures/M1_anticorrelation.png)
 
-*Figure 1. Peak stagnation heat flux (W/cm²) and peak bondline temperature (K) against entry flight-path angle (degrees), 41-point sweep, Fidelity 0, run `M1-20260902T130547Z`. File `reports/figures/M1_anticorrelation.png`.*
+*Figure 3. Peak stagnation heat flux (W/cm²) and peak bondline temperature (K) against entry flight-path angle (degrees), 41-point sweep, Fidelity 0, run `M1-20260902T130547Z`. File `reports/figures/M1_anticorrelation.png`.*
 
 ### 7.2 Mechanism
 
 The shallow entry decelerates in thinner air for longer. Peak flux falls, the pulse lengthens from 135 s to 324 s, and the integrated load rises from 79.3 to 128.3 MJ/m². The stack's diffusion length over a 245 s entry is about its own thickness. A short intense pulse is absorbed near the surface and re-radiated at T⁴ before it diffuses inward; a long mild pulse reaches the bondline.
 
-![Figure 2](../figures/M1_mechanism.png)
+![Figure 4](../figures/M1_mechanism.png)
 
-*Figure 2. Heat-flux histories and in-depth temperature response for the steep and shallow entries of Table 2, Fidelity 0, run `M1-20260902T130547Z`. File `reports/figures/M1_mechanism.png`. The depth-against-time field is `reports/figures/M1_temperature_field.png`; integrated load against bondline temperature is `M1_integrated_vs_bondline.png`.*
+*Figure 4. Heat-flux histories and in-depth temperature response for the steep and shallow entries of Table 2, Fidelity 0, run `M1-20260902T130547Z`. File `reports/figures/M1_mechanism.png`. The depth-against-time field is `reports/figures/M1_temperature_field.png`; integrated load against bondline temperature is `M1_integrated_vs_bondline.png`.*
 
 ### 7.3 No candidate was feasible
 
@@ -282,9 +290,9 @@ A full-factorial grid over entry angle and diameter, 140 evaluations with mass a
 
 The joint optimum runs 32.5 K cooler at the bondline for +19.6% peak flux. Both optima sit on the 3.0 m diameter bound, so the bound is selecting them, and they should be read as "at least this far in this direction". What happened when the bound was widened is in §17.1.
 
-![Figure 3](../figures/M1b_feasible_region.png)
+![Figure 5](../figures/M1b_feasible_region.png)
 
-*Figure 3. Feasible region on the entry-angle (degrees) by diameter (m) grid with the 12 g and 450 K constraints, 140 designs, Fidelity 0, run `M1-20260902T130547Z`. File `reports/figures/M1b_feasible_region.png`. The two selected designs are compared in `M1b_optimiser_comparison.png`; the trade space of the one-parameter sweep is `M1_trade_space.png`.*
+*Figure 5. Feasible region on the entry-angle (degrees) by diameter (m) grid with the 12 g and 450 K constraints, 140 designs, Fidelity 0, run `M1-20260902T130547Z`. File `reports/figures/M1b_feasible_region.png`. The two selected designs are compared in `M1b_optimiser_comparison.png`; the trade space of the one-parameter sweep is `M1_trade_space.png`.*
 
 The deceleration limit decides this region. On the stored grid, a 10 g limit leaves 4 of 140 designs feasible and an 8 g limit leaves none (`ASSUMPTIONS.md`, open decision under A-LIM-1b).
 
@@ -313,9 +321,21 @@ The gate reads `PASS`, and it has a history that belongs next to it. On the orig
 
 Other things a reader should know. The observed order at Mach 6 is below one, and it is computed from a fine-to-medium difference of about 0.1%, so it is weakly determined. Stagnation pressure and stand-off are single final-iteration snapshots; for p₀/p∞ the snapshot noise is as large as the mesh-to-mesh differences, so its Richardson value is not relied on. The Mach 6 convergence margin is thin. Sphere total drag is not validated: the measured free-flight totals are forebody plus base plus friction, and this CFD computes the first only. A full-body negative case was run inside the pipeline and fails the criterion, as it should.
 
-![Figure 4](../figures/M2_mesh_convergence.png)
+![Figure 6](../figures/cfd/M2_sphere_M6_fine_fourpanel.png)
 
-*Figure 4. Forebody drag coefficient, stand-off distance and stagnation pressure ratio against mesh level for the sphere at Mach 3 and 6, run `M2-20260920T123901Z`. File `reports/figures/M2_mesh_convergence.png`. Force histories against the declared criterion: `M2_force_convergence.png`; the fine-mesh limit cycle: `M2_limit_cycle.png`; benchmark comparison: `M2_benchmark.png`; residuals: `M2_residuals.png`.*
+*Figure 6. Sphere, R = 0.5 m, M∞ = 6, fine mesh (refinement factor 4, 49,152 cells), the max-Courant-0.1 solution of record after NR-25, saved iteration 110,000: Mach number, p/p∞, T/T∞ and ρ/ρ∞ in the meridional plane, one flat-shaded polygon per cell, run `M2-20260920T123901Z`, case `sphere_M6_fine_Co0p1`. rhoCentralFoam, axisymmetric Euler, calorically perfect gas γ = 1.4, p∞ = 1000 Pa, T∞ = 220 K. White line: sonic line M = 1 from the cell-centre triangulation; it bounds the subsonic nose region and also runs along the captured shock, where M passes through 1 inside the one to two cells of numerical shock thickness. Dashed: Billig's correlation for the shock shape, an independent empirical curve, not a fit. Δ: shock stand-off from `case_result.json` (50% density-rise point on the stagnation line). Colour bars: viridis (Mach, ρ/ρ∞), magma (p/p∞), cividis (T/T∞). Within its tested assumptions this CFD is used for forebody pressure drag, surface pressure and perfect-gas shock shape only; it is not used for shock-layer temperatures or heating of any kind (§8.1). File `reports/figures/cfd/M2_sphere_M6_fine_fourpanel.png`.*
+
+![Figure 7](../figures/cfd/M2_sphere_M6_mesh_levels.png)
+
+*Figure 7. Mach number for the sphere at M∞ = 6 on the coarse, medium and fine meshes (refinement factors 1, 2, 4; saved iterations 10,000, 20,000 and 110,000), common colour scale (viridis, 0 to M∞), run `M2-20260920T123901Z`, cases `sphere_M6_coarse`, `sphere_M6_medium`, `sphere_M6_fine_Co0p1`. Cell edges are drawn on the coarse and medium meshes so the refinement is visible; on the fine mesh (49,152 cells) they would blacken the panel and are omitted. The fine panel is the max-Courant-0.1 restart of record (NR-25); coarse and medium ran at max Courant 0.2. C_D,fore and Δ/R are read from each `case_result.json`. Same gas model and freestream as Figure 6. File `reports/figures/cfd/M2_sphere_M6_mesh_levels.png`.*
+
+![Figure 8](../figures/cfd/M2_sphere_stagnation_line_profiles.png)
+
+*Figure 8. Sampled cell values of p/p∞, T/T∞, ρ/ρ∞ and Mach number along the symmetry axis (`postProcess sampleLine`) for the sphere at M∞ = 3 and 6 on the three meshes, each at its final iteration (15,000, 20,000 and 110,000 at Mach 3; 10,000, 20,000 and 110,000 at Mach 6; the fine curves are the max-Courant-0.1 restarts of record), run `M2-20260920T123901Z`. Thin vertical lines: the shock stand-off Δ of each mesh (50% density-rise point, `case_result.json`); dashed: the Billig (1967) stand-off correlation, which is cited but not verified in primary by this project (§20). Line style and colour distinguish the meshes. Same gas model and freestream as Figure 6. File `reports/figures/cfd/M2_sphere_stagnation_line_profiles.png`.*
+
+![Figure 9](../figures/M2_mesh_convergence.png)
+
+*Figure 9. Forebody drag coefficient, stand-off distance and stagnation pressure ratio against mesh level for the sphere at Mach 3 and 6, run `M2-20260920T123901Z`. File `reports/figures/M2_mesh_convergence.png`. Force histories against the declared criterion: `M2_force_convergence.png`; the fine-mesh limit cycle: `M2_limit_cycle.png`; benchmark comparison: `M2_benchmark.png`; residuals: `M2_residuals.png`.*
 
 The GCI follows the three-grid procedure with safety factor 1.25, with formulae as given in NASA's NPARC verification tutorial [25]. The paper usually cited for the procedure could not be opened (§20).
 
@@ -328,6 +348,10 @@ The GCI follows the three-grid procedure with safety factor 1.25, with formulae 
 C_D(M, shape) = C_D,fore(M, shape) + C_D,base(M). The first term is a Gaussian process (Matérn-5/2, one length scale per input) through converged CFD cases over log Mach and three forebody ratios: bluntness R_n/D, cone half-angle, shoulder ratio R_c/D. The second is a stated assumption. Angle of attack is zero by construction. The trajectory consumes a per-capsule one-dimensional interpolant and never calls CFD or the GP inside a time step. Surface `cfd_surface_v2`, hash `b63b68a40321f38b`, run `M3-DP-20260920T1610Z`.
 
 Of 76 planned design points, 69 were usable, 5 were rejected for missing the unchanged force criterion and 2 crashed; all stay on disk. Every point is on the coarse mesh, not the medium mesh first intended, because a medium case cost about eight times a coarse one on the available laptop. Six coarse-to-medium pairs on capsule shapes differ by at most 0.411% in C_D,fore, which shows the size of the effect and does not bound the error. The discretisation band, 0.628%, is transferred from the sphere's GCI by assumption (A-CFD-9). Scale invariance was measured: the same shape at 1.2 m and 3 m gives identical C_D,fore to the digits printed.
+
+![Figure 10](../figures/cfd/M3_design_point_grid_mach.png)
+
+*Figure 10. Mach-number fields for six design-point shapes at M∞ = 3, 6, 20 and 27 on the coarse mesh (refinement factor 1, 3,072 cells), forebody domain from the nose to the maximum-radius station closed by a supersonic outflow, D = 1.2 m, each panel at its case's final saved iteration (in its title), run `M3-DP-20260920T1610Z`. Colour: viridis, one scale per column (0 to M∞); thin white line: sonic line; C_D,fore from each `case_result.json`. Rows 5 and 6 are the two shapes that stayed `REJECTED` under NR-27 at Mach 20 (force criterion never met in two consecutive blocks at Courant 0.2, 0.1 and 0.05) and, as NR-28 records, at Mach 27; their fields are the final saved solution of the last Courant restart, shown for what they are and not on the drag surface. There is no Mach-12 column: the design sampled Mach 12 (and Mach 6, except the baseline scale-check case `sc1p2`) only at fill-point shapes, so no usable case exists for these six shapes there. `dp062` at Mach 27 crashed in all three domain attempts without writing a second-order field (NR-28; Figure A.4). Outlines are drawn to the maximum-radius station only, where the domain ends. Same gas model and freestream as Figure 6; a calorically perfect γ = 1.4 gas is the wrong gas at Mach 20 to 27 and is carried as a declared ±5% band on C_D,fore (A-CFD-12). File `reports/figures/cfd/M3_design_point_grid_mach.png`.*
 
 **Table 5. Surface accuracy (source: `reports/milestones/M3_coupled_model.md` §6; C_D,fore spans 0.352 to 1.553).**
 
@@ -353,9 +377,9 @@ One placeholder number was wrong in two directions at once, and the direction de
 
 Over 12 swept shapes inside the hull at fixed diameter, mass and entry state, C_D at peak heating ranges from 0.496 to 1.378, which acting through drag alone moves peak flux by −6.35% to +60.84% and bondline temperature by −4.2 to +29.7 K. The model predicts that shape now matters. How much of that survives a finer mesh and real-gas effects is not established here.
 
-![Figure 5](../figures/M3_constant_vs_surface.png)
+![Figure 11](../figures/M3_constant_vs_surface.png)
 
-*Figure 5. Change in peak heat flux (%), bondline temperature (K) and maximum deceleration (%) when the constant C_D = 1.20 is replaced by `cfd_surface_v2`, for the baseline capsule and five Fidelity-0 front designs, run `M3-DP-20260920T1610Z`. File `reports/figures/M3_constant_vs_surface.png`. Design coverage: `M3_design_coverage.png`; C_D against Mach: `M3_cd_vs_mach.png`; cross-validation: `M3_surface_cv.png`; shape sweep: `M3_shape_sweep.png`; base-drag share: `M3_base_drag_fraction.png`; capsule family: `M3_capsule_family.png`.*
+*Figure 11. Change in peak heat flux (%), bondline temperature (K) and maximum deceleration (%) when the constant C_D = 1.20 is replaced by `cfd_surface_v2`, for the baseline capsule and five Fidelity-0 front designs, run `M3-DP-20260920T1610Z`. File `reports/figures/M3_constant_vs_surface.png`. Design coverage: `M3_design_coverage.png`; C_D against Mach: `M3_cd_vs_mach.png`; cross-validation: `M3_surface_cv.png`; shape sweep: `M3_shape_sweep.png`; base-drag share: `M3_base_drag_fraction.png`; capsule family: `M3_capsule_family.png`.*
 
 Gate G5 is a software gate. It says the coupled evaluator is deterministic and labels its aerodynamics. It says nothing about whether the drag is right.
 
@@ -371,9 +395,9 @@ Seven design variables (diameter, bluntness ratio, shoulder ratio, cone half-ang
 
 Sobol' indices (Saltelli design, 6144 evaluations, output centred; estimator citations in §20) were computed on a sub-box in which every capsule exists, covering 11.8% of the shape box, and they describe only that fraction. Peak flux is dominated by diameter (S_T 0.896); bondline temperature by diameter (0.429), insulator thickness (0.377) and entry angle (0.239); deceleration by entry angle (0.979). The freeze rule, declared before the run, freezes a design variable whose total-order upper confidence bound is below 0.01 on every output and whose validity index is below 0.03. It left four active variables: diameter, bluntness, cone half-angle (which moves no objective but decides validity) and entry angle. It froze the shoulder ratio, a decision §10.3 returns to.
 
-![Figure 6](../figures/M4_doe_sobol.png)
+![Figure 12](../figures/M4_doe_sobol.png)
 
-*Figure 6. Sobol' first- and total-order indices with 95% bootstrap intervals for peak heat flux, peak bondline temperature, maximum deceleration and heat-shield mass fraction, Saltelli sub-box, Fidelity 1, run `M4-DOE-20260920T204844Z`. File `reports/figures/M4_doe_sobol.png`. One-at-a-time sweeps: `M4_doe_oat.png`; Latin Hypercube cloud: `M4_doe_lhs.png`.*
+*Figure 12. Sobol' first- and total-order indices with 95% bootstrap intervals for peak heat flux, peak bondline temperature, maximum deceleration and heat-shield mass fraction, Saltelli sub-box, Fidelity 1, run `M4-DOE-20260920T204844Z`. File `reports/figures/M4_doe_sobol.png`. One-at-a-time sweeps: `M4_doe_oat.png`; Latin Hypercube cloud: `M4_doe_lhs.png`.*
 
 ### 10.2 Methods and fronts
 
@@ -400,9 +424,9 @@ No significance test was applied; with seven seeds, overlapping ranges mean no m
 
 Relative to the peak-flux-only optimum, the knee's bondline runs 14.9 K cooler and its peak flux is 2.146×10⁴ W/m² higher. The whole front spans 26.6 K and 4.882×10⁴ W/m². The model predicts a trade-off, so H1 is supported within the tested assumptions: a search that looked at peak flux alone would have stopped at the hottest-bondline end of the front.
 
-![Figure 7](../figures/M4_pareto_front.png)
+![Figure 13](../figures/M4_pareto_front.png)
 
-*Figure 7. Combined feasible Pareto front, peak heat flux (W/m²) against peak bondline temperature (K), with the peak-flux-only optimum, the knee and the bondline-only optimum marked; Fidelity 1 (`cfd_surface_v2`), run `M4-OPT-20260920T205252Z`. File `reports/figures/M4_pareto_front.png`. Hypervolume histories: `M4_hypervolume.png`; front in design space: `M4_front_variables.png`.*
+*Figure 13. Combined feasible Pareto front, peak heat flux (W/m²) against peak bondline temperature (K), with the peak-flux-only optimum, the knee and the bondline-only optimum marked; Fidelity 1 (`cfd_surface_v2`), run `M4-OPT-20260920T205252Z`. File `reports/figures/M4_pareto_front.png`. Hypervolume histories: `M4_hypervolume.png`; front in design space: `M4_front_variables.png`.*
 
 ### 10.3 The audit: what is selecting these designs
 
@@ -423,6 +447,10 @@ Surface C_D at peak heating spans 1.363 to 1.364 across the front, about 0.1%. C
 ### 10.4 What H1 amounts to
 
 Diameter is set by the mass fence, bluntness by the hull edge, cone angle by validity and the box, shoulder by the freeze. The only variable that trades the two objectives along the front is entry flight-path angle, from −1.50° (a box bound) to −3.57° (the 12 g limit). The Fidelity-1 front is a burn-versus-bake curve in entry angle drawn at a geometry chosen by fences. H1 is supported within the model by the same mechanism as §7. It is not evidence that joint optimisation finds a better capsule shape.
+
+![Figure 14](../figures/infographics/03_pareto_front_fences.png)
+
+*Figure 14. What the optimiser found: the combined feasible front of §10.2 is an entry-angle curve at a geometry fixed by fences, with the robust knee of §13.5 and its 95th-percentile whiskers. Explanatory figure. The fences are drawn in objective space as pickets hugging the front; they are constraints in design space and the picket positions are illustrative, while the counts on them are the audit's (§10.3). Sources: `results/M4/M4-OPT-20260920T205252Z/candidates.csv` and `summary.json`, `results/M7/M7-LFL-20260921T011854Z/likeforlike.json`, `results/M7/M7-UQ-20260920T233048Z/summary.json`, `results/M7/M7-ROBUST-20260920T211216Z/robust_front.csv`, `reports/milestones/M4_pareto_optimisation.md`. File `reports/figures/infographics/03_pareto_front_fences.png`.*
 
 ---
 
@@ -452,9 +480,9 @@ Two disclosures. The Bayesian optimiser was changed twice after a one-seed smoke
 
 At 200 evaluations the test rejects (every agent seed is above every `bo_parego` seed), and the verdict is "no measured difference" because the mean gain is under the threshold declared in advance. The agent was distinguishably ahead by an amount I had declared too small to count. With n = 5 the smallest attainable one-sided p is 1/252, so only complete separation can reject. NSGA-II at 200 evaluations reached 0.2803 ± 0.0253; the same algorithm reached 0.3467 after 1000 evaluations in §10.
 
-![Figure 8](../figures/M5_hypervolume.png)
+![Figure 15](../figures/M5_hypervolume.png)
 
-*Figure 8. Normalised hypervolume against evaluations for each method, mean and min–max band over 5 seeds, Fidelity 1, run `M5-ABL-20260920T211134Z`. File `reports/figures/M5_hypervolume.png`. Per-seed curves: `M5_hypervolume_per_seed.png`; fronts: `M5_fronts.png`; budget use: `M5_budget_use.png`; surrogate calibration: `M5_surrogate_calibration.png`.*
+*Figure 15. Normalised hypervolume against evaluations for each method, mean and min–max band over 5 seeds, Fidelity 1, run `M5-ABL-20260920T211134Z`. File `reports/figures/M5_hypervolume.png`. Per-seed curves: `M5_hypervolume_per_seed.png`; fronts: `M5_fronts.png`; budget use: `M5_budget_use.png`; surrogate calibration: `M5_surrogate_calibration.png`.*
 
 ### 11.3 What the agent did
 
@@ -504,9 +532,9 @@ The adaptive arm matched the greedy arm's score on half the calls. That is true,
 
 In this design space at this budget, extra CFD bought nothing measurable, so adaptive allocation had nothing to save. H2 is not supported. It is not contradicted in general either: a space where the cheap model is materially wrong near the front is where H2 would have something to show, and this study as sized could not have detected it. A reachable criterion would be a new pre-declared study. I have left this one as written and not re-scored it.
 
-![Figure 9](../figures/M6_cfd_spend_map.png)
+![Figure 16](../figures/M6_cfd_spend_map.png)
 
-*Figure 9. Where each arm spent its CFD calls in bluntness ratio and cone half-angle (degrees), against the reference-front shapes, run `M6-AF-20260920T211148Z` (shoulder ratio and Mach not shown). File `reports/figures/M6_cfd_spend_map.png`. Truth hypervolume against CFD calls: `M6_hv_vs_cfd_calls.png` (curves rise with calls partly because search progresses while calls are spent); hold-out error of the truth surface: `M6_surface_error_vs_truth.png`.*
+*Figure 16. Where each arm spent its CFD calls in bluntness ratio and cone half-angle (degrees), against the reference-front shapes, run `M6-AF-20260920T211148Z` (shoulder ratio and Mach not shown). File `reports/figures/M6_cfd_spend_map.png`. Truth hypervolume against CFD calls: `M6_hv_vs_cfd_calls.png` (curves rise with calls partly because search progresses while calls are spent); hold-out error of the truth surface: `M6_surface_error_vs_truth.png`.*
 
 ---
 
@@ -517,6 +545,10 @@ Fidelity 1. Propagation and attribution run `M7-UQ-20260920T233048Z`; robust opt
 ### 13.1 Inventory and sampling
 
 Twelve active inputs: three aleatory (atmospheric density, vehicle mass ±2% 1σ, delivered entry angle) and nine epistemic. The epistemic set includes a discrete 50/50 switch between the two effective-nose-radius primaries, the Sutton–Graves constant ±4%, a 0.5 to 1.5 multiplier on heating above 86 km, TPS conductivity ±15%, specific heat ±10%, and four drag terms (GP, discretisation, the perfect-gas ±5% band, base drag). Seven of the twelve are engineering judgment, including both TPS property bands and the high-altitude multiplier. Density dispersions below 86 km are NASA-published standard deviations [28]; those above are this project's conversion of observed ranges.
+
+![Figure 17](../figures/infographics/05_uncertainty_sources.png)
+
+*Figure 17. Where the uncertainty comes from: 84 to 99% of the output variance is epistemic, and the two dominant bondline terms (TPS conductivity, heating above 86 km) are engineering judgment. Explanatory figure; tier and aleatory/epistemic labels are the inventory's own fields, read from `results/M7/M7-UQ-20260920T233048Z/summary.json` (attribution, propagation decomposition, uncertainty model). Every spread shown is a lower bound (§13.1). File `reports/figures/infographics/05_uncertainty_sources.png`.*
 
 Sampling is nested: 24 epistemic branches × 125 aleatory draws with common random numbers, 3000 full evaluations per design. Aleatory and epistemic uncertainty are kept apart by the sample shape, so the primary output is a band of distributions across branches.
 
@@ -537,9 +569,9 @@ The epistemic share of variance is 84.4 to 93.9% for peak flux and 97.2 to 98.7%
 
 The pre-declared convergence check, a bootstrap over rows, is met by all eight statistics. It understates the sampling error: rows within a branch are not independent, and resampling whole branches gives half-widths 9 to 18 times larger. On that stricter reading the baseline mean marginally misses the 1% tolerance (1.06%). Absolute means are known to a few kelvin. More branches would tighten them; more draws would not (NR-34).
 
-![Figure 10](../figures/M7_pbox.png)
+![Figure 18](../figures/M7_pbox.png)
 
-*Figure 10. Probability boxes for peak bondline temperature (K): one empirical distribution per epistemic branch for each design, 24 branches × 125 draws, Fidelity 1, run `M7-UQ-20260920T233048Z`. File `reports/figures/M7_pbox.png`. Input inventory: `M7_input_inventory.png`; pooled output distributions: `M7_output_distributions.png`; convergence: `M7_convergence.png`.*
+*Figure 18. Probability boxes for peak bondline temperature (K): one empirical distribution per epistemic branch for each design, 24 branches × 125 draws, Fidelity 1, run `M7-UQ-20260920T233048Z`. File `reports/figures/M7_pbox.png`. Input inventory: `M7_input_inventory.png`; pooled output distributions: `M7_output_distributions.png`; convergence: `M7_convergence.png`.*
 
 ### 13.3 Is the knee's advantage larger than the uncertainty on it?
 
@@ -566,9 +598,9 @@ The branch-mean difference for the knee lies in [−17.05, −11.41] K and is ne
 
 At the front, the disagreement between the two NASA primaries carries 71% of the peak-flux variance. It is exactly zero on the hemispherical baseline, where the two agree identically. It is a term that evidence could resolve. The bondline is governed by the insulator's conductivity and by heating above 86 km, both engineering judgment. The second objective is dominated by the two numbers the project has least evidence for. The GP surrogate term (≤ 0.020) and the mesh term (≤ 0.003) are negligible for every output.
 
-![Figure 11](../figures/M7_attribution.png)
+![Figure 19](../figures/M7_attribution.png)
 
-*Figure 11. Total-order Sobol' indices over the uncertain inputs for peak heat flux, peak bondline temperature and maximum deceleration, designs `baseline` and `joint_knee`, run `M7-UQ-20260920T233048Z` (regenerated 2026-09-21; an earlier version of this figure was mislabelled, NR-34). File `reports/figures/M7_attribution.png`.*
+*Figure 19. Total-order Sobol' indices over the uncertain inputs for peak heat flux, peak bondline temperature and maximum deceleration, designs `baseline` and `joint_knee`, run `M7-UQ-20260920T233048Z` (regenerated 2026-09-21; an earlier version of this figure was mislabelled, NR-34). File `reports/figures/M7_attribution.png`.*
 
 ### 13.5 Fragility of the nominal optima, and the chance-constrained front
 
@@ -580,9 +612,9 @@ Two things sit beside that pass. All 46 robust-front designs show a mass-fractio
 
 The trade-off survives among chance-feasible designs: the robust front spans 30.6 K of 95th-percentile bondline temperature, and its flux-minimising end is its hottest-bondline end. At the knee, robustness costs +7.8 kW/m² (+3.1%) of nominal peak flux, through a diameter 1.0 to 1.5% smaller, and brings P(any violation) from 29.60% to 3.20% [2.63, 3.89] on the same 3000 draws. Paired with the nominal knee, its bondline is lower by 0.42 K (s.d. 0.12 K) in all 3000 draws.
 
-![Figure 12](../figures/M7_robust_vs_nominal.png)
+![Figure 20](../figures/M7_robust_vs_nominal.png)
 
-*Figure 12. Nominal Pareto front (78 designs, run `M4-OPT-20260920T205252Z`) and chance-constrained robust front (95th percentiles, run `M7-ROBUST-20260920T211216Z`), peak heat flux (W/m²) against peak bondline temperature (K); arrows join each nominal design to its own 95th percentile. File `reports/figures/M7_robust_vs_nominal.png`. Shortcut verification: `M7_shortcut_verification.png`.*
+*Figure 20. Nominal Pareto front (78 designs, run `M4-OPT-20260920T205252Z`) and chance-constrained robust front (95th percentiles, run `M7-ROBUST-20260920T211216Z`), peak heat flux (W/m²) against peak bondline temperature (K); arrows join each nominal design to its own 95th percentile. File `reports/figures/M7_robust_vs_nominal.png`. Shortcut verification: `M7_shortcut_verification.png`.*
 
 ### 13.6 Final comparison
 
@@ -691,6 +723,10 @@ Most of the code was AI-generated and most of it has not yet been read line by l
 
 Thirty-five entries are kept in `docs/negative_results.md`, including ones whose evidence is a scratch run that no longer exists, labelled as such. This section reports those that changed what the project claims. It sits before the conclusion because several numbers above cannot be read correctly without it.
 
+![Figure 21](../figures/infographics/06_negative_results_timeline.png)
+
+*Figure 21. The negative-results timeline: the thirty-five entries of `docs/negative_results.md` in four kinds, with five called out. Explanatory figure; titles are the file's verbatim headings, dates are from `git log -S` on that file, and the grouping by kind is the rendering script's own classification, labelled as such on the figure. File `reports/figures/infographics/06_negative_results_timeline.png`.*
+
 ### 17.1 The model had holes, and the optimiser found them
 
 #### A heat shield heavier than the vehicle (NR-13)
@@ -723,9 +759,9 @@ The specification asked for a Thermal Penetration Index. It was implemented, ver
 
 The pre-registered prediction was half wrong. The theory note predicted the outcome and gave a mechanism, that the integrand would be dominated by the outer millimetre or two. The outermost 20% of depth carries only 27.6 to 40.6% of the integral. The real mechanism is shape invariance: normalised exceedance profiles of all 140 designs have a minimum pairwise cosine similarity of 0.9366, so any weighted depth integral recovers one scale factor. The distinction changes what future work should try: the stack would have to change, not the weighting. The prediction text is left as written with the addendum beside it.
 
-![Figure 13](../figures/TPI_weighting_and_profile.png)
+![Figure 22](../figures/TPI_weighting_and_profile.png)
 
-*Figure 13. Depth weightings and normalised time-integrated temperature-exceedance profiles for the 140 grid designs, reference configuration T_ref = 400 K, insulator depth 15 mm, run `TPI-20260920T124732Z`. File `reports/figures/TPI_weighting_and_profile.png`. TPI against bondline temperature: `TPI_vs_bondline.png`; sensitivity to the 16 configurations: `TPI_sensitivity.png`; rank residuals: `TPI_rank_residual.png`.*
+*Figure 22. Depth weightings and normalised time-integrated temperature-exceedance profiles for the 140 grid designs, reference configuration T_ref = 400 K, insulator depth 15 mm, run `TPI-20260920T124732Z`. File `reports/figures/TPI_weighting_and_profile.png`. TPI against bondline temperature: `TPI_vs_bondline.png`; sensitivity to the 16 configurations: `TPI_sensitivity.png`; rank residuals: `TPI_rank_residual.png`.*
 
 ### 17.3 Tools that produced a plausible number instead of an error
 
@@ -763,6 +799,10 @@ A configuration snapshot, a commit hash and a dirty flag are not provenance for 
 
 §8.2 gives the account. The point for this section is that the `LIMITED` assessment is kept on disk beside the `PASS`, and that the mean of the limit cycle was not the fixed point: the converged C_D differs from the oscillating window mean by about 0.03%, a third of the fine-to-medium difference, which moved the observed order from 0.67 and 0.60 to 1.13 and 0.88.
 
+![Figure 23](../figures/infographics/07_gate_G4_history.png)
+
+*Figure 23. Gate G4 history: `LIMITED` to `PASS` by lowering the maximum Courant number from 0.2 to 0.1 on the fine-mesh cases; the restart rule was written after the first result had been seen and is disclosed (NR-25, §8.2). Explanatory figure read from `results/M2/M2-20260920T123901Z/gate_assessment.json`, `gate_assessment_20260921_0057_before_restarts.json`, `gci.csv`, `gci_20260921_0057_before_restarts.csv` and `config_snapshot.yaml`. File `reports/figures/infographics/07_gate_G4_history.png`.*
+
 ### 17.6 The experiment's traps, found before anything was built (NR-11)
 
 Four traps surfaced on synthetic data, each of which would have been invisible in a real experiment because the calibration would have fitted well with wrong parameters. Contact resistance, fitted freely under a prescribed flux, came back 186 to 531% wrong and dragged conductivity and specific heat 5 to 12% low. A calibration step of about one diffusion time left conductivity and specific heat each about 12% low while their ratio was recovered to 0.4%. The maximum of a noisy record is biased high, and averaging the near-peak plateau left +1.36 K of bias because the window is selected by the noisy maximum; smoothing first cut it to +0.08 K. And the "seeded" synthetic data used Python's salted string hash, so it differed between processes while looking deterministic within one.
@@ -788,6 +828,10 @@ Within a reduced-order model whose conduction solver, trajectory integrator and 
 On the final model, with drag from a CFD-derived surface and heating corrected for the stagnation velocity gradient, the knee of the two-objective front runs 14.9 K cooler at the bondline than the peak-flux-only optimum for 21.5 kW/m² more peak flux, and the paired difference under the declared uncertainties is −14.31 K, negative in every draw and every epistemic branch. H1 is supported, narrowly: it is a statement about entry steepness at a geometry set by an unsourced mass-fraction limit, the edge of where CFD was run, a box bound and a frozen shoulder. The knee's heat shield is 346 kg of a 350 kg vehicle. The nominal optima violate a non-thermal constraint in 29.6 to 46.6% of draws; a chance-constrained knee reduces that to 3.20% for 3.1% more peak flux.
 
 H2 was not supported. Adaptive use of CFD reached the pre-declared target in none of five seeds, the target was unreachable at the study's budget, extra CFD changed the no-CFD arm's score by 0.0001, and the AI-guided arm was not run. A language-model agent beat the best conventional optimiser at 50 and 100 evaluations and showed no measured difference at 200 under a rule declared in advance; its early lead cannot be separated from prior knowledge.
+
+![Figure 24](../figures/infographics/04_hypothesis_scorecard.png)
+
+*Figure 24. Hypothesis scorecard: H0 supported in the tested domain; H1 supported narrowly; H2 not supported; the optimiser comparison of §11 mixed. Explanatory figure; the caveat text paraphrases §4 of this paper and every numeral is read from a file: `results/M1/M1-20260902T130547Z/candidates.csv`, `results/M4/M4-OPT-20260920T205252Z/summary.json`, `results/M7/M7-UQ-20260920T233048Z/paired_difference.json`, `results/M6/M6-AF-20260920T211148Z/summary.json`, `results/M5/M5-ABL-20260920T211134Z/summary.json`, `reports/milestones/M6_adaptive_fidelity.md`. File `reports/figures/infographics/04_hypothesis_scorecard.png`.*
 
 Nothing here is established about a real vehicle or material. The coupon experiment has not been run and no external review has taken place.
 
@@ -884,3 +928,41 @@ These are used by the code or named in generated reports. None has been checked 
 - Rodrigues, "Closed-Form Reconstruction of Zoby–Sullivan Stagnation-Point Heat-Flux Scaling", *JTHT*, 2026. DOI 10.2514/1.T7458. Paywalled, not opened (❌ T3).
 - Vinh, Busemann and Culp (1980); Regan and Anandakrishnan (1993); Cooper and Holloway, "The Shuttle Tile Story" (1981). Not obtainable (❌ T3); named as gaps only.
 - NSGA-II and ParEGO are named as algorithms (the former through the pymoo library). No primary source for either was opened.
+
+---
+
+## Appendix A. CFD flow-field gallery
+
+Generated by `scripts/render_cfd_gallery.py` (`make cfd-gallery`) from the case directories under `cfd/generated/` and the result tables under `results/`. Every figure is written as PNG and vector PDF. Colour scales are perceptually uniform (viridis / magma / cividis) and stated on each colour bar. All fields are drawn in the meridional plane (x, r), axis equal, one flat-shaded polygon per cell of the wedge mesh (no interpolation). "Time step" is the saved iteration of the local-time-stepping pseudo-time march. The index of all twelve gallery figures, with cases and saved iterations, is `reports/figures/cfd/INDEX.md`; four of them appear in the body (Figures 6, 7, 8 and 10). Within its tested assumptions the CFD is used for forebody pressure drag, surface pressure and perfect-gas shock shape only (§8.1).
+
+![Figure A.1](../figures/cfd/M2_sphere_cp_meshes.png)
+
+*Figure A.1. Run `M2-20260920T123901Z`, cases `sphere_M3_coarse`, `sphere_M3_medium`, `sphere_M3_fine_Co0p1`, `sphere_M6_coarse`, `sphere_M6_medium`, `sphere_M6_fine_Co0p1`, sphere R = 0.5 m, three meshes (coarse ×1, medium ×2, fine ×4 = the max-Courant-0.1 restart of record), surface pressure sampled at each case's final iteration (15,000, 20,000, 110,000 at Mach 3; 10,000, 20,000, 110,000 at Mach 6). rhoCentralFoam, axisymmetric Euler, calorically perfect gas γ = 1.4, p∞ = 1000 Pa, T∞ = 220 K. C_p = (p − p∞)/q∞. Dashed: modified Newtonian theory C_p = C_p,max cos²θ with C_p,max from the exact Rayleigh-pitot relation, an analytical estimate for comparison, not a validation reference. Line style and colour distinguish the meshes. File `reports/figures/cfd/M2_sphere_cp_meshes.png`.*
+
+![Figure A.2](../figures/cfd/M2_demo_capsule_M6_fields.png)
+
+*Figure A.2. Run `M2-20260920T123901Z`, case `capsuledemo_M6_x2_a1`: a generic blunted 60° cone (nose R 0.6 m, D 1.2 m; not a flown vehicle, not a validated result), M∞ = 6, medium mesh (refinement factor 2, 12,288 cells, sizing radius 1 m), saved iteration 30,000: Mach number, p/p∞ and T/T∞. rhoCentralFoam, axisymmetric Euler, calorically perfect gas γ = 1.4, p∞ = 1000 Pa, T∞ = 220 K. White: sonic line. Red: shock stand-off Δ from `case_result.json`; blue: distance from the captured shock to the fixed-value inflow boundary on the axis (x_inflow = −0.313 m), the clearance NR-26 is about: the first attempt in the sphere-sized domain, `capsuledemo_M6_x2` (sizing radius 0.6 m), failed in the solver and wrote no field. C_D,fore = 1.3967. Colour: viridis / magma / cividis. File `reports/figures/cfd/M2_demo_capsule_M6_fields.png`.*
+
+![Figure A.3](../figures/cfd/M3_design_point_cp.png)
+
+*Figure A.3. Run `M3-DP-20260920T1610Z`, cases `sc1p2_coarse_a0`, `dp017_coarse_a0`, `dp057_coarse_a0`, `dp001_coarse_Co0p05`, `dp007_coarse_a0`, `dp011_coarse_Co0p05`, `dp061_coarse_Co0p05`, coarse mesh (3,072 cells), D = 1.2 m, surface pressure sampled at each case's final iteration (15,000, 10,000, 20,000, 105,000, 15,000, 135,000, 135,000). rhoCentralFoam, axisymmetric Euler, calorically perfect gas γ = 1.4, p∞ = 1000 Pa, T∞ = 220 K. C_p = (p − p∞)/q∞ against arc length from the nose over the diameter; the left panels show the same outlines in the same colour and line style. Series tagged `[REJECTED]` are the two NR-27 shapes: their C_p is the last Courant restart's final save and is not on the drag surface. At Mach 6 only the baseline shape (scale-check case `sc1p2`) exists. File `reports/figures/cfd/M3_design_point_cp.png`.*
+
+![Figure A.4](../figures/cfd/M3_mach27_dp062_startup_failure.png)
+
+*Figure A.4. Runs `M3-DP-20260920T1610Z` (top row: `dp062_coarse_a2`, the design-point attempt of record) and `M3-mach27-startup-exp` (bottom row: `dp062_A_fo6000`, the NR-28 isolation run with a 6,000-iteration first-order start), point `dp062`, M∞ = 27, coarse mesh (3,072 cells): T/T∞, Mach number and kinetic-energy fraction of the first-order start-up solution. rhoCentralFoam, axisymmetric Euler, calorically perfect gas γ = 1.4, p∞ = 1000 Pa, T∞ = 220 K. What survives is only the field written at the end of the first-order (upwind) start-up, iteration 1,500 and 6,000 respectively. The van Leer hand-over then diverged with a floating-point exception in sqrt (a negative temperature) at iteration 1,567 and 6,085 respectively, and a crashed run writes no field: the cell where the temperature went negative is not recorded anywhere on disk and cannot be shown. The saved first-order fields contain no cell below T∞ (minimum T = 220 K), so they hold no precursor either. The third column shows the mechanism NR-28 names: the kinetic energy is above 99% of the total energy in the freestream and stays dominant through the thin attached shock layer along the 20° cone, so a small error in total energy is a large relative error in c_v T. Other attempts, all without a post-hand-over field: `dp062_coarse_a0` died at iteration 1,528; `dp062_coarse_a1` at 1,554; `dp063_coarse_a2` at 1,601; `dp062_B_fo1500_co01` at 1,569; `dp062_C_fo6000_co01` at 6,047. Colour: cividis (T/T∞, energy fraction), viridis (Mach). File `reports/figures/cfd/M3_mach27_dp062_startup_failure.png`.*
+
+![Figure A.5](../figures/cfd/M2_sphere_M3_fine_fourpanel.png)
+
+*Figure A.5. Run `M2-20260920T123901Z`, case `sphere_M3_fine_Co0p1`, sphere R = 0.5 m, M∞ = 3, fine mesh (refinement factor 4, 49,152 cells), max Courant 0.1, the solution of record after NR-25, saved iteration 110,000: Mach number, p/p∞, T/T∞ and ρ/ρ∞. rhoCentralFoam, axisymmetric Euler, calorically perfect gas γ = 1.4, p∞ = 1000 Pa, T∞ = 220 K. One flat polygon per cell. White line: sonic line M = 1 from the cell-centre triangulation; it bounds the subsonic nose region and also runs along the captured shock, where M passes through 1 inside the one to two cells of numerical shock thickness. Dashed: Billig's correlation for the shock shape (independent empirical curve, not a fit). Δ: shock stand-off from `case_result.json` (50% density-rise point on the stagnation line). Colour bars: Mach viridis, p/p∞ magma, T/T∞ cividis, ρ/ρ∞ viridis. File `reports/figures/cfd/M2_sphere_M3_fine_fourpanel.png`.*
+
+![Figure A.6](../figures/cfd/M2_sphere_M3_limit_cycle_field.png)
+
+*Figure A.6. Run `M2-20260920T123901Z`, sphere R = 0.5 m, M∞ = 3, fine mesh (49,152 cells), cases `sphere_M3_fine`, `sphere_M3_fine_cyclediag`, `sphere_M3_fine_Co0p1`. rhoCentralFoam, axisymmetric Euler, calorically perfect gas γ = 1.4, p∞ = 1000 Pa, T∞ = 220 K. (a) Per-cell standard deviation of p over the 100 snapshots of the cycle-diagnosis continuation of the max-Courant-0.2 case (written every 2 iterations), divided by the per-cell mean: the fluctuation is smallest around the stagnation point and grows along the body in ray-like bands from the captured shock toward the supersonic outflow (NR-25). (b) The same case's difference between its two last saved fields, a two-phase sample of the oscillation. (c) The max-Courant-0.1 restart of record, difference between its two last saved fields, on the same colour scale; the intervals differ (20,000 against 5,000 iterations), so read the level, not a ratio. The two-time difference does not separate the two Courant numbers by its maximum (5.0×10⁻² against 2.0×10⁻², both in the cells the captured shock straddles near the outflow corner); it does by its level inside the shock layer: median 1.6×10⁻³ against 2.4×10⁻⁴, and 58% against 19% of the layer's cells above 10⁻³. "Shock layer" = cells with ρ/ρ∞ > 1.5 at the later saved iteration. (d) p/p∞ of record. Colour: cividis, log₁₀ clipped to [−4.5, −1]; magma for p/p∞. File `reports/figures/cfd/M2_sphere_M3_limit_cycle_field.png`.*
+
+![Figure A.7](../figures/cfd/M2_sphere_M6_limit_cycle_field.png)
+
+*Figure A.7. As Figure A.6, for M∞ = 6: run `M2-20260920T123901Z`, cases `sphere_M6_fine`, `sphere_M6_fine_cyclediag`, `sphere_M6_fine_Co0p1`, fine mesh (49,152 cells). Same gas model and freestream. The two-time difference does not separate the two Courant numbers by its maximum (1.1×10⁻¹ against 1.2×10⁻¹, both in the cells the captured shock straddles near the outflow corner); it does by its level inside the shock layer: median 3.6×10⁻³ against 9.0×10⁻⁴, and 76% against 47% of the layer's cells above 10⁻³. "Shock layer" = cells with ρ/ρ∞ > 1.5 at the later saved iteration. (d) p/p∞ of record. Colour: cividis, log₁₀ clipped to [−4.5, −1]; magma for p/p∞. File `reports/figures/cfd/M2_sphere_M6_limit_cycle_field.png`.*
+
+![Figure A.8](../figures/cfd/M6_adaptive_promotions_mach.png)
+
+*Figure A.8. Run `M6-AF-20260920T211148Z`, adaptive arm, coarse mesh (3,072 cells), D = 1.2 m, forebody domain, M∞ = 20, each panel at its case's final saved iteration (title): Mach number. rhoCentralFoam, axisymmetric Euler, calorically perfect gas γ = 1.4, p∞ = 1000 Pa, T∞ = 220 K. A promotion is a candidate the adaptive policy sent to CFD instead of trusting the Fidelity-1 surface (`promotion_log.json` reason for every adaptive promotion: "promising, and the cheap model is untrusted here"; none was outside the arm's hull). Every usable case is appended to that arm-and-seed's own surface, which is re-fitted (`counters.json` surface history): `af2a27042848_coarse_a0`, seed 37, usable, surface training set 69 → 70 → 71 → 72 → 74 points over the run; `af5e13e211ab_coarse_a0`, seed 37, usable, 69 → 70 → 71 → 72 → 74; `af01fbe28a96_coarse_a0`, seed 67, usable, 69 → 70 → 71 → 72; `af1376216f0b_coarse_Co0p05`, seed 37, rejected, 69 → 70 → 71 → 72 → 74. The rejected case never met the force criterion in two consecutive blocks at Courant 0.2, 0.1 and 0.05 (the NR-27 rule); its field is the last Courant restart's final save, shown but not used. White: sonic line. Colour: viridis. File `reports/figures/cfd/M6_adaptive_promotions_mach.png`.*

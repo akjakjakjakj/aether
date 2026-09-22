@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="972pt" height="619.2pt" viewBox="0 0 972 619.2" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-22T10:44:38.168508</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 619.2 
+L 972 619.2 
+L 972 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 56.5704 511.849269 
+L 915.4296 511.849269 
+Q 933.7032 511.849269 933.7032 503.447789 
+L 933.7032 112.77896 
+Q 933.7032 104.37748 915.4296 104.37748 
+L 56.5704 104.37748 
+Q 38.2968 104.37748 38.2968 112.77896 
+L 38.2968 503.447789 
+Q 38.2968 511.849269 56.5704 511.849269 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke-dasharray: 4.8,3.6; stroke-dashoffset: 0; stroke: #2a78d6; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_3">
+    <path d="M 74.844 501.347419 
+L 897.156 501.347419 
+Q 915.4296 501.347419 915.4296 492.945938 
+L 915.4296 146.384881 
+Q 915.4296 137.983401 897.156 137.983401 
+L 74.844 137.983401 
+Q 56.5704 137.983401 56.5704 146.384881 
+L 56.5704 492.945938 
+Q 56.5704 501.347419 74.844 501.347419 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke: #52514e; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 93.1176 490.845568 
+L 897.156 490.845568 
+Q 915.4296 490.845568 915.4296 482.444088 
+L 915.4296 200.994502 
+Q 915.4296 192.593022 897.156 192.593022 
+L 93.1176 192.593022 
+Q 74.844 192.593022 74.844 200.994502 
+L 74.844 482.444088 
+Q 74.844 490.845568 93.1176 490.845568 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #f4f4f1"/>
+   </g>
+   <g id="text_1">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #2a78d6" x="56.5704" y="119.5157" transform="rotate(-0 56.5704 119.5157)">M7 uncertainty layer — 12 uncertain inputs (3 aleatory, 9 epistemic; tiers: 4 primary, 1 secondary, 7 engineering judgment), nested 24 branches × 125 draws; every draw is one ordinary evaluation</text>
+   </g>
+   <g id="text_2">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="74.844" y="153.121621" transform="rotate(-0 74.844 153.121621)">optimiser loop — M4 NSGA-II / LHS / scalarised DE · M5 GP-ParEGO and LLM agent · M6 adaptive-fidelity promotion. A budget wrapper is the only caller of the evaluator; every candidate is logged.</text>
+   </g>
+   <g id="text_3">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="93.1176" y="205.947872" transform="rotate(-0 93.1176 205.947872)">evaluate_design(config)  — the one contract every study goes through</text>
+   </g>
+   <g id="patch_5">
+    <path d="M 94.94496 348.020405 
+L 237.47904 348.020405 
+Q 248.4432 348.020405 248.4432 342.979517 
+L 248.4432 227.039091 
+Q 248.4432 221.998203 237.47904 221.998203 
+L 94.94496 221.998203 
+Q 83.9808 221.998203 83.9808 227.039091 
+L 83.9808 342.979517 
+Q 83.9808 348.020405 94.94496 348.020405 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke: #c3c2b7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 282.24936 348.020405 
+L 424.78344 348.020405 
+Q 435.7476 348.020405 435.7476 342.979517 
+L 435.7476 227.039091 
+Q 435.7476 221.998203 424.78344 221.998203 
+L 282.24936 221.998203 
+Q 271.2852 221.998203 271.2852 227.039091 
+L 271.2852 342.979517 
+Q 271.2852 348.020405 282.24936 348.020405 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke: #c3c2b7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 469.55376 348.020405 
+L 616.65624 348.020405 
+Q 627.6204 348.020405 627.6204 342.979517 
+L 627.6204 227.039091 
+Q 627.6204 221.998203 616.65624 221.998203 
+L 469.55376 221.998203 
+Q 458.5896 221.998203 458.5896 227.039091 
+L 458.5896 342.979517 
+Q 458.5896 348.020405 469.55376 348.020405 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke: #c3c2b7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 661.42656 348.020405 
+L 785.68704 348.020405 
+Q 796.6512 348.020405 796.6512 342.979517 
+L 796.6512 227.039091 
+Q 796.6512 221.998203 785.68704 221.998203 
+L 661.42656 221.998203 
+Q 650.4624 221.998203 650.4624 227.039091 
+L 650.4624 342.979517 
+Q 650.4624 348.020405 661.42656 348.020405 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke: #c3c2b7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 830.45736 348.020405 
+L 899.89704 348.020405 
+Q 910.8612 348.020405 910.8612 342.979517 
+L 910.8612 227.039091 
+Q 910.8612 221.998203 899.89704 221.998203 
+L 830.45736 221.998203 
+Q 819.4932 221.998203 819.4932 227.039091 
+L 819.4932 342.979517 
+Q 819.4932 348.020405 830.45736 348.020405 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke: #c3c2b7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 94.94496 482.444088 
+L 292.29984 482.444088 
+Q 303.264 482.444088 303.264 477.4032 
+L 303.264 386.667214 
+Q 303.264 381.626326 292.29984 381.626326 
+L 94.94496 381.626326 
+Q 83.9808 381.626326 83.9808 386.667214 
+L 83.9808 477.4032 
+Q 83.9808 482.444088 94.94496 482.444088 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke: #c3c2b7; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 341.63856 482.444088 
+L 543.56184 482.444088 
+Q 554.526 482.444088 554.526 477.4032 
+L 554.526 386.667214 
+Q 554.526 381.626326 543.56184 381.626326 
+L 341.63856 381.626326 
+Q 330.6744 381.626326 330.6744 386.667214 
+L 330.6744 477.4032 
+Q 330.6744 482.444088 341.63856 482.444088 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke: #2a78d6; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_12">
+    <path d="M 634.01616 482.444088 
+L 899.89704 482.444088 
+Q 910.8612 482.444088 910.8612 477.4032 
+L 910.8612 386.667214 
+Q 910.8612 381.626326 899.89704 381.626326 
+L 634.01616 381.626326 
+Q 623.052 381.626326 623.052 386.667214 
+L 623.052 477.4032 
+Q 623.052 482.444088 634.01616 482.444088 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke: #c3c2b7; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 7px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="367.2216" y="355.540181" transform="rotate(-0 367.2216 355.540181)">C_D(t) into the trajectory — Fidelity 0 for M1/M1b, Fidelity 1 for every study from M3 on</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="513.4104" y="166.360478" transform="rotate(-0 513.4104 166.360478)">next candidate design vector (diameter, bluntness, cone angle, entry angle; shoulder frozen by the screening)</text>
+   </g>
+   <g id="patch_13">
+    <path d="M 94.94496 570.65963 
+L 456.76224 570.65963 
+Q 467.7264 570.65963 467.7264 565.618742 
+L 467.7264 527.392007 
+Q 467.7264 522.351119 456.76224 522.351119 
+L 94.94496 522.351119 
+Q 83.9808 522.351119 83.9808 527.392007 
+L 83.9808 565.618742 
+Q 83.9808 570.65963 94.94496 570.65963 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ffffff; stroke-dasharray: 3,2; stroke-dashoffset: 0; stroke: #c3c2b7; stroke-linejoin: miter"/>
+   </g>
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 8.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="97.686" y="538.092377" transform="rotate(-0 97.686 538.092377)">M8 thermal coupon experiment — attaches to the TPS block</text>
+   </g>
+   <g id="text_7">
+    <text style="font-size: 6.8px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="97.686" y="550.574893" transform="rotate(-0 97.686 550.574893)">a blind prediction of the conduction model, frozen before measurement; no measurement exists yet</text>
+   </g>
+   <g id="text_8">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="504.2736" y="537.092377" transform="rotate(-0 504.2736 537.092377)">what a status means here (VALIDATION_MATRIX.md)</text>
+   </g>
+   <g id="text_9">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="564.57648" y="547.127315" transform="rotate(-0 564.57648 547.127315)">checked against an independent reference</text>
+   </g>
+   <g id="text_10">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="589.24584" y="563.930276" transform="rotate(-0 589.24584 563.930276)">runs and is self-consistent; no external check</text>
+   </g>
+   <g id="text_11">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="877.96872" y="547.127315" transform="rotate(-0 877.96872 547.127315)">built, not yet run</text>
+   </g>
+   <g id="text_12">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="97.686" y="237.299313" transform="rotate(-0 97.686 237.299313)">Atmosphere</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 250.804481)">USSA-76, exact to 86 km;</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 262.014449)">log-interpolated table</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 273.59412)">86–150 km, flagged.</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 283.391791)"/>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 296.634353)">vs the published</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 308.907024)">USSA-76 tables</text>
+   </g>
+   <g id="patch_14">
+    <path d="M 103.16808 342.979517 
+L 145.19736 342.979517 
+Q 150.67944 342.979517 150.67944 340.459073 
+L 150.67944 331.217445 
+Q 150.67944 328.697001 145.19736 328.697001 
+L 103.16808 328.697001 
+Q 97.686 328.697001 97.686 331.217445 
+L 97.686 340.459073 
+Q 97.686 342.979517 103.16808 342.979517 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ceedce"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 252.280656 342.979517 
+L 318.979296 342.979517 
+Q 324.461376 342.979517 324.461376 340.459073 
+L 324.461376 331.217445 
+Q 324.461376 328.697001 318.979296 328.697001 
+L 252.280656 328.697001 
+Q 246.798576 328.697001 246.798576 331.217445 
+L 246.798576 340.459073 
+Q 246.798576 342.979517 252.280656 342.979517 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fef0d1"/>
+   </g>
+   <g id="text_14">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="284.9904" y="237.299313" transform="rotate(-0 284.9904 237.299313)">Trajectory</text>
+   </g>
+   <g id="text_15">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(284.9904 250.474481)">3-DOF planar ballistic</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(284.9904 262.014449)">entry, solve_ivp.</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(284.9904 271.851823)"/>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(284.9904 285.094385)">vs Allen–Eggers closed</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(284.9904 296.674056)">form on 3 published</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(284.9904 308.372321)">cases (Putnam &amp; Braun)</text>
+   </g>
+   <g id="patch_16">
+    <path d="M 290.47248 342.979517 
+L 332.50176 342.979517 
+Q 337.98384 342.979517 337.98384 340.459073 
+L 337.98384 331.217445 
+Q 337.98384 328.697001 332.50176 328.697001 
+L 290.47248 328.697001 
+Q 284.9904 328.697001 284.9904 331.217445 
+L 284.9904 340.459073 
+Q 284.9904 342.979517 290.47248 342.979517 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ceedce"/>
+   </g>
+   <g id="text_16">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="472.2948" y="237.299313" transform="rotate(-0 472.2948 237.299313)">Heating</text>
+   </g>
+   <g id="text_17">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(472.2948 250.375481)">Sutton–Graves stagnation</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(472.2948 262.384152)">flux, effective nose radius</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(472.2948 273.861214)">from Ellison (1969).</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(472.2948 283.391791)"/>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(472.2948 297.268056)">constant: vs TR R-376</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(472.2948 308.214024)">form (catalycity, hot</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(472.2948 319.981383)">wall, radiation): untested</text>
+   </g>
+   <g id="patch_17">
+    <path d="M 477.77688 342.979517 
+L 519.80616 342.979517 
+Q 525.28824 342.979517 525.28824 340.459073 
+L 525.28824 331.217445 
+Q 525.28824 328.697001 519.80616 328.697001 
+L 477.77688 328.697001 
+Q 472.2948 328.697001 472.2948 331.217445 
+L 472.2948 340.459073 
+Q 472.2948 342.979517 477.77688 342.979517 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ceedce"/>
+   </g>
+   <g id="patch_18">
+    <path d="M 539.90712 342.979517 
+L 606.60576 342.979517 
+Q 612.08784 342.979517 612.08784 340.459073 
+L 612.08784 331.217445 
+Q 612.08784 328.697001 606.60576 328.697001 
+L 539.90712 328.697001 
+Q 534.42504 328.697001 534.42504 331.217445 
+L 534.42504 340.459073 
+Q 534.42504 342.979517 539.90712 342.979517 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fef0d1"/>
+   </g>
+   <g id="text_18">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="664.1676" y="237.299313" transform="rotate(-0 664.1676 237.299313)">TPS</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(664.1676 250.474481)">1-D multilayer</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(664.1676 262.014449)">conduction, radiating</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(664.1676 273.92412)">surface, 1200 s soak.</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(664.1676 283.391791)"/>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(664.1676 296.634353)">vs Carslaw &amp; Jaeger</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(664.1676 308.174321)">analytical: 0.002%</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(664.1676 320.506289)">at the surface</text>
+   </g>
+   <g id="patch_19">
+    <path d="M 669.64968 342.979517 
+L 711.67896 342.979517 
+Q 717.16104 342.979517 717.16104 340.459073 
+L 717.16104 331.217445 
+Q 717.16104 328.697001 711.67896 328.697001 
+L 669.64968 328.697001 
+Q 664.1676 328.697001 664.1676 331.217445 
+L 664.1676 340.459073 
+Q 664.1676 342.979517 669.64968 342.979517 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ceedce"/>
+   </g>
+   <g id="text_20">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="833.1984" y="237.299313" transform="rotate(-0 833.1984 237.299313)">Objectives</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(833.1984 250.514184)">peak heat flux</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(833.1984 262.014449)">peak bondline T</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(833.1984 271.851823)"/>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(833.1984 285.424385)">limits: 450 K,</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(833.1984 296.634353)">12 g, and mass</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(833.1984 308.481118)">fraction ≤ 1 (a</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(833.1984 319.753992)">fence, no budget)</text>
+   </g>
+   <g id="patch_20">
+    <path d="M 838.68048 342.979517 
+L 905.37912 342.979517 
+Q 910.8612 342.979517 910.8612 340.459073 
+L 910.8612 331.217445 
+Q 910.8612 328.697001 905.37912 328.697001 
+L 838.68048 328.697001 
+Q 833.1984 328.697001 833.1984 331.217445 
+L 833.1984 340.459073 
+Q 833.1984 342.979517 838.68048 342.979517 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fef0d1"/>
+   </g>
+   <g id="patch_21">
+    <path d="M 250.442433 285.009304 
+Q 259.862641 285.009304 267.941208 285.009304 
+" clip-path="url(#p34f8d584f9)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 263.541208 282.809304 
+L 267.941208 285.009304 
+L 263.541208 287.209304 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #52514e; stroke: #52514e; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_22">
+    <path d="M 437.746833 285.009304 
+Q 447.167041 285.009304 455.245608 285.009304 
+" clip-path="url(#p34f8d584f9)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 450.845608 282.809304 
+L 455.245608 285.009304 
+L 450.845608 287.209304 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #52514e; stroke: #52514e; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_23">
+    <path d="M 629.619633 285.009304 
+Q 639.039841 285.009304 647.118408 285.009304 
+" clip-path="url(#p34f8d584f9)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 642.718408 282.809304 
+L 647.118408 285.009304 
+L 642.718408 287.209304 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #52514e; stroke: #52514e; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="patch_24">
+    <path d="M 798.650433 285.009304 
+Q 808.070641 285.009304 816.149208 285.009304 
+" clip-path="url(#p34f8d584f9)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 811.749208 282.809304 
+L 816.149208 285.009304 
+L 811.749208 287.209304 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #52514e; stroke: #52514e; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_22">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="97.686" y="396.927436" transform="rotate(-0 97.686 396.927436)">Aerodynamics, Fidelity 0</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 410.003604)">constant C_D = 1.2 — an engineering</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 422.414978)">value with no reference. Used for</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 433.915243)">M1 and M1b. M3 later measured it</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 444.762211)">+16.5% high in peak flux for the</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(97.686 456.262476)">baseline capsule.</text>
+   </g>
+   <g id="patch_25">
+    <path d="M 103.16808 477.4032 
+L 169.86672 477.4032 
+Q 175.3488 477.4032 175.3488 474.882756 
+L 175.3488 465.641128 
+Q 175.3488 463.120684 169.86672 463.120684 
+L 103.16808 463.120684 
+Q 97.686 463.120684 97.686 465.641128 
+L 97.686 474.882756 
+Q 97.686 477.4032 103.16808 477.4032 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fef0d1"/>
+   </g>
+   <g id="text_24">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="344.3796" y="396.927436" transform="rotate(-0 344.3796 396.927436)">Aerodynamics, Fidelity 1 — OpenFOAM</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(344.3796 410.142307)">rhoCentralFoam: Euler, perfect gas,</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(344.3796 421.682275)">forebody only, axisymmetric; anchors</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(344.3796 433.18254)">Mach 3–27. vs a sphere at Mach 3 and</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(344.3796 444.722508)">6: Rayleigh pitot, Van Dyke &amp; Gordon</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(344.3796 456.302179)">stand-off, Clark's forebody drag.</text>
+   </g>
+   <g id="patch_26">
+    <path d="M 349.86168 477.4032 
+L 391.89096 477.4032 
+Q 397.37304 477.4032 397.37304 474.882756 
+L 397.37304 465.641128 
+Q 397.37304 463.120684 391.89096 463.120684 
+L 349.86168 463.120684 
+Q 344.3796 463.120684 344.3796 465.641128 
+L 344.3796 474.882756 
+Q 344.3796 477.4032 349.86168 477.4032 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ceedce"/>
+   </g>
+   <g id="text_26">
+    <text style="font-weight: 700; font-size: 9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="636.7572" y="396.927436" transform="rotate(-0 636.7572 396.927436)">Drag surface cfd_surface_v2</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(636.7572 410.142307)">GP of forebody C_D over (Mach, R_n/D, cone</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(636.7572 421.642572)">angle, shoulder) + an assumed base-drag band.</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(636.7572 433.222243)">No capsule test data; ±5% perfect-gas band</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(636.7572 444.722508)">declared, not validated. Built only once gate</text>
+    <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(636.7572 456.302179)">G4 read PASS (restart rule after the fact: fig. 7).</text>
+   </g>
+   <g id="patch_27">
+    <path d="M 642.23928 477.4032 
+L 708.93792 477.4032 
+Q 714.42 477.4032 714.42 474.882756 
+L 714.42 465.641128 
+Q 714.42 463.120684 708.93792 463.120684 
+L 642.23928 463.120684 
+Q 636.7572 463.120684 636.7572 465.641128 
+L 636.7572 474.882756 
+Q 636.7572 477.4032 642.23928 477.4032 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fef0d1"/>
+   </g>
+   <g id="patch_28">
+    <path d="M 556.52356 432.035207 
+Q 561.3784 432.035207 565.115207 432.035207 
+" clip-path="url(#p34f8d584f9)" style="fill: none; stroke: #52514e; stroke-linecap: round"/>
+    <path d="M 560.715207 429.835207 
+L 565.115207 432.035207 
+L 560.715207 434.235207 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #52514e; stroke: #52514e; stroke-linecap: round"/>
+   </g>
+   <g id="patch_29">
+    <path d="M 611.34436 432.035207 
+Q 616.1992 432.035207 619.936007 432.035207 
+" clip-path="url(#p34f8d584f9)" style="fill: none; stroke: #52514e; stroke-linecap: round"/>
+    <path d="M 615.536007 429.835207 
+L 619.936007 432.035207 
+L 615.536007 434.235207 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #52514e; stroke: #52514e; stroke-linecap: round"/>
+   </g>
+   <g id="line2d_1">
+    <path d="M 193.6224 381.626326 
+L 193.6224 362.722996 
+L 766.9566 362.722996 
+L 766.9566 381.626326 
+" clip-path="url(#p34f8d584f9)" style="fill: none; stroke: #52514e; stroke-width: 1.1; stroke-linecap: square"/>
+   </g>
+   <g id="patch_30">
+    <path d="M 353.5164 360.723644 
+Q 353.5164 355.372219 353.5164 351.362434 
+" clip-path="url(#p34f8d584f9)" style="fill: none; stroke: #52514e; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 351.3164 355.762434 
+L 353.5164 351.362434 
+L 355.7164 355.762434 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #52514e; stroke: #52514e; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="line2d_2">
+    <path d="M 865.1772 221.998203 
+L 865.1772 173.689692 
+L 166.212 173.689692 
+L 166.212 216.957315 
+" clip-path="url(#p34f8d584f9)" style="fill: none; stroke: #52514e; stroke-width: 1.3; stroke-linecap: square"/>
+   </g>
+   <g id="patch_31">
+    <path d="M 166.212 211.398 
+Q 166.212 215.066952 166.212 217.282461 
+" clip-path="url(#p34f8d584f9)" style="fill: none; stroke: #52514e; stroke-width: 1.3; stroke-linecap: round"/>
+    <path d="M 168.412 212.882461 
+L 166.212 217.282461 
+L 164.012 212.882461 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #52514e; stroke: #52514e; stroke-width: 1.3; stroke-linecap: round"/>
+   </g>
+   <g id="patch_32">
+    <path d="M 509.75568 552.176374 
+L 551.78496 552.176374 
+Q 557.26704 552.176374 557.26704 549.65593 
+L 557.26704 540.414301 
+Q 557.26704 537.893857 551.78496 537.893857 
+L 509.75568 537.893857 
+Q 504.2736 537.893857 504.2736 540.414301 
+L 504.2736 549.65593 
+Q 504.2736 552.176374 509.75568 552.176374 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #ceedce"/>
+   </g>
+   <g id="patch_33">
+    <path d="M 509.75568 568.979334 
+L 576.45432 568.979334 
+Q 581.9364 568.979334 581.9364 566.45889 
+L 581.9364 557.217262 
+Q 581.9364 554.696818 576.45432 554.696818 
+L 509.75568 554.696818 
+Q 504.2736 554.696818 504.2736 557.217262 
+L 504.2736 566.45889 
+Q 504.2736 568.979334 509.75568 568.979334 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fef0d1"/>
+   </g>
+   <g id="patch_34">
+    <path d="M 765.58608 552.176374 
+L 865.1772 552.176374 
+Q 870.65928 552.176374 870.65928 549.65593 
+L 870.65928 540.414301 
+Q 870.65928 537.893857 865.1772 537.893857 
+L 765.58608 537.893857 
+Q 760.104 537.893857 760.104 540.414301 
+L 760.104 549.65593 
+Q 760.104 552.176374 765.58608 552.176374 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #e7e7e6"/>
+   </g>
+   <g id="patch_35">
+    <path d="M 97.686 342.979517 
+L 104.08176 342.979517 
+L 104.08176 328.697001 
+L 97.686 328.697001 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #0ca30c"/>
+   </g>
+   <g id="patch_36">
+    <path d="M 246.798576 342.979517 
+L 253.194336 342.979517 
+L 253.194336 328.697001 
+L 246.798576 328.697001 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fab219"/>
+   </g>
+   <g id="patch_37">
+    <path d="M 284.9904 342.979517 
+L 291.38616 342.979517 
+L 291.38616 328.697001 
+L 284.9904 328.697001 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #0ca30c"/>
+   </g>
+   <g id="patch_38">
+    <path d="M 472.2948 342.979517 
+L 478.69056 342.979517 
+L 478.69056 328.697001 
+L 472.2948 328.697001 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #0ca30c"/>
+   </g>
+   <g id="patch_39">
+    <path d="M 534.42504 342.979517 
+L 540.8208 342.979517 
+L 540.8208 328.697001 
+L 534.42504 328.697001 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fab219"/>
+   </g>
+   <g id="patch_40">
+    <path d="M 664.1676 342.979517 
+L 670.56336 342.979517 
+L 670.56336 328.697001 
+L 664.1676 328.697001 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #0ca30c"/>
+   </g>
+   <g id="patch_41">
+    <path d="M 833.1984 342.979517 
+L 839.59416 342.979517 
+L 839.59416 328.697001 
+L 833.1984 328.697001 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fab219"/>
+   </g>
+   <g id="patch_42">
+    <path d="M 97.686 477.4032 
+L 104.08176 477.4032 
+L 104.08176 463.120684 
+L 97.686 463.120684 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fab219"/>
+   </g>
+   <g id="patch_43">
+    <path d="M 344.3796 477.4032 
+L 350.77536 477.4032 
+L 350.77536 463.120684 
+L 344.3796 463.120684 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #0ca30c"/>
+   </g>
+   <g id="patch_44">
+    <path d="M 636.7572 477.4032 
+L 643.15296 477.4032 
+L 643.15296 463.120684 
+L 636.7572 463.120684 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fab219"/>
+   </g>
+   <g id="patch_45">
+    <path d="M 103.16808 566.45889 
+L 202.7592 566.45889 
+Q 208.24128 566.45889 208.24128 563.938446 
+L 208.24128 554.696818 
+Q 208.24128 552.176374 202.7592 552.176374 
+L 103.16808 552.176374 
+Q 97.686 552.176374 97.686 554.696818 
+L 97.686 563.938446 
+Q 97.686 566.45889 103.16808 566.45889 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #e7e7e6"/>
+   </g>
+   <g id="patch_46">
+    <path d="M 504.2736 552.176374 
+L 510.66936 552.176374 
+L 510.66936 537.893857 
+L 504.2736 537.893857 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #0ca30c"/>
+   </g>
+   <g id="patch_47">
+    <path d="M 504.2736 568.979334 
+L 510.66936 568.979334 
+L 510.66936 554.696818 
+L 504.2736 554.696818 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #fab219"/>
+   </g>
+   <g id="patch_48">
+    <path d="M 760.104 552.176374 
+L 766.49976 552.176374 
+L 766.49976 537.893857 
+L 760.104 537.893857 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #898781"/>
+   </g>
+   <g id="text_28">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="110.47752" y="337.930459" transform="rotate(-0 110.47752 337.930459)">PASS</text>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 6.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="159.81624" y="337.835359" transform="rotate(-0 159.81624 337.835359)">5 altitudes</text>
+   </g>
+   <g id="text_30">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="259.590096" y="337.930459" transform="rotate(-0 259.590096 337.930459)">LIMITED</text>
+   </g>
+   <g id="text_31">
+    <text style="font-size: 6.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="333.598176" y="337.835359" transform="rotate(-0 333.598176 337.835359)">the rest</text>
+   </g>
+   <g id="text_32">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="297.78192" y="337.930459" transform="rotate(-0 297.78192 337.930459)">PASS</text>
+   </g>
+   <g id="text_33">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="485.08632" y="337.930459" transform="rotate(-0 485.08632 337.930459)">PASS</text>
+   </g>
+   <g id="text_34">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="547.21656" y="337.930459" transform="rotate(-0 547.21656 337.930459)">LIMITED</text>
+   </g>
+   <g id="text_35">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="676.95912" y="337.930459" transform="rotate(-0 676.95912 337.930459)">PASS</text>
+   </g>
+   <g id="text_36">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="845.98992" y="337.930459" transform="rotate(-0 845.98992 337.930459)">LIMITED</text>
+   </g>
+   <g id="text_37">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="110.47752" y="472.354142" transform="rotate(-0 110.47752 472.354142)">LIMITED</text>
+   </g>
+   <g id="text_38">
+    <text style="font-size: 6.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="184.4856" y="472.259042" transform="rotate(-0 184.4856 472.259042)">no reference</text>
+   </g>
+   <g id="text_39">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="357.17112" y="472.354142" transform="rotate(-0 357.17112 472.354142)">PASS</text>
+   </g>
+   <g id="text_40">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="649.54872" y="472.354142" transform="rotate(-0 649.54872 472.354142)">LIMITED</text>
+   </g>
+   <g id="patch_49">
+    <path d="M 575.54064 450.938537 
+L 602.03736 450.938537 
+Q 609.3468 450.938537 609.3468 447.577945 
+L 609.3468 416.492469 
+Q 609.3468 413.131877 602.03736 413.131877 
+L 575.54064 413.131877 
+Q 568.2312 413.131877 568.2312 416.492469 
+L 568.2312 447.577945 
+Q 568.2312 450.938537 575.54064 450.938537 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #c2e8c2; stroke: #0ca30c; stroke-width: 1.2; stroke-linejoin: miter"/>
+   </g>
+   <g id="patch_50">
+    <path d="M 97.686 566.45889 
+L 104.08176 566.45889 
+L 104.08176 552.176374 
+L 97.686 552.176374 
+z
+" clip-path="url(#p34f8d584f9)" style="fill: #898781"/>
+   </g>
+   <g id="text_41">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="517.06512" y="547.127315" transform="rotate(-0 517.06512 547.127315)">PASS</text>
+   </g>
+   <g id="text_42">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="517.06512" y="563.930276" transform="rotate(-0 517.06512 563.930276)">LIMITED</text>
+   </g>
+   <g id="text_43">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="772.89552" y="547.127315" transform="rotate(-0 772.89552 547.127315)">IN_PROGRESS</text>
+   </g>
+   <g id="text_44">
+    <text style="font-size: 6.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="588.789" y="423.078683" transform="rotate(-0 588.789 423.078683)">gate</text>
+   </g>
+   <g id="text_45">
+    <text style="font-weight: 700; font-size: 8.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #141413" x="588.789" y="434.729707" transform="rotate(-0 588.789 434.729707)">G4</text>
+   </g>
+   <g id="text_46">
+    <text style="font-weight: 700; font-size: 6.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #141413" x="588.789" y="445.342605" transform="rotate(-0 588.789 445.342605)">PASS</text>
+   </g>
+   <g id="text_47">
+    <text style="font-weight: 700; font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="110.47752" y="561.409832" transform="rotate(-0 110.47752 561.409832)">IN_PROGRESS</text>
+   </g>
+  </g>
+  <g id="text_48">
+   <text style="font-weight: 700; font-size: 30px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #c3c2b7" x="34.02" y="57.864" transform="rotate(-0 34.02 57.864)">2</text>
+  </g>
+  <g id="text_49">
+   <text style="font-weight: 700; font-size: 17px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="72.9" y="44.864" transform="rotate(-0 72.9 44.864)">One evaluator, two aerodynamic fidelities, and what each box was checked against</text>
+  </g>
+  <g id="text_50">
+   <text style="font-size: 10.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="72.9" y="66.228" transform="rotate(-0 72.9 66.228)">Every study calls evaluate_design(config). The chain is verified block by block; the statuses are the validation matrix's own words, and LIMITED is never reported as PASS.</text>
+  </g>
+  <g id="text_51">
+   <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #898781" transform="translate(34.02 579.369047)">Statuses parsed from VALIDATION_MATRIX.md (last updated as stated there); G4 from results/M2/M2-20260920T123901Z/gate_assessment.json; uncertainty inventory from results/M7/M7-UQ-20260920T233048Z/summary.json; active/frozen variables from</text>
+   <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #898781" transform="translate(34.02 591.540107)">results/M4/M4-OPT-20260920T205252Z/summary.json (active: diameter_m, bluntness_ratio, cone_half_angle_deg, flight_path_angle_deg).</text>
+   <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #898781" transform="translate(34.02 603.711167)">Study rows M4–M7 are LIMITED because no external reference exists for any of them. Structure after ARCHITECTURE.md. Within tested assumptions; nothing here is checked against a measurement.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p34f8d584f9">
+   <rect x="29.16" y="95.976" width="913.68" height="476.784"/>
+  </clipPath>
+ </defs>
+</svg>

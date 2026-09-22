@@ -1,0 +1,138 @@
+% Preamble for the AETHER paper. Loaded by pandoc -H; runs under XeTeX (tectonic).
+%
+% Type: Charter (Matthew Carter, 1987) for the text, Avenir Next for headings, captions,
+% table heads and running heads — the same sans the paper's infographics are set in, so
+% figures and page share one type system — Menlo for run IDs and file paths only, and
+% STIX Two Math as the glyph source for the few symbols Charter lacks (primes, arrows).
+% Palette: the infographics' own ink / rule / accent-blue tokens (scripts/render_infographics.py).
+
+\usepackage[a4paper, left=28mm, right=28mm, top=26mm, bottom=28mm, headsep=9mm, footskip=13mm]{geometry}
+
+\usepackage{fontspec}
+\setmainfont{Charter}[
+  BoldFont = {Charter Bold}, ItalicFont = {Charter Italic}, BoldItalicFont = {Charter Bold Italic}]
+\setsansfont{Avenir Next}[
+  UprightFont = {Avenir Next Regular}, BoldFont = {Avenir Next Demi Bold},
+  ItalicFont = {Avenir Next Italic}, BoldItalicFont = {Avenir Next Demi Bold Italic}]
+\setmonofont{Menlo}[Scale=0.84]
+\newfontfamily\symfont{STIX Two Math}
+\newfontfamily\sfmedium{Avenir Next Medium}[Ligatures=TeX]
+
+\usepackage{xcolor}
+\definecolor{ink}{HTML}{141413}
+\definecolor{inktwo}{HTML}{52514e}
+\definecolor{muted}{HTML}{898781}
+\definecolor{ruleline}{HTML}{c3c2b7}
+\definecolor{panel}{HTML}{f4f4f1}
+\definecolor{accent}{HTML}{184f95}
+\definecolor{good}{HTML}{0ca30c}
+\definecolor{warn}{HTML}{e09a00}
+\definecolor{crit}{HTML}{d03b3b}
+\color{ink}
+
+% reference-tier marks (the markdown uses emoji; XeTeX cannot set colour emoji)
+\usepackage{pifont}
+\newcommand{\tierok}{{\color{good}\ding{51}}}
+\newcommand{\tiermid}{{\color{warn}\ding{108}}}
+\newcommand{\tierno}{{\color{crit}\ding{55}}}
+
+% body rhythm
+\linespread{1.10}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt minus 1pt}
+\emergencystretch 2.5em
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{1}
+\clubpenalty=8000 \widowpenalty=8000
+
+% headings
+\usepackage[nobottomtitles*]{titlesec}
+\renewcommand{\bottomtitlespace}{0.12\textheight}
+\titleformat{\section}
+  {\sffamily\bfseries\fontsize{15.5}{19}\selectfont\color{ink}}
+  {{\color{accent}\thesection}}{0.75em}{}
+\titlespacing*{\section}{0pt}{24pt plus 5pt minus 3pt}{9pt}
+\titleformat{\subsection}
+  {\sffamily\bfseries\fontsize{12}{15}\selectfont\color{ink}}
+  {{\color{accent}\thesubsection}}{0.7em}{}
+\titlespacing*{\subsection}{0pt}{15pt plus 3pt minus 2pt}{5pt}
+\titleformat{\subsubsection}
+  {\sfmedium\fontsize{10.5}{13}\selectfont\color{inktwo}}
+  {}{0em}{}
+\titlespacing*{\subsubsection}{0pt}{11pt plus 2pt minus 1pt}{3pt}
+\usepackage{placeins}   % \FloatBarrier before the references and the appendix only
+
+% running heads
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\fontsize{8}{10}\selectfont\color{inktwo}AETHER\;·\;When Cooler Is Not Safer}
+\fancyhead[R]{\sffamily\fontsize{8}{10}\selectfont\color{inktwo}Draft, 21 September 2026 · AI-drafted, not yet revised by the author}
+\fancyfoot[C]{\sffamily\fontsize{9}{11}\selectfont\color{inktwo}\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\sffamily\fontsize{9}{11}\selectfont\color{inktwo}\thepage}\renewcommand{\headrulewidth}{0pt}}
+
+% captions: sans, small, label in the accent
+\usepackage{caption}
+\captionsetup{font={sf,footnotesize}, labelfont={bf,color=accent}, labelsep=period,
+  justification=justified, singlelinecheck=false, skip=7pt}
+\captionsetup[table]{position=above, skip=5pt}
+
+% floats: let a figure page hold a tall figure, keep text with small ones
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.7}
+\setcounter{topnumber}{3}
+\setcounter{totalnumber}{4}
+\makeatletter   % on a float-only page, stack floats from the top instead of centring them
+\setlength{\@fptop}{0pt}
+\setlength{\@fpsep}{14pt plus 2pt}
+\setlength{\@fpbot}{0pt plus 1fil}
+\makeatother
+
+% boxes: the page-1 status banner and block quotes (hypotheses, the pending-results slot)
+\usepackage{tcolorbox}
+\tcbuselibrary{breakable, skins}
+\newtcolorbox{draftbanner}{enhanced, breakable, colback=panel, colframe=panel,
+  borderline west={2.5pt}{0pt}{accent}, arc=0pt, boxrule=0pt, boxsep=0pt,
+  left=10pt, right=10pt, top=6pt, bottom=6pt, before skip=8pt, after skip=10pt,
+  fontupper=\sffamily\fontsize{9}{11.6}\selectfont\color{ink}}
+\renewenvironment{quote}
+  {\begin{tcolorbox}[enhanced, breakable, colback=white, colframe=white,
+     borderline west={1.5pt}{0pt}{ruleline}, arc=0pt, boxrule=0pt, boxsep=0pt,
+     left=10pt, right=0pt, top=3pt, bottom=3pt, before skip=6pt, after skip=8pt]}
+  {\end{tcolorbox}}
+
+% tables
+\usepackage{booktabs, longtable, array, colortbl}
+\setlength{\LTpre}{6pt}
+\setlength{\LTpost}{10pt}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.18}
+\arrayrulecolor{ruleline}
+\newcommand{\tabhead}[1]{{\sffamily\bfseries\fontsize{8.5}{10.5}\selectfont #1}}
+\setlength{\aboverulesep}{0.3ex}
+\setlength{\belowrulesep}{0.5ex}
+
+% contents page
+\usepackage{tocloft}
+\renewcommand{\cfttoctitlefont}{\sffamily\bfseries\fontsize{15.5}{19}\selectfont}
+\renewcommand{\cftaftertoctitle}{\vspace{4pt}}
+\renewcommand{\cftsecfont}{\sffamily\bfseries\small}
+\renewcommand{\cftsecpagefont}{\sffamily\small}
+\renewcommand{\cftsubsecfont}{\small}
+\renewcommand{\cftsubsecpagefont}{\small}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftsecdotsep}}
+\renewcommand{\cftsecdotsep}{\cftnodots}
+\renewcommand{\cftsubsecdotsep}{4.5}
+\setlength{\cftbeforesecskip}{5pt}
+\setlength{\cftbeforesubsecskip}{1pt}
+\setlength{\cftsecnumwidth}{2.2em}
+\setlength{\cftsubsecindent}{2.2em}
+\setlength{\cftsubsecnumwidth}{2.6em}
+
+% lists a little tighter
+\usepackage{enumitem}
+\setlist{itemsep=2pt, parsep=0pt, topsep=4pt, leftmargin=1.6em}
+\setlist[enumerate]{leftmargin=2.2em}

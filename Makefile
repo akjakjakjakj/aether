@@ -167,3 +167,28 @@ adaptive-dry-run:
 clean:
 	rm -rf results/* reports/figures/* .pytest_cache .ruff_cache
 	find . -name __pycache__ -type d -exec rm -rf {} +
+
+# Flow-field gallery: reads cfd/generated/ and results/ (read-only), writes
+# reports/figures/cfd/*.png|pdf + INDEX.md. No OpenFOAM needed - the wedge mesh is read
+# from constant/polyMesh in Python. Seconds to a minute.
+#   make cfd-gallery                       every figure, latest M2 / M3-DP / M6-AF runs
+#   make cfd-gallery ONLY=sphere,grid      a subset (sphere, limit, demo, grid, m27, m6, cp)
+.PHONY: cfd-gallery
+cfd-gallery:
+	$(PY) scripts/render_cfd_gallery.py $(if $(ONLY),--only $(ONLY),)
+
+# Explanatory infographics for the paper (the argument, not the science plots). Reads
+# results/ and the generated reports (read-only), writes reports/figures/infographics/
+# *.png|pdf|svg + INDEX.md. Figure 1 re-runs evaluate_design on the M1 config snapshot to
+# recover the time histories and asserts the scalars match candidates.csv. Under a minute.
+.PHONY: infographics
+infographics:
+	$(PY) scripts/render_infographics.py
+
+# The paper: reports/final/AETHER_paper.md -> reports/final/AETHER_paper.pdf via pandoc and
+# tectonic (XeTeX), with the figure set typeset from the vector PDFs. Needs pandoc, tectonic,
+# pdfinfo (poppler) and the macOS system fonts named in reports/final/paper_build/preamble.tex.
+# Seconds. Reads nothing under src/, configs/ or results/.
+.PHONY: paper
+paper:
+	reports/final/build_paper.sh

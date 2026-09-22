@@ -1,0 +1,547 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="972pt" height="619.2pt" viewBox="0 0 972 619.2" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-09-22T10:44:41.000829</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 619.2 
+L 972 619.2 
+L 972 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="text_1">
+    <text style="font-size: 7.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="34.02" y="164.5128" transform="rotate(-0 34.02 164.5128)">…_before_restarts.json (kept on disk)</text>
+   </g>
+   <g id="patch_2">
+    <path d="M 126.417137 134.9856 
+Q 165.094594 134.9856 202.43041 134.9856 
+" style="fill: none; stroke: #141413; stroke-width: 1.2; stroke-linecap: round"/>
+    <path d="M 198.63041 133.0856 
+L 202.43041 134.9856 
+L 198.63041 136.8856 
+z
+" style="fill: #141413; stroke: #141413; stroke-width: 1.2; stroke-linecap: round"/>
+   </g>
+   <g id="text_2">
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="165.0942" y="118.0356" transform="rotate(-0 165.0942 118.0356)">what changed</text>
+   </g>
+   <g id="text_3">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="214.812" y="137.585" transform="rotate(-0 214.812 137.585)">max Courant 0.2 → 0.1 (and 0.05), each fine case continued as a NEW case from its final solution, in blocks of 5000 iterations, verdict at the end of two consecutive blocks</text>
+   </g>
+   <g id="text_4">
+    <text style="font-size: 7.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="214.812" y="164.5128" transform="rotate(-0 214.812 164.5128)">criterion unchanged: forebody C_D over the final 2,000 iterations, peak-to-peak ≤ 0.1% and half-window drift ≤ 0.02%</text>
+   </g>
+   <g id="text_5">
+    <text style="font-size: 7.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="861.1434" y="164.5128" transform="rotate(-0 861.1434 164.5128)">gate_assessment.json</text>
+   </g>
+   <g id="patch_3">
+    <path d="M 39.44376 147.9888 
+L 105.43284 147.9888 
+Q 110.8566 147.9888 110.8566 147.61728 
+L 110.8566 122.35392 
+Q 110.8566 121.9824 105.43284 121.9824 
+L 39.44376 121.9824 
+Q 34.02 121.9824 34.02 122.35392 
+L 34.02 147.61728 
+Q 34.02 147.9888 39.44376 147.9888 
+z
+" clip-path="url(#p8054d805b5)" style="fill: #fef1d6"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 866.56716 147.9888 
+L 932.55624 147.9888 
+Q 937.98 147.9888 937.98 147.61728 
+L 937.98 122.35392 
+Q 937.98 121.9824 932.55624 121.9824 
+L 866.56716 121.9824 
+Q 861.1434 121.9824 861.1434 122.35392 
+L 861.1434 147.61728 
+Q 861.1434 147.9888 866.56716 147.9888 
+z
+" clip-path="url(#p8054d805b5)" style="fill: #d3eed3"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 34.02 147.9888 
+L 39.44376 147.9888 
+L 39.44376 121.9824 
+L 34.02 121.9824 
+z
+" clip-path="url(#p8054d805b5)" style="fill: #fab219"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 861.1434 147.9888 
+L 866.56716 147.9888 
+L 866.56716 121.9824 
+L 861.1434 121.9824 
+z
+" clip-path="url(#p8054d805b5)" style="fill: #0ca30c"/>
+   </g>
+   <g id="text_6">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="44.86752" y="138.1556" transform="rotate(-0 44.86752 138.1556)">LIMITED</text>
+   </g>
+   <g id="text_7">
+    <text style="font-weight: 700; font-size: 10px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="871.99092" y="138.1556" transform="rotate(-0 871.99092 138.1556)">PASS</text>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="patch_7">
+    <path d="M 63.18 495.36 
+L 451.98 495.36 
+L 451.98 213.624 
+L 63.18 213.624 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 158.295015 495.36 
+L 158.295015 213.624 
+" clip-path="url(#p103a646d44)" style="fill: none; stroke: #e6e5df; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2">
+      <defs>
+       <path id="mbd67ea6747" d="M 0 0 
+L 0 3.5 
+" style="stroke: #52514e; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mbd67ea6747" x="158.295015" y="495.36" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <text style="font-size: 8.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="158.295015" y="510.86" transform="rotate(-0 158.295015 510.86)">Mach 3, fine mesh</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 356.864985 495.36 
+L 356.864985 213.624 
+" clip-path="url(#p103a646d44)" style="fill: none; stroke: #e6e5df; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#mbd67ea6747" x="356.864985" y="495.36" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_9">
+      <text style="font-size: 8.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="356.864985" y="510.86" transform="rotate(-0 356.864985 510.86)">Mach 6, fine mesh</text>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_5">
+      <path d="M 63.18 495.36 
+L 451.98 495.36 
+" clip-path="url(#p103a646d44)" style="fill: none; stroke: #e6e5df; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6">
+      <defs>
+       <path id="md5bcf39492" d="M 0 0 
+L -3.5 0 
+" style="stroke: #52514e; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#md5bcf39492" x="63.18" y="495.36" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_10">
+      <text style="font-size: 8.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="56.18" y="499.61" transform="rotate(-0 56.18 499.61)">0.00</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_7">
+      <path d="M 63.18 452.672727 
+L 451.98 452.672727 
+" clip-path="url(#p103a646d44)" style="fill: none; stroke: #e6e5df; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8">
+      <g>
+       <use xlink:href="#md5bcf39492" x="63.18" y="452.672727" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_11">
+      <text style="font-size: 8.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="56.18" y="456.922727" transform="rotate(-0 56.18 456.922727)">0.05</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_9">
+      <path d="M 63.18 409.985455 
+L 451.98 409.985455 
+" clip-path="url(#p103a646d44)" style="fill: none; stroke: #e6e5df; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10">
+      <g>
+       <use xlink:href="#md5bcf39492" x="63.18" y="409.985455" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_12">
+      <text style="font-size: 8.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="56.18" y="414.235455" transform="rotate(-0 56.18 414.235455)">0.10</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_11">
+      <path d="M 63.18 367.298182 
+L 451.98 367.298182 
+" clip-path="url(#p103a646d44)" style="fill: none; stroke: #e6e5df; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12">
+      <g>
+       <use xlink:href="#md5bcf39492" x="63.18" y="367.298182" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_13">
+      <text style="font-size: 8.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="56.18" y="371.548182" transform="rotate(-0 56.18 371.548182)">0.15</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_13">
+      <path d="M 63.18 324.610909 
+L 451.98 324.610909 
+" clip-path="url(#p103a646d44)" style="fill: none; stroke: #e6e5df; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14">
+      <g>
+       <use xlink:href="#md5bcf39492" x="63.18" y="324.610909" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_14">
+      <text style="font-size: 8.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="56.18" y="328.860909" transform="rotate(-0 56.18 328.860909)">0.20</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_15">
+      <path d="M 63.18 281.923636 
+L 451.98 281.923636 
+" clip-path="url(#p103a646d44)" style="fill: none; stroke: #e6e5df; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_16">
+      <g>
+       <use xlink:href="#md5bcf39492" x="63.18" y="281.923636" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_15">
+      <text style="font-size: 8.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="56.18" y="286.173636" transform="rotate(-0 56.18 286.173636)">0.25</text>
+     </g>
+    </g>
+    <g id="ytick_7">
+     <g id="line2d_17">
+      <path d="M 63.18 239.236364 
+L 451.98 239.236364 
+" clip-path="url(#p103a646d44)" style="fill: none; stroke: #e6e5df; stroke-width: 0.6; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_18">
+      <g>
+       <use xlink:href="#md5bcf39492" x="63.18" y="239.236364" style="fill: #52514e; stroke: #52514e; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_16">
+      <text style="font-size: 8.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: end; fill: #52514e" x="56.18" y="243.486364" transform="rotate(-0 56.18 243.486364)">0.30</text>
+     </g>
+    </g>
+    <g id="text_17">
+     <text style="font-size: 9px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="31.886" y="354.492" transform="rotate(-90 31.886 354.492)">forebody C_D peak-to-peak over the final window [%]</text>
+    </g>
+   </g>
+   <g id="line2d_19">
+    <path d="M 63.18 409.985455 
+L 451.98 409.985455 
+" clip-path="url(#p103a646d44)" style="fill: none; stroke: #d03b3b; stroke-width: 1.2; stroke-linecap: square"/>
+   </g>
+   <g id="patch_8">
+    <path d="M 63.18 495.36 
+L 63.18 213.624 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_9">
+    <path d="M 63.18 495.36 
+L 451.98 495.36 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_10">
+    <path d="M 80.852727 495.36 
+L 128.50952 495.36 
+L 128.50952 254.564647 
+L 80.852727 254.564647 
+z
+" clip-path="url(#p103a646d44)" style="fill: #c3c2b7"/>
+   </g>
+   <g id="patch_11">
+    <path d="M 279.422697 495.36 
+L 327.079489 495.36 
+L 327.079489 305.091158 
+L 279.422697 305.091158 
+z
+" clip-path="url(#p103a646d44)" style="fill: #c3c2b7"/>
+   </g>
+   <g id="text_18">
+    <text style="font-weight: 700; font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(90.64078 236.625375)">0.282%</text>
+    <text style="font-weight: 700; font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(87.806233 246.733775)">NOT MET</text>
+   </g>
+   <g id="text_19">
+    <text style="font-size: 6.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="104.681124" y="489.602618" transform="rotate(-0 104.681124 489.602618)">100k it.</text>
+   </g>
+   <g id="text_20">
+    <text style="font-weight: 700; font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(289.210749 287.151886)">0.223%</text>
+    <text style="font-weight: 700; font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(286.376202 297.260286)">NOT MET</text>
+   </g>
+   <g id="text_21">
+    <text style="font-size: 6.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #52514e" x="303.251093" y="489.602618" transform="rotate(-0 303.251093 489.602618)">100k it.</text>
+   </g>
+   <g id="patch_12">
+    <path d="M 134.466619 495.36 
+L 182.123412 495.36 
+L 182.123412 467.482188 
+L 134.466619 467.482188 
+z
+" clip-path="url(#p103a646d44)" style="fill: #2a78d6"/>
+   </g>
+   <g id="patch_13">
+    <path d="M 333.036588 495.36 
+L 380.693381 495.36 
+L 380.693381 429.855448 
+L 333.036588 429.855448 
+z
+" clip-path="url(#p103a646d44)" style="fill: #2a78d6"/>
+   </g>
+   <g id="text_22">
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(145.667031 449.542915)">0.033%</text>
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(151.7385 459.651315)">met</text>
+   </g>
+   <g id="text_23">
+    <text style="font-size: 6.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="158.295015" y="489.602618" transform="rotate(-0 158.295015 489.602618)">110k it.</text>
+   </g>
+   <g id="text_24">
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(344.237 411.916175)">0.077%</text>
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(350.308469 422.024575)">met</text>
+   </g>
+   <g id="text_25">
+    <text style="font-size: 6.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="356.864985" y="489.602618" transform="rotate(-0 356.864985 489.602618)">110k it.</text>
+   </g>
+   <g id="patch_14">
+    <path d="M 188.080511 495.36 
+L 235.737303 495.36 
+L 235.737303 486.209015 
+L 188.080511 486.209015 
+z
+" clip-path="url(#p103a646d44)" style="fill: #6da7ec"/>
+   </g>
+   <g id="patch_15">
+    <path d="M 386.65048 495.36 
+L 434.307273 495.36 
+L 434.307273 463.12212 
+L 386.65048 463.12212 
+z
+" clip-path="url(#p103a646d44)" style="fill: #6da7ec"/>
+   </g>
+   <g id="text_26">
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(199.280923 468.269742)">0.011%</text>
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(205.352391 478.378142)">met</text>
+   </g>
+   <g id="text_27">
+    <text style="font-size: 6.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="211.908907" y="489.602618" transform="rotate(-0 211.908907 489.602618)">110k it.</text>
+   </g>
+   <g id="text_28">
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(397.850892 445.182847)">0.038%</text>
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(403.922361 455.291247)">met</text>
+   </g>
+   <g id="text_29">
+    <text style="font-size: 6.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: middle; fill: #ffffff" x="410.478876" y="489.602618" transform="rotate(-0 410.478876 489.602618)">110k it.</text>
+   </g>
+   <g id="text_30">
+    <text style="font-weight: 700; font-size: 8px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #d03b3b" x="68.938529" y="403.642473" transform="rotate(-0 68.938529 403.642473)">declared limit 0.1%</text>
+   </g>
+   <g id="text_31">
+    <text style="font-size: 7px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #52514e" x="63.18" y="542.866231" transform="rotate(-0 63.18 542.866231)">drift (limit 0.02%) was never the problem — Mach 3, fine mesh: 0.0007% → 0.0002%, Mach 6, fine mesh: 0.0016% → 0.0015%</text>
+   </g>
+   <g id="text_32">
+    <text style="font-weight: 700; font-size: 10.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="63.18" y="207.624" transform="rotate(-0 63.18 207.624)">a  The force criterion, before and after the Courant restarts</text>
+   </g>
+   <g id="legend_1">
+    <g id="patch_16">
+     <path d="M 335.493375 228.064 
+L 350.693375 228.064 
+L 350.693375 222.744 
+L 335.493375 222.744 
+z
+" style="fill: #c3c2b7"/>
+    </g>
+    <g id="text_33">
+     <text style="font-size: 7.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="356.773375" y="228.064" transform="rotate(-0 356.773375 228.064)">Co 0.2 — original run</text>
+    </g>
+    <g id="patch_17">
+     <path d="M 335.493375 242.2456 
+L 350.693375 242.2456 
+L 350.693375 236.9256 
+L 335.493375 236.9256 
+z
+" style="fill: #2a78d6"/>
+    </g>
+    <g id="text_34">
+     <text style="font-size: 7.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="356.773375" y="242.2456" transform="rotate(-0 356.773375 242.2456)">Co 0.1 — restart, of record</text>
+    </g>
+    <g id="patch_18">
+     <path d="M 335.493375 256.4272 
+L 350.693375 256.4272 
+L 350.693375 251.1072 
+L 335.493375 251.1072 
+z
+" style="fill: #6da7ec"/>
+    </g>
+    <g id="text_35">
+     <text style="font-size: 7.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="356.773375" y="256.4272" transform="rotate(-0 356.773375 256.4272)">Co 0.05 — restart</text>
+    </g>
+   </g>
+  </g>
+  <g id="axes_3">
+   <g id="patch_19">
+    <path d="M 523.7136 538.704 
+L 934.2864 538.704 
+Q 942.84 538.704 942.84 532.2024 
+L 942.84 428.1768 
+Q 942.84 421.6752 934.2864 421.6752 
+L 523.7136 421.6752 
+Q 515.16 421.6752 515.16 428.1768 
+L 515.16 532.2024 
+Q 515.16 538.704 523.7136 538.704 
+z
+" clip-path="url(#pbdf427ce2b)" style="fill: #fef3dc"/>
+   </g>
+   <g id="patch_20">
+    <path d="M 515.16 538.704 
+L 518.58144 538.704 
+L 518.58144 421.6752 
+L 515.16 421.6752 
+z
+" clip-path="url(#pbdf427ce2b)" style="fill: #fab219"/>
+   </g>
+   <g id="line2d_20">
+    <path d="M 515.16 268.8876 
+L 942.84 268.8876 
+" clip-path="url(#pbdf427ce2b)" style="fill: none; stroke: #e6e5df; stroke-width: 0.7; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_21">
+    <path d="M 515.16 295.54416 
+L 942.84 295.54416 
+" clip-path="url(#pbdf427ce2b)" style="fill: none; stroke: #e6e5df; stroke-width: 0.7; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_22">
+    <path d="M 515.16 322.20072 
+L 942.84 322.20072 
+" clip-path="url(#pbdf427ce2b)" style="fill: none; stroke: #e6e5df; stroke-width: 0.7; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_23">
+    <path d="M 515.16 348.85728 
+L 942.84 348.85728 
+" clip-path="url(#pbdf427ce2b)" style="fill: none; stroke: #e6e5df; stroke-width: 0.7; stroke-linecap: square"/>
+   </g>
+   <g id="text_36">
+    <text style="font-weight: 700; font-size: 10.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="515.16" y="224.124" transform="rotate(-0 515.16 224.124)">b  What the restart moved, and what it did not</text>
+   </g>
+   <g id="text_37">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="669.1248" y="238.005" transform="rotate(-0 669.1248 238.005)">Mach 3</text>
+   </g>
+   <g id="text_38">
+    <text style="font-weight: 700; font-size: 7.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #898781" x="805.9824" y="238.005" transform="rotate(-0 805.9824 238.005)">Mach 6</text>
+   </g>
+   <g id="text_39">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="515.16" y="258.4838" transform="rotate(-0 515.16 258.4838)">fine-mesh C_D, of record</text>
+   </g>
+   <g id="text_40">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="669.1248" y="258.4838" transform="rotate(-0 669.1248 258.4838)">0.84721 → 0.84692  (-0.035%)</text>
+   </g>
+   <g id="text_41">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="805.9824" y="258.4838" transform="rotate(-0 805.9824 258.4838)">0.87221 → 0.87199  (-0.026%)</text>
+   </g>
+   <g id="text_42">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="515.16" y="285.14036" transform="rotate(-0 515.16 285.14036)">observed order of convergence</text>
+   </g>
+   <g id="text_43">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="669.1248" y="285.14036" transform="rotate(-0 669.1248 285.14036)">0.67 → 1.13</text>
+   </g>
+   <g id="text_44">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="805.9824" y="285.14036" transform="rotate(-0 805.9824 285.14036)">0.60 → 0.88</text>
+   </g>
+   <g id="text_45">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="515.16" y="311.79692" transform="rotate(-0 515.16 311.79692)">GCI, fine mesh</text>
+   </g>
+   <g id="text_46">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="669.1248" y="311.79692" transform="rotate(-0 669.1248 311.79692)">0.27% → 0.10%</text>
+   </g>
+   <g id="text_47">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="805.9824" y="311.79692" transform="rotate(-0 805.9824 311.79692)">0.36% → 0.19%</text>
+   </g>
+   <g id="text_48">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="515.16" y="338.45348" transform="rotate(-0 515.16 338.45348)">fine − medium C_D difference</text>
+   </g>
+   <g id="text_49">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="669.1248" y="338.45348" transform="rotate(-0 669.1248 338.45348)">0.128% → 0.093%</text>
+   </g>
+   <g id="text_50">
+    <text style="font-size: 8.2px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="805.9824" y="338.45348" transform="rotate(-0 805.9824 338.45348)">0.151% → 0.125%</text>
+   </g>
+   <g id="text_51">
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(515.16 368.036494)">The mean of the limit cycle was not the fixed point: the converged C_D sits about 0.03% off the</text>
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(515.16 381.682834)">oscillating window mean — small against every tolerance, but a third of the fine–medium difference, which</text>
+    <text style="font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(515.16 395.284659)">is why the observed order and the GCI moved.</text>
+   </g>
+   <g id="text_52">
+    <text style="font-weight: 700; font-size: 7.4px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="527.9904" y="438.8276" transform="rotate(-0 527.9904 438.8276)">DISCLOSURE (NR-25)</text>
+   </g>
+   <g id="text_53">
+    <text style="font-size: 7.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(527.9904 457.965051)">The restart rule, the two-block minimum and the rule for which solution is “of record” (the largest</text>
+    <text style="font-size: 7.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(527.9904 471.383067)">Courant number that met the criterion) were all written AFTER the original results had been seen; the</text>
+    <text style="font-size: 7.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(527.9904 484.844997)">two-block minimum was added while block 1 was running. Each makes the test stricter or is outcome-</text>
+    <text style="font-size: 7.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(527.9904 498.306927)">neutral, but none is pre-declared.</text>
+    <text style="font-size: 7.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(527.9904 511.812771)">A reader who does not accept a rule written after the fact should read G4 as LIMITED; the evidence for</text>
+    <text style="font-size: 7.3px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #141413" transform="translate(527.9904 525.230787)">both readings is in the run directory. The Mach 6 margin is thin, and went up between blocks.</text>
+   </g>
+  </g>
+  <g id="text_54">
+   <text style="font-weight: 700; font-size: 30px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #c3c2b7" x="34.02" y="57.864" transform="rotate(-0 34.02 57.864)">7</text>
+  </g>
+  <g id="text_55">
+   <text style="font-weight: 700; font-size: 17px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; text-anchor: start; fill: #141413" x="72.9" y="44.864" transform="rotate(-0 72.9 44.864)">Gate G4: LIMITED → PASS, with the rule that got it there disclosed</text>
+  </g>
+  <g id="text_56">
+   <text style="font-size: 10.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(72.9 66.228)">Both fine-mesh sphere cases ended in a bounded limit cycle and missed the force criterion. The criterion was not moved;</text>
+   <text style="font-size: 10.5px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #52514e" transform="translate(72.9 80.571)">the Courant number was. The restart rule was written after the first results had been seen.</text>
+  </g>
+  <g id="text_57">
+   <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #898781" transform="translate(34.02 591.540107)">Run M2-20260920T123901Z: gate_assessment.json (PASS) and gate_assessment_20260921_0057_before_restarts.json (LIMITED); gci.csv vs gci_20260921_0057_before_restarts.csv; criterion from config_snapshot.yaml. OpenFOAM v2512 installed (spec names v2606).</text>
+   <text style="font-size: 6.6px; font-family: 'Avenir Next', 'Helvetica Neue', 'DejaVu Sans'; fill: #898781" transform="translate(34.02 603.711167)">Sphere of radius 0.5 m, inviscid perfect gas, forebody only; benchmark and mesh-independence conditions were met in both assessments. Total sphere drag is not validated like-for-like. Disclosure text quotes docs/negative_results.md NR-25.</text>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p8054d805b5">
+   <rect x="34.02" y="111.456" width="903.96" height="61.92"/>
+  </clipPath>
+  <clipPath id="p103a646d44">
+   <rect x="63.18" y="213.624" width="388.8" height="281.736"/>
+  </clipPath>
+  <clipPath id="pbdf427ce2b">
+   <rect x="515.16" y="213.624" width="427.68" height="325.08"/>
+  </clipPath>
+ </defs>
+</svg>

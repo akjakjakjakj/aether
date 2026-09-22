@@ -10,7 +10,10 @@ generated milestone reports. The filling was done by the AI assistant; the stude
 yet revised any of it. What is left is marked **`[PENDING — STUDENT]`** and cannot be filled
 by anyone else: the coupon experiment's results, any external review, the public repository
 location and release commit, and the review counts in the disclosure. The full paper is
-`reports/final/AETHER_paper.md`; the hand-over note is `reports/final/HANDOFF.md`.
+`reports/final/AETHER_paper.md`, typeset as **`reports/final/AETHER_paper.pdf`** (`make
+paper`; A4, with the 24 body figures and the Appendix A CFD gallery — the PDF is what to
+attach or send, the markdown is what to edit); the hand-over note is
+`reports/final/HANDOFF.md`.
 
 One thing every artefact here must now carry, because it is the easiest thing to lose in
 compression: the Fidelity-1 result is a trade in entry angle at a geometry fixed by
@@ -31,6 +34,7 @@ not supported.
 | [`authorship_and_ai_disclosure.md`](authorship_and_ai_disclosure.md) | The disclosure that accompanies every submission | 1 page |
 | [`acknowledgements_template.md`](acknowledgements_template.md) | Mentor and reviewer acknowledgements | short |
 | [`reproducibility_links.md`](reproducibility_links.md) | What a stranger needs to re-run this | 1 page |
+| [`../../reports/final/AETHER_paper.pdf`](../../reports/final/AETHER_paper.pdf) | The full paper, typeset from `reports/final/AETHER_paper.md` by `make paper` | 56 pages incl. appendix |
 
 ---
 

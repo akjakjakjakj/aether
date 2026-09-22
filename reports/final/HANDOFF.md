@@ -11,6 +11,16 @@ criterion written down before it ran.
   hand-written companions (the M5 agent audit, the M6 and M7 addenda).
 - The paper is drafted: `reports/final/AETHER_paper.md`, all twenty §40 sections, every
   number traced to a file.
+- The paper is typeset (2026-09-22): `make paper` (or `reports/final/build_paper.sh`) turns
+  the markdown into `reports/final/AETHER_paper.pdf` — A4, numbered sections, figures and
+  tables, table of contents, the draft-status banner kept on page 1. It needs `pandoc`,
+  `tectonic` and `pdfinfo`; the fonts are macOS system faces (Charter, Avenir Next, Menlo,
+  STIX Two Math). The figure set is 24 body figures (the 13 the draft already carried, the
+  seven infographics from `reports/figures/infographics/`, and four OpenFOAM flow-field
+  figures from `reports/figures/cfd/`) plus an Appendix A gallery of the remaining eight
+  flow-field figures with their `INDEX.md` captions. Rebuild after editing the markdown;
+  the build reads nothing under `src/`, `configs/` or `results/`. The build files are
+  `reports/final/paper_build/` (Lua filter, LaTeX preamble, title block).
 - The submission package, the defence questions, the quality gate, the status, the README
   and the roadmap are filled and current.
 - Thirty-five negative results are written up. They are the strongest thing in the project.
@@ -29,7 +39,7 @@ unmet and all three are yours: the blind experiment, external criticism, and own
 | 3 | Read Tiers 2 and 3 | about 5 hours each; about 16 hours in all, four to six sittings | same file |
 | 4 | Run the coupon experiment | none given for the whole. The long calibration step alone is about an hour per run for a 10 mm coupon, and doing both flux calibrations costs "one extra afternoon" | `experiments/thermal_coupon/protocol.md` |
 | 5 | Ask one person to review the assumptions (form R1; needs no CFD background) | none given | `docs/external_reviews/` |
-| 6 | Rewrite the paper and the spoken scripts in your own words, checking each number against the file named beside it | none given | `reports/final/AETHER_paper.md` |
+| 6 | Rewrite the paper and the spoken scripts in your own words, checking each number against the file named beside it; then `make paper` to re-typeset the PDF | none given | `reports/final/AETHER_paper.md` → `reports/final/AETHER_paper.pdf` |
 | 7 | Choose a public location, tag a clean commit | none given | `docs/submission_package/reproducibility_links.md` |
 
 Two habits while reading, from the reading plan. Move each `AI_USAGE.md` row from *review
